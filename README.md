@@ -33,3 +33,8 @@ O livro é compilado automaticamente via GitHub Actions. Podes aceder à versão
 **Mário Prazeres** Licenciado em Engenharia Informática (Média de 16 valores).  
 
 Este projeto demonstra a aplicação de rigor de engenharia (CI/CD, Versionamento, Documentação Técnica) no domínio emergente da IA Generativa.
+<<<<<<< HEAD
+=======
+
+## Licença: Este trabalho está licenciado sob CC BY-NC-SA 4.0.
+>>>>>>> 9e6cb1d (Feature: Scripts de demonstração, Licença CC e automação de Releases)
