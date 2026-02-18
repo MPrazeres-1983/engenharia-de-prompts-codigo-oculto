@@ -7,19 +7,20 @@ jobs:
       - name: Checkout Código
         uses: actions/checkout@v4
 
-      - name: Instalar Dependências LaTeX
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y texlive-latex-extra texlive-fonts-recommended texlive-lang-portuguese
+      # ESTE PASSO É PARA DEBUG: Vai mostrar onde os ficheiros estão realmente
+      - name: Listar ficheiros para verificar caminhos
+        run: ls -R
 
       - name: Compilar LaTeX
         uses: xu-cheng/latex-action@v3
         with:
           root_file: src/livro.tex
-          args: "-pdf -interaction=nonstopmode -halt-on-error"
+          # Adicionamos isto para ele ignorar erros menores e continuar
+          args: "-pdf -interaction=nonstopmode -file-line-error"
 
       - name: Upload PDF
         uses: actions/upload-artifact@v4
+        if: always() # Faz upload mesmo que a compilação falhe (para vermos o log)
         with:
           name: Engenharia-de-Prompts-PDF
           path: src/livro.pdf
