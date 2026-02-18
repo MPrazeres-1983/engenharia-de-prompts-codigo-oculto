@@ -31,6 +31,5 @@ O livro é compilado automaticamente via GitHub Actions. Podes aceder à versão
 
 ## 👤 Sobre o Autor
 **Mário Prazeres** Licenciado em Engenharia Informática (Média de 16 valores).  
-*Projeto Final de Curso focado em IA/Engenharia (Nota: 19 valores).*
 
 Este projeto demonstra a aplicação de rigor de engenharia (CI/CD, Versionamento, Documentação Técnica) no domínio emergente da IA Generativa.
