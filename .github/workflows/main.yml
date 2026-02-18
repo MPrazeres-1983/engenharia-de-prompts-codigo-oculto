@@ -12,8 +12,6 @@ jobs:
         with:
           root_file: livro.tex
           working_directory: src
-          compiler: pdflatex
-          # O segredo está aqui: o latexmk garante as múltiplas passagens
           args: "-pdf -interaction=nonstopmode -file-line-error"
 
       - name: Upload PDF
