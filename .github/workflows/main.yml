@@ -13,7 +13,8 @@ jobs:
           root_file: livro.tex
           working_directory: src
           compiler: pdflatex
-          args: "-interaction=nonstopmode -file-line-error"
+          # O segredo está aqui: o latexmk garante as múltiplas passagens
+          args: "-pdf -interaction=nonstopmode -file-line-error"
 
       - name: Upload PDF
         uses: actions/upload-artifact@v4
