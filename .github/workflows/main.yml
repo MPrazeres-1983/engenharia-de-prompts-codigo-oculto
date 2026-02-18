@@ -7,20 +7,16 @@ jobs:
       - name: Checkout Código
         uses: actions/checkout@v4
 
-      # ESTE PASSO É PARA DEBUG: Vai mostrar onde os ficheiros estão realmente
-      - name: Listar ficheiros para verificar caminhos
-        run: ls -R
-
-      - name: Compilar LaTeX
+      - name: Compilar LaTeX (Motor PDFLaTeX)
         uses: xu-cheng/latex-action@v3
         with:
           root_file: src/livro.tex
-          # Adicionamos isto para ele ignorar erros menores e continuar
-          args: "-pdf -interaction=nonstopmode -file-line-error"
+          # Forçamos o uso de pdflatex que lida melhor com PNGs
+          compiler: pdflatex
+          args: "-interaction=nonstopmode -file-line-error"
 
-      - name: Upload PDF
+      - name: Upload PDF Final
         uses: actions/upload-artifact@v4
-        if: always() # Faz upload mesmo que a compilação falhe (para vermos o log)
         with:
           name: Engenharia-de-Prompts-PDF
           path: src/livro.pdf
