@@ -156,7 +156,7 @@ fonttitle=\bfseries,
 \begin{document}
 
 % --------- CAPA COM IMAGEM (1.ª página) ---------
-\newgeometry{margin=0pt} % sem margens nesta página
+\newgeometry{margin=0pt} 
 
 \begin{titlepage}
   \thispagestyle{empty}
@@ -164,14 +164,12 @@ fonttitle=\bfseries,
   \includegraphics[width=\paperwidth,height=\paperheight,keepaspectratio]{capa_livro}%
 \end{titlepage}
 
-\restoregeometry      % volta às margens normais para o resto do livro
-\clearpage
+\restoregeometry      
 
 % --------- FRONTMATTER E ÍNDICE ---------
 \frontmatter
 
-% Se quiseres manter a página de título em texto, deixa esta linha.
-% Se não quiseres, comenta-a com % no início.
+
 \maketitle
 
 \tableofcontents
