@@ -1,0 +1,19 @@
+name: Compilar Livro PDF
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Código
+        uses: actions/checkout@v4
+
+      - name: Compilar LaTeX
+        uses: xu-cheng/latex-action@v3
+        with:
+          root_file: src/livro.tex # Caminho para o teu ficheiro
+
+      - name: Publicar PDF como Artefacto
+        uses: actions/upload-artifact@v4
+        with:
+          name: Engenharia-de-Prompts-PDF
+          path: src/livro.pdf
