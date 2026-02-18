@@ -7,15 +7,15 @@ jobs:
       - name: Checkout Código
         uses: actions/checkout@v4
 
-      - name: Compilar LaTeX (Motor PDFLaTeX)
+      - name: Compilar LaTeX
         uses: xu-cheng/latex-action@v3
         with:
-          root_file: src/livro.tex
-          # Forçamos o uso de pdflatex que lida melhor com PNGs
+          root_file: livro.tex
+          working_directory: src
           compiler: pdflatex
           args: "-interaction=nonstopmode -file-line-error"
 
-      - name: Upload PDF Final
+      - name: Upload PDF
         uses: actions/upload-artifact@v4
         with:
           name: Engenharia-de-Prompts-PDF
