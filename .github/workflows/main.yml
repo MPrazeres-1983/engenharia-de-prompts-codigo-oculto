@@ -1,5 +1,7 @@
 name: Compilar Livro PDF
+
 on: [push]
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -19,3 +21,12 @@ jobs:
         with:
           name: Engenharia-de-Prompts-PDF
           path: src/livro.pdf
+
+      - name: Criar Release
+        uses: softprops/action-gh-release@v2
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: src/livro.pdf
+          body: "Versão oficial compilada do livro Engenharia de Prompts: O Código Oculto."
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
