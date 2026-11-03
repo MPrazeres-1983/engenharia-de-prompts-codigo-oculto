@@ -1,6 +1,6 @@
 # Fontes e alcance da verificação
 
-Data de corte: **3 de novembro de 2026**. As 38 entradas em `src/referencias.bib` têm títulos e ligações concretas. Esta é uma revisão dirigida das afirmações e lacunas do manuscrito, não uma revisão sistemática exaustiva de toda a investigação publicada até essa data. Os resultados dos artigos pertencem às condições estudadas; o texto evita transportar percentagens para modelos ou tarefas não avaliados.
+Data de corte: **3 de novembro de 2026**. As 41 entradas em `src/referencias.bib` têm títulos e ligações concretas. Esta é uma revisão dirigida das afirmações e lacunas do manuscrito, não uma revisão sistemática exaustiva de toda a investigação publicada até essa data. Os resultados dos artigos pertencem às condições estudadas; o texto evita transportar percentagens para modelos ou tarefas não avaliados.
 
 **Alcance:** nos artigos, foram confirmados metadados e resumos originais; foram consultadas secções específicas quando indicadas abaixo. Não se afirma ter reproduzido os estudos ou auditado integralmente todos os papers. Os exemplos numéricos são separados dos resultados publicados. As fontes de fornecedor descrevem interfaces e orientações, não constituem comparação independente entre produtos.
 
@@ -16,12 +16,12 @@ Data de corte: **3 de novembro de 2026**. As 38 entradas em `src/referencias.bib
 | `rafailov2023` | [DPO](https://arxiv.org/abs/2305.18290) | Alternativa à sequência explícita recompensa + RL; não equivalência de todos os métodos. |
 | `liu2024` | [Lost in the Middle](https://arxiv.org/abs/2307.03172) | Efeito experimental da posição em tarefas/modelos identificados, sem lei universal de atenção. |
 | `holtzman2020` | [Neural Text Degeneration](https://arxiv.org/abs/1904.09751) | Nucleus sampling; o livro distingue amostragem, estilo e correção. |
-| `wei2022` | [Chain-of-Thought](https://arxiv.org/abs/2201.11903) | Exemplos de resolução e ganhos experimentais delimitados. |
+| `wei2022` | [Chain-of-Thought v6](https://arxiv.org/html/2201.11903v6), secções 2–3 e apêndice A.3 | Demonstrações de resolução e ganhos dependentes de escala, tarefa e prompt; métodos e limites consultados, sem reprodução do benchmark. |
 | `kojima2022` | [Zero-Shot Reasoners](https://arxiv.org/abs/2205.11916) | Técnica histórica de instrução de resolução sem demonstrações. |
-| `wang2023` | [Self-Consistency](https://arxiv.org/abs/2203.11171) | Amostrar percursos e agregar respostas; não cinco soluções consecutivas na mesma mensagem. |
-| `yao2023tot` | [Tree of Thoughts](https://arxiv.org/abs/2305.10601) | Procura em estados intermédios; comparação de propostas não é implementação do algoritmo. |
+| `wang2023` | [Self-Consistency v4](https://arxiv.org/html/2203.11171v4), secção 2 | Método de amostragem de percursos diversos e agregação das respostas finais; não cinco soluções consecutivas na mesma mensagem. |
+| `yao2023tot` | [Tree of Thoughts v2](https://arxiv.org/html/2305.10601v2), secção 3 | Estados intermédios, geração, avaliação e procura com BFS/DFS; comparação de propostas não implementa o algoritmo. |
 | `turpin2023` | [Unfaithful explanations](https://arxiv.org/abs/2305.04388) | Explicações podem omitir influências da decisão. Não prova que todas as explicações sejam inúteis. |
-| `huang2024` | [Self-correction](https://arxiv.org/abs/2310.01798) | Limites da autocorreção intrínseca nas tarefas testadas, sem generalizar a impossibilidade de correção futura. |
+| `huang2024` | [Self-correction v2](https://arxiv.org/html/2310.01798v2), secções 2 e 3.1–3.2 | Distingue feedback intrínseco de rótulos-oráculo; modelos de 2023, benchmarks e redução de desempenho nas condições testadas. Não prova impossibilidade de correção futura. |
 | `deepseek2025` | [DeepSeek-R1](https://arxiv.org/abs/2501.12948), revisão de 2026 | Exemplo documentado de pós-treino orientado a raciocínio. Não revela arquiteturas privadas de outros modelos. |
 | `lewis2020` | [RAG](https://arxiv.org/abs/2005.11401) | Trabalho original de recuperação + geração; padrões práticos posteriores são identificados como arquitetura de engenharia. |
 | `robertson2009` | [BM25 and Beyond](https://doi.org/10.1561/1500000019) | Metadados/descrição primária do enquadramento probabilístico; não se afirma leitura integral da monografia paga. |
@@ -41,14 +41,17 @@ Data de corte: **3 de novembro de 2026**. As 38 entradas em `src/referencias.bib
 | `mcpauth2026` | [Authorization](https://modelcontextprotocol.io/specification/2026-07-28/basic/authorization) | Requisitos de autorização e destinatário dos tokens. Não há servidor MCP implementado no exemplo. |
 | `owasp2025` | [OWASP LLM Top 10, 2025](https://genai.owasp.org/llm-top-10/) | Taxonomia versionada de riscos, orientação e não certificação. |
 | `nist2024` | [NIST AI 600-1](https://doi.org/10.6028/NIST.AI.600-1) | Quadro voluntário de gestão de riscos de IA generativa. |
-| `rgpd2016` | [RGPD](https://eur-lex.europa.eu/eli/reg/2016/679/oj) | Texto oficial identificado; excertos indexados de artigos 6 e 22 consultados. A abertura direta devolveu verificação anti-robot. Revisão jurídica integral pendente. |
-| `aiact2024` | [AI Act](https://eur-lex.europa.eu/eli/reg/2024/1689) | Referência oficial identificada; acesso direto à consolidação 2026-07-27 bloqueado por verificação anti-robot. Não se declara auditoria jurídica do texto integral. |
+| `rgpd2016` | [RGPD](https://eur-lex.europa.eu/eli/reg/2016/679/oj), considerando 26 e artigos 5, 6, 9, 22 e 35 | Confirmados princípios, fundamentos, pseudonimização, âmbito/exceções de decisões automatizadas e avaliação de impacto nas disposições oficiais indexadas. Abertura direta bloqueada por verificação anti-robot; não se declara auditoria jurídica integral. |
+| `aiact2024` | [AI Act consolidado em 27-07-2026](https://eur-lex.europa.eu/legal-content/PT/TXT/?uri=CELEX%3A02024R1689-20260727), artigo 113 | Confirmada aplicação geral em 02-08-2026, exceções e ato modificador no texto oficial indexado. Não se declara leitura integral da consolidação. |
+| `aiomnibus2026` | [Regulamento (UE) 2026/1744](https://eur-lex.europa.eu/eli/reg/2026/1744/oj), artigo 1, ponto 40, e artigo 4 | Publicado em 24-07 e em vigor em 27-07-2026. Capítulo III, secções 1–3, exceto artigo 6(5): 02-12-2027 para artigo 6(2)/anexo III e 02-08-2028 para artigo 6(1)/anexo I. Disposições oficiais indexadas consultadas; acesso direto continua limitado. |
+| `qwengguf` | [Modelo oficial Qwen](https://huggingface.co/Qwen/Qwen2.5-0.5B-Instruct-GGUF/tree/9217f5db79a29953eb74d5343926648285ec7e67) | Modelo de 0.5B, licença Apache-2.0; ficheiro Q4_K_M descarregado da revisão fixada e SHA-256 verificado. Descrição do fornecedor não usada como resultado independente. |
+| `llamacpp` | [Servidor llama.cpp b11960](https://github.com/ggml-org/llama.cpp/blob/b11960/tools/server/README.md) | Documentação da API, seed, amostragem e response_format com esquema. Build oficial descarregado, digest SHA-256 confrontado com metadados da release; executado localmente em CPU. |
 | `conselho2026` | [Cronologia do Conselho](https://www.consilium.europa.eu/en/policies/artificial-intelligence-act/timeline-artificial-intelligence/), entradas de 29-06 e 02-08-2026 | Confirma alterações de calendário e aplicação de regras. Na divergência com um resumo institucional sobre sandboxes, essa data foi omitida do livro; confirmar o ato aplicável. |
 
 ## Experiências e limitações
 
-- Nenhuma chamada paga nem execução de um LLM real foi efetuada para atribuir desempenho a um modelo.
+- Foram efetuadas 52 inferências reais, sem serviços pagos, com um Qwen local quantizado. Casos, variantes, configurações e respostas estão em `experiencias/llm_local`. Não se apresenta esta amostra como avaliação de todos os modelos ou dos 47 laboratórios.
 - O caso offline e os testes verificam código, contratos, acesso e regressões conhecidas. Os resultados constam do relatório de validação; não são um benchmark de IA.
 - A fórmula de atenção foi corrigida e o exemplo `[0, ln(3)]` com valores `[2, 6]` dá `5`. A amostragem e o cálculo de Wilson são apresentados com hipóteses explícitas.
-- Toda a matéria jurídica continua sujeita a confirmação humana no texto em vigor antes de publicação; não se infere conformidade de um produto a partir deste livro.
+- As afirmações jurídicas concretas do capítulo 28 foram confrontadas com as disposições oficiais acima. Não houve parecer de advogado nem decisão de conformidade de um produto; essas atividades dependem de um caso concreto e não se inferem desta revisão documental.
 - Para uma futura atualização, rever primeiro protocolos, APIs, legislação e relatórios de modelos; as referências históricas mantêm-se quando explicam a origem de uma técnica.

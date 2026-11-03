@@ -12,7 +12,7 @@ Um \emph{vetor} é, aqui, uma lista ordenada de números:
 \[\mathbf{v}=(v_1,v_2,\ldots,v_d)\in\mathbb{R}^{d}.\]
 
 Podes imaginá-lo como uma seta num espaço de 
-d dimensões. Em modelos de linguagem, cada palavra (ou token) é mapeada para um vetor destes — chamamos a isso \emph{embedding}. Palavras com usos parecidos acabam com vetores parecidos.
+d dimensões. Num Transformer de texto, o identificador de cada token seleciona um vetor aprendido, o \emph{embedding} inicial. Com os parâmetros fixos, essa consulta devolve o mesmo vetor para o mesmo identificador. As camadas seguintes produzem representações que dependem do contexto~\citep{vaswani2017}.
 
 \subsection*{Matrizes como transformações}
 
@@ -21,7 +21,7 @@ Uma \emph{matriz} é uma tabela de números. Multiplicar uma matriz por um vetor
 Do ponto de vista de prompting, o que importa é:
 
 \begin{itemize}[leftmargin=*]
-\item O significado de uma palavra (embedding) não é fixo por dicionário; é aprendido com base no uso em contexto.
+\item O embedding inicial é aprendido durante o treino; as representações nas camadas seguintes variam com os tokens e posições disponíveis.
 \item Transformar vetores corresponde a olhar para a mesma frase com “óculos” diferentes (atenção cabeça X, projeção para queries, etc.).
 \end{itemize}
 
@@ -137,10 +137,10 @@ Este teste compara comportamento observável. Não revela pesos de atenção nem
 
 Quando dizemos que o modelo “entende” que \texttt{gato} e \texttt{cão} são mais parecidos entre si do que com \texttt{parafuso}, não estamos a atribuir-lhe intuição animal. Estamos a falar de \emph{embeddings}: representações vetoriais aprendidas.
 
-Durante o treino, o modelo ajusta os vetores de forma a que tokens que aparecem em contextos semelhantes acabem próximos no espaço. Isso cria um \emph{espaço latente} onde:
+Durante o treino, o objetivo e os dados dão origem a regularidades nas representações. A geometria depende do modelo, da camada e da medida de proximidade. Num \emph{espaço latente}, podemos encontrar padrões como:
 
 \begin{itemize}[leftmargin=*]
-\item Sinónimos tendem a ficar perto.
+\item Palavras com usos semelhantes podem ter representações próximas; antónimos também podem partilhar contextos, pelo que proximidade não significa sinonímia.
 \item Palavras que partilham função gramatical ou papel semântico têm padrões reconhecíveis.
 \item Certos embeddings estáticos apresentam regularidades relacionais aproximadas, estudadas, por exemplo, por Mikolov e colaboradores~\citep{mikolov2013}. Analogias vetoriais não são identidades algébricas nem uma regra geral para representações contextuais.
 \end{itemize}
@@ -148,9 +148,9 @@ Durante o treino, o modelo ajusta os vetores de forma a que tokens que aparecem 
 Porque é que isto interessa para prompts?
 
 \begin{itemize}[leftmargin=*]
-\item Mudar ligeiramente o vocabulário pode pôr o modelo em regiões diferentes do espaço latente (e mudar radicalmente o estilo de resposta).
-\item Fornecer exemplos com um certo “vibe” empurra o embedding do contexto para regiões onde essas respostas são mais prováveis.
-\item Instruções negativas (“não sejas demasiado formal”) também jogam neste espaço, mas muitas vezes com resultados mais caóticos do que usar instruções positivas (“escreve como se estivesses a falar com um colega no café”).
+\item Mudar o vocabulário altera a sequência de tokens e pode mudar a resposta; o efeito não se deduz só de uma distância entre embeddings.
+\item Exemplos de estilo acrescentam padrões ao contexto. Compara a sua utilidade em respostas novas, sem lhes atribuir uma direção geométrica que não mediste.
+\item Instruções positivas e negativas são alternativas a testar. «Escreve como se estivesses a falar com um colega» torna um objetivo observável; não garante que seja superior em todas as tarefas.
 \end{itemize}
 
 \begin{keyideabox}{Prompts empurram o contexto no espaço latente}

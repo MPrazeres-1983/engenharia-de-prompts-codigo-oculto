@@ -38,7 +38,8 @@ jobs:
           python3 -m unittest discover -s tests -v 2>&1 | tee build/testes.txt
           python3 -m exemplos.lavandaria.avaliar | tee build/avaliacao.json
           python3 scripts/verificar_livro.py | tee build/estrutura.json
-          python3 -m compileall -q exemplos scripts tests
+          python3 experiencias/llm_local/verificar_registo.py | tee build/registo-llm.json
+          python3 -m compileall -q exemplos scripts tests experiencias
 
       - name: Compilar LaTeX e BibTeX
         uses: xu-cheng/latex-action@v3
@@ -61,3 +62,4 @@ jobs:
             src/livro.log
             src/livro.bbl
             build/
+            experiencias/llm_local/resultados/

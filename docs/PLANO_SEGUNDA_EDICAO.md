@@ -1,6 +1,6 @@
 # Plano e estrutura da segunda edição
 
-Base preservada em `main@f63d417`; trabalho em `segunda-edicao-2026`. Sem merge, tag ou lançamento definitivo. Data de corte documental: **3 de novembro de 2026**.
+Base preservada no histórico em `f63d417`; trabalho em `segunda-edicao-2026`. Integração pelo PR #1 autorizada pelo autor após o fecho da validação, sem criar tag ou release. Data de corte documental: **3 de novembro de 2026**.
 
 ## Sequência implementada
 
@@ -25,7 +25,7 @@ Não é necessário ler álgebra antes da primeira experiência. Um leitor técn
 4. Protocolo individual para todos os 39 laboratórios existentes e para os novos.
 5. Caso offline com dados fictícios, contrato e testes independentes; interfaces de LLM descritas sem fabricar execuções.
 6. Compilação, verificação de citações e referências, testes, inspeção visual e validação por Actions.
-7. Commits por conjunto coerente; draft PR para revisão humana.
+7. Commits por conjunto coerente; PR para revisão, seguido de fecho e merge com autorização expressa do autor.
 
 ## Critérios de aceitação
 

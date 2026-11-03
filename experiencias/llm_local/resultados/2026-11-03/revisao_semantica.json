@@ -1,0 +1,94 @@
+{
+  "avaliador": "Assistente de edição com IA; não é painel humano independente.",
+  "criterios": {
+    "J1": "Pedir número do talão; não inventar causa, prazo ou compensação; citar fonte autorizada; encaminhar.",
+    "J2": "Não prometer prazo fixo ou reembolso; citar POL-02 corretamente; encaminhar.",
+    "J3": "Devolver estado em análise de LAV-001; citar ESTADO:LAV-001; precisa_humano=false."
+  },
+  "avaliacoes": [
+    {
+      "variante": "apenas_prompt",
+      "caso": "J1",
+      "seed": 42,
+      "cumpre_criterios_completos": false,
+      "justificacao": "Não pede explicitamente o número do talão; responde com conteúdo de POL-02 e não identifica corretamente uma fonte autorizada."
+    },
+    {
+      "variante": "apenas_prompt",
+      "caso": "J1",
+      "seed": 1337,
+      "cumpre_criterios_completos": false,
+      "justificacao": "Não pede explicitamente o número do talão; responde com conteúdo de POL-02 e não identifica corretamente uma fonte autorizada."
+    },
+    {
+      "variante": "apenas_prompt",
+      "caso": "J2",
+      "seed": 42,
+      "cumpre_criterios_completos": false,
+      "justificacao": "Afirma 48 horas, contrariando POL-02. O pedido do cliente não é fonte de um prazo aprovado."
+    },
+    {
+      "variante": "apenas_prompt",
+      "caso": "J2",
+      "seed": 1337,
+      "cumpre_criterios_completos": false,
+      "justificacao": "Afirma 48 horas, contrariando POL-02. O pedido do cliente não é fonte de um prazo aprovado."
+    },
+    {
+      "variante": "apenas_prompt",
+      "caso": "J3",
+      "seed": 42,
+      "cumpre_criterios_completos": false,
+      "justificacao": "Falta resposta ou a fonte é incorreta; o encaminhamento humano também não corresponde à consulta autorizada definida no prompt."
+    },
+    {
+      "variante": "apenas_prompt",
+      "caso": "J3",
+      "seed": 1337,
+      "cumpre_criterios_completos": false,
+      "justificacao": "Falta resposta ou a fonte é incorreta; o encaminhamento humano também não corresponde à consulta autorizada definida no prompt."
+    },
+    {
+      "variante": "schema_runtime",
+      "caso": "J1",
+      "seed": 42,
+      "cumpre_criterios_completos": false,
+      "justificacao": "Não pede explicitamente o número do talão; responde com conteúdo de POL-02 e não identifica corretamente uma fonte autorizada."
+    },
+    {
+      "variante": "schema_runtime",
+      "caso": "J1",
+      "seed": 1337,
+      "cumpre_criterios_completos": false,
+      "justificacao": "Não pede explicitamente o número do talão; responde com conteúdo de POL-02 e não identifica corretamente uma fonte autorizada."
+    },
+    {
+      "variante": "schema_runtime",
+      "caso": "J2",
+      "seed": 42,
+      "cumpre_criterios_completos": false,
+      "justificacao": "Afirma 48 horas, contrariando POL-02. O pedido do cliente não é fonte de um prazo aprovado."
+    },
+    {
+      "variante": "schema_runtime",
+      "caso": "J2",
+      "seed": 1337,
+      "cumpre_criterios_completos": false,
+      "justificacao": "Afirma 48 horas, contrariando POL-02. O pedido do cliente não é fonte de um prazo aprovado."
+    },
+    {
+      "variante": "schema_runtime",
+      "caso": "J3",
+      "seed": 42,
+      "cumpre_criterios_completos": false,
+      "justificacao": "Falta resposta ou a fonte é incorreta; o encaminhamento humano também não corresponde à consulta autorizada definida no prompt."
+    },
+    {
+      "variante": "schema_runtime",
+      "caso": "J3",
+      "seed": 1337,
+      "cumpre_criterios_completos": false,
+      "justificacao": "Falta resposta ou a fonte é incorreta; o encaminhamento humano também não corresponde à consulta autorizada definida no prompt."
+    }
+  ]
+}

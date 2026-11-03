@@ -84,7 +84,7 @@ sentimento: um entre ["negativo", "neutro", "positivo"]
 Devolve APENAS um objeto JSON válido.
 \end{lstlisting}
 
-Aplica a 3–5 exemplos reais e vê se o modelo consegue respeitar o schema.
+Aplica aos mesmos três a cinco textos fictícios ou autorizados e verifica se o modelo respeita o esquema.
 
 \textbf{Resultado esperado e validação:} Faz parsing e confere campos, tipos, enumerações e informação ausente. Compara valores com os textos, sem concluir que JSON válido implica verdade.
 
@@ -166,7 +166,7 @@ Em vez disso, podes:
 \item pedir um excerto de evidência e permitir encaminhamento humano.
 \end{itemize}
 
-Exemplo de schema mais honesto:
+Exemplo de instância com informação ausente, a validar por um esquema que admita estes valores:
 
 \begin{lstlisting}
 {

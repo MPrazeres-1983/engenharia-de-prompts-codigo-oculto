@@ -406,3 +406,29 @@ Faz repetições quando há variabilidade e compara versões nos mesmos casos. G
 
 \section{Juízes também precisam de auditoria}
 Estudos de avaliação com LLMs documentam efeitos como preferência pela posição de uma resposta e pela verbosidade~\citep{zheng2023}. Baralha a ordem, oculta a identidade das versões, usa critérios ancorados em exemplos e compara uma amostra com avaliação humana. Uma resposta mais longa não é automaticamente mais correta. A nota do juiz é uma medição imperfeita, não uma autoridade que dispensa revisão.
+
+\section{Um ensaio real, incluindo o que correu mal}
+\label{sec:ensaio-real}
+Em 3 de novembro de 2026 foram executadas 52 inferências locais com o modelo oficial Qwen2.5-0.5B-Instruct, quantização Q4\_K\_M, e llama.cpp build b11960~\citep{qwengguf,llamacpp}. O repositório conserva os pedidos, respostas brutas, revisões, hashes, configurações e avaliação em \texttt{experiencias/llm\_local}. Os casos e soluções foram definidos antes das chamadas; não se voltou a afinar o prompt para apagar as falhas.
+
+São três comparações pequenas, cada uma com duas seeds, temperatura 0.2 e contexto novo por chamada. A classificação usa seis mensagens; a resposta documental, três pedidos; a duração, quatro problemas. Na última comparação, ambas as condições usam o mesmo esquema JSON; só muda uma instrução de decomposição, sem pedir uma explicação. Não se reproduz o método few-shot CoT dos estudos originais.
+
+\begin{table}[htbp]
+\small
+\begin{tabularx}{\textwidth}{@{}lXX@{}}
+\toprule
+Tarefa e critério & Primeira condição & Segunda condição \\
+\midrule
+Classificação: etiqueta exata & Zero-shot: 6/12 & Few-shot: 11/12 \\
+Documentos: JSON válido & Só prompt: 6/6 & Esquema no runtime: 6/6 \\
+Documentos: contrato e excertos & Só prompt: 0/6 & Esquema no runtime: 1/6 \\
+Duração: resultado exato & Direta: 1/8 & Decomposição: 0/8 \\
+\bottomrule
+\end{tabularx}
+\caption{Contagens observadas no ensaio local. Cada denominador inclui duas execuções dos mesmos casos; não representa outros tantos casos independentes.}
+\label{tab:ensaio-local}
+\end{table}
+
+O caso mais instrutivo é uma resposta «48 horas» a um pedido de reembolso. Passou o contrato e citou literalmente POL-02, mas essa fonte diz precisamente que não existe prazo fixo nem reembolso automático. A presença de uma citação verdadeira não faz a resposta decorrer dela. Nas seis saídas com esquema, a estrutura respeitou os campos e tipos; cinco falharam a proveniência verificada e a restante falhou o conteúdo. A revisão de conteúdo registada foi feita durante a edição assistida, sem painel humano independente.
+
+O modelo é pequeno, quantizado e não representa os modelos disponíveis em 2026. A amostra é sintética e curta; as repetições partilham casos e modelo. Estes números demonstram o procedimento e os seus limites. Não provam melhoria geral de few-shot, superioridade de um fornecedor, inutilidade de decomposição ou segurança contra ataques. Mesmo quando todos os pedidos terminam sem erro de execução, a tarefa pode falhar. Para calcular durações, continua a haver uma solução bastante competente: fazer a conta em código.

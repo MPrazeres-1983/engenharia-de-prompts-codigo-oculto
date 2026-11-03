@@ -41,11 +41,11 @@
 | 25. Avaliação | Original 18 | Precisão/sensibilidade, cobertura, Wilson, teste reservado e enviesamento do juiz; diagrama. |
 | 26. Segurança | Original 20 | OWASP 2025, autorização externa e novo laboratório de injeção. |
 | 27. LLMOps | Original 19 | Custo por tarefa, percentis, cache autorizada e minimização/pseudonimização. |
-| 28. Governação | Novo | RGPD/AI Act/NIST, data de consulta, limites de acesso e revisão jurídica pendente. |
+| 28. Governação | Novo | RGPD/AI Act/NIST, disposições oficiais e calendário alterado pelo Regulamento (UE) 2026/1744; alcance documental declarado. |
 | 29. Futuro | Original 22 | Separação de cenários e garantias; competências sem promessas de segurança de emprego. |
 | A. Padrões | Original 23 | Movido para consulta; JSON corrigido e terminologia harmonizada. |
 | B. Glossário | Original A | Acrescentados catorze termos; definições de temperatura/RAG revistas. |
-| C. Leitura de fontes + bibliografia | Original B | Orientação mantida; referências vagas convertidas em 38 entradas concretas. |
+| C. Leitura de fontes + bibliografia | Original B | Orientação mantida; referências vagas convertidas em 41 entradas concretas, incluindo as três acrescentadas no fecho. |
 
 ### Cortes e substituições justificados
 
@@ -64,4 +64,14 @@
 - Actions adaptada para push e pull request, testes, BibTeX, SHA no PDF e artefactos de evidência. Removida publicação automática de release deste fluxo de revisão; não foi criada qualquer tag.
 - Inspeção visual de todas as páginas em miniaturas e amostra ampliada de fórmulas, diagramas, tabelas, laboratórios, índice e bibliografia. Corrigida proximidade de texto no esquema do Transformer e avisos de largura/glossário.
 
-O relatório `VALIDACAO_SEGUNDA_EDICAO.md` identifica as execuções concretas e as questões humanas. A branch e o draft PR são material de revisão; não representam aprovação final do autor.
+O relatório `VALIDACAO_SEGUNDA_EDICAO.md` identifica as execuções concretas e as questões humanas. A decisão posterior do autor de terminar e fazer merge está registada na secção de fecho abaixo.
+
+## 2026-11-03 — Fecho autorizado pelo autor
+
+- O autor pediu expressamente para terminar o trabalho pendente e fazer merge do PR #1; mantém-se a branch existente.
+- Verificação documental dos artigos jurídicos citados: RGPD e artigo 113 do AI Act, com Regulamento (UE) 2026/1744. Registados localizadores e alcance do acesso.
+- Consulta dos métodos originais de CoT, self-consistency, ToT e autocorreção intrínseca; nenhuma reprodução de estudos é alegada.
+- Revisão editorial dos percursos inicial e técnico. Corrigidas a obrigatoriedade contraditória da persona, a alegação universal sobre exemplos e imprecisões entre embedding inicial, representação contextual e metáfora geométrica.
+- 52 inferências locais com Qwen2.5-0.5B-Instruct Q4_K_M e llama.cpp b11960; prompts, respostas, hashes e avaliação guardados. O capítulo 25 inclui contagens e um erro factual que passou o contrato. Não se afinou o prompt sobre os resultados.
+- Atualizadas nota de edição, documentação e distinção entre demonstração offline e ensaio real. Não houve estudo com leitores humanos independentes nem parecer jurídico profissional.
+- Critério de integração: testes e compilação final sem erros, inspeção do PDF e CI bem-sucedida antes de marcar o PR pronto e fazer merge. O PR regista o SHA e as execuções finais. Nenhuma tag ou release é criada por este fecho.

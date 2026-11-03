@@ -5,6 +5,8 @@ A empresa começou com uma hipótese sobre meias esquerdas. Chegou a um sistema 
 
 \ficcao Todos os documentos, clientes e pedidos deste capítulo são inventados. O exemplo executa-se localmente, sem conta, chave de API ou envio de dados. Usa pesquisa lexical e um gerador por templates. \textbf{Não é uma execução de um LLM, um servidor MCP ou um benchmark de raciocínio.} Podemos assim testar contratos e barreiras antes de ligar uma componente estocástica.
 
+Há também um ensaio separado com um LLM local em \texttt{experiencias/llm\_local}, descrito no capítulo~\ref{ch:avaliacao}. Usa os mesmos documentos autorizados e o mesmo validador, sem alterar o funcionamento offline por omissão. Os resultados incluem respostas incorretas; não são uma aprovação para operar com clientes.
+
 \section{O que o repositório executa}
 O pacote \texttt{exemplos/lavandaria} contém documentos, reclamações, esquema de saída, pesquisa, executor, gerador local e avaliação. A suite em \texttt{tests} verifica critérios da tabela~\ref{tab:spec-lav}.
 
