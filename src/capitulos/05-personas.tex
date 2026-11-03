@@ -1,0 +1,269 @@
+\chapter{Personas, System Prompts e Identidade Artificial}
+\label{ch:personas}
+
+\section{Porque ``age como...'' é fraco}
+
+Um dos prompts mais populares do mundo é qualquer coisa do género:
+
+\begin{quote}
+\small
+``Age como um especialista em X.''
+\end{quote}
+
+Funciona? Às vezes. Mas, na maior parte dos casos, é uma instrução vaga, com três problemas:
+
+\begin{enumerate}[leftmargin=*]
+\item \textbf{Não define o que é ``especialista''.}
+É académico? Consultor? Operacional? Um tipo prático com 20 anos de chão de fábrica?
+\item \textbf{Não define objetivos.}
+O que queres do especialista? Explicar? Decidir? Propor? Criticar?
+\item \textbf{Não define estilo.}
+Formal, informal, agressivo, diplomático, cínico, neutro?
+\end{enumerate}
+
+Sem esses critérios, o modelo pode associar «especialista» a estilos e tarefas diferentes. A resposta resulta do modelo e do contexto fornecido; não podemos explicá-la como uma média das vezes em que alguém escreveu «age como».
+
+Uma persona útil precisa sempre de mais estrutura:
+
+\begin{itemize}[leftmargin=*]
+\item papel,
+\item objetivos,
+\item restrições,
+\item estilo,
+\item enviesamentos assumidos (sim, vamos usá-los a nosso favor).
+\end{itemize}
+
+\begin{keyideabox}{Personas são contratos, não fantasias}
+Uma persona útil explicita papel, objetivos, estilo e limites. «Contrato» é aqui uma analogia de especificação, sem garantia de cumprimento. Uma descrição concreta permite testar o comportamento pretendido.
+\end{keyideabox}
+
+\section{Hierarquia de mensagens: system, user, assistant}
+
+Na maioria das APIs modernas, uma conversa com o modelo é composta por mensagens com um \emph{role}:
+
+\begin{itemize}[leftmargin=*]
+\item \texttt{system} — define regras de topo e contexto global.
+\item \texttt{user} — pedidos do utilizador.
+\item \texttt{assistant} — respostas do modelo (e, às vezes, exemplos).
+\end{itemize}
+
+A hierarquia é uma regra de interface e de treino, não uma propriedade universal da linguagem natural. Algumas plataformas distinguem também instruções de aplicação (por exemplo, \texttt{developer}), mensagens de ferramentas e conteúdo citado. Verifica os papéis e prioridades documentados no serviço usado~\citep{modelspec2026}. Mesmo quando o modelo deve seguir uma hierarquia, pode falhar; a autorização deve ser aplicada por código.
+
+Em muitas interfaces de chat, não vês o system prompt; ele está escondido, configurado pelo fornecedor. Em sistemas que construas tu, tens controlo direto sobre isso.
+
+Pensar com esta hierarquia em mente ajuda a organizar o teu design:
+
+\begin{itemize}[leftmargin=*]
+\item O \textbf{system} define quem o modelo é, o que faz e o que não faz.
+\item O \textbf{user} traz o problema concreto daquele momento.
+\item O \textbf{assistant} mantém consistência com o que ficou definido em system.
+\end{itemize}
+
+\begin{promptlabbox}{Separar regras globais de pedidos concretos}
+\textbf{Objetivo e contexto:} Distinguir instruções de aplicação do pedido concreto. Usa apenas um cenário financeiro fictício e sem dados pessoais.
+
+Constrói um mini-exemplo de API (mesmo só conceptual) com:
+
+\medskip
+
+\textbf{System}
+
+\begin{lstlisting}
+És um consultor técnico de IA. O teu objetivo é
+ajudar equipas de desenvolvimento a desenhar
+sistemas com LLMs com foco em clareza, robustez
+e segurança.
+
+Regras:
+
+Explica sempre os trade-offs.
+
+Se o utilizador pedir algo inseguro ou irresponsável,
+recusa e sugere alternativas seguras.
+
+Usa português de Portugal.
+\end{lstlisting}
+
+\textbf{User}
+
+\begin{lstlisting}
+Queremos pôr um LLM a responder a clientes
+sobre o nosso produto financeiro. Que opções temos?
+\end{lstlisting}
+
+Testa o mesmo pedido:
+
+\begin{itemize}[leftmargin=*]
+\item sem system prompt nenhum,
+\item com o system acima.
+\end{itemize}
+
+Compara a diferença de tom, estrutura e preocupação com segurança.
+
+\textbf{Resultado esperado e validação:} Compara objetivo, limites e explicação das opções de arquitetura. O resultado esperado é organização mais explícita; não é aconselhamento financeiro validado.
+
+\textbf{Falhas possíveis:} Simular um role num campo de texto e assumir que isso altera a hierarquia real, ou tratar a resposta como parecer profissional.
+\end{promptlabbox}
+
+\section{Construir personas granulares (Persona Stack)}
+
+Uma persona bem especificada é, no mínimo, um conjunto de campos:
+
+\begin{itemize}[leftmargin=*]
+\item \textbf{Identidade profissional} (quem és?).
+\item \textbf{Objetivo principal} (para que estás aqui?).
+\item \textbf{Estilo de comunicação} (como falas?).
+\item \textbf{Enviesamentos declarados} (em que desconfias? o que valorizas?).
+\item \textbf{Limites éticos e práticos} (o que recusas fazer?).
+\end{itemize}
+
+Em vez de uma só persona monolítica, podes trabalhar com um \emph{Persona Stack}: várias personas que podes invocar conforme o tipo de tarefa.
+
+Exemplo de stack para um sistema de apoio a desenvolvimento de software:
+
+\begin{itemize}[leftmargin=*]
+\item \textbf{Arquiteto}: foca-se em design de alto nível, trade-offs, diagramas.
+\item \textbf{Revisor de código}: foca-se em bugs, legibilidade, segurança.
+\item \textbf{Professor}: foca-se em explicar conceitos a juniores.
+\item \textbf{Gestor de produto}: foca-se em impacto no negócio e utilizador final.
+\end{itemize}
+
+Cada persona tem o seu bloco de instruções no catálogo da aplicação. «Vinte anos de experiência» descreve uma voz fictícia; não concede credenciais, acesso a dados ou competência comprovada.
+
+\begin{godmodebox}{Template de persona granular}
+Podes usar esta estrutura como ponto de partida para qualquer persona:
+
+\medskip
+
+\begin{lstlisting}
+[NOME DA PERSONA]
+Identidade:
+
+[descrição curta: anos de experiência, área, tipo de trabalho]
+
+Objetivo principal:
+
+[uma frase clara sobre o que prioriza]
+
+Estilo de comunicação:
+
+[3 bullets: tom, nível de detalhe, jargão permitido]
+
+Enviesamentos assumidos:
+
+[prefere X a Y, desconfia de Z, valoriza A e B]
+
+Limites:
+
+[o que nunca faz; temas que encaminha para especialistas humanos]
+
+Protocolos:
+
+[como responde quando está inseguro]
+
+[como pede mais informação]
+\end{lstlisting}
+\end{godmodebox}
+
+\section{Multi-persona e conselhos de administração simulados}
+
+Uma das funcionalidades mais interessantes dos LLMs é a capacidade de simular múltiplas vozes num só prompt. Em vez de pedires opinião “genérica”, podes criar um micro-conselho de administração artificial:
+
+\begin{itemize}[leftmargin=*]
+\item Persona A: otimista (vê oportunidades).
+\item Persona B: pessimista (lista riscos).
+\item Persona C: financeiro (olha para números).
+\item Persona D: técnico (olha para viabilidade).
+\end{itemize}
+
+Depois, podes pedir ao modelo para:
+
+\begin{enumerate}[leftmargin=*]
+\item Deixar cada persona argumentar separadamente.
+\item Produzir um resumo/síntese das posições.
+\item Propor uma decisão final baseada na discussão.
+\end{enumerate}
+
+As vozes são produzidas pelo mesmo sistema e podem partilhar os mesmos erros. Não contes cada persona como um voto independente nem como parecer de um profissional. O valor está em gerar perguntas e alternativas que vais verificar.
+
+\begin{promptlabbox}{Simular um debate estruturado}
+\textbf{Objetivo e contexto:} Gerar perspetivas para uma decisão reversível e fictícia, usando critérios já escritos por ti.
+
+Define quatro personas para discutir uma decisão tua importante (por exemplo, adotar ou não uma nova tecnologia).
+
+\medskip
+
+\textbf{Passo 1 — Definir personas}
+
+Escreve algo neste espírito:
+
+\begin{lstlisting}
+Persona 1: Visionário de Produto
+Persona 2: Engenheiro Cético
+Persona 3: Financeiro Conservador
+Persona 4: Utilizador Final Exigente
+\end{lstlisting}
+
+\textbf{Passo 2 — Debate}
+
+Pede ao modelo:
+
+\begin{lstlisting}
+Cada persona deve expor argumentos a favor e
+contra a decisão. Depois, faz uma síntese neutra
+com os principais trade-offs.
+\end{lstlisting}
+
+\textbf{Passo 3 — Reflexão}
+
+Compara as preocupações levantadas pelo modelo com as que já tinhas identificado. O objetivo não é concordar com tudo, mas ver ângulos que te faltavam.
+
+\textbf{Resultado esperado e validação:} Identifica argumentos novos e liga-os a evidência a verificar. Conta a saída como sugestões de um único sistema, não como quatro pareceres independentes.
+
+\textbf{Falhas possíveis:} Transformar vozes simuladas em votação científica ou aceitar números e pressupostos sem fontes.
+\end{promptlabbox}
+
+\section{Deriva de contexto e re-ancoragem}
+
+Quanto mais longa é uma conversa, maior a probabilidade de o modelo “derivar”:
+
+\begin{itemize}[leftmargin=*]
+\item começar a ignorar instruções iniciais,
+\item mudar de tom sem tu pedires,
+\item misturar tarefas ou esquecer constraints importantes.
+\end{itemize}
+
+Isto acontece por várias razões:
+
+\begin{itemize}[leftmargin=*]
+\item A janela de contexto é finita, e mensagens antigas podem ser truncadas.
+\item Mesmo quando não são truncadas, o padrão de atenção favorece as mensagens mais recentes.
+\item Instruções contraditórias ao longo da conversa criam ambiguidade.
+\end{itemize}
+
+O antídoto é a \emph{re-ancoragem}: relembrar explicitamente quem o modelo é e o que está a fazer, de tempos a tempos.
+
+Técnicas simples:
+
+\begin{itemize}[leftmargin=*]
+\item Repetir um resumo curto das regras no início de novas fases da conversa.
+\item Pedir ao modelo para recapitular, em 3–4 frases, o que está a tentar fazer.
+\item Usar marcadores claros tipo ``[NOVA TAREFA]'' quando mudares de assunto.
+\end{itemize}
+
+\begin{warningboxenv}{Evita a conversa infinita de tudo e mais alguma coisa}
+Se usas o mesmo chat para código, receitas de cozinha e planeamento de férias, não te admires que o modelo fique confuso. Em contexto de trabalho, é melhor abrir novas sessões por projeto/tópico, mantendo as instruções alinhadas ao problema.
+\end{warningboxenv}
+
+\section{Resumo: identidade artificial sob controlo}
+
+Neste capítulo, o objetivo foi arrancar-te da fantasia “age como” e pôr-te a pensar em:
+
+\begin{itemize}[leftmargin=*]
+\item system prompts como constituições,
+\item personas como contratos,
+\item multi-persona como ferramenta deliberada,
+\item re-ancoragem como manutenção de estado.
+\end{itemize}
+
+O contexto estruturado e os exemplos do capítulo~\ref{ch:contexto} completam este desenho. Na parte seguinte, abrimos a máquina para perceber melhor por que motivo a mesma instrução pode produzir respostas diferentes.

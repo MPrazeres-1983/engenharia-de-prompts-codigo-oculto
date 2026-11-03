@@ -1,0 +1,171 @@
+
+
+\documentclass[12pt,a4paper,oneside]{book}
+
+% --------------------------------------------------
+% Codificação, língua e fontes
+% --------------------------------------------------
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[portuguese]{babel}
+
+% --------------------------------------------------
+% Layout e microtipografia
+% --------------------------------------------------
+\usepackage[a4paper,margin=2.5cm]{geometry}
+\usepackage{microtype}
+\usepackage{setspace}
+
+% --------------------------------------------------
+% Matemática e ambientes de teorema
+% --------------------------------------------------
+\usepackage{amsmath,amssymb,amsthm}
+
+% --------------------------------------------------
+% Gráficos, cores
+% --------------------------------------------------
+\usepackage{graphicx}
+\usepackage{xcolor}
+
+% --------------------------------------------------
+% Hiperligações e referências cruzadas
+% --------------------------------------------------
+\usepackage{hyperref}
+\hypersetup{
+colorlinks=true,
+linkcolor=blue,
+citecolor=blue,
+urlcolor=blue,
+pdftitle={Engenharia de Prompts: O Código Oculto --- Segunda edição},
+pdfauthor={Mário Prazeres}
+}
+\usepackage[nameinlink,noabbrev]{cleveref}
+
+% --------------------------------------------------
+% Listas, código, citações
+% --------------------------------------------------
+\usepackage{enumitem}
+\usepackage{listings}
+\usepackage{csquotes}
+\usepackage[numbers,sort&compress]{natbib}
+\usepackage{booktabs,tabularx,longtable,array}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,calc}
+\usepackage{xurl}
+\setcounter{tocdepth}{1}
+\setlength{\emergencystretch}{2em}
+\InputIfFileExists{revisao.tex}{}{}
+\providecommand{\revisao}{trabalho-2026-11-03}
+\newcommand{\ficcao}{\textbf{Caso fictício.} }
+
+
+% Configuração básica para listagens de código
+\lstset{
+basicstyle=\ttfamily\footnotesize,
+  upquote=true,
+  breakatwhitespace=false,
+  xleftmargin=0pt,
+  xrightmargin=0pt,
+breaklines=true,
+columns=fullflexible,
+frame=single,
+keepspaces=true,
+showstringspaces=false,
+tabsize=2,
+literate={á}{{\'a}}1 {à}{{\`a}}1 {â}{{\^a}}1 {ã}{{\~a}}1
+{é}{{\'e}}1 {ê}{{\^e}}1 {í}{{\'i}}1 {ó}{{\'o}}1 {ô}{{\^o}}1
+{õ}{{\~o}}1 {ú}{{\'u}}1 {ü}{{\"u}}1 {ç}{{\c{c}}}1
+{Á}{{\'A}}1 {À}{{\`A}}1 {Â}{{\^A}}1 {Ã}{{\~A}}1
+{É}{{\'E}}1 {Ê}{{\^E}}1 {Í}{{\'I}}1 {Ó}{{\'O}}1 {Ô}{{\^O}}1
+{Õ}{{\~O}}1 {Ú}{{\'U}}1 {Ç}{{\c{C}}}1
+{“}{{``}}1 {”}{{''}}1 {‘}{{`}}1 {’}{{'}}1
+{–}{{--}}1 {—}{{---}}1 {…}{{...}}3 {→}{{$\to$}}2 {⇒}{{$\Rightarrow$}}2
+}
+
+% --------------------------------------------------
+% Caixas especiais (Prompt Labs, avisos, etc.)
+% --------------------------------------------------
+\usepackage[most]{tcolorbox}
+\tcbset{
+enhanced,
+sharp corners,
+boxrule=0.6pt,
+colback=white,
+colframe=black
+}
+
+% --------------------------------------------------
+% Ambientes de teorema (para quando forem úteis)
+% --------------------------------------------------
+\theoremstyle{definition}
+\newtheorem{definition}{Definição}[chapter]
+\theoremstyle{plain}
+\newtheorem{theorem}{Teorema}[chapter]
+\newtheorem{proposition}{Proposição}[chapter]
+\theoremstyle{remark}
+\newtheorem{remark}{Nota}[chapter]
+\newtheorem{example}{Exemplo}[chapter]
+
+% --------------------------------------------------
+% Contadores para elementos especiais
+% --------------------------------------------------
+\newcounter{promptlab}
+\newcounter{godmode}
+\newcounter{checklist}
+\newcounter{warningbox}
+\newcounter{keyidea}
+
+% --------------------------------------------------
+% Ambiente: Prompt Lab
+% --------------------------------------------------
+\newtcolorbox{promptlabbox}[2][]{
+breakable,
+title={Prompt Lab~\refstepcounter{promptlab}\thepromptlab: #2},
+fonttitle=\bfseries,
+#1
+}
+
+% --------------------------------------------------
+% Ambiente: God Mode
+% --------------------------------------------------
+\newtcolorbox{godmodebox}[2][]{
+breakable,
+title={God Mode~\refstepcounter{godmode}\thegodmode: #2},
+fonttitle=\bfseries,
+#1
+}
+
+% --------------------------------------------------
+% Ambiente: Checklist
+% --------------------------------------------------
+\newtcolorbox{checklistbox}[2][]{
+breakable,
+title={Checklist~\refstepcounter{checklist}\thechecklist: #2},
+fonttitle=\bfseries,
+#1
+}
+
+% --------------------------------------------------
+% Ambiente: Aten\c c~ao / Aviso
+% --------------------------------------------------
+\newtcolorbox{warningboxenv}[2][]{
+breakable,
+title={Atenção \refstepcounter{warningbox}\thewarningbox: #2},
+fonttitle=\bfseries,
+#1
+}
+
+% --------------------------------------------------
+% Ambiente: Ideia-Chave
+% --------------------------------------------------
+\newtcolorbox{keyideabox}[2][]{
+breakable,
+title={Ideia-chave~\refstepcounter{keyidea}\thekeyidea: #2},
+fonttitle=\bfseries,
+#1
+}
+
+% --------------------------------------------------
+% Título, autor, data
+% --------------------------------------------------

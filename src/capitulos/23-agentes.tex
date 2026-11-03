@@ -1,0 +1,332 @@
+\chapter{Cadeias de Prompts, Agentes e Workflows}
+\label{ch:agentes}
+
+\section{Do prompt solitário ao sistema inteiro}
+
+Até aqui falámos sobretudo de \emph{prompts individuais}: uma pergunta bem escrita, uma resposta aceitável. Isto é útil para:
+
+\begin{itemize}[leftmargin=*]
+\item experimentação individual,
+\item tarefas pontuais,
+\item protótipos rápidos.
+\end{itemize}
+
+Mas no mundo real, a maior parte do valor aparece quando:
+
+\begin{itemize}[leftmargin=*]
+\item ligas vários prompts em sequência,
+\item combinas LLMs com ferramentas externas,
+\item defines fluxos de decisão (quem faz o quê, em que ordem),
+\item consegues repetir o processo amanhã sem teres de “inventar o prompt do zero”.
+\end{itemize}
+
+É aqui que entram:
+
+\begin{itemize}[leftmargin=*]
+\item \textbf{cadeias de prompts} (prompt chaining),
+\item \textbf{agentes} (LLMs com memória de curto prazo + ferramentas + objetivos),
+\item \textbf{workflows} (orquestração de várias etapas, nem sempre todas com IA).
+\end{itemize}
+
+\begin{keyideabox}{Um sistema de IA é mais do que “o prompt do bot”}
+Quando alguém diz “temos um chatbot com IA”, o prompt de sistema é apenas uma parte da arquitetura, sem percentagem universal.
+O resto é:
+\begin{itemize}[leftmargin=*]
+\item fluxos de pedidos,
+\item gestão de contexto,
+\item chamadas a ferramentas e bases de dados,
+\item logs, métricas, limites, timeouts.
+\end{itemize}
+\end{keyideabox}
+
+\section{Cadeias de prompts: dividir o problema em etapas}
+
+Prompt chaining é a arte de transformar um pedido grande e vago numa sequência de passos mais pequenos, cada um com o seu prompt.
+
+Exemplo simples: escrever uma landing page.
+
+\begin{enumerate}[leftmargin=*]
+\item \textbf{Etapa 1} — Clarificar o produto e o público.
+\item \textbf{Etapa 2} — Definir estrutura (secções, ordem).
+\item \textbf{Etapa 3} — Gerar rascunho de cada secção.
+\item \textbf{Etapa 4} — Rever tom/estilo.
+\end{enumerate}
+
+Cada etapa é um prompt diferente, muitas vezes com modelos de resposta diferentes (um mais criativo, outro mais crítico). Em pseudo-código:
+
+\begin{lstlisting}
+E1: Prompt de clarificação -> resumo_produto
+E2: Prompt de estrutura -> esqueleto
+E3: Prompt de geração -> rascunho
+E4: Prompt de revisão -> versão_final
+\end{lstlisting}
+
+No limite, podes fazer isto tudo num único prompt gigante. Mas:
+
+\begin{itemize}[leftmargin=*]
+\item perdes capacidade de debug,
+\item é mais difícil reaproveitar partes,
+\item é mais frágil a pequenas mudanças.
+\end{itemize}
+
+\begin{promptlabbox}{Refatorar um pedido complexo em cadeia}
+\textbf{Objetivo e contexto:} Dividir uma tarefa nas mesmas entradas e critérios do pedido original, com contratos entre passos.
+
+Escolhe um pedido que costumas fazer à IA e que resulta num prompt enorme com muitas instruções (por exemplo: “faz-me um plano de curso de X semanas, com exercícios, explicações, etc.”).
+
+\medskip
+
+\textbf{Passo 1} — Identifica 3–5 etapas lógicas (por exemplo: clarificar objetivo, definir módulos, gerar exercícios, gerar texto explicativo).
+
+\textbf{Passo 2} — Escreve um prompt separado para cada etapa.
+
+\textbf{Passo 3} — Executa a cadeia manualmente (copiando a saída de um passo para o seguinte) e compara com o resultado do “mega-prompt”.
+
+Avalia:
+\begin{itemize}[leftmargin=*]
+\item qual dos métodos é mais fácil de ajustar?
+\item em qual consegues localizar melhor a origem de um erro?
+\end{itemize}
+
+\textbf{Resultado esperado e validação:} Guarda entradas e saídas de cada etapa e verifica onde surge cada falha. Compara qualidade, custo e facilidade de diagnóstico.
+
+\textbf{Falhas possíveis:} Aumentar passos sem benefício, perder informação em resumos intermédios ou ocultar falhas com uma síntese final.
+\end{promptlabbox}
+
+\section{Tipos de cadeia: linear, com ramos e com loops}
+
+Há três padrões básicos:
+
+\subsection*{Cadeia linear}
+
+Cada passo usa a saída do anterior e segue em frente. Exemplo:
+
+\begin{lstlisting}
+Brief -> Outline -> Draft -> Review
+\end{lstlisting}
+
+Bom para processos previsíveis e repetíveis.
+
+\subsection*{Cadeia com ramos}
+
+Um passo decide qual caminho seguir. Exemplo em suporte ao cliente:
+
+\begin{lstlisting}
+Classificar_ticket -> (rota "técnico" ou rota "faturação")
+\end{lstlisting}
+
+O LLM aqui pode:
+
+\begin{itemize}[leftmargin=*]
+\item classificar o ticket em categorias,
+\item decidir qual cadeia específica executar.
+\end{itemize}
+
+\subsection*{Cadeia com loops}
+
+O sistema repete uma etapa até satisfazer um critério (por exemplo, qualidade mínima). Exemplo:
+
+\begin{lstlisting}
+Gerar_rascunho -> Criticar -> Reescrever
+
+|-------------------------|
+(repetir até score >= 8/10)
+\end{lstlisting}
+
+\begin{warningboxenv}{Loops sem critério = receita para contas de API arderem}
+Loop é útil, mas só com:
+\begin{itemize}[leftmargin=*]
+\item critério de paragem claro (número máximo de iterações ou score mínimo),
+\item sinalidades para “fail fast” quando algo está estruturalmente errado.
+\end{itemize}
+Sem isto, ficas com agentes a conversar consigo próprios até ao fim do orçamento.
+\end{warningboxenv}
+
+\section{Agentes: definição pragmática vs hype}
+
+“Agente” é uma daquelas palavras que significa tudo e nada. Vamos à versão pragmática:
+
+\begin{quote}
+\emph{Um agente é um sistema baseado em LLM que tem:}
+\begin{itemize}[leftmargin=*]
+\item \emph{um objetivo relativamente estável,}
+\item \emph{acesso a ferramentas ou ambiente,}
+\item \emph{capacidade de decidir que ação tomar a seguir com base no estado atual.}
+\end{itemize}
+\end{quote}
+
+Isto pode ser tão simples quanto:
+
+\begin{itemize}[leftmargin=*]
+\item um LLM com acesso limitado a uma API de pesquisa interna;
+\end{itemize}
+
+ou tão complexo quanto:
+
+\begin{itemize}[leftmargin=*]
+\item múltiplos LLMs com papéis diferentes, a colaborar, com memória e logs.
+\end{itemize}
+
+Diferença em relação a uma cadeia fixa:
+
+\begin{itemize}[leftmargin=*]
+\item na cadeia, a ordem das etapas é pré-definida;
+\item no agente, a ordem pode mudar em tempo de execução, em função do contexto.
+\end{itemize}
+
+\begin{keyideabox}{Nem todo workflow com LLM é “agente inteligente”}
+Se o teu sistema faz sempre “A depois B depois C”, isso é uma cadeia.
+Chamar-lhe “agente autónomo” só porque fica bem na apresentação não lhe dá capacidades novas.
+\end{keyideabox}
+
+\section{Arquiteturas típicas de agentes}
+
+Alguns padrões que aparecem frequentemente:
+
+\subsection*{Router + ferramentas}
+
+\begin{itemize}[leftmargin=*]
+\item Um LLM atua como \emph{router}.
+\item Decide se:
+\begin{itemize}[leftmargin=*]
+\item responde diretamente,
+\item chama uma ferramenta (ex: base de dados),
+\item passa para um humano.
+\end{itemize}
+\end{itemize}
+
+Prompt típico de router:
+
+\begin{lstlisting}
+És um router de pedidos.
+
+Para cada mensagem do utilizador, decide:
+
+"responder": se consegues responder com segurança
+usando apenas conhecimento geral.
+
+"ferramenta": se precisas de dados específicos
+(ex: saldo de conta, documentos internos).
+
+"humano": se o pedido é sensível, ambíguo ou
+fora de escopo.
+
+Devolve um objeto com "rota" (uma de "responder",
+"ferramenta", "humano") e "motivo" (frase curta).
+A aplicacao valida o objeto antes de seguir a rota.
+\end{lstlisting}
+
+\subsection*{Planner + executores}
+
+\begin{itemize}[leftmargin=*]
+\item Um LLM “planner” decompõe um objetivo em tarefas.
+\item Outros componentes (LLM ou não) executam cada tarefa.
+\end{itemize}
+
+Pseudo-fluxo:
+
+\begin{lstlisting}
+Objetivo do utilizador -> Planner -> Lista de passos
+Lista de passos -> Executor -> Resultados por passo
+Resultados -> Agregador -> Resposta final
+\end{lstlisting}
+
+\subsection*{Supervisor + vários especialistas}
+
+\begin{itemize}[leftmargin=*]
+\item Um supervisor decide que “especialista” (persona ou modelo) deve tratar cada parte.
+\item Especialistas podem ser:
+\begin{itemize}[leftmargin=*]
+\item “especialista em código”,
+\item “especialista em escrita”,
+\item “especialista em legal/compliance”.
+\end{itemize}
+\end{itemize}
+
+\section{Exemplos de workflows concretos}
+
+\subsection*{Workflow RAG (Retrieval-Augmented Generation) simplificado}
+
+\begin{enumerate}[leftmargin=*]
+\item Utilizador faz uma pergunta.
+\item Sistema extrai \emph{query} para pesquisa.
+\item Ferramenta de busca encontra documentos relevantes.
+\item LLM gera resposta usando:
+\begin{itemize}[leftmargin=*]
+\item pergunta original,
+\item excertos dos documentos.
+\end{itemize}
+\item Opcional: outra etapa para validar consistência com as fontes.
+\end{enumerate}
+
+Nem todas as etapas precisam de um LLM: recuperação e autorização podem ser implementadas por código. Etapas que podem usar prompts incluem:
+
+\begin{itemize}[leftmargin=*]
+\item \emph{Prompt de reformulação de query}
+\item \emph{Prompt de resposta “grounded” nas fontes}
+\item \emph{Prompt de verificação de alucinação}
+\end{itemize}
+
+\subsection*{Workflow de geração de código com testes}
+
+\begin{enumerate}[leftmargin=*]
+\item Clarificação do requisito (LLM).
+\item Geração de esqueleto de código (LLM).
+\item Geração de testes unitários (LLM).
+\item Execução de testes (ferramenta externa).
+\item Se falhar:
+\begin{itemize}[leftmargin=*]
+\item enviar logs de erro de volta ao LLM,
+\item pedir correção iterativa.
+\end{itemize}
+\end{enumerate}
+
+\subsection*{Workflow de atendimento misto IA+humano}
+
+\begin{enumerate}[leftmargin=*]
+\item Classificar ticket (LLM).
+\item Se trivial, responder com base em FAQ (LLM+RAG).
+\item Se sensível, encaminhar para agente humano com resumo (LLM).
+\item Depois da resposta humana, LLM pode:
+\begin{itemize}[leftmargin=*]
+\item gerar rascunho de follow-up,
+\item propor uma atualização Q\&A, sujeita a revisão antes da indexação.
+\end{itemize}
+\end{enumerate}
+
+\section{Antipadrões de agentes e cadeias}
+
+Alguns erros clássicos:
+
+\begin{itemize}[leftmargin=*]
+\item \textbf{Agentes que fazem tudo:} um único LLM encarregado de “resolver qualquer coisa”. Resultado: comportamento imprevisível e difícil de debugar.
+\item \textbf{Cadeias opacas:} prompts espalhados por código sem documentação. Quando algo corre mal, ninguém sabe onde mexer.
+\item \textbf{Loop de conversa infinita:} agentes a falar uns com os outros sem critério de paragem claro.
+\item \textbf{Redundância de passos:} três ou quatro fases a “explicar melhor” a mesma coisa para tentar compensar um prompt inicial mal desenhado.
+\end{itemize}
+
+\begin{checklistbox}{Antes de dizer que tens um ``agente'' em produção}
+Garante que:
+
+\begin{itemize}[leftmargin=*]
+\item sabes descrever o \textbf{objetivo} do agente em 2–3 frases;
+\item tens um diagrama simples do fluxo (mesmo que seja em texto);
+\item cada ferramenta acessível ao agente tem limites bem definidos;
+\item há \textbf{critérios de paragem} claros para loops;
+\item tens uma forma de \textbf{logar} decisões e saídas para debug.
+\end{itemize}
+\end{checklistbox}
+
+\begin{keyideabox}{Primeiro faz funcionar manualmente, depois automatiza}
+Antes de escreveres código para um agente complexo, testa o fluxo manualmente com prompts em modo “copiar-colar”.
+Se nem manualmente consegues obter resultados aceitáveis, automatizar só vai produzir lixo mais rápido.
+\end{keyideabox}
+
+\section{Estado, memória e falhas parciais}
+Contexto é o que está disponível nesta chamada. Memória persistente é informação guardada pela aplicação para chamadas futuras; precisa de regras de origem, atualização, acesso e eliminação. Não a confundas com os pesos do modelo nem com a cache de atenção.
+
+Um agente operacional precisa ainda de um orçamento de passos, prazo, limites de custo e estados de saída: sucesso, informação insuficiente, erro recuperável e encaminhamento. Esses limites vivem no orquestrador. Um prompt a dizer «não entres em loop» não desliga uma tarefa presa.
+
+Se uma ferramenta cria algo e a resposta se perde, repetir pode duplicar a operação. Usa identificadores de idempotência quando o domínio os suporta e confirma o estado antes de tentar de novo. Uma pesquisa pode ser repetível; uma transferência financeira não deve ser tratada como se fosse uma pesquisa.
+
+ReAct estudou a combinação de raciocínio textual e ações em ambientes específicos~\citep{yao2023react}. Isso fornece um padrão experimental, não prova que acrescentar mais agentes melhora qualquer sistema. Compara com um fluxo fixo mais simples antes de adotar supervisores e especialistas.

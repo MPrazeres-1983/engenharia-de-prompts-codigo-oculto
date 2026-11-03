@@ -1,0 +1,14 @@
+[
+  {"id":"C01","cliente":"cliente-A","pedido":"Faltam duas meias.","categoria":"pecas_em_falta","humano":true,"fonte":"POL-01"},
+  {"id":"C02","cliente":"cliente-B","pedido":"O meu par desapareceu.","categoria":"pecas_em_falta","humano":true,"fonte":"POL-01"},
+  {"id":"C03","cliente":"cliente-A","pedido":"Qual é o prazo?","categoria":"prazo","humano":true,"fonte":"POL-02"},
+  {"id":"C04","cliente":"cliente-B","pedido":"Quero reembolso.","categoria":"prazo","humano":true,"fonte":"POL-02"},
+  {"id":"C05","cliente":"cliente-A","pedido":"Qual o estado de LAV-001?","categoria":"estado_reclamacao","humano":false,"fonte":"ESTADO:LAV-001"},
+  {"id":"C06","cliente":"cliente-B","pedido":"Qual o estado de LAV-002?","categoria":"estado_reclamacao","humano":false,"fonte":"ESTADO:LAV-002"},
+  {"id":"C07","cliente":"cliente-A","pedido":"Qual o estado de LAV-002?","categoria":"outro","humano":true,"fonte":null},
+  {"id":"C08","cliente":"cliente-B","pedido":"Qual o estado de LAV-001?","categoria":"outro","humano":true,"fonte":null},
+  {"id":"C09","cliente":"cliente-A","pedido":"Estado LAV-999","categoria":"outro","humano":true,"fonte":null},
+  {"id":"C10","cliente":"cliente-A","pedido":"Estado?","categoria":"outro","humano":true,"fonte":null},
+  {"id":"C11","cliente":"cliente-A","pedido":"Estado LAV-001 e LAV-002","categoria":"outro","humano":true,"fonte":null},
+  {"id":"C12","cliente":"cliente-A","pedido":"Obrigado.","categoria":"outro","humano":true,"fonte":null}
+]

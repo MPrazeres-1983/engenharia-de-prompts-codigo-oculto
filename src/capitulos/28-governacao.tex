@@ -1,0 +1,49 @@
+\chapter{Governação, Privacidade e Responsabilidade na União Europeia}
+\label{ch:governacao}
+
+Uma equipa pode ter bons testes e continuar sem saber se pode usar os dados, quem responde pelo sistema ou como um cliente contesta uma decisão. São perguntas diferentes da taxa de acerto. Chegam frequentemente tarde porque não parecem problemas de programação. Continuam a ser problemas do projeto.
+
+Este capítulo distingue enquadramento legal, orientação voluntária e escolhas de engenharia. A verificação documental termina em \textbf{3 de novembro de 2026}. Um caso concreto depende da finalidade, dos dados, do papel da organização e das regras setoriais e nacionais aplicáveis.
+
+\section{Um inventário antes dos princípios}
+Para cada sistema, regista finalidade, utilizadores, dados, fornecedores, ferramentas, decisões afetadas e responsável. Acrescenta onde corre, quem pode alterar o modelo e o que acontece quando falha. Um inventário pequeno pode ser mais útil do que cinquenta páginas a afirmar que a empresa valoriza a ética.
+
+Na Lavandaria, «preparar um rascunho» e «aprovar uma compensação» têm efeitos diferentes. A mudança exige rever dados, autorização, critérios e responsabilidade. Não é apenas acrescentar uma ferramenta.
+
+\section{RGPD: o tratamento precisa de fundamento}
+O artigo 5 do RGPD estabelece princípios como finalidade, minimização, exatidão, limitação da conservação e segurança. O consentimento é um dos fundamentos de licitude do artigo 6, não uma solução universal; categorias especiais e transferências exigem análise adicional. Dados pseudonimizados que possam ser associados a uma pessoa continuam a ser dados pessoais. O artigo 35 exige avaliação de impacto antes de um tratamento suscetível de implicar elevado risco, nas condições aí previstas~\citep{rgpd2016}.
+
+O artigo 22 trata de decisões exclusivamente automatizadas com efeitos jurídicos ou efeitos similarmente significativos, com condições e exceções. Não proíbe toda a automação nem transforma qualquer clique humano em supervisão suficiente. Nos casos de necessidade contratual ou consentimento explícito previstos no n.º 2, alíneas a) e c), o n.º 3 exige salvaguardas que incluem intervenção humana, expressão do ponto de vista e contestação. A exceção fundada em lei tem de prever medidas adequadas nessa lei~\citep{rgpd2016}.
+
+Como prática de engenharia, começa com dados fictícios e usa apenas os campos necessários. Não assumes que uma conta paga impede treino, retenção ou acesso por terceiros: verifica termos e configuração do serviço.
+
+\section{AI Act: finalidade, papéis e calendário}
+O Regulamento (UE) 2024/1689 estabelece obrigações que variam por prática, risco e papel, incluindo regras para modelos de finalidade geral~\citep{aiact2024}. Um chatbot não é automaticamente de alto risco por usar um LLM; finalidade e contexto contam.
+
+A regra geral de aplicação do artigo 113 aponta para 2 de agosto de 2026, com exceções. O Regulamento (UE) 2026/1744, publicado em 24 de julho e em vigor desde 27 de julho de 2026, alterou esse artigo. Para o capítulo III, secções 1 a 3, com exceção do artigo 6, n.º 5, distingue os sistemas do artigo 6, n.º 2, e anexo III, com marco em \textbf{2 de dezembro de 2027}, dos sistemas do artigo 6, n.º 1, e anexo I, com marco em \textbf{2 de agosto de 2028}~\citep{aiomnibus2026}. A cronologia do Conselho oferece enquadramento institucional~\citep{conselho2026}.
+
+Estas datas não significam que todas as obrigações de um sistema comecem no mesmo dia. Há exceções, regras transitórias e deveres com outros marcos, incluindo literacia e transparência. Consulta o artigo aplicável à finalidade e ao papel da organização. A verificação documental deste capítulo não determina a conformidade de um produto concreto.
+
+\section{Uma checklist não é uma certificação}
+O NIST AI RMF e o perfil de IA generativa oferecem um quadro voluntário de gestão de riscos~\citep{nist2024}. OWASP ajuda a identificar falhas. Estas referências têm funções próprias; segui-las não prova conformidade legal.
+
+Em engenharia, ajudam a perguntar que danos são plausíveis, que evidência existe, como se controla acesso e que risco residual é aceite. A resposta deve ficar ligada a quem decide e à versão do sistema, não a uma declaração abstrata.
+
+\section{Supervisão que possa alterar o resultado}
+O revisor precisa de informação, tempo, competência e poder para rejeitar a proposta. Se recebe cem decisões por minuto e só pode carregar em «aceitar», a presença humana pouco acrescenta. Mede carga, divergências, erros apanhados e tempo de resposta.
+
+Um modelo não é uma pessoa a quem a organização possa atribuir a culpa. O responsável pelo processo tem de conhecer limites, aprovar o uso e manter alternativa quando o sistema fica indisponível.
+
+\begin{promptlabbox}{Uma ficha de governação que cabe numa reunião}
+\textbf{Objetivo e contexto:} avaliar passar de rascunho para envio automático na Lavandaria fictícia. O exercício não certifica conformidade jurídica.
+
+\textbf{Instruções:} preenche finalidade, dados indispensáveis, efeitos, responsável, contestação, retenção e incidente. Identifica decisões que precisam de jurídico, proteção de dados ou dono do processo.
+
+\textbf{Resultado esperado:} uma ficha com decisões e questões abertas. Um bloqueio relevante deve impedir a funcionalidade afetada, não desaparecer numa nota.
+
+\textbf{Validação:} outra pessoa deve conseguir dizer quem pode parar o sistema e como um cliente corrige um erro. Confirma interpretações nas fontes oficiais com o responsável competente.
+
+\textbf{Falhas possíveis:} copiar uma política genérica, confundir consentimento com toda a autorização ou chamar supervisão a uma aprovação sem informação.
+\end{promptlabbox}
+
+Guarda versão aprovada, testes, limites e quem aceita o risco residual. Define reavaliação para novo fornecedor, ferramenta, dados ou finalidade. A governação acompanha mudanças concretas: não precisa de bloquear pequenas experiências, mas tem de reconhecer quando elas passam a afetar outras pessoas.

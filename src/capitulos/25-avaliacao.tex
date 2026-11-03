@@ -1,0 +1,434 @@
+\chapter{Avaliação e Debugging de Prompts}
+\label{ch:avaliacao}
+
+\section{Porque é que prompts precisam de testes}
+
+Há uma ilusão comum: “se o prompt está bem escrito, a resposta será boa”. A realidade:
+
+\begin{itemize}[leftmargin=*]
+\item Prompts comportam-se como \emph{código frágil}: pequenas mudanças podem ter efeitos grandes.
+\item Modelos são atualizados, versões mudam, outputs também.
+\item Contextos de entrada reais são mais variados e caóticos que os teus exemplos de protótipo.
+\end{itemize}
+
+Logo, se não testas:
+
+\begin{itemize}[leftmargin=*]
+\item não sabes se um “refinamento” realmente melhorou a performance,
+\item não consegues comparar prompts entre si,
+\item ficas sempre em modo “feeling”, não em modo engenharia.
+\end{itemize}
+
+Avaliar prompts não é opcional em produção. É parte básica de LLMOps.
+
+\section{O que estás a tentar otimizar, exatamente?}
+
+Antes de falar de métricas, é preciso responder: \emph{para quê?} Alguns objetivos típicos:
+
+\begin{itemize}[leftmargin=*]
+\item \textbf{Correção factual}: quão frequentemente a resposta está fatualmente certa?
+\item \textbf{Formatação}: a resposta cumpre o formato especificado (JSON, tabela, esquema fixo)?
+\item \textbf{Cobertura}: a resposta aborda todos os pontos importantes?
+\item \textbf{Estilo}: o tom e vocabulário estão alinhados com o esperado?
+\item \textbf{Robustez}: o comportamento mantém-se com inputs “esquisitos” ou borderline?
+\item \textbf{Segurança/políticas}: evita conteúdos proibidos ou respostas arriscadas?
+\end{itemize}
+
+Cada objetivo pede métricas diferentes. Não existe “uma métrica para dominá-las a todas”.
+
+\begin{promptlabbox}{Definir critérios de qualidade para um caso teu}
+\textbf{Objetivo e contexto:} Especificar erros inaceitáveis e condições de aceitação antes de calcular métricas.
+
+Pensa num uso concreto (por exemplo, um resumo de e-mails, uma classificação de tickets, um gerador de respostas a clientes).
+
+Para esse caso, responde:
+
+\begin{itemize}[leftmargin=*]
+\item O que é \emph{inaceitável} que aconteça? (ex: JSON inválido, insultos, informação legal errada.)
+\item O que é desejável, mas não crítico? (ex: estilo perfeito, explicações muito bonitas.)
+\item Como definirias “isto está suficientemente bom” em 2–3 frases?
+\end{itemize}
+
+Só depois disso pensa em métricas numéricas. Sem critérios de qualidade explícitos, qualquer número é só decoração.
+
+\textbf{Resultado esperado e validação:} Cada critério deve ter um caso que o possa reprovar e uma fonte de resultado esperado. Se não é observável, refina-o.
+
+\textbf{Falhas possíveis:} Confundir preferência de estilo com requisito crítico ou escolher a métrica depois de ver o resultado.
+\end{promptlabbox}
+
+\section{Golden sets: casos de teste com respostas de referência}
+
+Em vez de discutir em abstrato se um prompt é “melhor”, cria um \emph{golden set}: um conjunto de inputs representativos com outputs de referência que consideras bons.
+
+\subsection*{Como construir um golden set decente}
+
+\begin{itemize}[leftmargin=*]
+\item \textbf{Diversidade}: inclui casos fáceis, médios e difíceis.
+\item \textbf{Casos de canto}: inputs estranhos, abreviados, com erros, etc.
+\item \textbf{Casos sensíveis}: situações em que o erro é mais perigoso.
+\item \textbf{Respostas de referência}: idealmente criadas/revistas por humanos com conhecimento do domínio.
+\end{itemize}
+
+Formato simples (para classificação):
+
+\begin{lstlisting}
+{
+"id": "exemplo_01",
+"input": "texto do utilizador",
+"expected_label": "categoria_X"
+}
+\end{lstlisting}
+
+Formato para geração estruturada:
+
+\begin{lstlisting}
+{
+"id": "exemplo_07",
+"input": "email do cliente",
+"expected_output": {
+"tipo_problema": "pagamento",
+"urgencia": "alta",
+"precisa_resposta_humana": true
+}
+}
+\end{lstlisting}
+
+\subsection*{Usar o golden set para comparar prompts}
+
+Para cada prompt candidato:
+
+\begin{enumerate}[leftmargin=*]
+\item Correres todos os inputs do golden set pelo modelo.
+\item Guardas as respostas.
+\item Calculas:
+\begin{itemize}[leftmargin=*]
+\item percentagem de acerto (para classificações),
+\item taxa de outputs inválidos (JSON mal-formado, etc.),
+\item algum score de similaridade/qualidade (para geração livre).
+\end{itemize}
+\end{enumerate}
+
+\begin{checklistbox}{Golden set minimamente digno desse nome}
+Antes de confiares em resultados baseados num golden set:
+
+\begin{itemize}[leftmargin=*]
+\item Tens pelo menos algumas dezenas de exemplos (não 3 ou 4).
+\item Há exemplos cobrindo a variedade de inputs reais.
+\item As respostas de referência foram revistas por alguém que percebe do assunto.
+\item Documentaste como o conjunto foi construído (para evitar enviesamentos óbvios).
+\end{itemize}
+\end{checklistbox}
+
+\section{Métricas: exatas, aproximadas e baseadas em julgamentos}
+
+Dependendo do tipo de tarefa, tens três grandes famílias de métricas.
+
+\subsection*{Métricas exatas (discretas)}
+
+Perfeitas para tarefas do tipo:
+
+\begin{itemize}[leftmargin=*]
+\item classificação (categoria correta?),
+\item extração estruturada (campo bate com o esperado?),
+\item validação de formato (JSON é válido?).
+\end{itemize}
+
+Exemplos:
+
+\begin{itemize}[leftmargin=*]
+\item Accuracy (percentagem de acertos),
+\item F1-score (quando há classes desequilibradas),
+\item Taxa de outputs inválidos (por exemplo, JSON mal-formado).
+\end{itemize}
+
+Estas métricas são fáceis de automatizar e comparar entre prompts.
+
+\subsection*{Métricas aproximadas (similaridade)}
+
+Para tarefas de geração de texto onde não há uma única resposta correta, podes medir:
+
+\begin{itemize}[leftmargin=*]
+\item similaridade semântica entre resposta e referência(s),
+\item cobertura de pontos-chave,
+\item comprimento/estrutura.
+\end{itemize}
+
+Ferramentas típicas incluem:
+
+\begin{itemize}[leftmargin=*]
+\item scores baseados em embeddings (quão “perto” estão os textos),
+\item métricas de overlap (tipo ROUGE/BLEU) – com cautela.
+\end{itemize}
+
+\subsection*{LLM-as-a-judge (modelo como juiz)}
+
+Em vez de comparares strings diretamente, podes pedir a outro modelo (ou ao mesmo, em modo juiz) para avaliar respostas:
+
+\begin{lstlisting}
+Tarefa: avaliar qualidade de respostas a perguntas.
+
+Critérios (0-10 cada):
+
+Correção factual
+
+Completude
+
+Clareza
+
+Estilo apropriado
+
+A partir de:
+
+pergunta original,
+
+resposta de referência,
+
+resposta do sistema,
+
+atribui um score global de 0 a 10 e explica porquê.
+\end{lstlisting}
+
+Isto é útil, mas tem riscos:
+
+\begin{itemize}[leftmargin=*]
+\item o juiz pode estar enviesado por certas formulações,
+\item modelos diferentes podem ter opiniões diferentes,
+\item é fácil “otimizar para agradar ao juiz” e não ao utilizador final.
+\end{itemize}
+
+\begin{warningboxenv}{Métrica sem utilizador real pode ser só um jogo de números}
+Se a tua métrica diz que um prompt é “melhor”, mas os utilizadores reclamam mais, a métrica está desalinhada com a realidade.
+Métricas automáticas são úteis, mas não substituem feedback humano, sobretudo no início.
+\end{warningboxenv}
+
+\section{Testes de regressão e A/B testing de prompts}
+
+Quando mexes em prompts ou mudas de modelo (por exemplo, de uma versão X para Y), precisas de saber se:
+
+\begin{itemize}[leftmargin=*]
+\item ficaste melhor no geral,
+\item pioraste em algum subconjunto de casos,
+\item introduziste erros novos em casos sensíveis.
+\end{itemize}
+
+\subsection*{Testes de regressão}
+
+Com um golden set em mãos:
+
+\begin{itemize}[leftmargin=*]
+\item corres o conjunto com o \emph{prompt antigo} e guardas resultados (baseline),
+\item corres com o \emph{prompt novo} ou \emph{modelo novo},
+\item comparas:
+\begin{itemize}[leftmargin=*]
+\item casos melhorados,
+\item casos inalterados,
+\item regressões (onde era bom e ficou mau).
+\end{itemize}
+\end{itemize}
+
+Isto permite:
+
+\begin{itemize}[leftmargin=*]
+\item estudos de impacto antes de lançar para todos,
+\item discussões mais racionais do que “parece melhor”.
+\end{itemize}
+
+\subsection*{A/B testing com utilizadores reais}
+
+Quando tens tráfego suficiente, podes:
+
+\begin{itemize}[leftmargin=*]
+\item enviar uma percentagem de pedidos para o sistema A (prompt/modelo antigo),
+\item outra percentagem para o sistema B (novo),
+\item medir métricas de negócio:
+\begin{itemize}[leftmargin=*]
+\item taxa de resolução sem intervenção humana,
+\item satisfação (NPS, thumbs up/down),
+\item tempo até resolução,
+\item escaladas para humanos.
+\end{itemize}
+\end{itemize}
+
+\begin{keyideabox}{Não faças grandes mudanças sem “rede de segurança”}
+Sempre que mudares de prompt/modelo num sistema crítico:
+\begin{itemize}[leftmargin=*]
+\item testa em ambiente de staging com golden set,
+\item faz rollout gradual (canary release),
+\item monitoriza métricas de erro e feedback.
+\end{itemize}
+\end{keyideabox}
+
+\section{Debugging de prompts: da falha ao ajuste}
+
+Quando uma resposta é má, a tentação é logo “melhorar o modelo”. Mas muitas vezes o problema está no prompt, no contexto ou no fluxo.
+
+Processo de debugging simples:
+
+\begin{enumerate}[leftmargin=*]
+\item \textbf{Reproduzir} o problema com o mesmo input e prompt.
+\item \textbf{Isolar}:
+\begin{itemize}[leftmargin=*]
+\item retirar ruído do contexto,
+\item testar com variantes mínimas do prompt.
+\end{itemize}
+\item \textbf{Classificar} o tipo de erro:
+\begin{itemize}[leftmargin=*]
+\item factual,
+\item de formatação,
+\item de cobertura (faltam partes),
+\item de estilo,
+\item de política/segurança.
+\end{itemize}
+\item \textbf{Propor hipóteses}: o que no prompt/contexto pode ter levado a isto?
+\item \textbf{Experimentos pequenos}: testar variações controladas do prompt.
+\end{enumerate}
+
+\begin{promptlabbox}{Analisar falhas em série}
+\textbf{Objetivo e contexto:} Classificar dez falhas registadas do mesmo sistema, preservando input, versão e resultado esperado.
+
+Escolhe 10 exemplos onde o teu sistema falhou (respostas más). Para cada um, pede ao LLM (ou a ti mesmo):
+
+\begin{lstlisting}
+Classifica o erro na resposta abaixo em:
+
+factual
+
+formatação
+
+cobertura (faltam partes)
+
+estilo
+
+segurança/política
+
+outro
+
+Explica em 3-5 frases como o prompt poderia ser
+ajustado para reduzir a probabilidade deste erro.
+\end{lstlisting}
+
+Depois, procura padrões:
+\begin{itemize}[leftmargin=*]
+\item há muitos erros de formatação? talvez o prompt não seja suficientemente rígido sobre o output.
+\item há muitas alucinações factuais? talvez precises de RAG ou de instruções para admitir desconhecimento.
+\end{itemize}
+
+\textbf{Resultado esperado e validação:} Confirma cada diagnóstico numa evidência e testa uma hipótese de cada vez. Reavalia regressões e casos novos depois do ajuste.
+
+\textbf{Falhas possíveis:} Culpar sempre o prompt, perder a versão ou corrigir apenas os dez exemplos analisados.
+\end{promptlabbox}
+
+\section{Documentação e versionamento de prompts}
+
+Prompts em produção são configuração executada por um modelo. Devem receber disciplina de engenharia:
+
+\begin{itemize}[leftmargin=*]
+\item controlo de versões,
+\item comentários,
+\item histórico de mudanças,
+\item autores responsáveis.
+\end{itemize}
+
+Boas práticas:
+
+\begin{itemize}[leftmargin=*]
+\item Guardar prompts em ficheiros/versionamento (Git), não só em campos de base de dados obscuros.
+\item Dar nomes claros (por exemplo, \texttt{faq\_router\_v3\_2025-10-20}).
+\item Manter um changelog:
+\begin{itemize}[leftmargin=*]
+\item o que mudou,
+\item porquê,
+\item com base em que resultados.
+\end{itemize}
+\item Ligar versões de prompts a resultados em testes (golden set, A/B).
+\end{itemize}
+
+\begin{checklistbox}{Governance mínima de prompts}
+Se o teu sistema depende de prompts importantes, certifica-te de que:
+
+\begin{itemize}[leftmargin=*]
+\item não há \emph{apenas} uma pessoa que sabe onde estão;
+\item mudanças não são feitas diretamente em produção sem revisão;
+\item cada mudança relevante tem um ticket ou registo associado;
+\item consegues reverter para uma versão anterior se algo correr mal.
+\end{itemize}
+\end{checklistbox}
+
+\section{Limites da avaliação automatizada}
+
+Por fim, alguma humildade:
+
+\begin{itemize}[leftmargin=*]
+\item Nenhuma métrica capta totalmente “qualidade” em tarefas criativas ou complexas.
+\item LLMs como juízes são úteis, mas não infalíveis.
+\item Em muitos contextos, o melhor que consegues é \emph{aproximação suficiente} + supervisão humana.
+\end{itemize}
+
+\begin{keyideabox}{Avaliar prompts é iterar entre números e realidade}
+O ciclo saudável:
+\begin{enumerate}[leftmargin=*]
+\item defines critérios de qualidade,
+\item crias golden sets e métricas,
+\item testas variações,
+\item observas resultados com utilizadores reais,
+\item ajustas métricas para aproximar melhor o que de facto importa.
+\end{enumerate}
+
+Sem este ciclo, estás só a colecionar dashboards bonitos.
+\end{keyideabox}
+
+\section{Medir acerto, cobertura e custo do erro}
+\label{sec:metricas}
+Para uma classe de interesse, precisão é $TP/(TP+FP)$ e sensibilidade é $TP/(TP+FN)$. A primeira pergunta «das deteções, quantas estavam certas?»; a segunda pergunta «dos casos positivos, quantos detetámos?». Define o comportamento quando o denominador é zero. F1 é a média harmónica das duas quando ambas estão definidas. Não resolves desequilíbrio apenas escrevendo «F1»: explicita a classe e a agregação macro ou micro.
+
+Na Lavandaria, encaminhar todos os pedidos para uma pessoa evita algumas decisões automáticas erradas, mas não significa resolver a tarefa. Mede cobertura automática (respostas emitidas/pedidos), acerto entre respostas emitidas e erros graves por pedido. Define antecipadamente se uma abstinência correta conta como sucesso operacional e apresenta-a separadamente.
+
+Dez respostas, oito certas, dão uma proporção observada de $0.8$. Não dão «80\% de fiabilidade» para todos os clientes. Pelo intervalo de Wilson a 95\%, sob um modelo binomial com casos independentes e representativos, o intervalo é aproximadamente $[0.490,0.943]$~\citep{wilson1927}. Dez variações quase iguais não justificam a mesma generalização. A demonstração reproduz o cálculo em Python.
+
+\section{Um teste reservado que continua reservado}
+Usa um conjunto para desenvolver o prompt e outro para avaliar a versão fechada. Se lês as falhas do teste reservado e alteras o sistema para elas, esses casos passaram a influenciar desenvolvimento; precisas de nova evidência para estimar generalização. Dados sintéticos ajudam a exercitar regras, mas não demonstram cobertura do tráfego real.
+
+Faz repetições quando há variabilidade e compara versões nos mesmos casos. Guarda outputs, recusas, interrupções, versão do modelo e configuração. Um empate na média pode esconder degradação precisamente nos casos de maior risco.
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[node distance=6mm and 8mm, every node/.style={draw,align=center,text width=39mm,minimum height=10mm,font=\small},>=Stealth]
+\node (dev) {Desenvolvimento e critérios};
+\node (freeze) [below=of dev] {Versão fechada};
+\node (test) [below left=of freeze] {Teste reservado e repetições};
+\node (safe) [below right=of freeze] {Segurança e casos críticos};
+\node (gate) [below=27mm of freeze] {Decisão documentada};
+\draw[->](dev)--(freeze);\draw[->](freeze)--(test);\draw[->](freeze)--(safe);\draw[->](test)--(gate);\draw[->](safe)--(gate);
+\end{tikzpicture}
+\caption{Avaliação antes da passagem a produção. O teste reservado não é um catálogo de exemplos para copiar para o prompt.}
+\label{fig:avaliacao}
+\end{figure}
+
+\section{Juízes também precisam de auditoria}
+Estudos de avaliação com LLMs documentam efeitos como preferência pela posição de uma resposta e pela verbosidade~\citep{zheng2023}. Baralha a ordem, oculta a identidade das versões, usa critérios ancorados em exemplos e compara uma amostra com avaliação humana. Uma resposta mais longa não é automaticamente mais correta. A nota do juiz é uma medição imperfeita, não uma autoridade que dispensa revisão.
+
+\section{Um ensaio real, incluindo o que correu mal}
+\label{sec:ensaio-real}
+Em 3 de novembro de 2026 foram executadas 52 inferências locais com o modelo oficial Qwen2.5-0.5B-Instruct, quantização Q4\_K\_M, e llama.cpp build b11960~\citep{qwengguf,llamacpp}. O repositório conserva os pedidos, respostas brutas, revisões, hashes, configurações e avaliação em \texttt{experiencias/llm\_local}. Os casos e soluções foram definidos antes das chamadas; não se voltou a afinar o prompt para apagar as falhas.
+
+São três comparações pequenas, cada uma com duas seeds, temperatura 0.2 e contexto novo por chamada. A classificação usa seis mensagens; a resposta documental, três pedidos; a duração, quatro problemas. Na última comparação, ambas as condições usam o mesmo esquema JSON; só muda uma instrução de decomposição, sem pedir uma explicação. Não se reproduz o método few-shot CoT dos estudos originais.
+
+\begin{table}[htbp]
+\small
+\begin{tabularx}{\textwidth}{@{}lXX@{}}
+\toprule
+Tarefa e critério & Primeira condição & Segunda condição \\
+\midrule
+Classificação: etiqueta exata & Zero-shot: 6/12 & Few-shot: 11/12 \\
+Documentos: JSON válido & Só prompt: 6/6 & Esquema no runtime: 6/6 \\
+Documentos: contrato e excertos & Só prompt: 0/6 & Esquema no runtime: 1/6 \\
+Duração: resultado exato & Direta: 1/8 & Decomposição: 0/8 \\
+\bottomrule
+\end{tabularx}
+\caption{Contagens observadas no ensaio local. Cada denominador inclui duas execuções dos mesmos casos; não representa outros tantos casos independentes.}
+\label{tab:ensaio-local}
+\end{table}
+
+O caso mais instrutivo é uma resposta «48 horas» a um pedido de reembolso. Passou o contrato e citou literalmente POL-02, mas essa fonte diz precisamente que não existe prazo fixo nem reembolso automático. A presença de uma citação verdadeira não faz a resposta decorrer dela. Nas seis saídas com esquema, a estrutura respeitou os campos e tipos; cinco falharam a proveniência verificada e a restante falhou o conteúdo. A revisão de conteúdo registada foi feita durante a edição assistida, sem painel humano independente.
+
+O modelo é pequeno, quantizado e não representa os modelos disponíveis em 2026. A amostra é sintética e curta; as repetições partilham casos e modelo. Estes números demonstram o procedimento e os seus limites. Não provam melhoria geral de few-shot, superioridade de um fornecedor, inutilidade de decomposição ou segurança contra ataques. Mesmo quando todos os pedidos terminam sem erro de execução, a tarefa pode falhar. Para calcular durações, continua a haver uma solução bastante competente: fazer a conta em código.

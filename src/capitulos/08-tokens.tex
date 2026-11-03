@@ -1,0 +1,223 @@
+\chapter{Tokens, Temperatura e Controlo de Loucura}
+\label{ch:tokens}
+
+\section{Tokenização e as suas consequências desagradáveis}
+
+Um LLM não vê “palavras” nem “frases” como tu. Vê \emph{tokens}. Dependendo do modelo, um token pode ser:
+
+\begin{itemize}[leftmargin=*]
+\item uma palavra inteira (\texttt{gato}),
+\item um pedaço de palavra (\texttt{pro}, \texttt{gram}, \texttt{ação}),
+\item um símbolo (\texttt{?}, \texttt{,}, \texttt{)}),
+\item ou até espaços em branco.
+\end{itemize}
+
+O processo de partir texto em tokens chama-se \emph{tokenização}. Cada modelo tem o seu tokenizador com regras próprias. Isto leva a efeitos curiosos:
+
+\begin{itemize}[leftmargin=*]
+\item Palavras raras ou com acentos estranhos podem partir-se em muitos tokens.
+\item Algumas sequências comuns (como \texttt{https://}) podem ser um único token.
+\item Um emoji pode ocupar vários tokens; mede com o tokenizador correspondente, sem assumir equivalência entre um símbolo visível e um token.
+\end{itemize}
+
+Porque é que isto te deve interessar como engenheiro de prompts?
+
+\subsection*{1. Custos e limites contam em tokens, não em palavras}
+
+Quando a documentação diz “máximo 8k tokens” ou “custo de X por 1M tokens”, não é “palavras”. Um texto de 500 palavras pode ser 700, 800 ou mais tokens, dependendo da língua e do estilo.
+
+\subsection*{2. Contar letras ou sílabas é pedir problemas}
+
+Se pedires:
+
+\begin{quote}
+\small
+“Escreve um poema em que cada verso tem exatamente 7 sílabas.”
+\end{quote}
+
+o modelo tem de fazer ginástica para conectar o teu pedido (sílabas) com a sua realidade interna (tokens). Às vezes acerta surpreendentemente bem; noutras falha miseravelmente. A tokenização, por si só, não prova incapacidade de contagem. Contudo, não existe garantia de cumprimento da métrica poética; valida o resultado com um critério linguístico apropriado.
+
+\subsection*{3. Formatação estranha pode rebentar a tokenização}
+
+Sequências como:
+
+\begin{lstlisting}
+########## TÍTULO ##########
+\end{lstlisting}
+
+ou
+\begin{lstlisting}
+---- passo 1 ----
+\end{lstlisting}
+
+são perfeitamente válidas para humanos, mas podem gerar tokens pouco usuais. Não é grave, mas se enchermos o prompt de ruído decorativo, gastamos tokens sem acrescentar significado.
+
+\begin{warningboxenv}{Cuidado com “prompts artísticos”}
+Prompts cheios de emojis, molduras ASCII e ornamentos tipo “====” podem ser bonitos para screenshots no Twitter, mas podem aumentar o custo sem melhorar o resultado; isso deve ser testado, não presumido. Num sistema de produção, menos espetáculo e mais clareza.
+\end{warningboxenv}
+
+\begin{promptlabbox}{Ver a tokenização com os teus próprios olhos}
+\textbf{Objetivo e contexto:} Medir segmentação com um tokenizador identificado. Guarda os três textos completos e a versão usada.
+
+Quase todas as grandes APIs fornecem uma forma de ver como um texto é tokenizado (via ferramentas web ou SDKs).
+
+\medskip
+
+Tarefa:
+
+\begin{enumerate}[leftmargin=*]
+\item Escolhe três frases: uma normal, uma com muitos acentos/abreviaturas, e uma com emojis.
+\item Usa uma ferramenta oficial de tokenização para ver em quantos tokens cada frase é partida.
+\item Repara como pequenas mudanças (retirar um emoji, mudar uma palavra) alteram o número de tokens.
+\end{enumerate}
+
+Depois disso, nunca mais vais olhar para “contar palavras” da mesma forma.
+
+\textbf{Resultado esperado e validação:} Regista IDs ou segmentos e contagem de tokens. Compara tamanho, sem presumir que um acento ou emoji aumenta sempre a contagem.
+
+\textbf{Falhas possíveis:} Usar tokenizador de outro modelo, confundir caracteres com tokens ou introduzir normalização sem a registar.
+\end{promptlabbox}
+
+\section{Parâmetros de \emph{sampling}: temperatura, top-k e top-p}
+O modelo produz \emph{logits}, scores reais $z_i$ para tokens candidatos. Para $T>0$, uma forma comum de obter probabilidades é
+\[
+p_i(T)=\frac{\exp(z_i/T)}{\sum_j\exp(z_j/T)}.
+\]
+Reduzir $T$ concentra massa nos scores maiores; aumentar $T$ torna a distribuição mais uniforme. Isto altera a amostragem, não a veracidade do que está a ser dito. Um erro muito provável pode continuar muito provável a baixa temperatura.
+
+\emph{Top-k} restringe a escolha aos $k$ candidatos de maior probabilidade. \emph{Top-p}, ou nucleus sampling, retém o menor prefixo da lista ordenada cuja probabilidade acumulada atinge pelo menos $p$; depois renormaliza~\citep{holtzman2020}. Empates e combinação de filtros dependem da implementação.
+
+Com probabilidades ilustrativas $[0.60,0.25,0.10,0.05]$, top-p de $0.80$ retém os dois primeiros candidatos, cuja massa é $0.85$. Top-k igual a 1 corresponde a escolha gulosa no passo considerado. O limite $T\to0^+$ também concentra a escolha nos máximos; muitos serviços tratam o valor zero como opção especial. Não substituas essa convenção pela divisão por zero na fórmula.
+
+\begin{warningboxenv}{Repetível não significa garantidamente idêntico}
+Mesmo sem amostragem, uma aplicação pode mudar de versão, contexto, ferramenta ou implementação numérica. Temperatura zero não é contrato de reprodução de um serviço inteiro. Guarda a versão do modelo, configuração, entradas e resultados das ferramentas.
+\end{warningboxenv}
+
+Nem todos os modelos expõem estes controlos, e alguns modelos de raciocínio impõem restrições específicas. Consulta a documentação da versão que vais usar. Em experiências, muda um parâmetro de cada vez e mede correção, diversidade, custo e latência; não adotes «0.7» como constante da natureza.
+
+
+\section{Orientar o estilo quando não controlas a API}
+
+Nem sempre tens acesso direto aos parâmetros de \emph{sampling}. Num chat “normal”, não podes mexer no \texttt{temperature} ou no \texttt{top-p}. Ainda assim, consegues influenciar o comportamento com instruções.
+
+Alguns padrões úteis:
+
+\begin{itemize}[leftmargin=*]
+\item \textbf{Para pedir redação contida:}
+\begin{itemize}[leftmargin=*]
+\item “Responde de forma factual e direta.”
+\item “Evita floreados estilísticos.”
+\item “Se não tiveres a certeza, diz explicitamente que não sabes.”
+\end{itemize}
+\item \textbf{Para pedir exploração de ideias:}
+\begin{itemize}[leftmargin=*]
+\item “Sê criativo e explora possibilidades improváveis.”
+\item “Dá-me várias ideias muito diferentes umas das outras.”
+\end{itemize}
+\item \textbf{Para controlar variação:}
+\begin{itemize}[leftmargin=*]
+\item “Mantém o estilo consistente com o exemplo seguinte.”
+\item “Usa sempre o mesmo formato que já definimos acima.”
+\end{itemize}
+\end{itemize}
+
+Estas instruções mudam a distribuição condicionada ao texto. Não alteram o parâmetro numérico de temperatura, não substituem top-p e não oferecem garantias equivalentes. «Responde de forma factual» é um objetivo; verificar os factos continua a ser outra operação.
+
+\begin{promptlabbox}{Criar um seletor de “modo” só com texto}
+\textbf{Objetivo e contexto:} Testar três instruções de estilo na mesma tarefa e com os mesmos dados.
+
+Constrói um prompt de system com instruções deste género:
+
+\medskip
+
+\begin{lstlisting}
+És um assistente de escrita com três modos:
+
+[modo=PRECISO]
+
+Estilo: direto, conciso, foco em factos.
+
+Evita criatividade desnecessária.
+
+Admite quando não souberes algo.
+
+[modo=EXPLICATIVO]
+
+Estilo: pedagógico, com exemplos.
+
+Mantém rigor técnico, mas admite analogias.
+
+[modo=CRIATIVO]
+
+Estilo: exploratório, ideias fora da caixa.
+
+Permite sugestões improváveis, desde que coerentes.
+
+Sempre que o utilizador escrever algo como:
+[MODO: PRECISO] ou [MODO: EXPLICATIVO] ou [MODO: CRIATIVO],
+deves adaptar o teu comportamento a esse modo.
+\end{lstlisting}
+
+Depois, experimenta:
+
+\begin{itemize}[leftmargin=*]
+\item Fazer a mesma pergunta nos três modos.
+\item Ver quão diferentes são as respostas.
+\end{itemize}
+
+\textbf{Resultado esperado e validação:} Compara concisão, exemplos e diversidade com critérios textuais. Regista também erros factuais; uma mudança de estilo não demonstra alteração da temperatura da API.
+
+\textbf{Falhas possíveis:} Confundir criatividade verbal com qualidade ou deixar modos diferentes acumularem contexto.
+\end{promptlabbox}
+
+\section{Comprimento de resposta, penalizações e repetição}
+
+Outro conjunto de parâmetros importante controla o quão longa e repetitiva é a resposta do modelo.
+
+Nas APIs, encontras coisas como:
+
+\begin{itemize}[leftmargin=*]
+\item \texttt{max\_tokens} ou equivalente: limite de geração; o nome e a inclusão de tokens de raciocínio variam por API.
+\item \texttt{frequency\_penalty}: penaliza repetir o mesmo token muitas vezes.
+\item \texttt{presence\_penalty}: penaliza repetir tokens que já apareceram no contexto.
+\end{itemize}
+
+Se não tens acesso direto a estes controlos, podes aproximar-te com linguagem natural:
+
+\begin{itemize}[leftmargin=*]
+\item Para limitar comprimento:
+\begin{itemize}[leftmargin=*]
+\item “Responde em no máximo 5 frases.”
+\item “Dá-me apenas uma lista com 3 pontos.”
+\end{itemize}
+\item Para evitar repetição:
+\begin{itemize}[leftmargin=*]
+\item “Não repitas o enunciado.”
+\item “Evita repetir as mesmas palavras; usa sinónimos.”
+\end{itemize}
+\end{itemize}
+
+Claro que isto não é perfeito. O modelo pode ignorar-te ocasionalmente. Mas é muito melhor do que mandar perguntas vagas e esperar milagres.
+
+\begin{warningboxenv}{O mito do “responde em exatamente N palavras”}
+Pedir “exatamente 137 palavras” é pedir ao modelo que alinhe um pedido em “palavras” com uma realidade interna em “tokens”. Mesmo que acerte, não contes com isso como contrato. Em contextos de produção, usa limites de tokens na API e valida o tamanho do output com código.
+\end{warningboxenv}
+
+\section{Quando não usar LLMs}
+
+Antes de avançarmos, convém dizer o óbvio que muitas equipas ignoram: há situações em que usar um LLM é simplesmente má ideia.
+
+Casos típicos onde \emph{não} é a melhor ferramenta:
+
+\begin{itemize}[leftmargin=*]
+\item \textbf{Cálculos exatos e de alto risco}: impostos, dosagem de medicamentos, controlo de infraestruturas críticas.
+\item \textbf{Verificações formais}: provas matemáticas, validação de protocolos criptográficos.
+\item \textbf{Regras fixas e simples}: transformações deterministas (por exemplo, converter \texttt{YYYY-MM-DD} em \texttt{DD/MM/YYYY}).
+\item \textbf{Dados ultra-sensíveis} quando não tens garantias fortes de privacidade.
+\end{itemize}
+
+Nestes casos, usa código normal, algoritmos tradicionais, bases de dados. O LLM pode ajudar a \emph{escrever} esse código, a explicar o problema ou a gerar testes — mas não deve ser o motor principal de decisão.
+
+\begin{keyideabox}{LLM é martelo, mas nem tudo é prego}
+Sempre que pensares “podíamos pôr um LLM aqui”, pergunta primeiro se não há uma função determinista simples que faça melhor, mais rápido e mais barato. Só depois envolve tokens.
+\end{keyideabox}

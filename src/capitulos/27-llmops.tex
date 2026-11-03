@@ -1,0 +1,363 @@
+\chapter{LLMOps para Prompts e Sistemas de Produção}
+\label{ch:llmops}
+
+\section{De “brincar no chat” a operar em produção}
+
+Há uma diferença grande entre:
+
+\begin{itemize}[leftmargin=*]
+\item tu, ao fim do dia, a experimentar prompts num chat;
+\item uma aplicação de produção que atende milhares de utilizadores com um SLA.
+\end{itemize}
+
+No primeiro caso, quando algo corre mal:
+
+\begin{itemize}[leftmargin=*]
+\item dás um suspiro,
+\item corriges o prompt,
+\item segues a tua vida.
+\end{itemize}
+
+No segundo, quando algo corre mal:
+
+\begin{itemize}[leftmargin=*]
+\item há clientes zangados,
+\item métricas de negócio a descer,
+\item equipas de suporte sobrecarregadas,
+\item possivelmente riscos legais.
+\end{itemize}
+
+Aí entra \textbf{LLMOps} para prompts: aplicar disciplinas de DevOps/MLOps à vida inteira dos prompts e das integrações com LLMs.
+
+\begin{keyideabox}{Prompts de produção são “infraestrutura lógica”}
+Não são posts-it colados numa UI de fornecedor.
+São parte da infraestrutura: precisam de controlo de versões, testes, monitorização, owners, processos de mudança.
+\end{keyideabox}
+
+\section{Ciclo de vida de um prompt em produção}
+
+Um fluxo saudável (simplificado) para prompts críticos:
+
+\begin{enumerate}[leftmargin=*]
+\item \textbf{Design inicial}
+Clarificas:
+\begin{itemize}[leftmargin=*]
+\item objetivo de negócio,
+\item tipo de tarefa (classificação, extração, geração, etc.),
+\item constraints (segurança, estilo, custos).
+\end{itemize}
+\item \textbf{Prototipagem}
+Experimentas no chat:
+\begin{itemize}[leftmargin=*]
+\item crias alguns exemplos,
+\item testas rapidamente variações,
+\item recolhes casos fáceis e difíceis.
+\end{itemize}
+\item \textbf{Criação de golden set}
+A partir dos exemplos, montas um conjunto de teste (Secção anterior).
+\item \textbf{Testes offline}
+Corres:
+\begin{itemize}[leftmargin=*]
+\item prompt v1, v2, v3...
+\item com um ou mais modelos,
+\item medes métricas definidas (accuracy, taxas de erro, etc.).
+\end{itemize}
+\item \textbf{Revisão e aprovação}
+Alguém além do autor do prompt revê:
+\begin{itemize}[leftmargin=*]
+\item comportamento,
+\item riscos,
+\item impacto esperado.
+\end{itemize}
+\item \textbf{Deploy controlado}
+Lançamento em:
+\begin{itemize}[leftmargin=*]
+\item ambiente de teste / staging,
+\item canary release (percentagem pequena de tráfego),
+\item depois rollout total.
+\end{itemize}
+\item \textbf{Monitorização contínua}
+Recolhes:
+\begin{itemize}[leftmargin=*]
+\item logs de prompts e outputs (com anonimização),
+\item métricas de negócio,
+\item feedback dos utilizadores.
+\end{itemize}
+\item \textbf{Iteração com disciplina}
+Quando queres melhorar:
+\begin{itemize}[leftmargin=*]
+\item voltas ao golden set,
+\item testas novas versões,
+\item fazes rollout gradual,
+\item manténs histórico.
+\end{itemize}
+\end{enumerate}
+
+\section{Gestão de configuração e versionamento de prompts}
+
+Prompts importantes não devem estar:
+
+\begin{itemize}[leftmargin=*]
+\item só numa UI de fornecedor,
+\item apenas na cabeça de uma pessoa.
+\end{itemize}
+
+Boas práticas mínimas:
+
+\begin{itemize}[leftmargin=*]
+\item Guardar prompts em ficheiros de texto (por exemplo, \texttt{.txt}, \texttt{.md}, \texttt{.yaml}) no mesmo repositório que o código.
+\item Dar nomes explícitos, por exemplo:
+\begin{itemize}[leftmargin=*]
+\item \texttt{router\_faq\_pt\_v3.txt},
+\item \texttt{classificador\_pedidos\_suporte\_v5.yaml}.
+\end{itemize}
+\item Usar controlo de versão (Git):
+\begin{itemize}[leftmargin=*]
+\item ver diffs entre versões (o que mudou),
+\item associar commits a tickets/tasks,
+\item ter histórico de evolução.
+\end{itemize}
+\item Incluir metadados onde fizer sentido:
+\begin{itemize}[leftmargin=*]
+\item data,
+\item autor,
+\item modelo-alvo (por exemplo, \texttt{modelo\_e\_versao\_verificados}),
+\item tarefas que o prompt destina-se a resolver,
+\item links para golden sets ou testes.
+\end{itemize}
+\end{itemize}
+
+Exemplo simplificado de ficheiro \texttt{.yaml}:
+
+\begin{lstlisting}
+id: classificador_tickets_suporte
+version: 5
+language: pt-PT
+model_target: modelo_e_versao_verificados
+owner: equipa_suporte
+description: >
+Classificação de tickets de suporte em categorias
+operacionais para routing interno.
+
+prompt_system: |
+És um classificador de pedidos de suporte...
+prompt_user_template: |
+Classifica o texto abaixo...
+
+tests_golden_set: data/golden_tickets_v2.json
+\end{lstlisting}
+
+\begin{checklistbox}{Antes de mexer num prompt de produção}
+Garante que:
+
+\begin{itemize}[leftmargin=*]
+\item o prompt está em repositório versionado;
+\item existe um golden set associado (nem que pequeno);
+\item tens um ambiente para testar a nova versão antes de produção;
+\item sabes como reverter rapidamente se algo correr mal.
+\end{itemize}
+\end{checklistbox}
+
+\section{Observabilidade: logs, métricas e rastreamento}
+
+Sem observabilidade, ficas cego. Coisas a registar (com cuidado com privacidade):
+
+\begin{itemize}[leftmargin=*]
+\item \textbf{Inputs} anonimizados:
+\begin{itemize}[leftmargin=*]
+\item tipo de pedido,
+\item tamanho em tokens,
+\item canal (web, mobile, API, etc.).
+\end{itemize}
+\item \textbf{Prompts usados}:
+\begin{itemize}[leftmargin=*]
+\item versão do system prompt,
+\item contexto adicional (documentos, ferramentas chamadas).
+\end{itemize}
+\item \textbf{Outputs} (de forma segura e, se possível, truncada ou mascarada).
+\item \textbf{Métricas técnicas}:
+\begin{itemize}[leftmargin=*]
+\item latência,
+\item tokens de input e output,
+\item erros da API.
+\end{itemize}
+\item \textbf{Métricas de negócio}:
+\begin{itemize}[leftmargin=*]
+\item taxa de resolução automática,
+\item thumbs up/down,
+\item escaladas para humanos,
+\item conversões (quando aplicável).
+\end{itemize}
+\end{itemize}
+
+Isto permite:
+
+\begin{itemize}[leftmargin=*]
+\item identificar rapidamente:
+\begin{itemize}[leftmargin=*]
+\item quedas de qualidade,
+\item aumentos de alucinações,
+\item quebras de formato.
+\end{itemize}
+\item analisar distribuição de tráfego por tipo de pedido;
+\item perceber onde convém investir em melhorias de prompt ou fluxo.
+\end{itemize}
+
+\begin{warningboxenv}{Logs de IA podem conter dados sensíveis}
+Não registes texto bruto de utilizadores sem:
+\begin{itemize}[leftmargin=*]
+\item políticas claras de retenção,
+\item anonimização e/ou pseudonimização,
+\item fundamento de licitude e informação aos titulares adequados ao tratamento,
+\item controlos de acesso rígidos.
+\end{itemize}
+
+Observabilidade não é desculpa para ignorar privacidade.
+\end{warningboxenv}
+
+\section{Guardrails, políticas e fallbacks}
+
+Mesmo com prompts excelentes, precisas de \emph{guardrails} fora do modelo:
+
+\begin{itemize}[leftmargin=*]
+\item filtros de conteúdo (antes e/ou depois do LLM),
+\item whitelists/blacklists de operações e ferramentas,
+\item mecanismos de fallback (para humanos, para respostas neutras).
+\end{itemize}
+
+Exemplos:
+
+\begin{itemize}[leftmargin=*]
+\item \textbf{Filtro de input}:
+\begin{itemize}[leftmargin=*]
+\item bloquear pedidos claramente fora de escopo (ex: tentar usar o chatbot de suporte para crime),
+\item sanitizar partes do texto (ex: remover credenciais).
+\end{itemize}
+\item \textbf{Filtro de output}:
+\begin{itemize}[leftmargin=*]
+\item verificar se há padrões proibidos (ex: dados bancários, insultos),
+\item moderar a resposta (ou substituí-la por algo neutro) se necessário.
+\end{itemize}
+\item \textbf{Fallbacks}:
+\begin{itemize}[leftmargin=*]
+\item se o modelo falha repetidamente num pedido, passar o caso a humano,
+\item se há timeout, enviar mensagem clara ao utilizador.
+\end{itemize}
+\end{itemize}
+
+\begin{checklistbox}{Guardrails básicos para um sistema com LLM}
+Antes de colocar algo público:
+
+\begin{itemize}[leftmargin=*]
+\item tens filtros de input para bloquear conteúdo ilegal/abusivo?
+\item tens filtros de output para evitar que o sistema devolva algo claramente inaceitável?
+\item tens mecanismos de fallback para humanos e mensagens de erro decentes?
+\item sabes quem é responsável por rever casos problemáticos?
+\end{itemize}
+\end{checklistbox}
+
+\section{Ambientes, rollouts e gestão de risco}
+
+Se aplicas boas práticas de DevOps, muito disto soa familiar:
+
+\begin{itemize}[leftmargin=*]
+\item \textbf{Ambientes separados}:
+\begin{itemize}[leftmargin=*]
+\item desenvolvimento,
+\item staging (pré-produção),
+\item produção.
+\end{itemize}
+\item \textbf{Canary releases}:
+\begin{itemize}[leftmargin=*]
+\item lançar nova versão de prompt/modelo para pequena percentagem de utilizadores,
+\item observar métricas,
+\item ampliar gradualmente se estiver estável,
+\item reverter se algo correr mal.
+\end{itemize}
+\item \textbf{Feature flags}:
+\begin{itemize}[leftmargin=*]
+\item ativar/desativar funcionalidades baseadas em LLM sem redeploy completo,
+\item experimentar novos fluxos com segmentos específicos de utilizadores.
+\end{itemize}
+\end{itemize}
+
+\begin{keyideabox}{Trata “trocar de modelo” como um change de infra, não como detalhe}
+Mudar de \emph{modelo} (por exemplo, de uma versão para outra) pode ter impacto tão grande quanto mudar de base de dados.
+Planeia, testa, monitora e regista.
+\end{keyideabox}
+
+\section{Custos, latência e escolhas arquiteturais}
+
+LLMs não são grátis nem instantâneos. Em sistemas reais, tens de equilibrar:
+
+\begin{itemize}[leftmargin=*]
+\item \textbf{Qualidade} (modelos maiores, prompts mais ricos),
+\item \textbf{Custos} (tokens, chamadas, infra de suporte),
+\item \textbf{Latência} (utilizadores não gostam de esperar).
+\end{itemize}
+
+Padrões para gerir isto:
+
+\begin{itemize}[leftmargin=*]
+\item Usar modelos menores para tarefas simples (classificação, validação).
+\item Reservar modelos mais poderosos para:
+\begin{itemize}[leftmargin=*]
+\item casos complexos,
+\item revisão final,
+\item tarefas com impacto maior.
+\end{itemize}
+\item Cache de resultados:
+\begin{itemize}[leftmargin=*]
+\item pedidos repetidos (FAQs populares),
+\item outputs que não mudam frequentemente.
+\end{itemize}
+\item Otimizar prompts:
+\begin{itemize}[leftmargin=*]
+\item remover redundância,
+\item cortar exemplos desnecessários,
+\item não enfiar meia enciclopédia no contexto “só porque sim”.
+\end{itemize}
+\end{itemize}
+
+\section{Equipa, governance e responsabilidade}
+
+LLMOps não é só tech. Envolve pessoas e processos:
+
+\begin{itemize}[leftmargin=*]
+\item \textbf{Quem escreve e revê prompts?}
+\begin{itemize}[leftmargin=*]
+\item engenheiros,
+\item especialistas de domínio,
+\item equipas de UX/conteúdo.
+\end{itemize}
+\item \textbf{Quem decide que mudanças avançam?}
+\begin{itemize}[leftmargin=*]
+\item existe um processo de aprovação?
+\item há critérios de “go/no-go”?
+\end{itemize}
+\item \textbf{Quem responde quando algo corre mal?}
+\begin{itemize}[leftmargin=*]
+\item contact points,
+\item equipas de incidente,
+\item comunicação interna/externa.
+\end{itemize}
+\end{itemize}
+
+Idealmente, defines:
+
+\begin{itemize}[leftmargin=*]
+\item um \emph{owner} por fluxo de prompts,
+\item uma cadência de review (por exemplo, mensal),
+\item linhas vermelhas (o que o sistema nunca deve fazer, e o que acontece se fizer).
+\end{itemize}
+
+\begin{keyideabox}{LLMOps é a ponte entre “brincar com IA” e “assumir responsabilidade por IA”}
+É aqui que deixas de ser só um entusiasta com prompts giros e passas a ser alguém que põe sistemas com LLMs no mundo sem incendiar metade da empresa.
+\end{keyideabox}
+
+\section{O custo da tarefa resolvida, não apenas do token}
+Calcula custo de chamadas, ferramentas, infraestrutura e revisão humana por tarefa concluída dentro do critério. Um modelo barato que obriga a três tentativas e duas correções pode ser a opção mais cara. Para latência, acompanha percentis, como p50 e p95, e a taxa de timeouts; a média esconde esperas raras mas importantes.
+
+Uma cache de respostas ou documentos deve incluir o âmbito de autorização, versão da fonte e prazo de validade. Se um cliente deixa de ter acesso a um documento, uma resposta antiga em cache não pode contornar essa revogação. Nunca uses uma cache partilhada como memória informal entre clientes.
+
+Pseudonimizar reduz associação direta, mas os dados continuam pessoais quando podem ser reatribuídos. Regista por defeito identificadores técnicos e métricas; conserva texto bruto apenas quando necessário, com acesso, fundamento e retenção definidos. Para reproduzir incidentes, guarda uma amostra controlada, não um arquivo ilimitado de conversas~\citep{rgpd2016}.

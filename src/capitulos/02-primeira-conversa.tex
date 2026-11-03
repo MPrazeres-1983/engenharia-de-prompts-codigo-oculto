@@ -1,0 +1,61 @@
+\chapter{A Primeira Conversa: do Pedido Vago ao Resultado Útil}
+\label{ch:primeira-conversa}
+
+O gerente abre um chat e escreve: «Resolve o problema das meias desaparecidas.» Pode receber uma lista de hipóteses, uma campanha de marketing ou uma teoria sobre duendes. Nenhuma dessas respostas demonstra onde está uma meia. O problema começa no pedido: não define uma tarefa que a ferramenta possa executar e verificar.
+
+Um prompt melhor não precisa de linguagem solene. Precisa de dar ao modelo informação suficiente para produzir o resultado de que precisas. Comecemos por um trabalho pequeno: preparar uma resposta a uma reclamação.
+
+\section{Dar ao pedido uma finalidade}
+\ficcao A mensagem do cliente é: «Entreguei seis pares na segunda-feira e recebi cinco. Podem confirmar o que aconteceu?» Não temos acesso ao registo de recolha. Sabemos apenas que a política fictícia pede o número do talão antes de investigar.
+
+Um primeiro pedido utilizável seria:
+
+\begin{lstlisting}
+Prepara um rascunho de resposta em portugues de Portugal.
+O cliente diz que entregou seis pares e recebeu cinco.
+Nao temos o registo de recolha nem sabemos a causa.
+A politica pede o numero do talao para investigar.
+
+A resposta deve reconhecer o pedido, pedir esse numero
+e explicar o proximo passo. Usa ate quatro frases.
+Nao prometas reembolso, prazo nem resultado da investigacao.
+\end{lstlisting}
+
+O texto dá uma tarefa, contexto, limites e formato. Não manda fingir que temos acesso à máquina de lavar. A resposta que procuramos pede o talão e evita inventar uma conclusão. O vocabulário exato pode variar.
+
+\begin{keyideabox}{Especificar é reduzir adivinhas}
+Pergunta: o que quero obter, com que informação, sob que limites e como vou verificar? O papel do modelo é opcional; esses quatro elementos são mais importantes do que começar por «és o maior especialista do mundo».
+\end{keyideabox}
+
+\section{Uma resposta ilustrativa e uma verificação real}
+Uma possível saída, escrita aqui como exemplo, seria: «Obrigado pelo aviso. Para verificarmos a diferença entre a entrega e a recolha, pode indicar o número do talão? Com esse número, a equipa poderá consultar o registo e dar seguimento à reclamação.» Este texto não é uma execução registada de um modelo.
+
+Verificamos quatro coisas: reconhece o pedido; pede o talão; não afirma saber a causa; não promete compensação ou prazo. «Lamentamos o duende ter fugido com a sua meia» falha o terceiro critério, mesmo que tenha melhor sentido de humor.
+
+Também podemos distinguir factos atribuídos de factos confirmados. «O cliente refere que faltou um par» descreve a mensagem. «A lavandaria perdeu um par» afirma uma conclusão ainda não investigada. Uma palavra muda a responsabilidade da frase.
+
+\section{Melhorar uma coisa de cada vez}
+Se a resposta for demasiado longa, especifica o limite e confirma-o. Se inventar uma causa, torna explícita a informação em falta e testa outra mensagem. Se o formato variar, mostra um exemplo. Evita acrescentar quinze regras sem saber que falha cada uma tenta resolver.
+
+Para comparar duas versões, guarda a mesma entrada e usa sessões independentes, quando a interface o permite. Caso contrário, uma resposta anterior pode influenciar a seguinte. Não confundas mudança de modelo com efeito do prompt. Regista a ferramenta, data, versão identificável e configuração disponível.
+
+Num chat não controlas necessariamente todos os detalhes: pode haver instruções da plataforma, pesquisa automática, memória ou seleção de ferramentas. Anota o que consegues observar. «Não sei qual era a configuração interna» é uma descrição honesta da experiência.
+
+\begin{promptlabbox}{A primeira reclamação da Lavandaria}
+\textbf{Objetivo e contexto:} comparar um pedido vago com uma tarefa delimitada. Usa a mensagem dos seis pares e a política fictícia deste capítulo. Não forneças dados de clientes reais.
+
+\textbf{Instruções:} numa sessão pede «responde ao cliente». Noutra, usa o prompt completo. Guarda ambas as saídas. Repete com «não tenho o talão» e com «quero uma indemnização já». Não alteres a política entre versões.
+
+\textbf{Resultado esperado:} o segundo pedido torna observáveis os critérios da resposta, sem garantir acerto. Para a falta de talão, deve identificar o bloqueio ou pedir um procedimento autorizado; não inventar uma exceção.
+
+\textbf{Validação:} usa os quatro critérios acima, marcando cumpre/não cumpre e copiando o trecho que justifica a avaliação. Se quiseres quantificar variação, repete cada condição e guarda todas as respostas, incluindo falhas.
+
+\textbf{Falhas possíveis:} avaliar só a simpatia, escolher apenas a melhor tentativa, comparar entradas diferentes ou tratar um resultado ilustrativo como resposta medida.
+\end{promptlabbox}
+
+\section{Do rascunho à ação}
+Enquanto estás a experimentar, podes rever uma frase antes de a usar. Numa aplicação automática, o texto pode ser enviado a milhares de pessoas. A diferença de escala altera o que precisamos de testar.
+
+Por isso vamos manter quatro fronteiras ao longo do livro: informação e instrução; proposta e execução; resposta e evidência; experiência fictícia e resultado medido. Quando chegarmos a agentes, serão as mesmas fronteiras com ferramentas ligadas.
+
+O capítulo seguinte transforma este pequeno exercício num método repetível. Em vez de procurar uma frase secreta que faz o modelo obedecer, vamos construir um ciclo de especificação, teste e revisão.

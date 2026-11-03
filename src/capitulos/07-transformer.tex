@@ -1,0 +1,249 @@
+\chapter{Dentro da Máquina: Transformer sem Fumo Sagrado}
+\label{ch:transformer}
+
+\section{Álgebra linear em modo de sobrevivência}
+
+Para perceberes o Transformer, precisas de um kit de sobrevivência de álgebra linear. Não é um curso completo; é apenas o mínimo para que as palavras “vetor” e “matriz” deixem de soar a trauma escolar.
+
+\subsection*{Vetores como setas de significado}
+
+Um \emph{vetor} é, aqui, uma lista ordenada de números:
+
+\[\mathbf{v}=(v_1,v_2,\ldots,v_d)\in\mathbb{R}^{d}.\]
+
+Podes imaginá-lo como uma seta num espaço de 
+d dimensões. Num Transformer de texto, o identificador de cada token seleciona um vetor aprendido, o \emph{embedding} inicial. Com os parâmetros fixos, essa consulta devolve o mesmo vetor para o mesmo identificador. As camadas seguintes produzem representações que dependem do contexto~\citep{vaswani2017}.
+
+\subsection*{Matrizes como transformações}
+
+Uma \emph{matriz} é uma tabela de números. Multiplicar uma matriz por um vetor é aplicar uma transformação linear: rodar, esticar, comprimir esse vetor no espaço. O Transformer não faz magia; faz muitas multiplicações de matrizes por vetores, com algumas não-linearidades pelo meio.
+
+Do ponto de vista de prompting, o que importa é:
+
+\begin{itemize}[leftmargin=*]
+\item O embedding inicial é aprendido durante o treino; as representações nas camadas seguintes variam com os tokens e posições disponíveis.
+\item Transformar vetores corresponde a olhar para a mesma frase com “óculos” diferentes (atenção cabeça X, projeção para queries, etc.).
+\end{itemize}
+
+Não precisas de calcular nenhuma destas matrizes à mão. Mas a intuição “texto \(\to\) vetores \(\to\) operações \(\to\) texto” é fundamental para entender porque é que o contexto e a ordem das coisas importam.
+
+\begin{keyideabox}{Texto \texorpdfstring{$\to$}{->} vetores \texorpdfstring{$\to$}{->} operações \texorpdfstring{$\to$}{->} texto}
+Um Transformer pega em texto, converte-o em vetores, faz operações em cima desses vetores (atenção, projeções, não-linearidades) e volta a texto. Cada decisão de prompt é, literalmente, uma decisão sobre que vetores vão estar presentes e como vão interagir.
+\end{keyideabox}
+
+\section{Self-attention com desenhos de guardanapo}
+
+O coração do Transformer é o mecanismo de \emph{self-attention}. A ideia é combinar informação das posições permitidas. No descodificador causal, uma máscara impede cada posição de usar tokens futuros durante o treino. Na geração, só existem o contexto e os tokens já produzidos.
+
+De forma simplificada, para cada token temos três vetores:
+
+\begin{itemize}[leftmargin=*]
+\item q — \emph{query}: “o que eu procuro”.
+\item k — \emph{key}: “o que eu ofereço”.
+\item v — \emph{value}: “a informação que posso fornecer”.
+\end{itemize}
+
+A atenção entre dois tokens é dada, grosso modo, pelo produto interno entre query e key, seguido de uma normalização por \emph{softmax}. Para um conjunto de queries Q, keys K e values V, a fórmula canónica é:
+
+\[
+\operatorname{Attention}(Q,K,V)=
+\operatorname{softmax}\!\left(\frac{QK^{\mathsf T}}{\sqrt{d_k}}+M\right)V.
+\]
+Com $n$ posições, $Q,K\in\mathbb{R}^{n\times d_k}$ e $V\in\mathbb{R}^{n\times d_v}$. A softmax é aplicada por linha. Na máscara causal $M_{ij}=0$ se $j\leq i$ e $M_{ij}=-\infty$ se $j>i$, anulando os pesos de posições futuras. O fator $\sqrt{d_k}$ controla a escala dos produtos internos~\citep{vaswani2017}.
+
+Por exemplo, numa linha com dois scores permitidos, $[0,\ln 3]$, a softmax dá $[1/4,3/4]$. Se os valores escalares forem $[2,6]$, a combinação é $\tfrac14\times2+\tfrac34\times6=5$. Estes números são um exemplo didático, não uma medição de atenção de um LLM.
+
+O que isto faz, em termos de desenho de guardanapo:
+
+\begin{enumerate}[leftmargin=*]
+\item Cada posição compara a sua query (Q) com keys (K) das posições permitidas.
+\item Calcula “graus de afinidade” (os scores) com cada um.
+\item Passa esses scores por uma softmax para obter pesos que somam 1.
+\item Faz uma média ponderada das \emph{values} V usando esses pesos.
+\end{enumerate}
+
+No fim, a representação de cada token passa a ser uma mistura das informações dos tokens a que decidiu prestar mais atenção.
+
+Do ponto de vista de prompts:
+
+\begin{itemize}[leftmargin=*]
+\item A posição de informação relevante pode alterar o desempenho observado.
+\item Instruções contraditórias tornam ambíguo o comportamento esperado; uma resposta não revela por si só a distribuição de atenção interna.
+\item Exemplos estruturados ajudam a especificar a tarefa, mas o seu efeito deve ser medido.
+\end{itemize}
+
+Mais tarde, quando falarmos de \emph{janela de contexto} e de “lost in the middle”, vais ver como isto se traduz em consequências práticas para o design de mensagens longas.
+
+\begin{promptlabbox}{Ver o impacto da ordem das instruções}
+\textbf{Objetivo e contexto:} Comparar organização de instruções com o mesmo parágrafo, sem mudar os requisitos.
+
+Experimenta comparar estes dois prompts:
+
+\medskip
+
+\textbf{Prompt A}
+
+\begin{lstlisting}
+Quero que analises o seguinte texto.
+
+[COLOCA AQUI UM PARÁGRAFO QUALQUER]
+
+No fim, faz:
+
+Um resumo em 3 pontos.
+
+Uma crítica em tom cínico.
+
+Uma sugestão de melhoria.
+
+Começa pelo resumo.
+\end{lstlisting}
+
+\medskip
+
+\textbf{Prompt B}
+
+\begin{lstlisting}
+Quero que faças três coisas, por esta ordem:
+
+Um resumo em 3 pontos.
+
+Uma crítica em tom cínico.
+
+Uma sugestão de melhoria.
+
+Só depois disso é que vais ler o seguinte texto
+e aplicar os passos anteriores:
+
+[COLOCA AQUI O MESMO PARÁGRAFO]
+
+Começa pelo resumo.
+\end{lstlisting}
+
+Compara:
+\begin{itemize}[leftmargin=*]
+\item Em qual deles o modelo segue melhor a ordem das tarefas?
+\item Em qual deles parece “esquecer-se” de algum passo?
+\end{itemize}
+
+Este teste compara comportamento observável. Não revela pesos de atenção nem prova uma explicação causal sobre os mecanismos internos do modelo.
+
+\textbf{Resultado esperado e validação:} Assinala se há três pontos de resumo, uma crítica e uma sugestão, pela ordem pedida. Repete em sessões separadas; empate é um resultado admissível.
+
+\textbf{Falhas possíveis:} Mudar simultaneamente texto, tarefa e ordem; interpretar o resultado como medição direta de atenção.
+\end{promptlabbox}
+
+\section{Embeddings e espaço latente}
+
+Quando dizemos que o modelo “entende” que \texttt{gato} e \texttt{cão} são mais parecidos entre si do que com \texttt{parafuso}, não estamos a atribuir-lhe intuição animal. Estamos a falar de \emph{embeddings}: representações vetoriais aprendidas.
+
+Durante o treino, o objetivo e os dados dão origem a regularidades nas representações. A geometria depende do modelo, da camada e da medida de proximidade. Num \emph{espaço latente}, podemos encontrar padrões como:
+
+\begin{itemize}[leftmargin=*]
+\item Palavras com usos semelhantes podem ter representações próximas; antónimos também podem partilhar contextos, pelo que proximidade não significa sinonímia.
+\item Palavras que partilham função gramatical ou papel semântico têm padrões reconhecíveis.
+\item Certos embeddings estáticos apresentam regularidades relacionais aproximadas, estudadas, por exemplo, por Mikolov e colaboradores~\citep{mikolov2013}. Analogias vetoriais não são identidades algébricas nem uma regra geral para representações contextuais.
+\end{itemize}
+
+Porque é que isto interessa para prompts?
+
+\begin{itemize}[leftmargin=*]
+\item Mudar o vocabulário altera a sequência de tokens e pode mudar a resposta; o efeito não se deduz só de uma distância entre embeddings.
+\item Exemplos de estilo acrescentam padrões ao contexto. Compara a sua utilidade em respostas novas, sem lhes atribuir uma direção geométrica que não mediste.
+\item Instruções positivas e negativas são alternativas a testar. «Escreve como se estivesses a falar com um colega» torna um objetivo observável; não garante que seja superior em todas as tarefas.
+\end{itemize}
+
+\begin{keyideabox}{Prompts empurram o contexto no espaço latente}
+Cada palavra que usas no prompt empurra o contexto para uma região diferente do espaço latente. É uma metáfora útil, mas não existe um único «embedding do contexto» que possas deslocar como uma peça num tabuleiro. Formulações distintas condicionam o cálculo; a sua eficácia deve ser medida na tarefa.
+\end{keyideabox}
+
+\section{O que existe para além da atenção}
+A entrada começa por identificadores de tokens e embeddings. Informação de posição permite distinguir «o cão mordeu o homem» de «o homem mordeu o cão». Cada bloco combina atenção, transformações feed-forward, normalização e ligações residuais; a saída é projetada para scores sobre o vocabulário. Há variantes de cada componente.
+
+No treino, conhecemos a sequência de referência e calculamos perdas em várias posições em paralelo, respeitando a máscara. Na geração autoregressiva, acrescentamos tokens sucessivamente. Uma cache de keys e values pode evitar recalcular parte do histórico; não é uma memória permanente de conversas.
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[node distance=7mm, every node/.style={draw, rounded corners=1pt, align=center, text width=35mm, minimum height=9mm, font=\small}, >=Stealth]
+\node (in) {Tokens e posições};
+\node (att) [below=of in] {Atenção causal};
+\node (ff) [below=of att] {Feed-forward, normalização e resíduos};
+\node (out) [below=of ff] {Logits e descodificação};
+\draw[->] (in)--(att); \draw[->] (att)--(ff); \draw[->] (ff)--(out);
+\end{tikzpicture}
+\caption{Percurso simplificado num Transformer de texto com descodificador causal. Os blocos repetem-se; não é uma arquitetura comercial específica.}
+\label{fig:transformer}
+\end{figure}
+
+Uma alteração no prompt muda a entrada deste cálculo. Não te dá acesso direto aos parâmetros, às posições internas ou a um interruptor de «verdade». O desenho é útil precisamente porque mantém essas fronteiras visíveis.
+\section{Como os parâmetros aprendem}
+Uma rede começa com parâmetros e um objetivo de treino. Para previsão autoregressiva, uma perda comum é a média da log-probabilidade negativa dos tokens de referência:
+\[
+\mathcal{L}(\theta)=-\frac{1}{N}\sum_{k=1}^{N}
+\log P_{\theta}(t_k\mid t_{<k}).
+\]
+Aqui, $\theta$ representa os parâmetros, $N$ o número de posições avaliadas e $t_{<k}$ os tokens anteriores. A perda aumenta quando o modelo atribui pouca probabilidade ao token que aparece nos dados. Não mede diretamente se uma afirmação do mundo é verdadeira.
+
+O gradiente indica como a perda varia com os parâmetros. Uma atualização simples de descida do gradiente seria $\theta\leftarrow\theta-\eta\nabla_{\theta}\mathcal{L}$, com passo $\eta>0$. Otimizadores práticos usam variantes mais elaboradas. A retropropagação calcula derivadas através das camadas; os problemas de gradientes referidos no capítulo anterior dizem respeito à transmissão desse sinal de aprendizagem~\citep{goodfellow2016}.
+
+Treinar exige muitos exemplos, computação e avaliação. Durante a inferência normal, não repetimos esta atualização por cada mensagem: usamos parâmetros fixos para calcular uma distribuição condicionada ao contexto. É por isso que fornecer uma política no prompt e alterar os pesos são operações diferentes.
+
+\section{Janela de contexto e “lost in the middle”}
+
+Um LLM não lê texto infinito. Ele trabalha com uma \emph{janela de contexto} finita: um número máximo de tokens que consegue considerar de uma vez. Os limites variam por modelo e serviço; confirma separadamente capacidade de entrada, limite de geração e tratamento do histórico. Uma interface pode rejeitar uma entrada longa, resumi-la ou truncá-la; não há uma regra universal.
+
+Dois problemas práticos aparecem aqui:
+
+\begin{enumerate}[leftmargin=*]
+\item \textbf{Corte duro}: se ultrapassas o limite, o modelo pura e simplesmente não vê o que ficou para trás (ou tens de o truncar/resumir).
+\item \textbf{Lost in the middle}: Liu e colaboradores observaram degradação associada à posição da evidência nas tarefas e modelos que testaram~\citep{liu2024}. É um resultado experimental importante, não uma lei invariável de todos os modelos com contexto longo.
+\end{enumerate}
+
+Para prompting, isto significa:
+
+\begin{itemize}[leftmargin=*]
+\item Instruções importantes devem aparecer no início (system prompt ou início da conversa) e, se for crítico, podem ser repetidas perto do fim.
+\item Textos longos devem ser estruturados em secções claras com títulos, listas e marcadores; paredes de texto homogéneo são receita para o modelo se perder.
+\item Muitas conversas longas com “pequenos ajustes” acabam num estado em que ninguém (nem tu, nem o modelo) sabe exatamente que instruções ainda estão ativas.
+\end{itemize}
+
+Mais à frente, quando falarmos de \emph{prompt chaining} e de RAG, vamos ver como contornar isto com pipelines em vez de tentar meter o mundo inteiro numa única janela.
+
+\section{RLHF, RLAIF e camadas de alinhamento}
+
+Até agora falámos do modelo base enquanto preditor de texto. Mas o que encontras numa interface pública (tipo chat) não é só o modelo base; é um modelo \emph{alinhado}.
+
+Uma receita histórica importante, a do RLHF com modelo de recompensa, é~\citep{ouyang2022}:
+
+\begin{enumerate}[leftmargin=*]
+\item Treinar um modelo base em montes de texto para prever o próximo token.
+\item Pedir a humanos (ou a outros modelos) que avaliem respostas do modelo a vários prompts.
+\item Treinar um \emph{modelo de recompensa} que aprenda a prever quais respostas agradam mais aos avaliadores.
+\item Ajustar o modelo base com \emph{Reinforcement Learning from Human Feedback} (RLHF) ou variações (como RLAIF), para maximizar essa recompensa.
+\end{enumerate}
+
+Isto não é uma receita única. O ajuste supervisionado usa exemplos de respostas; RLAIF usa avaliações de IA~\citep{bai2022}; DPO otimiza preferências sem exigir a mesma sequência explícita de modelo de recompensa e otimização por reforço~\citep{rafailov2023}. Os fornecedores podem combinar métodos.
+
+O resultado pretendido é um modelo mais:
+
+\begin{itemize}[leftmargin=*]
+\item mais educado,
+\item menos tóxico,
+\item mais útil dentro de certos limites,
+\item mais obediente a políticas de segurança.
+\end{itemize}
+
+Do ponto de vista de prompting, isto explica várias coisas que vês no dia a dia:
+
+\begin{itemize}[leftmargin=*]
+\item Respostas cheias de disclaimers e avisos legais.
+\item Recusa em entrar em certos temas, mesmo quando a pergunta é académica.
+\item Tendência para dizer “como modelo de IA, não posso…” em situações em que, tecnicamente, até podia responder.
+\end{itemize}
+
+Quando mais tarde falarmos de jailbreaks e DAN, estás na verdade a tentar contornar estas camadas de alinhamento. Quando falarmos de segurança e ética, vamos ver como usar esse conhecimento para \emph{defender} sistemas em produção, em vez de os rebentar.
+
+\begin{warningboxenv}{Não confundir alinhamento com competência}
+Um modelo pode ser altamente “alinhado” (educado, politicamente aceitável) e ao mesmo tempo alucinar factos básicos. Alinhamento não é sinónimo de precisão. Quando desenhas prompts, tens de lidar com estas duas dimensões em separado.
+\end{warningboxenv}
+

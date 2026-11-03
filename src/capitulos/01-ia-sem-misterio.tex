@@ -1,0 +1,52 @@
+\chapter{IA, Aprendizagem e Modelos: Começar do Zero}
+\label{ch:ia}
+
+Uma lavandaria descobre que recebe cada vez mais reclamações sobre meias desaparecidas. O gerente conclui que as máquinas de lavar têm preferência pelo pé esquerdo. A contabilista pede dados. Alguém sugere inteligência artificial. Ainda ninguém contou as meias.
+
+\ficcao Esta é a \emph{Lavandaria das Meias Desaparecidas}, o caso que vamos desenvolver. O absurdo pertence à história; os problemas de dados, instruções, permissões e testes são reais. A empresa existe apenas neste livro e nos ficheiros de demonstração.
+
+Antes de escolher uma ferramenta, precisamos de perceber que tipo de problema temos. Se queremos contar dez pares, uma soma chega. Se queremos agrupar milhares de reclamações escritas de formas diferentes, um modelo de linguagem pode ajudar. Se queremos saber onde está uma meia concreta, uma resposta eloquente não substitui o registo de entrada e saída.
+
+\section{IA é uma família de abordagens}
+Inteligência artificial é um campo de investigação e engenharia que procura construir sistemas capazes de executar tarefas associadas a capacidades como perceção, aprendizagem, raciocínio e decisão. Não é uma técnica única nem um selo de qualidade. Existem sistemas baseados em regras explícitas, procura, otimização e aprendizagem a partir de dados.
+
+Num programa de regras, escrevemos condições: «se o pedido tem mais de dez dias, sinaliza-o». Em \emph{aprendizagem automática} (machine learning), ajustamos um modelo a dados e usamos o resultado para tratar casos novos. Se lhe mostramos mensagens já classificadas, pode aprender padrões que distinguem uma pergunta de uma reclamação. A generalização, isto é, funcionar além dos exemplos de treino, tem de ser medida.
+
+Uma rede neuronal é uma família de modelos que combina transformações parametrizadas. Os parâmetros são números ajustados durante o treino. Em \emph{deep learning}, várias camadas aprendem representações que ajudam na tarefa~\citep{goodfellow2016}. Não são pequenos neurónios humanos a trabalhar num escritório. A analogia biológica explica a origem do nome e deixa de ser útil bastante depressa.
+
+\begin{keyideabox}{Três coisas diferentes}
+O \textbf{algoritmo de treino} ajusta parâmetros; o \textbf{modelo treinado} usa esses parâmetros; a \textbf{aplicação} envolve o modelo com interface, dados, regras e ferramentas. Uma capacidade da aplicação não é necessariamente uma capacidade isolada do modelo.
+\end{keyideabox}
+
+\section{Prever uma classe e gerar uma resposta}
+Um classificador pode devolver «reclamação», «pergunta» ou «outro». Um modelo generativo pode produzir texto, imagem, áudio ou outras representações. O formato de entrada e saída depende do modelo e da aplicação. Generativo não significa criativo no sentido humano; significa que o sistema produz uma saída, em vez de se limitar a selecionar um registo existente.
+
+Um modelo de linguagem atribui probabilidades a sequências de unidades de texto. Um LLM é um modelo de linguagem de grande escala. Mais à frente veremos tokens, redes e Transformers. Por agora, basta esta distinção: gerar uma continuação plausível e consultar um registo são operações diferentes. Uma aplicação pode combinar ambas.
+
+Quando perguntas «qual é a política de devoluções?», o sistema pode usar apenas o que aprendeu no treino, ler documentos fornecidos ou consultar uma ferramenta. A resposta final pode parecer idêntica nos três casos. Para avaliar confiança, interessa saber de onde veio a informação, se está atualizada e se a consegues confirmar.
+
+\section{Treino, inferência e contexto}
+No \emph{treino}, os parâmetros mudam com os dados e com o objetivo escolhido. Na \emph{inferência}, usamos um modelo para produzir uma saída. Dar-lhe exemplos num prompt é, em geral, mudar a entrada dessa inferência; não é voltar a treinar o modelo. O ajuste posterior com novos dados, ou fine-tuning, é uma operação distinta.
+
+O \emph{prompt} é o pedido e o material usado para orientar a resposta: instruções, exemplos e contexto. O \emph{contexto} disponível pode incluir mensagens, documentos e resultados de ferramentas. Tem limites de tamanho e depende do que a aplicação efetivamente envia ao modelo.
+
+Pensa numa reunião: a mesma pergunta, com ou sem o relatório em cima da mesa, pode levar a respostas diferentes. É uma analogia sobre disponibilidade de informação. Um LLM não tem uma memória humana nem a experiência de quem participou na reunião.
+
+Também há três datas a distinguir: a data do documento, a data da sua atualização e o momento em que o sistema o consultou. «Esta informação estava no treino» não nos diz qual das três é relevante para decidir hoje.
+
+\section{O que não podemos concluir a partir de uma boa resposta}
+Uma resposta certa num exemplo não demonstra fiabilidade em todos os casos. Uma explicação convincente não prova que os passos descritos correspondem ao processo interno. Uma persona de «especialista» não concede credenciais. E uma recusa não prova que a aplicação está segura contra todas as formas de abuso.
+
+Estas limitações não tornam a ferramenta inútil. Definem o trabalho que continua a caber-nos: escolher a tarefa, fornecer dados adequados, estabelecer critérios e verificar resultados. É a diferença entre experimentar uma máquina e construir um processo à volta dela.
+
+\begin{promptlabbox}{Escolher a ferramenta antes de escrever o prompt}
+\textbf{Objetivo e contexto:} distinguir regras fixas, interpretação e consulta. Considera três tarefas fictícias: contar os pares recebidos; agrupar reclamações em linguagem livre; confirmar o estado da reclamação \texttt{LAV-001}.
+
+\textbf{Instruções:} para cada tarefa, escreve a entrada, a saída, a fonte necessária e uma forma de verificar o resultado. Decide se usarias código, um modelo, uma consulta ou uma combinação. Não é necessário abrir um chat.
+
+\textbf{Resultado esperado e validação:} a contagem deve apoiar-se nos registos; a classificação pode usar interpretação; o estado deve vir do sistema autorizado. Confirma se a ferramenta escolhida tem acesso à informação necessária.
+
+\textbf{Falhas possíveis:} confundir uma tarefa difícil de explicar com uma tarefa que precisa de IA; usar um modelo para inventar um dado ausente; automatizar antes de definir a decisão.
+\end{promptlabbox}
+
+No próximo capítulo vamos escrever o primeiro pedido e observar o que muda quando lhe acrescentamos informação útil. As matrizes podem esperar. As meias, aparentemente, já esperaram demasiado.

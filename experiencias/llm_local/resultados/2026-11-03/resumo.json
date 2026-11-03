@@ -1,0 +1,39 @@
+{
+  "total": 52,
+  "grupos": {
+    "classificacao/zero_shot": {
+      "total": 12,
+      "correto": 6,
+      "erros_execucao": 0
+    },
+    "classificacao/few_shot": {
+      "total": 12,
+      "correto": 11,
+      "erros_execucao": 0
+    },
+    "documentos_json/apenas_prompt": {
+      "total": 6,
+      "json_valido": 6,
+      "contrato_valido": 0,
+      "erros_execucao": 0
+    },
+    "documentos_json/schema_runtime": {
+      "total": 6,
+      "json_valido": 6,
+      "contrato_valido": 1,
+      "erros_execucao": 0
+    },
+    "duracao/direta": {
+      "total": 8,
+      "correto": 1,
+      "json_valido": 8,
+      "erros_execucao": 0
+    },
+    "duracao/decomposicao": {
+      "total": 8,
+      "correto": 0,
+      "json_valido": 8,
+      "erros_execucao": 0
+    }
+  }
+}

@@ -1,0 +1,83 @@
+\chapter{RAG: Dar Fontes ao Modelo sem Lhe Entregar a Empresa Inteira}
+\label{ch:rag}
+
+O assistente da Lavandaria explica com segurança que todos os clientes têm direito a uma meia de substituição em prata. A empresa nunca teve essa política. O modelo não precisava de mais entusiasmo; precisava de acesso à fonte certa e de critérios para a usar.
+
+\emph{Retrieval-augmented generation} (RAG) combina recuperação de informação com geração. O trabalho de Lewis e colaboradores apresentou uma arquitetura de investigação que liga memória paramétrica e recuperação externa~\citep{lewis2020}. Na prática, o termo também cobre sistemas que pesquisam documentos e colocam excertos no contexto de um modelo sem o voltar a treinar.
+
+RAG não é uma promessa de verdade. É uma arquitetura com passos que podemos observar separadamente. Se não recuperou a política certa, mudar o tom da resposta é arrumar o balcão enquanto a máquina de lavar inunda a cave.
+
+\section{Duas fases: preparar e consultar}
+Na preparação, recolhes documentos autorizados, extrais texto, preservas estrutura e metadados, divides em unidades pesquisáveis e constróis um índice. Na consulta, identificas o utilizador e o âmbito de acesso, pesquisas, selecionas evidência e pedes uma resposta sustentada.
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[node distance=6mm and 8mm, every node/.style={draw,align=center,text width=38mm,minimum height=10mm,font=\small},>=Stealth]
+\node (docs) {Documentos, versões e permissões};
+\node (idx) [below=of docs] {Extração, segmentação e índice};
+\node (q) [left=of idx] {Pedido e identidade};
+\node (search) [below=of idx] {Pesquisa no âmbito autorizado};
+\node (ctx) [below=of search] {Seleção e contexto com IDs};
+\node (gen) [below left=of ctx] {Geração e citações};
+\node (check) [below right=of ctx] {Validação e encaminhamento};
+\draw[->](docs)--(idx);\draw[->](idx)--(search);\draw[->](q)|-(search);\draw[->](search)--(ctx);\draw[->](ctx)--(gen);\draw[->](gen)--(check);
+\end{tikzpicture}
+\caption{Um pipeline RAG. Autorização e metadados acompanham a pesquisa; a geração não concede acesso.}
+\label{fig:rag}
+\end{figure}
+
+Cada excerto deve conservar origem, versão, data relevante, localizador e regras de acesso. Se separas uma tabela do cabeçalho, ou uma exceção da regra, podes produzir unidades textuais legíveis mas semanticamente erradas.
+
+\section{Segmentar sem cortar a regra ao meio}
+Dividir a cada determinado número de tokens é simples, mas nem sempre respeita o documento. Prefere fronteiras que preservem secções, listas e tabelas quando o conteúdo o exige. Uma sobreposição entre segmentos pode ajudar a manter contexto, ao custo de duplicação.
+
+Não há um tamanho universal de chunk. Segmentos pequenos podem perder a condição; grandes podem introduzir ruído e consumir a janela. Experimenta tamanhos e avalia recuperação e resposta. Para PDFs, testa a extração: colunas trocadas, notas de rodapé e OCR errado chegam ao modelo com a mesma aparência de certeza que o texto correto.
+
+Na Lavandaria, POL-01 contém o procedimento de peças em falta e POL-02 a informação sobre prazos. São documentos fictícios pequenos. A demonstração mantém-nos inteiros; não precisa de uma estratégia de segmentação industrial para dois procedimentos tão curtos.
+
+\section{Pesquisa lexical, vetorial e híbrida}
+A pesquisa lexical procura termos e pode usar uma função de ranking, como BM25~\citep{robertson2009}. É particularmente útil para códigos, nomes raros e referências exatas. Uma pesquisa vetorial representa consultas e documentos por embeddings e procura proximidade segundo uma métrica. Pode ajudar quando as palavras diferem mas o significado é próximo; também pode confundir negações e casos com vocabulário semelhante.
+
+Uma base de dados vetorial é uma forma de guardar e pesquisar vetores, não o próprio RAG. Para conjuntos pequenos, uma comparação exata pode chegar. Índices aproximados podem reduzir custo em escala, com compromissos de cobertura e latência que devem ser medidos.
+
+Na pesquisa híbrida, combinas rankings lexicais e vetoriais. Não somes scores de escalas diferentes sem justificação. Podes usar fusão por posição, por exemplo reciprocal rank fusion:
+\[
+\operatorname{RRF}(d)=\sum_{r}\frac{1}{k+\operatorname{rank}_{r}(d)},
+\]
+onde a soma percorre os rankings em que o documento aparece e $k$ é um parâmetro positivo~\citep{cormack2009}. Isto combina ordens; não transforma posições em probabilidades de a resposta estar certa.
+
+Um reranker volta a ordenar um conjunto de candidatos com um método mais atento à relação consulta--documento. Pode melhorar relevância, mas não recupera o documento que ficou fora de todos os candidatos. Mede se o ganho paga a latência e o custo.
+
+\section{A fronteira de acesso vem antes da resposta}
+O cliente A não deve recuperar a nota privada do cliente B. Verifica permissões no sistema de dados e preserva esse âmbito em índices, caches e resultados de ferramentas. Filtrar apenas no texto final é tarde: o dado já pode ter entrado no contexto.
+
+Podes aplicar filtros antes da procura ou uma recuperação controlada com filtragem segura, consoante o motor. Em qualquer desenho, nenhum candidato não autorizado pode chegar à geração. Testa também revogações, documentos duplicados, metadados em falta e caches antigas.
+
+Os excertos são dados, não novas instruções de aplicação. Um documento pode conter texto a mandar exportar clientes. O capítulo~\ref{ch:seguranca} desenvolve essa ameaça; aqui a regra arquitetural é que recuperar texto não lhe concede autoridade para chamar ferramentas ou mudar permissões.
+
+\section{Responder com evidência e saber parar}
+O contexto deve distinguir pergunta, instruções de aplicação e excertos com IDs. Pede ao modelo uma resposta limitada à evidência disponível e um identificador para cada afirmação relevante. Depois confirma que o ID existe, que o excerto está acessível e que sustenta a frase. Uma citação pode ser real e estar mal usada.
+
+Se POL-02 não define prazo, o sistema deve dizer que não há prazo confirmado na documentação consultada e encaminhar quando necessário. Não deve converter uma rotina de atendimento numa garantia de 48 horas porque «soa razoável».
+
+\begin{promptlabbox}{A política que não respondia à pergunta}
+\textbf{Objetivo e contexto:} separar recuperação e geração. Usa POL-01 e POL-02 da Lavandaria. Prepara três perguntas respondíveis e duas cuja informação não está nos documentos.
+
+\textbf{Instruções:} regista primeiro quais os documentos relevantes para cada pergunta. Executa a pesquisa lexical offline; depois usa os excertos num prompt de resposta, se quiseres testar um modelo. Mantém os casos de desenvolvimento separados dos novos casos.
+
+\textbf{Resultado esperado:} perguntas sobre peças em falta recuperam POL-01; pedidos de prazo não obtêm uma garantia inventada. A ausência de evidência deve produzir abstinência ou encaminhamento.
+
+\textbf{Validação:} avalia IDs recuperados, suporte das afirmações e decisões de encaminhamento. A saída local por templates testa o pipeline; só uma execução real registada permite avaliar o modelo escolhido.
+
+\textbf{Falhas possíveis:} medir apenas fluência, permitir documentos de outro cliente ou aceitar uma citação que não sustenta a frase.
+\end{promptlabbox}
+
+\section{Avaliar as duas metades}
+Para recuperação, mede se a evidência relevante aparece nos primeiros $k$ resultados: recall@k relaciona documentos relevantes recuperados com os relevantes conhecidos. A definição exige uma referência de relevância e depende da unidade avaliada: documento ou segmento. Para geração, mede correção, suporte documental, completude e abstinência. Uma recuperação perfeita pode alimentar uma resposta errada; um gerador competente pode ficar sem o documento necessário.
+
+Acrescenta testes de atualização: publica uma nova versão da política, retira a antiga do índice ativo e verifica se respostas e caches deixam de a usar. Guarda a versão da fonte no registo de avaliação. «Citou POL-01» é insuficiente quando há três POL-01 diferentes.
+
+\section{RAG, contexto longo ou fine-tuning?}
+Se os documentos são poucos e cabem no contexto, enviá-los diretamente pode ser uma boa base de comparação. Se são muitos, mudam frequentemente ou exigem seleção e controlo de acesso, recuperação pode acrescentar valor. Fine-tuning altera parâmetros e pode ajudar em comportamento ou formato; não deve ser tratado como atualização instantânea e auditável de todos os factos.
+
+Estas técnicas podem combinar-se. Escolhe pela tarefa e pela evidência: compara qualidade, custo, privacidade e manutenção. Não compres uma base vetorial antes de confirmar que a procura simples falha no teu problema.
