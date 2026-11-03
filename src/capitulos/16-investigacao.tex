@@ -1,0 +1,385 @@
+\chapter{Investigação Académica e Relatórios Técnicos}
+\label{ch:investigacao}
+
+\section{O que a IA faz bem (e mal) em contexto académico}
+
+Usar LLM em investigação e ensino superior exige escolhas explícitas sobre método e transparência. Pontos fortes:
+
+\begin{itemize}[leftmargin=*]
+\item ajuda a clarificar perguntas de investigação;
+\item sugere estruturas para artigos, dissertações, relatórios;
+\item melhora legibilidade de texto técnico;
+\item gera checklists e grelhas de correção.
+\end{itemize}
+
+Pontos fracos (e perigosos):
+
+\begin{itemize}[leftmargin=*]
+\item inventa referências, DOIs e citações plausíveis mas falsas;
+\item pode distorcer resultados de artigos se resumir mal;
+\item facilita plágio e “trabalhos ocos” se usado para escrever tudo.
+\end{itemize}
+
+\begin{warningboxenv}{Se o modelo “inventa” artigos, a responsabilidade é tua}
+Os modelos não têm uma lista fidedigna e estática de papers aprovados. Se pedes “cita 10 artigos sobre X”, ele pode inventar títulos e autores.
+Nunca uses referências sugeridas por IA sem as verificares em bases reais (Google Scholar, bases de dados da biblioteca, etc.).
+\end{warningboxenv}
+
+\section{Refinar perguntas de investigação e objetivos}
+
+Uma boa pergunta de investigação é:
+
+\begin{itemize}[leftmargin=*]
+\item clara;
+\item focada (não tenta salvar o mundo inteiro);
+\item operacionalizável (dá para recolher dados e responder de forma objetiva ou argumentada).
+\end{itemize}
+
+Padrão de uso da IA:
+
+\begin{lstlisting}
+Vou descrever o tema geral em que quero trabalhar
+e uma primeira versão da minha pergunta de investigação.
+
+Tema geral:
+[texto]
+
+Primeira tentativa de pergunta:
+[texto]
+
+Quero que:
+
+critiques esta pergunta quanto a clareza,
+foco e exequibilidade;
+
+proponhas 3 versões alternativas mais focadas,
+justificando o que muda em cada uma;
+
+identifiques, para a versão que consideras
+mais promissora, que tipo de dados ou fontes
+seriam necessárias para responder.
+\end{lstlisting}
+
+\begin{promptlabbox}{Usar IA como ``orientador preliminar''}
+\textbf{Objetivo e contexto:} Delimitar uma investigação fictícia ou pública, com tempo e dados disponíveis explícitos.
+
+Escolhe um tema em que estejas a pensar fazer trabalho (e.g., segurança em redes, justiça, mobilidade urbana). Pede ao modelo para:
+
+\begin{enumerate}[leftmargin=*]
+\item ajudar a transformar esse tema em 3–5 perguntas de investigação distintas;
+\item para cada uma, listar:
+\begin{itemize}[leftmargin=*]
+\item tipo de estudo provável (experimental, observacional, teórico),
+\item fontes ou dados necessários,
+\item principais dificuldades previsíveis.
+\end{itemize}
+\end{enumerate}
+
+Depois discute as opções com um orientador humano. A IA ajuda a preparar o terreno, não a decidir por ti.
+
+\textbf{Resultado esperado e validação:} Verifica se as perguntas são exequíveis e se dados e método respondem ao objetivo. Discute a escolha com um orientador, sem tratar sugestões de fontes como referências verificadas.
+
+\textbf{Falhas possíveis:} Inventar acesso a amostras, formular causalidade sem desenho adequado ou aceitar uma metodologia só pelo vocabulário.
+\end{promptlabbox}
+
+\section{Estruturar artigos, dissertações e relatórios técnicos}
+
+Modelos são bons a reproduzir estruturas padrão (IMRaD, relatórios técnicos com secções típicas, etc.). Em vez de pedires “escreve-me o relatório”, pede:
+
+\begin{lstlisting}
+Quero um esqueleto detalhado para um relatório
+técnico sobre [tema], com cerca de [n] páginas.
+
+Formato:
+
+Índice proposto com capítulos e secções.
+
+Para cada secção: 2-3 frases a indicar o que
+deve ser tratado ali.
+
+Indica também que tipo de figuras ou tabelas
+fariam sentido em cada parte.
+\end{lstlisting}
+
+Depois, podes pedir ajuda secção a secção. Padrões úteis:
+
+\subsection*{Introdução}
+
+\begin{lstlisting}
+Preciso de uma primeira versão de Introdução
+(1-2 páginas) para um relatório sobre [tema].
+
+Requisitos:
+
+Contextualizar o problema sem encher chouriços.
+
+Apresentar claramente objetivo(s) do trabalho.
+
+Delimitar o escopo (o que fica de fora).
+
+Não inventar dados nem referências específicas.
+
+Depois desta versão, quero que proponhas
+3-5 perguntas que devo responder para
+refinar e personalizar o texto.
+\end{lstlisting}
+
+\subsection*{Metodologia}
+
+\begin{lstlisting}
+Abaixo descrevo a metodologia que realmente usei.
+
+[texto teu, em bruto]
+
+Quero que organizes isto numa secção de Metodologia
+clara, com subsecções (ex: amostra, instrumentos,
+procedimentos, análise de dados), sem inventar
+nada que eu não tenha descrito.
+
+Se achares que faltam detalhes importantes,
+aponta-os no fim.
+\end{lstlisting}
+
+\section{Trabalhar com fontes: leitura, síntese e comparação}
+
+Aqui a IA brilha se lhe deres material explícito. Em vez de pedires “resume a literatura sobre X”, faz:
+
+\begin{itemize}[leftmargin=*]
+\item recolhe tu os artigos relevantes (via bases académicas);
+\item para cada artigo, copia o resumo e, se puderes, partes-chave;
+\item pede ao modelo para:
+\begin{itemize}[leftmargin=*]
+\item sintetizar,
+\item comparar,
+\item extrair elementos estruturados.
+\end{itemize}
+\end{itemize}
+
+Padrões:
+
+\subsection*{Resumo estruturado de artigo}
+
+\begin{lstlisting}
+A partir do texto abaixo (abstract + excertos),
+cria um resumo estruturado com:
+
+Pergunta de investigação
+
+Metodologia
+
+Principais resultados
+
+Limitações mencionadas
+
+Ideias para trabalho futuro
+
+[texto]
+\end{lstlisting}
+
+\subsection*{Comparar vários artigos}
+
+\begin{lstlisting}
+Vou colar resumos de 4 artigos sobre [tema].
+
+Para cada um:
+
+identifica pergunta, método, resultados em 2-3 frases.
+
+Depois, faz uma síntese comparativa:
+
+em que pontos concordam?
+
+em que pontos divergem?
+
+que lacunas parecem comuns?
+
+[Abstract 1]
+[Abstract 2]
+[...]
+\end{lstlisting}
+
+\begin{checklistbox}{Uso disciplinado da IA na revisão de literatura}
+Para cada pacote de artigos:
+
+\begin{itemize}[leftmargin=*]
+\item obtiveste os textos em fontes académicas legítimas?
+\item usaste a IA apenas para ajudar a sintetizar e comparar?
+\item mantiveste notas tuas (não apenas do modelo) sobre o que achas importante?
+\item verificaste manualmente interpretações críticas?
+\end{itemize}
+\end{checklistbox}
+
+\section{Escrita clara de texto técnico}
+
+Textos académicos não têm de ser opacos. LLMs podem ajudar a:
+
+\begin{itemize}[leftmargin=*]
+\item simplificar frases sem perder rigor;
+\item eliminar repetições;
+\item adaptar o nível de formalidade.
+\end{itemize}
+
+Padrões típicos:
+
+\subsection*{Clareza sem perder precisão}
+
+\begin{lstlisting}
+Reescreve o texto abaixo em português de Portugal,
+mantendo o conteúdo técnico, mas:
+
+frases mais curtas,
+
+menos voz passiva,
+
+evitar jargão desnecessário.
+
+Se achares frases muito ambíguas, aponta-as e
+propõe duas alternativas.
+
+[texto]
+\end{lstlisting}
+
+\subsection*{Versão para diferentes públicos}
+
+\begin{lstlisting}
+A partir do texto técnico abaixo, produz:
+
+Uma versão para estudantes de licenciatura
+no mesmo curso (assume alguma base).
+
+Uma versão para público geral interessado,
+sem formação técnica.
+
+Assinala claramente qual é qual.
+
+[texto]
+\end{lstlisting}
+
+\begin{warningboxenv}{Não deixes a IA inventar resultados}
+Pede ajuda na \emph{forma}, não no \emph{conteúdo} dos resultados.
+Se pedes “escreve a secção de resultados” sem lhe dar os dados, o modelo pode fabricar uma continuação plausível; deve recusar preencher resultados sem dados.
+Resultados e dados \emph{vêm das tuas análises}, não da imaginação da IA.
+\end{warningboxenv}
+
+\section{Ética, plágio e transparência}
+
+Ponto sensível: é fácil escorregar para:
+
+\begin{itemize}[leftmargin=*]
+\item deixar a IA escrever metade do trabalho e fingir que é tudo teu;
+\item copiar literalmente redações sugeridas;
+\item usar referências inventadas;
+\item violar regras explícitas da instituição.
+\end{itemize}
+
+Boas práticas:
+
+\begin{itemize}[leftmargin=*]
+\item Lê e respeita as políticas da tua universidade sobre uso de IA.
+\item Usa a IA para:
+\begin{itemize}[leftmargin=*]
+\item brainstorming,
+\item estruturação,
+\item melhoria de redação,
+\item síntese de materiais que tu próprio forneceste.
+\end{itemize}
+\item Não uses para:
+\begin{itemize}[leftmargin=*]
+\item escrever trabalhos inteiros “de raiz”,
+\item inventar dados,
+\item inventar citações.
+\end{itemize}
+\item Quando fizer sentido, declara o uso de IA (por exemplo, “foi usada ferramenta de IA generativa para auxílio na redação e revisão de texto, sob supervisão do autor”).
+\end{itemize}
+
+\begin{keyideabox}{A IA pode ajudar a pensar melhor, não a pensar menos}
+Se usas o modelo para te poupar do esforço cognitivo essencial (ler fontes, entender métodos, estruturar argumentos), estás a sabotar o teu próprio crescimento académico.
+Se o usas para te libertar de fricção superficial (formatação, algumas reescritas), podes focar mais no que interessa.
+\end{keyideabox}
+
+\section{Preparar-se para revisores, orientadores e bancas}
+
+Finalmente, podes usar LLMs para simular o “lado de lá”:
+
+\begin{itemize}[leftmargin=*]
+\item revisores de revista,
+\item orientadores exigentes,
+\item membros de banca.
+\end{itemize}
+
+Padrões:
+
+\subsection*{Simulação de revisor anónimo}
+
+\begin{lstlisting}
+Assume o papel de revisor anónimo de uma revista
+científica na área de [área].
+
+A partir do texto abaixo (Introdução + Metodologia):
+
+Resume em 5-7 frases o que entendes ser o
+contributo do trabalho.
+
+Aponta 5 pontos fortes.
+
+Aponta 5 pontos fracos ou dúvidas.
+
+Sugere 3 melhorias específicas que aumentariam
+a qualidade do artigo.
+
+[texto]
+\end{lstlisting}
+
+\subsection*{Simular perguntas de banca}
+
+\begin{lstlisting}
+Assume que és membro de uma banca de dissertação
+de mestrado em [área].
+
+Tendo em conta o resumo do trabalho abaixo, gera
+10 perguntas que poderias fazer ao candidato,
+focadas em:
+
+justificações de escolha metodológica,
+
+limitações do estudo,
+
+implicações práticas,
+
+possíveis extensões futuras.
+
+[resumo da dissertação]
+\end{lstlisting}
+
+\begin{promptlabbox}{Vacina anti-surpresa de banca}
+\textbf{Objetivo e contexto:} Preparar defesa oral com base apenas no resumo e conclusões fornecidos.
+
+Pega no resumo e conclusões do teu trabalho (ou de um trabalho fictício) e pede:
+
+\begin{lstlisting}
+Gera 15 perguntas difíceis e incómodas que
+um orientador cético poderia fazer sobre este
+trabalho, com foco em:
+
+pontos fracos,
+
+pressupostos discutíveis,
+
+alternativas metodológicas.
+
+Depois, para cada pergunta, sugere uma resposta
+"razoável" que o candidato poderia dar.
+\end{lstlisting}
+
+Usa estas perguntas para treinar respostas em voz alta.
+A vantagem é que a IA não se cansa de ser chata.
+
+\textbf{Resultado esperado e validação:} Responde primeiro às perguntas sem ver a sugestão. Confronta cada resposta com a metodologia e os dados reais, mantendo limitações explícitas.
+
+\textbf{Falhas possíveis:} Decorar uma defesa inventada ou ocultar uma limitação em vez de a explicar.
+\end{promptlabbox}
+
+\section{Uma ficha de evidência por afirmação importante}
+Guarda título, autores, versão, URL/DOI, secção ou página, método, amostra ou modelos avaliados, resultado e limitações. Se só leste o abstract, declara-o: não podes auditar uma metodologia inteira a partir dele. Distingue o que os autores mediram da interpretação que estás a propor.
+
+Uma referência existente pode continuar a ser inadequada: o artigo pode tratar outro domínio ou mostrar apenas um resultado num conjunto restrito. A pergunta não é só «esta fonte existe?», mas «sustenta esta frase, com este alcance?». O apêndice~\ref{ap:fontes} oferece um protocolo de leitura; a bibliografia reúne fontes concretas desta edição.

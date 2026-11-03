@@ -1,0 +1,299 @@
+\chapter{Biblioteca de Padrões, Checklists e Mandamentos}
+\label{ap:padroes}
+
+\section{Os 10 mandamentos da Engenharia de Prompts}
+
+Uma versão condensada da filosofia deste livro:
+
+\begin{enumerate}[leftmargin=*]
+\item \textbf{Não terás outros oráculos além dos dados}
+LLMs são modelos estatísticos, não fontes mágicas de verdade. Sempre que o domínio for crítico, valida com dados e especialistas.
+\item \textbf{Não farás prompts vagos quando quiseres resultados específicos}
+Define objetivo, formato, constraints. “Faz qualquer coisa fixe” é convite a lixo.
+\item \textbf{Honrarás o contexto e o exemplo}
+Bons exemplos e contexto relevante valem mais do que duas páginas de teoria no system prompt.
+\item \textbf{Não tomarás a “primeira resposta” como resposta definitiva}
+Itera. Pede revisão, pede alternativas, pede auto-crítica do modelo.
+\item \textbf{Lembrar-te-ás de que modelos mudam}
+O que funciona hoje pode mudar amanhã com uma nova versão. Por isso, testa, versiona e loga.
+\item \textbf{Guardarás os teus prompts como código}
+Em repositórios, com histórico, owners, testes. Não em caixas de texto anónimas numa UI qualquer.
+\item \textbf{Terás guardrails fora do modelo}
+Filtros, validações, controlos de acesso. System prompt forte ajuda, mas não chega.
+\item \textbf{Usarás IA para pensar melhor, não para abdicar de pensar}
+Brainstorm e ajuda na escrita, sim. Delegar julgamento ético e responsabilidade, não.
+\item \textbf{Respeitarás quem é afetado pelos teus sistemas}
+Utilizadores, clientes, pessoas cujos dados passam pelo teu pipeline. Transparência, fundamento de licitude e mitigação de danos.
+\item \textbf{Partilharás o que aprendes}
+Documenta padrões, anti-padrões, lições aprendidas. Engenharia de prompts é, em grande parte, conhecimento tácito transformado em boas práticas.
+\end{enumerate}
+
+\section{Padrões essenciais por tipo de tarefa}
+
+Não é uma lista exaustiva, mas uma mini “carta de bolso”.
+
+\subsection*{Design e clarificação de tarefa}
+
+\begin{itemize}[leftmargin=*]
+\item \textbf{Clarificar objetivo}:
+\begin{lstlisting}
+Vou descrever o que quero fazer. Primeiro,
+faz apenas perguntas para clarificar o objetivo,
+escopo e constraints. Não dês ainda solução.
+
+[descrição livre]
+\end{lstlisting}
+\item \textbf{Reformular problema}:
+\begin{lstlisting}
+Reformula o problema abaixo em 2-3 versões:
+
+Versão simples (para não especialistas).
+
+Versão técnica (para equipa de engenharia).
+
+Versão operacional (para equipa de operações).
+
+[problema]
+\end{lstlisting}
+\end{itemize}
+
+\subsection*{Geração de texto estruturado}
+
+\begin{itemize}[leftmargin=*]
+\item \textbf{Formato rígido}:
+\begin{lstlisting}
+Responde EXACTAMENTE no formato JSON abaixo,
+sem texto adicional:
+
+{
+"categoria": "...",
+"prioridade": "...",
+"precisa_humano": false,
+"resumo": "..."
+}
+
+Texto:
+[text]
+\end{lstlisting}
+\item \textbf{Checklist}:
+\begin{lstlisting}
+A partir do texto abaixo, gera uma checklist
+operacional, em bullet points, que alguém
+poderia seguir passo a passo.
+
+[texto]
+\end{lstlisting}
+\end{itemize}
+
+\subsection*{Código e engenharia de software}
+
+\begin{itemize}[leftmargin=*]
+\item \textbf{Especificar antes de gerar}:
+\begin{lstlisting}
+Antes de escreveres qualquer código, quero que:
+
+listes os requisitos funcionais;
+
+listes os requisitos não funcionais (desempenho,
+segurança mínima, logging);
+
+proponhas uma estrutura de ficheiros e módulos.
+
+Só depois de eu dizer "ok", gera o código.
+\end{lstlisting}
+\item \textbf{Explanação de código legado}:
+\begin{lstlisting}
+Explica o seguinte ficheiro de código:
+
+o que faz em alto nível;
+
+quais as funções principais e seus argumentos;
+
+quaisquer riscos óbvios (segurança, performance),
+se existirem.
+
+[código]
+\end{lstlisting}
+\end{itemize}
+
+\subsection*{Dados, ETL e análise}
+
+\begin{itemize}[leftmargin=*]
+\item \textbf{Schema-first}:
+\begin{lstlisting}
+O teu objetivo é extrair dados em JSON com o
+seguinte exemplo de instancia; os tipos e as opcoes
+devem constar de um esquema separado:
+
+{
+"nome": "Ana",
+"idade": null,
+"cidade": "Lisboa"
+}
+
+Se um campo não estiver presente no texto,
+usa null.
+
+Texto:
+[text]
+\end{lstlisting}
+\item \textbf{EDA guiada}:
+\begin{lstlisting}
+Vou colar abaixo um resumo estatístico e
+alguns gráficos (em texto). Age como analista
+de dados.
+
+Resume em 5-7 bullets o que os dados parecem
+mostrar.
+
+Propõe 3 hipóteses plausíveis.
+
+Sugere 3 análises adicionais a fazer com os
+dados originais.
+
+[output da ferramenta]
+\end{lstlisting}
+\end{itemize}
+
+\subsection*{Educação e explicação}
+
+\begin{itemize}[leftmargin=*]
+\item \textbf{Níveis de explicação}:
+\begin{lstlisting}
+Explica o conceito abaixo em três níveis:
+
+Para um aluno do secundário.
+
+Para um estudante de licenciatura na área.
+
+Para um profissional que precisa de refrescar
+o conceito rapidamente.
+
+[conceito]
+\end{lstlisting}
+\item \textbf{Exercícios com soluções}:
+\begin{lstlisting}
+Gera 5 exercícios de dificuldade crescente
+sobre [tema]. Para cada um:
+
+enunciado,
+
+solução detalhada,
+
+2-3 erros comuns a evitar.
+
+Formata em português de Portugal.
+\end{lstlisting}
+\end{itemize}
+
+\subsection*{Negócios, gestão e comunicação profissional}
+
+\begin{itemize}[leftmargin=*]
+\item \textbf{E-mail em tom ajustado}:
+\begin{lstlisting}
+A partir dos pontos soltos abaixo, escreve
+um e-mail em português de Portugal para
+[destinatário], com tom:
+
+[formal/profissional/relaxado mas respeitoso]
+
+Inclui:
+
+contexto breve,
+
+pedido claro,
+
+próximos passos.
+
+[Pontos soltos]
+\end{lstlisting}
+\item \textbf{Análise crítica}:
+\begin{lstlisting}
+Lê o texto estratégico abaixo e responde:
+
+3 pontos fortes.
+
+3 pontos fracos/risco.
+
+3 perguntas que faltam responder para tornar
+o plano mais concreto.
+
+[texto]
+\end{lstlisting}
+\end{itemize}
+
+\subsection*{Segurança, políticas e compliance}
+
+\begin{itemize}[leftmargin=*]
+\item \textbf{Resumir políticas}:
+\begin{lstlisting}
+A partir desta política interna:
+
+resume em 5-10 bullets as obrigações práticas
+para um colaborador normal;
+
+destaca 3 comportamentos proibidos;
+
+sugere 3 exemplos concretos de "isto pode" e
+3 de "isto não pode".
+
+[política]
+\end{lstlisting}
+\item \textbf{Simular auditor}:
+\begin{lstlisting}
+Assume o papel de auditor de conformidade.
+Lê a descrição do sistema abaixo e indica:
+
+dados pessoais envolvidos,
+
+potenciais riscos para privacidade,
+
+5 perguntas que terias para a equipa.
+
+[descrição do sistema]
+\end{lstlisting}
+\end{itemize}
+
+\section{Checklist rápida de design de prompt}
+
+Uma versão “cola na parede”:
+
+\begin{itemize}[leftmargin=*]
+\item \textbf{1. Objetivo}
+Sei exatamente o que quero da resposta? (tipo de tarefa + público-alvo)
+\item \textbf{2. Contexto}
+Dei contexto suficiente? (exemplos, constraints, dados relevantes)
+\item \textbf{3. Formato}
+Especifiquei claramente o formato de saída? (JSON, bullets, secções)
+\item \textbf{4. Limites}
+Disse o que o modelo \emph{não} deve fazer? (tabus, escopo)
+\item \textbf{5. Exemplos}
+Incluí 1–3 exemplos representativos (se útil)?
+\item \textbf{6. Robustez}
+Pensei em inputs estranhos? (erros, abreviações, casos de canto)
+\item \textbf{7. Segurança}
+Indiquei restrições de conteúdo/sensibilidade quando relevante?
+\item \textbf{8. Iteração}
+Fiz pelo menos uma ronda de teste+ajuste com casos reais?
+\end{itemize}
+
+\section{Checklist rápida de LLMOps para um fluxo em produção}
+
+Para cada fluxo baseado em LLM no teu sistema:
+
+\begin{itemize}[leftmargin=*]
+\item \textbf{Prompts versionados}
+Estão em repositório, com histórico e owners?
+\item \textbf{Golden set}
+Existe um conjunto de teste, ainda que pequeno?
+\item \textbf{Métricas}
+Sei o que estou a otimizar? (accuracy, custo, satisfação, etc.)
+\item \textbf{Logs e privacidade}
+Tenho logs suficientes para debug, sem violar privacidade?
+\item \textbf{Guardrails}
+Há filtros de input/output e limites claros para ferramentas?
+\item \textbf{Rollout}
+Mudo de prompt/modelo com testes prévios e canary release?
+\item \textbf{Incidentes}
+Há plano para lidar com respostas perigosas ou erros graves?
+\end{itemize}

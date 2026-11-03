@@ -1,0 +1,289 @@
+\chapter{Programar com IA sem Perder o Controlo}
+\label{ch:software}
+
+O termo \emph{vibe coding} é usado para abordagens em que se descreve uma intenção e se aceita código gerado com pouca leitura. É uma prática possível de prototipagem, não um substituto de engenharia. Neste capítulo o objetivo é conseguir explicar, rever e testar a alteração; no capítulo~\ref{ch:spec-first}, vamos partir de uma especificação verificável.
+
+\section{Modos de uso: copiloto, pair programmer, arquiteto}
+
+Usar IA para programação não é uma única coisa. Há pelo menos três modos distintos:
+
+\begin{itemize}[leftmargin=*]
+\item \textbf{Copiloto}: completa linhas, sugere snippets, acelera tarefas rotineiras.
+\item \textbf{Pair programmer}: discute abordagens, ajuda a entender código, sugere refatorações.
+\item \textbf{Arquiteto}: ajuda a desenhar a estrutura global de sistemas, módulos, contratos entre componentes.
+\end{itemize}
+
+Cada modo pede prompts diferentes.
+
+\subsection*{Copiloto}
+
+Aqui normalmente nem estás a usar prompts longos; estás num editor com sugestões em linha. Mas quando falas com um LLM em chat, podes simular esse modo com prompts curtos e muito focados:
+
+\begin{lstlisting}
+Preciso de uma função em Python que recebe
+uma lista de números e devolve a média,
+ignorando valores None. Não uses bibliotecas
+externas.
+\end{lstlisting}
+
+\subsection*{Pair programmer}
+
+Aqui o valor está na conversa:
+
+\begin{lstlisting}
+Vou colar uma função que está a ficar difícil
+de ler. Explica-me o que faz, identifica
+pontos fracos e sugere uma refatoração
+mais clara, mantendo o mesmo comportamento.
+\end{lstlisting}
+
+\subsection*{Arquiteto}
+
+Neste modo, estás mais perto de engenharia de requisitos:
+
+\begin{lstlisting}
+Temos de construir um serviço web para gerir
+planos de refeições semanais.
+
+Requisitos:
+
+utilizadores autenticados
+
+CRUD de receitas
+
+geração automática de plano semanal
+
+base de dados relacional
+
+Propõe uma arquitetura em camadas, com
+tecnologias razoáveis para cada camada,
+e explica os trade-offs.
+\end{lstlisting}
+
+\begin{promptlabbox}{Identificar o modo certo antes de pedir ajuda}
+\textbf{Objetivo e contexto:} Escolher entre completar código, rever um módulo e discutir arquitetura a partir de uma necessidade pequena.
+
+Antes de abrir o chat, pergunta a ti próprio:
+
+\begin{itemize}[leftmargin=*]
+\item Quero ajuda micro (linha de código, bug pontual)?
+\item Quero ajuda meso (refatorar uma função/módulo)?
+\item Quero ajuda macro (desenhar o sistema)?
+\end{itemize}
+
+Escreve o prompt a partir dessa resposta. Evita misturar os três numa única frase gigante.
+
+\textbf{Resultado esperado e validação:} O prompt deve delimitar o nível de alteração, o material disponível e o resultado. Verifica se a resposta fica nesse âmbito.
+
+\textbf{Falhas possíveis:} Pedir correção de uma linha e aceitar uma reescrita do projeto ou misturar requisitos contraditórios.
+\end{promptlabbox}
+
+\section{Prompts para leitura e explicação de código}
+
+Um dos usos mais subvalorizados de LLMs é \emph{leitura de código}. A IA é incansável a explicar:
+
+\begin{itemize}[leftmargin=*]
+\item o que um trecho faz,
+\item como fluxos se ligam,
+\item onde podem estar bugs prováveis.
+\end{itemize}
+
+Padrões úteis:
+
+\subsection*{Explicar função/método}
+
+\begin{lstlisting}
+Explica o que faz esta função, passo a passo,
+como se estivesses a falar com um programador
+júnior que já conhece a linguagem, mas não
+esta base de código.
+
+[cola a função]
+\end{lstlisting}
+
+\subsection*{Diagramar fluxo}
+
+\begin{lstlisting}
+A partir deste código, descreve o fluxo
+de execução típico e, se fizer sentido,
+produz um diagrama textual (ex: estilo
+mermaid ou pseudo-UML) das principais chamadas.
+
+[cola o ficheiro ou módulo]
+\end{lstlisting}
+
+\subsection*{Identificar riscos óbvios}
+
+\begin{lstlisting}
+Analisa este código e aponta:
+
+possíveis bugs óbvios,
+
+riscos de segurança,
+
+pontos fracos de legibilidade.
+
+Não reescrevas o código ainda; foca-te
+só na análise.
+
+[cola o código]
+\end{lstlisting}
+
+\begin{warningboxenv}{Não entregues código inteiro sem contexto}
+Se colas um repositório gigante sem dizer ao modelo o que te interessa, vais receber ou um resumo superficial ou uma análise aleatória. Diz sempre o que queres aprender com aquele código.
+\end{warningboxenv}
+
+\section{Geração de código robusto}
+
+Pedir “faz-me um programa em X que faz Y” costuma resultar em:
+
+\begin{itemize}[leftmargin=*]
+\item código que compila (às vezes),
+\item mas com pouco tratamento de erros,
+\item design improvisado,
+\item zero testes.
+\end{itemize}
+
+Para subir o nível, trata o pedido como especificação de API:
+
+\begin{lstlisting}
+Quero que cries uma pequena biblioteca em Python
+para gerir uma lista de tarefas (to-do list).
+
+Requisitos:
+
+Funções para adicionar, remover, listar tarefas.
+
+Cada tarefa tem id, descrição, prioridade, estado.
+
+Não uses frameworks externos.
+
+Critérios de qualidade:
+
+Código legível, com funções pequenas.
+
+Comentários sucintos onde necessário.
+
+Inclui uma pequena suite de testes unitários
+usando unittest, com casos que cubram o comportamento normal,
+os limites e as falhas definidos nos requisitos.
+
+Formato:
+
+Primeiro, mostra-me a API proposta (assinaturas).
+
+Depois, o código da implementação.
+
+Por fim, os testes.
+\end{lstlisting}
+
+Note a estrutura:
+
+\begin{itemize}[leftmargin=*]
+\item requisitos funcionais,
+\item critérios de qualidade,
+\item formato de resposta.
+\end{itemize}
+
+\begin{promptlabbox}{Refinar um pedido de geração de código}
+\textbf{Objetivo e contexto:} Comparar dois pedidos de implementação com os mesmos requisitos e dados de teste independentes.
+
+Pega num pedido antigo teu do tipo “faz-me um script em X que...”. Reescreve-o introduzindo:
+
+\begin{itemize}[leftmargin=*]
+\item requisitos funcionais claros,
+\item critérios de qualidade (legibilidade, testes, tratamento de erros),
+\item formato de resposta (ordem em que queres ver o código).
+\end{itemize}
+
+Corre os dois prompts (velho e novo) e compara não só a aparência, mas a facilidade de integrar o código num projeto real.
+
+\textbf{Resultado esperado e validação:} Executa ambas as propostas num ambiente isolado. Avalia comportamento, erros, manutenção e testes; código com melhor apresentação pode continuar incorreto.
+
+\textbf{Falhas possíveis:} Avaliar só o aspeto, aceitar dependências inventadas ou usar testes que repetem a interpretação da implementação.
+\end{promptlabbox}
+
+\section{Análise de complexidade, performance e segurança}
+
+LLMs podem não ser perfeitos a fazer provas de complexidade, mas são bons a:
+
+\begin{itemize}[leftmargin=*]
+\item identificar ciclos desnecessários,
+\item propor estruturas de dados melhores,
+\item apontar vulnerabilidades óbvias.
+\end{itemize}
+
+Alguns prompts úteis:
+
+\subsection*{Complexidade e performance}
+
+\begin{lstlisting}
+Analisa esta função e estima a complexidade
+temporal e espacial em notação O-grande.
+Sugere melhorias se vires alguma forma de
+reduzir complexidade.
+
+[função]
+\end{lstlisting}
+
+\subsection*{Segurança}
+
+\begin{lstlisting}
+Analisa o código abaixo do ponto de vista
+de segurança. Procura:
+
+injeção de SQL,
+
+problemas de validação de input,
+
+exposição de dados sensíveis,
+
+má gestão de credenciais.
+
+[trecho de código]
+\end{lstlisting}
+
+\subsection*{Legibilidade e manutenção}
+
+\begin{lstlisting}
+Avalia este código em termos de legibilidade
+e facilidade de manutenção. Propõe até 3
+refatorações concretas, explicando o porquê
+de cada uma.
+
+[código]
+\end{lstlisting}
+
+\begin{warningboxenv}{IA não substitui revisão por pares}
+Um LLM pode ser um par extra de olhos, mas não substitui revisão humana, especialmente em código crítico. Usa-o como primeira ronda de triagem, não como “aprovação final”.
+\end{warningboxenv}
+
+\section{Limites de uso: quando o LLM te mete em sarilhos}
+
+Há vários riscos em depender demais de IA para código:
+
+\begin{itemize}[leftmargin=*]
+\item \textbf{Snippet-rot}: colas código que funciona hoje mas não amanhã, porque as bibliotecas evoluem.
+\item \textbf{Licenciamento obscuro}: o modelo pode reproduzir código sob licenças incompatíveis sem o dizer.
+\item \textbf{Compreensão superficial}: usas bibliotecas ou padrões sem realmente os entenderes, dificultando debug futuro.
+\item \textbf{Otimizador prematuro}: tentas fazer “coisas inteligentes” sugeridas pela IA sem necessidade real.
+\end{itemize}
+
+Boas práticas:
+
+\begin{itemize}[leftmargin=*]
+\item Verifica sempre documentação oficial de APIs e frameworks antes de confiar em snippets.
+\item Usa a IA para te \emph{explicar} o código, não só para o gerar.
+\item Mantém um nível mínimo de domínio da linguagem e stack que estás a usar; IA não é substituto para aprender fundamentos.
+\end{itemize}
+
+\begin{keyideabox}{IA como exo-esqueleto, não como muleta}
+A melhor relação com IA em programação é: ela aumenta a tua força e alcance, mas tu continuas a saber mexer-te sozinho. Se não consegues fazer nada sem ela, estás a construir uma carreira em terreno instável.
+\end{keyideabox}
+
+\section{Um ambiente onde a sugestão possa falhar}
+Cria uma branch, limita ficheiros que o assistente pode alterar e usa dados de teste. Antes de executar código gerado, lê comandos, dependências e operações de rede ou disco. Revê o diff completo: uma correção pequena não justifica reescrever uma aplicação inteira.
+
+Os testes devem ter um oráculo independente: exemplos aceites pelo negócio, uma implementação de referência ou propriedades invariantes. Se o mesmo pedido gera implementação e testes sem confrontar requisitos, ambos podem repetir a mesma interpretação errada. Um teste que passa demonstra o que foi efetivamente verificado, não a ausência de todos os erros.
+
+Regista linguagem, versões e comando de execução. Num relatório de QA, separa o comportamento observado do esperado e da dúvida funcional. Essa separação parece menos brilhante do que «a IA tratou de tudo», mas é muito mais fácil de auditar.

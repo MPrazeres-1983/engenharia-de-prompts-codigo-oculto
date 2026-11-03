@@ -1,0 +1,151 @@
+\chapter{Desligar a Magia, Ligar a Engenharia}
+\label{ch:fundamentos}
+
+\section{O que é realmente um LLM}
+Já temos prompts e exemplos. Falta abrir a máquina. Um \emph{large language model} (LLM) é um modelo de linguagem de grande escala. Neste capítulo focamo-nos nos modelos \emph{autoregressivos}: produzem uma sequência condicionando cada novo token nos anteriores. Existem outros objetivos de treino e outras arquiteturas; esta descrição não é uma definição de toda a IA generativa.
+
+A fatorização da probabilidade de uma sequência é
+\[
+P(t_1,\ldots,t_n)=\prod_{k=1}^{n}P(t_k\mid t_1,\ldots,t_{k-1}).
+\]
+Aqui, $t_k$ é o identificador de um token. A fórmula diz: a probabilidade do texto completo é o produto das probabilidades condicionais dos seus passos. Não diz que o sistema escolhe sempre o token mais provável. Essa escolha depende do método de descodificação, que estudaremos no capítulo~\ref{ch:tokens}.
+
+Durante o treino, os parâmetros aprendem regularidades de linguagem e representações úteis para muitas tarefas. O facto de o objetivo envolver previsão não implica que o modelo só consiga copiar expressões superficiais. Há conhecimento factual e capacidades de generalização nos parâmetros, como mostram as tarefas avaliadas por Brown e colaboradores~\citep{brown2020}. O problema é outro: uma resposta fluente não vem acompanhada de uma prova de verdade.
+
+O modelo de um chat é ainda parte de um produto: há instruções, pós-treino, seleção de ferramentas e, por vezes, pesquisa. O teu prompt influencia o contexto; não controla sozinho todo esse sistema. E uma frase como «sou consciente» também não demonstra consciência. Não precisamos de resolver filosofia da mente para decidir que uma fatura exige verificação.
+
+\begin{keyideabox}{Previsão não é verificação}
+Um modelo pode produzir uma resposta correta a partir do conhecimento aprendido. Para uma decisão que exija atualização ou prova, confirma a afirmação numa fonte ou ferramenta adequada. A plausibilidade do texto não substitui esse passo.
+\end{keyideabox}
+
+
+\section{Do n-gram ao Transformer}
+
+Antes de Transformers, modelos de linguagem já existiam, mas eram muito mais limitados.
+
+\subsection*{Modelos n-gram (a pré-história útil)}
+
+Um modelo n-gram olha para as últimas n-1 palavras e tenta prever a próxima. Por exemplo, num modelo trigram (n=3), para prever a próxima palavra em:
+\begin{center}
+\texttt{o rato comeu o ?}
+\end{center}
+ele só olha para as duas anteriores: \texttt{comeu o}. Não vê o resto da frase, não percebe o tema global. Isto funciona de forma razoável para coisas simples, mas falha em dependências longas (pronomes, anáforas, estrutura de parágrafos).
+
+\subsection*{RNNs e LSTMs (a era “quase dá”)}
+
+Depois vieram as \emph{Recurrent Neural Networks} e variantes como LSTM/GRU. A ideia: em vez de só olhar para as últimas n-1 palavras, mantemos um estado interno que vai sendo atualizado token a token. Em teoria, a rede pode “lembrar-se” de coisas ditas há muito tempo.
+
+Na prática, tens:
+
+\begin{itemize}[leftmargin=*]
+\item Problemas de \emph{vanishing/exploding gradients}: o sinal de erro morre ou explode ao atravessar muitas etapas.
+\item Dificuldade em paralelizar o treino, porque o estado é sequencial.
+\item Contextos longos continuam difíceis de usar de forma eficiente.
+\end{itemize}
+
+Foi aqui que alguém decidiu que talvez fosse boa ideia deixar a sequência de lado e perguntar: e se cada palavra pudesse olhar diretamente para qualquer outra?
+
+\subsection*{Transformers (o “Attention Is All You Need”)}
+
+O artigo de Vaswani e colaboradores apresentou um Transformer encoder--decoder para tradução, sem recorrência nem convoluções~\citep{vaswani2017}. Na atenção, cada posição combina informação de posições permitidas pela arquitetura. Num descodificador causal, essas posições não incluem o futuro. Os LLMs de texto frequentemente usam variantes do descodificador; não são cópias integrais do modelo original.
+
+Resultado:
+
+\begin{itemize}[leftmargin=*]
+\item Muito mais paralelização no treino.
+\item Capacidade melhor para capturar dependências longas.
+\item Uma arquitetura que escala com mais dados e mais parâmetros.
+\end{itemize}
+
+Não vamos reconstruir o paper linha a linha, mas precisas de reter isto: o Transformer é a máquina que está por baixo dos LLMs modernos. As tuas decisões de prompt estão a mexer na forma como essa máquina distribui atenção pelo contexto.
+
+\section{O jogo das probabilidades na prática}
+
+Imagina que o modelo vê o início da frase:
+
+\begin{center}
+\texttt{O rato comeu o}
+\end{center}
+
+Na cabeça da máquina, isto transforma-se numa distribuição de probabilidades sobre o próximo token:
+
+\begin{center}
+\begin{tabular}{ll}
+\texttt{queijo} & 0.55 \\
+\texttt{pão} & 0.20 \\
+\texttt{livro} & 0.05 \\
+\texttt{telefone} & 0.01 \\
+\texttt{…} & \dots
+\end{tabular}
+\end{center}
+
+
+Se a temperatura estiver baixa, ele escolhe quase sempre \texttt{queijo}. Se estiver mais alta, começa a arriscar \texttt{pão} ou \texttt{livro}. As probabilidades desta tabela são inventadas para ilustrar o mecanismo; não foram medidas num modelo. O exemplo não permite concluir o que uma rede representa internamente sobre roedores.
+
+Agora repara no efeito do contexto. Se, antes dessa frase, tiveres:
+
+\begin{quote}
+\small
+“Este é um teste de criatividade absurda. Escreve frases surrealistas, inesperadas, com objetos que não fazem sentido juntos.”
+\end{quote}
+
+a distribuição muda. De repente, \texttt{telefone} deixa de ser tão improvável. A semântica não vem de um “módulo de bom senso”; vem da estatística condicionada ao contexto que tu próprio forneceste no prompt.
+
+\begin{promptlabbox}{Ver o modelo a mudar de “humor” com o contexto}
+\textbf{Objetivo e contexto:} Observar o efeito do contexto numa continuação. Usa as duas condições e a mesma frase; faz cinco chamadas separadas por condição.
+
+Experimenta isto com o teu modelo favorito.
+
+\medskip
+
+\textbf{Passo 1 — Prompt neutro}
+
+\begin{lstlisting}
+És um assistente neutro. Completa a frase de forma simples e natural.
+
+"O rato comeu o"
+\end{lstlisting}
+
+Repara nas primeiras 5 respostas.
+
+\medskip
+
+\textbf{Passo 2 — Prompt surrealista}
+
+\begin{lstlisting}
+És um escritor surrealista. Escreve frases absurdas, inesperadas,
+combinando objetos que normalmente não aparecem juntos.
+
+Completa a frase:
+
+"O rato comeu o"
+\end{lstlisting}
+
+Compara as respostas. O que mudou? Que tipo de palavras aparecem agora?
+
+\textbf{Resultado esperado e validação:} Classifica as palavras produzidas por naturalidade e absurdo com um critério definido antes. Guarda todas as saídas; esta comparação não mede temperatura nem os pesos da rede.
+
+\textbf{Falhas possíveis:} Escolher só as respostas engraçadas, continuar na mesma conversa ou atribuir probabilidades inventadas ao modelo.
+\end{promptlabbox}
+
+A moral da história: o que pedes, como pedes e em que ordem pedes muda a distribuição de probabilidades que o modelo vai usar. A “engenharia” está em controlar o contexto em vez de aceitar o default.
+
+\section{Alucinações: quando a fluência ultrapassa a evidência}
+Uma resposta pode conter um título de artigo perfeito, autores plausíveis e um DOI inexistente. Chamamos frequentemente \emph{alucinação} a conteúdo fabricado ou sem suporte. Em tarefas documentais, convém distinguir erro factual de falta de sustentação: uma afirmação pode até ser verdadeira e, mesmo assim, não constar dos documentos autorizados.
+
+O pré-treino autoregressivo não verifica cada frase num repositório de factos. Mas seria incorreto dizer que o modelo nunca foi treinado para admitir incerteza: o pós-treino pode premiar utilidade, veracidade ou abstinência e penalizar determinadas respostas~\citep{ouyang2022}. Nada disso garante correção em todos os casos.
+
+Em ficção, inventar uma lavandaria intergaláctica pode ser o objetivo. Numa reclamação de cliente, inventar a política de indemnização é uma falha. Não são apenas dois níveis de uma mesma «criatividade»: mudam os critérios de aceitação.
+
+\begin{checklistbox}{Dar à incerteza uma saída utilizável}
+Define que fontes são admissíveis, permite «não há informação suficiente» e exige um localizador verificável quando a tarefa depende de documentos. Confirma se a fonte existe e se sustenta a frase. Não transformes um «95\% de confiança» escrito pelo próprio modelo numa probabilidade de estar certo. A calibração exige avaliação empírica, como veremos no capítulo~\ref{ch:avaliacao}.
+\end{checklistbox}
+
+RAG, pesquisa e ferramentas podem melhorar o acesso a evidência, mas também podem recuperar a página errada ou dados desatualizados. O capítulo~\ref{ch:rag} separa esses modos de falha. Um prompt cuidadoso ajuda; uma arquitetura verificável dá-te mais sítios onde descobrir o erro.
+
+
+\section{Da intuição à engenharia}
+Os capítulos~\ref{ch:ia} e~\ref{ch:primeira-conversa} introduziram IA, modelos e uma primeira experiência sem exigir programação. A partir daqui, a notação surge acompanhada da sua leitura em palavras. Podes experimentar os prompts num chat; só os laboratórios de implementação exigem Python.
+
+Se já programas, não confundas facilidade de integração com fiabilidade. Se estás a começar, não precisas de decorar matrizes para escrever um pedido claro. O objetivo comum é conseguir perguntar: «Que parte deste problema pede um modelo, que parte pede código e como vou saber se funcionou?»
+

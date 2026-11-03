@@ -1,0 +1,63 @@
+\chapter{Ferramentas, Contratos e Model Context Protocol}
+\label{ch:mcp}
+
+O modelo escreve «consultei a reclamação» com a mesma facilidade com que escreve «um duende confessou». Para distinguir uma ação real de uma frase, precisamos de uma chamada executada, um resultado e um registo. Entram as ferramentas.
+
+\section{O ciclo de uma chamada}
+Em function calling, a aplicação descreve uma ferramenta e os seus argumentos; o modelo pode propor uma chamada; a aplicação valida e executa; o resultado volta ao contexto e pode fundamentar a resposta~\citep{functioncalling2026}. O formato exato varia por fornecedor.
+
+Na Lavandaria, expomos \texttt{consultar\_estado(reclamacao\_id)}. O cliente autenticado vem da aplicação, fora dos argumentos gerados. Se deixássemos o modelo escolher livremente \texttt{cliente\_id}, uma frase «sou o cliente B» poderia tornar-se uma tentativa de mudança de identidade.
+
+Um contrato mínimo define nome, finalidade, tipos, condições de erro, efeitos e limites. Prefere ferramentas estreitas, como consultar uma reclamação autorizada, a ferramentas universais, como executar qualquer SQL. «Apenas leitura» também exige cuidado: custo excessivo, dados privados e funções com efeitos continuam possíveis.
+
+\section{MCP padroniza uma ligação, não uma autorização}
+O \emph{Model Context Protocol} (MCP) é um protocolo aberto para ligar aplicações com modelos a fontes de contexto e ferramentas. Distingue a aplicação anfitriã (host), clientes que fazem a ligação e servidores que oferecem capacidades. Usa mensagens JSON-RPC~\citep{mcp2026}.
+
+Um servidor pode disponibilizar \emph{resources} (dados), \emph{prompts} (modelos de mensagens) e \emph{tools} (operações). São conceitos de interface. Um recurso pode conter dados pessoais; um prompt de um servidor pode conter instruções inadequadas; uma ferramenta pode ter efeitos reais. A presença num catálogo não transforma o conteúdo em fonte de confiança.
+
+MCP não é o agente, o modelo ou a base de dados. Também não garante que diferentes clientes implementem todas as capacidades da mesma maneira. Descoberta de uma ferramenta significa saber que está exposta; autorização significa verificar se aquela identidade a pode usar naquele recurso e naquele momento.
+
+\section{Uma versão explícita evita exemplos incompatíveis}
+\begin{warningboxenv}{Referência desta edição: MCP 2026-07-28}
+A especificação consultada em 3 de novembro de 2026 adota pedidos sem estado de sessão de protocolo, metadados por pedido e descoberta com \texttt{server/discover}. O changelog regista a remoção do handshake \texttt{initialize} da versão anterior~\citep{mcpchanges2026}. Exemplos de 2025 não devem ser copiados como se descrevessem esta versão.
+\end{warningboxenv}
+
+Cada pedido inclui a versão e as capacidades relevantes nos metadados. Um cliente pode consultar \texttt{server/discover} para conhecer versões e capacidades suportadas; a operação é obrigatória no servidor, mas a descoberta inicial não é obrigatória em todas as chamadas. \texttt{tools/list} descreve ferramentas; \texttt{tools/call} invoca uma delas segundo o contrato da versão.
+
+Para manter o exemplo independente de SDKs, o código desta edição implementa o executor de domínio e o contrato de uma ferramenta; \textbf{não implementa um servidor MCP}. O exercício abaixo valida o que esse servidor teria de proteger. Uma integração real deve escolher um SDK compatível e executar testes de protocolo além dos testes de negócio.
+
+\section{O limite de confiança tem de sobreviver ao prompt}
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[node distance=7mm and 8mm,every node/.style={draw,align=center,text width=36mm,minimum height=10mm,font=\small},>=Stealth]
+\node (model) {Modelo propõe chamada};
+\node (app) [below=of model] {Aplicação valida contrato};
+\node (policy) [below left=of app] {Identidade e política};
+\node (exec) [below right=of app] {Executor autorizado};
+\node (data) [below=25mm of app] {Dados ou efeito permitido};
+\draw[->](model)--(app);\draw[->](app)--(policy);\draw[->](policy)--(exec);\draw[->](exec)--(data);
+\end{tikzpicture}
+\caption{A proposta do modelo não concede autorização. MCP transporta operações; a política pertence à aplicação e ao servidor.}
+\label{fig:ferramentas}
+\end{figure}
+
+Em ligações remotas autenticadas, a especificação define requisitos de autorização e validação de tokens, incluindo o destinatário do token e a proibição de o passar cegamente para serviços a montante~\citep{mcpauth2026}. Segredos não pertencem ao prompt nem aos logs. Uma etiqueta de «read-only» é metadado; o executor tem de impor o comportamento.
+
+Para ações com efeitos, define idempotência, confirmação quando exigida, prazo e resultado verificável. Uma resposta perdida não significa que a operação não aconteceu. Uma chamada repetida precisa de política de repetição, não de otimismo.
+
+\begin{promptlabbox}{A ferramenta certa, com o cliente errado}
+\textbf{Objetivo e contexto:} testar autorização fora do modelo. Usa o executor offline da Lavandaria: LAV-001 pertence a cliente-A e LAV-002 a cliente-B.
+
+\textbf{Instruções:} com contexto de cliente-A, consulta LAV-001 e depois LAV-002. Tenta ainda fornecer um campo extra \texttt{cliente\_id} nos argumentos da ferramenta e usa um identificador inexistente.
+
+\textbf{Resultado esperado:} a primeira consulta funciona; as restantes não revelam dados de outro cliente. Campo extra é rejeitado. Ausência e falta de autorização produzem uma mensagem externa equivalente.
+
+\textbf{Validação:} executa os testes ligados a CA-02 e CA-03. Inspeciona o resultado da ferramenta, não apenas a frase final. Verifica que o cliente vem do contexto da aplicação.
+
+\textbf{Falhas possíveis:} confiar no modelo para escolher a identidade, filtrar apenas a resposta final ou chamar a este exercício uma avaliação de compatibilidade MCP.
+\end{promptlabbox}
+
+\section{O que acrescenta uma integração real}
+Além do domínio já testado, precisas de transporte, descoberta, negociação de versão, autenticação, limites, tratamento de erros e observabilidade. Valida o esquema recebido, a proveniência do servidor e o que muda quando uma ferramenta é atualizada. Testa recusa de acesso, timeout e resposta mal formada.
+
+Se o objetivo é chamar duas funções internas, uma interface direta pode chegar. Se várias aplicações precisam de descobrir e usar as mesmas capacidades, um protocolo comum pode simplificar a integração. Escolhe-o por esse benefício, não porque três letras parecem mais inteligentes do que uma função.

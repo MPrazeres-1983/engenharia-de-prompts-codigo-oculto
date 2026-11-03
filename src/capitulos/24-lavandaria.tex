@@ -1,0 +1,75 @@
+\chapter{A Lavandaria Funcional: Integrar sem Fingir que Tudo Está Resolvido}
+\label{ch:lavandaria}
+
+A empresa começou com uma hipótese sobre meias esquerdas. Chegou a um sistema que consulta uma política, verifica a autorização de uma reclamação e prepara uma resposta com evidência. Ainda não encontrou a meia. Encontrou uma fronteira mais útil: aquilo que consegue afirmar sem inventar.
+
+\ficcao Todos os documentos, clientes e pedidos deste capítulo são inventados. O exemplo executa-se localmente, sem conta, chave de API ou envio de dados. Usa pesquisa lexical e um gerador por templates. \textbf{Não é uma execução de um LLM, um servidor MCP ou um benchmark de raciocínio.} Podemos assim testar contratos e barreiras antes de ligar uma componente estocástica.
+
+\section{O que o repositório executa}
+O pacote \texttt{exemplos/lavandaria} contém documentos, reclamações, esquema de saída, pesquisa, executor, gerador local e avaliação. A suite em \texttt{tests} verifica critérios da tabela~\ref{tab:spec-lav}.
+
+Na raiz do repositório, com Python 3.10 ou posterior:
+\begin{lstlisting}
+python3 -m exemplos.lavandaria --cliente cliente-A \
+  --pergunta "Qual e o estado de LAV-001?"
+python3 -m exemplos.lavandaria --cliente cliente-A \
+  --pergunta "Qual e o estado de LAV-002?"
+python3 -m exemplos.lavandaria.avaliar
+python3 -m unittest discover -s tests -v
+\end{lstlisting}
+
+O argumento \texttt{--cliente} escolhe um papel fictício; \textbf{não autentica ninguém}. Num serviço real, a aplicação teria de autenticar a identidade antes de chamar este núcleo. O modelo não pode fornecer ou alterar esse valor nos argumentos da ferramenta.
+
+\section{Dados pequenos, origens explícitas}
+POL-01 explica como iniciar uma investigação de peças em falta. POL-02 não estabelece prazo fixo nem reembolso automático. Há documentos privados para testar filtragem. LAV-001 pertence a cliente-A; LAV-002 a cliente-B. Os estados vêm de uma ferramenta autorizada, não do tom da mensagem.
+
+A pesquisa usa termos normalizados e sobreposição lexical. Não calcula embeddings, não implementa BM25 e não aprende sinónimos. Uma paráfrase pode falhar. É uma base determinística com a qual podemos comparar motores mais capazes.
+
+\begin{table}[htbp]
+\small
+\begin{tabularx}{\textwidth}{@{}lXX@{}}
+\toprule
+Componente & Função & Limite \\
+\midrule
+Pesquisa & Seleciona fontes autorizadas & Sobreposição lexical, não semântica. \\
+Ferramenta & Consulta estado pelo ID & Só leitura e dados fictícios. \\
+Gerador & Compõe resposta e evidência & Templates, sem modelo de IA. \\
+Validador & Confere contrato e excertos & Não prova toda a semântica. \\
+Avaliação & Executa regressões & Não estima tráfego real. \\
+\bottomrule
+\end{tabularx}
+\caption{O que cada peça demonstra e o que fica por demonstrar.}
+\end{table}
+
+\section{Da pergunta à resposta}
+O fluxo identifica a intenção por regras, seleciona evidência autorizada e consulta estado quando necessário. Com dois IDs, informação insuficiente ou acesso negado, encaminha. A proposta atravessa validação estrutural e verificação dos excertos no contexto autorizado.
+
+O esquema define a categoria, o identificador de reclamação, a resposta, as evidências e a necessidade de intervenção humana. Os nomes exatos dos campos estão no contrato JSON do repositório. Não inclui confiança fabricada. Um excerto deve constar da fonte identificada. Isto deteta citações inventadas; não garante que todas as frases sejam consequência lógica do excerto. Os casos de teste e a revisão do domínio continuam necessários.
+
+A consulta autorizada a LAV-001 devolve o estado. Com cliente-A e LAV-002, é negada. O erro externo não distingue «não existe» de «não tens acesso», reduzindo divulgação de existência. Uma instrução escondida num documento não deve alterar esta política.
+
+\section{Testar uma barreira fora do modelo}
+O teste não pergunta se o modelo promete respeitar privacidade: invoca o executor com um recurso de outro cliente e verifica que não obtém o dado. Tenta também acrescentar identidade aos argumentos; o contrato recusa esse campo.
+
+Outro teste fornece a um gerador simulado uma citação inexistente. O pipeline rejeita a proposta e encaminha. Há testes para entrada vazia, tamanho excessivo, múltiplos IDs, tipos errados e ausência de evidência.
+
+São testes de software. A resistência de um LLM real a prompt injection exige experiências com esse modelo e ferramentas concretas. A suite não prova uma propriedade de uma componente que não executou.
+
+\begin{promptlabbox}{Trocar o gerador sem retirar as barreiras}
+\textbf{Objetivo e contexto:} testar uma interface substituível. O gerador recebe pedido, categoria e evidência e devolve um objeto candidato.
+
+\textbf{Instruções:} lê o gerador simulado nos testes. Substitui-o por uma função que devolve um campo extra; depois por outra com uma citação inventada. Como extensão, exporta o contexto com \texttt{--exportar-contexto} e testa manualmente um modelo, apenas com dados fictícios.
+
+\textbf{Resultado esperado:} propostas inválidas não passam à resposta utilizável. A exportação só contém fontes autorizadas para o papel escolhido.
+
+\textbf{Validação:} executa a suite, confirma o encaminhamento e verifica os excertos. Numa execução real de modelo, guarda versão, pedido, contexto, resposta bruta, configuração, data e avaliação.
+
+\textbf{Falhas possíveis:} remover validação porque uma API promete JSON, deixar o modelo escolher a identidade ou atribuir os números offline ao desempenho de um LLM.
+\end{promptlabbox}
+
+\section{O que falta para operar com pessoas reais}
+Faltam autenticação, armazenamento com permissões, tratamento de dados pessoais, monitorização, limites de custo e latência, avaliação de mensagens representativas e procedimento de incidente. «Pedir a um humano» também exige fila, responsável e tempo de resposta; sem isso, é só uma frase para deixar o pedido parado.
+
+Para acrescentar um modelo, implementa o adaptador segundo a API escolhida, com timeout e tratamento de recusa. Preserva os contratos e acrescenta avaliação semântica. Para MCP, implementa transporte e requisitos da versão sem deslocar autorização para o prompt.
+
+O resultado é pequeno, mas funcional no âmbito declarado. Mostra por que motivo precisamos de engenharia mesmo quando o modelo melhora. As meias podem permanecer um mistério; o acesso aos dados não deve ser um.

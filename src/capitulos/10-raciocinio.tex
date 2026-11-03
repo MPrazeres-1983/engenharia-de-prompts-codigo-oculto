@@ -1,0 +1,87 @@
+\chapter{Raciocínio: CoT, ToT e Modelos que Trabalham Mais Tempo}
+\label{ch:raciocinio}
+
+«Pensa passo a passo» tornou-se uma espécie de chave de fendas universal. O problema é que nem todas as tarefas têm parafusos. E escrever uma explicação longa não garante que a resposta esteja certa.
+
+Precisamos de separar três coisas: técnicas de prompting que pedem passos intermédios; modelos treinados para tarefas de raciocínio; e sistemas que usam procura, verificadores ou ferramentas durante a inferência. Podem combinar-se, mas não são sinónimos.
+
+\section{O que os estudos de CoT mostraram}
+Wei e colaboradores estudaram \emph{chain-of-thought} (CoT) com exemplos que incluíam passos de resolução antes da resposta~\citep{wei2022}. Observaram ganhos em certas tarefas e modelos de escala suficiente. Kojima e colaboradores estudaram instruções do tipo «let's think step by step» sem demonstrações de resolução~\citep{kojima2022}. São resultados experimentais, não um certificado de melhoria em todas as perguntas.
+
+Gerar passos pode fornecer contexto adicional para os passos seguintes. Também pode acrescentar erros, custo e uma racionalização convincente. Turpin e colaboradores mostraram casos em que as explicações não revelavam influências presentes na decisão~\citep{turpin2023}. Uma descrição textual é uma saída do modelo; não é uma leitura direta do mecanismo interno.
+
+A analogia «Sistema 1/Sistema 2» pode ajudar a falar de esforço e rapidez, mas não demonstra a existência de dois módulos psicológicos num LLM. Não uses a analogia como arquitetura.
+
+\begin{keyideabox}{Explicação útil e raciocínio interno são coisas diferentes}
+Pede uma resposta acompanhada de cálculos, pressupostos, fontes ou uma justificação concisa que possas verificar. Não pressuponhas acesso a uma transcrição fiel de todo o processamento interno. O teste decisivo continua a ser a correção do resultado e da evidência apresentada.
+\end{keyideabox}
+
+\section{Modelos de raciocínio: o treino também mudou}
+Alguns modelos recebem pós-treino orientado para tarefas que exigem resolução em várias etapas e podem usar mais computação antes da resposta. O trabalho DeepSeek-R1 descreve métodos e resultados dessa família~\citep{deepseek2025}. Isto difere de acrescentar uma frase ao prompt de um modelo fixo. Um relatório de um modelo não descreve automaticamente o funcionamento de todos os fornecedores.
+
+Alguns serviços permitem configurar esforço de raciocínio ou orçamento; outros não. Os tokens e a latência desse processamento podem ser contabilizados separadamente do texto visível. Segue a documentação da versão. Há orientações de fornecedor que recomendam pedidos diretos em vez de insistir em «pensar passo a passo» para certos modelos~\citep{reasoning2026}.
+
+Mais computação pode ajudar em determinadas tarefas, mas uma pergunta sobre um dado ausente continua a exigir dados. Pensar dez minutos na localização da meia não substitui consultar o talão.
+
+\section{Decompor o problema para o tornar verificável}
+Em vez de «mostra todos os teus pensamentos», formula o que precisas para auditar a resposta:
+
+\begin{lstlisting}
+Resolve o problema e apresenta:
+1. A resposta final.
+2. Os dados e pressupostos usados.
+3. Os calculos ou evidencias necessarios para verificar.
+Se faltar informacao, identifica-a sem a inventar.
+\end{lstlisting}
+
+Para aritmética, confirma com código ou cálculo independente. Para programação, executa testes. Para decisões documentais, confronta as fontes. Pedir «verifica» sem lhe dar um sinal novo é mais uma geração, não um verificador independente.
+
+\begin{promptlabbox}{Adicionar CoT a um problema de palavras}
+\textbf{Objetivo e contexto:} medir se uma instrução de resolução altera acerto numa pequena tarefa. Usa problemas com resposta calculável: uma viagem das 10h às 13h dura três horas; uma das 23h às 01h do dia seguinte dura duas.
+
+\textbf{Instruções:} prepara pelo menos seis variações, incluindo mudança de dia e informação insuficiente. Compara pedido direto com pedido de resposta e cálculo verificável. Usa sessões separadas e o mesmo modelo.
+
+\textbf{Resultado e validação:} compara respostas com soluções escritas antes do teste; regista também latência e tamanho. O resultado pode ser empate. Não concluas que a instrução causou melhoria geral a partir destes seis casos.
+
+\textbf{Falhas possíveis:} confundir comprimento com acerto, dar pistas só numa condição ou usar o próprio modelo como único oráculo.
+\end{promptlabbox}
+
+\section{Exemplos de resolução: mostrar o critério}
+Exemplos podem ensinar a distinguir uma exceção de um caso normal. Na Lavandaria, «o talão está presente» e «o número é mencionado mas inválido» são casos diferentes. Mostra a regra e uma justificação curta, sem ensinar o sistema a fabricar evidência.
+
+\begin{promptlabbox}{Criar um mini-dataset de Few-shot CoT}
+\textbf{Objetivo e contexto:} demonstrar uma regra com exemplos explicados. Usa três casos fictícios de uma política simples: consultar o registo apenas com identificador válido e cliente autenticado autorizado.
+
+\textbf{Instruções:} escreve input, decisão esperada e motivo verificável para cada caso. Inclui identificador ausente e acesso cruzado. Fornece esses exemplos ao modelo e reserva outros seis casos para testar.
+
+\textbf{Resultado e validação:} a decisão deve seguir a regra nos casos novos. A recusa por falta de acesso deve decorrer da autorização no executor, mesmo que o modelo proponha a consulta. Compara decisões, não a semelhança entre justificações.
+
+\textbf{Falhas possíveis:} exemplos contraditórios, usar todos os casos no prompt, ou acreditar que explicar uma política a faz cumprir no servidor.
+\end{promptlabbox}
+
+\section{Tree of Thoughts é procura, não três parágrafos}
+ToT, de Yao e colaboradores, explora estados intermédios, avalia candidatos e escolhe caminhos com procura e possibilidade de regressar a alternativas~\citep{yao2023tot}. Um pedido para «dar três abordagens» é comparação estruturada; não implementa sozinho o algoritmo estudado.
+
+Numa implementação externa, podes representar um estado, gerar sucessores, pontuá-los, limitar a largura e a profundidade e testar uma condição final. A pontuação pode usar o modelo, regras ou verificadores. Os erros da avaliação de estados também podem eliminar um caminho correto.
+
+\begin{promptlabbox}{Aplicar ToT a uma decisão de design}
+\textbf{Objetivo e contexto:} distinguir brainstorming de procura explícita. A Lavandaria compara resposta direta, consulta documental e consulta de estado. Define antes os critérios: fonte necessária, autorização, custo e possibilidade de confirmar a resposta.
+
+\textbf{Instruções:} pede três propostas e avalia-as com a grelha. Chama a isto comparação de arquiteturas. Como extensão técnica, escreve um controlador que expanda estados, mantenha só os dois melhores por nível e pare num máximo de três níveis.
+
+\textbf{Resultado e validação:} a primeira parte produz alternativas; a extensão deve registar estados gerados, descartados e critério de paragem. Só essa extensão exemplifica uma procura controlada.
+
+\textbf{Falhas possíveis:} declarar ToT porque há três propostas, pontuar apenas elegância verbal ou deixar a procura crescer sem orçamento.
+\end{promptlabbox}
+
+\section{Self-consistency e respostas correlacionadas}
+A estratégia de self-consistency amostra vários percursos e agrega as respostas finais~\citep{wang2023}. No método estudado, a diversidade é obtida por geração amostrada; não por pedir cinco soluções consecutivas num único texto. Chamadas separadas reduzem dependência contextual, mas partilham modelo, dados e erros sistemáticos: não são cinco especialistas independentes.
+
+Se três respostas dizem 42 e duas dizem 41, uma votação pode selecionar 42. Isso não prova que seja o resultado certo. Usa um critério externo sempre que disponível. Se a tarefa permite várias respostas válidas, a própria agregação exige cuidado: diferenças de redação não devem contar como desacordo factual.
+
+O protocolo experimental mínimo compara uma chamada com várias chamadas no mesmo conjunto reservado e mede acerto, custo e latência. Uma solução mais cara só se justifica se o ganho relevante for observado.
+
+\section{Escolher o mecanismo pelo sinal de erro}
+Se a dificuldade é falta de informação, procura a fonte. Se é cálculo, chama uma ferramenta. Se há vários caminhos com estados verificáveis, considera procura. Se o resultado varia entre amostras, uma agregação pode merecer teste. Se o problema é uma regra não autorizada, resolve-o na aplicação.
+
+Não há medalha para o pipeline com mais passos. Há um trabalho a concluir com correção suficiente, custo aceitável e limites que alguém consegue explicar. O próximo capítulo trata precisamente da diferença entre rever uma resposta e verificar um resultado.

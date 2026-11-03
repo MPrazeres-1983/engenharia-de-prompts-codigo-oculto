@@ -1,0 +1,40 @@
+\chapter{Glossário Essencial de Termos}
+\label{ap:glossario}
+
+\begin{description}[style=nextline,leftmargin=0pt,labelindent=0pt,labelsep=0pt,labelwidth=0pt]
+\item[LLM (Large Language Model)] Modelo de linguagem de grande escala, treinado em grandes quantidades de texto para prever a próxima palavra/token em sequência. Base de sistemas como chatbots, assistentes de código, etc.
+\item[Token] Unidade básica de entrada/saída de um LLM. Pode ser uma palavra, parte de palavra ou símbolo. Custos e limites de contexto medem-se tipicamente em tokens.
+\item[Embedding] Representação numérica (vetor) de texto ou outros dados, de forma que itens “semelhantes” fiquem próximos no espaço vetorial. Usado para busca semântica, clustering, etc.
+\item[Transformer] Arquitetura de rede neuronal introduzida em “Attention is All You Need” (Vaswani et al., 2017), baseada em mecanismos de atenção. É a base da maior parte dos LLMs modernos.
+\item[Atenção (Attention)] Mecanismo que permite ao modelo “ponderar” diferentes partes da sequência de entrada ao gerar cada token de saída, em vez de depender apenas de vizinhos imediatos.
+\item[Janela de contexto] Número máximo de tokens que o modelo consegue considerar de uma só vez (entrada + saída). Limita o tamanho de conversas, documentos e instruções.
+\item[Temperatura] Parâmetro que reescala logits antes da amostragem. Altera a concentração da distribuição, sem garantir criatividade, veracidade ou reprodução de um serviço.
+\item[Top-k / Top-p] Técnicas de sampling que restringem o conjunto de tokens candidatos: top-k limita ao “k” tokens mais prováveis; top-p (nucleus sampling) limita a um conjunto cuja soma de probabilidades atinge um limiar “p”.
+\item[Chain-of-Thought (CoT)] Técnica de prompting que encoraja o modelo a gerar raciocínios em passos, em vez de só a resposta final. Popularizada em trabalhos como os de Wei et al. (2022).
+\item[Tree-of-Thought (ToT)] Extensão da ideia de CoT, explorando múltiplos caminhos de raciocínio como uma árvore, em vez de uma única cadeia linear (Yao et al., 2023).
+\item[RLHF (Reinforcement Learning from Human Feedback)] Processo de ajustar modelos usando feedback humano (preferências entre respostas), para alinhar o comportamento com objetivos desejados.
+\item[RLAIF] Variação de RLHF que usa feedback de outros modelos (em vez de, ou complementando, feedback humano) para orientar o ajuste de comportamento.
+\item[RAG (Retrieval-Augmented Generation)] Padrão que recupera informação externa e a usa na geração. Pode melhorar o suporte documental, mas não garante correção nem obediência às fontes.
+\item[Prompt] Instrução ou conjunto de instruções (incluindo contexto, exemplos, constraints) fornecidas ao modelo para orientar a resposta.
+\item[System prompt] Parte do prompt (normalmente invisível ao utilizador final) que define o comportamento de alto nível do modelo (persona, regras, prioridades).
+\item[Prompt injection] Ataque em que o texto de utilizadores ou de documentos externos contém instruções que tentam sobrepor-se às do system prompt, manipulando o comportamento do modelo.
+\item[Jailbreak] Conjunto de técnicas para tentar contornar restrições de segurança impostas ao modelo, levando-o a produzir respostas que supostamente seriam bloqueadas.
+\item[Guardrails] Mecanismos (dentro e fora do modelo) que limitam ou validam inputs/outputs: filtros de conteúdo, validações de formato, políticas de acesso, etc.
+\item[LLMOps] Conjunto de práticas para gerir o ciclo de vida de sistemas baseados em LLMs em produção: design, testes, deploy, monitorização, segurança, governance.
+\item[Golden set] Conjunto de inputs (e outputs de referência) usados como base de teste e comparação de prompts/modelos, para avaliar qualidade e regressões.
+\item[Multimodal] Capacidade de um modelo de lidar com mais de um tipo de input/output (por exemplo, texto, imagem, áudio) e combinar essa informação.
+\item[Treino e inferência] No treino ajustam-se parâmetros; na inferência usa-se o modelo para produzir uma saída. Fornecer exemplos em contexto não implica atualizar pesos.
+\item[Fine-tuning] Ajuste de parâmetros de um modelo já treinado com novos dados ou objetivos. É distinto de fornecer documentos no contexto.
+\item[API] Interface de programação que define como componentes de software comunicam. Um chat e uma API podem expor controlos diferentes sobre a mesma família de modelos.
+\item[JSON e JSON Schema] JSON representa dados; JSON Schema descreve restrições sobre a estrutura e os valores desses dados. Nenhum dos dois prova, por si só, correção factual.
+\item[Logit] Score real atribuído a um candidato antes da transformação em probabilidades.
+\item[Máscara causal] Restrição que impede uma posição de usar informação de posições futuras na atenção de um descodificador autoregressivo.
+\item[Grounding] Ligação de afirmações a dados ou fontes identificáveis. A existência de uma citação não prova que a fonte sustenta a frase.
+\item[Calibração] Relação empírica entre confiança prevista e frequência de acerto. Uma confiança verbal isolada não estabelece essa relação.
+\item[Function calling] Proposta estruturada de chamada de ferramenta produzida pelo modelo e executada pela aplicação após validação e autorização.
+\item[MCP] Model Context Protocol: protocolo para ligar aplicações a contexto e ferramentas. A compatibilidade depende da versão; não substitui autorização nem implementa o agente inteiro.
+\item[Spec-First] Prática de explicitar comportamento e critérios de aceitação antes da implementação. Não existe um formato único nem garantia automática de cumprimento pelo modelo.
+\item[Idempotência] Propriedade de uma operação cujo efeito pretendido não se multiplica por a repetir. É relevante em repetições após falhas parciais.
+\item[Memória persistente] Dados guardados pela aplicação para utilização futura, com origem, permissões, atualização e eliminação. Não é a janela de contexto nem a cache de atenção.
+\item[Abstinência] Decisão de não emitir uma resposta ou executar uma ação por falta de evidência, capacidade ou autorização. Deve ser medida com a cobertura e o erro.
+\end{description}
