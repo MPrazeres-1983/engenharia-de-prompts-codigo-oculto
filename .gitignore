@@ -8,3 +8,16 @@
 *.synctex.gz
 .vscode/
 node_modules/
+*.bbl
+*.blg
+*.lof
+*.lot
+*.bcf
+*.run.xml
+__pycache__/
+*.pyc
+build/
+output/
+.pytest_cache/
+src/revisao.tex
+

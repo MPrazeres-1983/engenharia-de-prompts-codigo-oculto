@@ -1,23 +1,23 @@
-"""
-Demonstração técnica: Classificador de Intenção com Fallback.
-Este script exemplifica os conceitos de 'Groundedness' e 'Controlo Estocástico' 
-abordados no Capítulo 15 do livro.
+"""Baseline heurística de intenção: não executa RAG, sentimento ou um LLM.
+
+O nome histórico do ficheiro mantém compatibilidade com a primeira edição.
+Não há confiança calibrada; uma palavra-chave pode ser insuficiente ou ambígua.
+O exemplo integrado está em exemplos/lavandaria.
 """
 
 def classificar_feedback(texto):
-    # Simulação de categorias técnicas definidas no livro
-    categorias = ["Dúvida Técnica", "Bug Report", "Sugestão", "Elogio"]
-    
-    # Lógica de "Prompting" simulada
-    print(f"--- Processando Input: '{texto}' ---")
-    
-    # Simulação de uma resposta estruturada (JSON-like)
+    if not isinstance(texto, str):
+        raise TypeError("texto deve ser uma string")
     if "erro" in texto.lower() or "crash" in texto.lower():
-        return {"intent": "Bug Report", "confidence": 0.98, "needs_human": True}
+        categoria, humano = "Bug Report", True
     elif "como" in texto.lower() or "?" in texto.lower():
-        return {"intent": "Dúvida Técnica", "confidence": 0.85, "needs_human": False}
+        categoria, humano = "Dúvida Técnica", True
+    elif "gostei" in texto.lower():
+        categoria, humano = "Elogio", False
     else:
-        return {"intent": "Indeterminado", "confidence": 0.0, "needs_human": True}
+        categoria, humano = "Indeterminado", True
+    return {"intent": categoria, "needs_human": humano,
+            "metodo": "heuristica_palavras_chave_sem_LLM"}
 
 if __name__ == "__main__":
     casos = [

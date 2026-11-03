@@ -1,0 +1,24 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "title":"Resposta da Lavandaria — demonstração fictícia",
+  "type":"object",
+  "additionalProperties":false,
+  "required":["categoria","reclamacao_id","resposta","evidencias","precisa_humano"],
+  "properties":{
+    "categoria":{"enum":["pecas_em_falta","prazo","estado_reclamacao","outro"]},
+    "reclamacao_id":{"type":["string","null"],"pattern":"^LAV-[0-9]{3}$"},
+    "resposta":{"type":"string","minLength":1,"maxLength":1200},
+    "precisa_humano":{"type":"boolean"},
+    "evidencias":{
+      "type":"array","maxItems":3,
+      "items":{
+        "type":"object","additionalProperties":false,
+        "required":["fonte","excerto"],
+        "properties":{
+          "fonte":{"type":"string","minLength":1},
+          "excerto":{"type":"string","minLength":1}
+        }
+      }
+    }
+  }
+}
