@@ -7,7 +7,7 @@ Revisão de trabalho de **3 de novembro de 2026**, na branch `segunda-edicao-202
 | Verificação | Resultado |
 |---|---|
 | Compilação original, depois de instalar a dependência portuguesa local | 164 páginas; 33 avisos de largura. |
-| Compilação revista com pdfLaTeX + latexmk + BibTeX | 198 páginas, sem erros, referências/citações indefinidas ou avisos relevantes de composição. |
+| Compilação revista com pdfLaTeX + latexmk + BibTeX | 198 páginas no ambiente local (TeX Live 2023); 199 na CI (TeX Live 2026), sem erros, referências/citações indefinidas ou avisos relevantes de composição. O PDF entregue é o da CI. |
 | Estrutura | 29 capítulos, três apêndices, 47 laboratórios, 38 entradas bibliográficas. |
 | Instâncias JSON nas listagens identificadas como objetos | 4 válidas; restantes listagens são prompts, comandos ou formatos explicitamente ilustrativos. |
 | Testes Python | 30 passaram, 0 falharam. |
@@ -40,7 +40,9 @@ Uma inspeção por amostragem não substitui prova tipográfica linha a linha ne
 
 ## GitHub Actions
 
-A workflow existente foi adaptada para push e pull request, validação estática, testes offline, compilação BibTeX e upload do PDF/log/resultados. Cada PDF de CI identifica o SHA compilado. As ligações às execuções verificadas serão registadas abaixo e no draft PR quando terminarem; não se atribui sucesso a uma execução ainda em curso.
+A workflow existente foi adaptada para push e pull request, validação estática, testes offline, compilação BibTeX e upload do PDF/log/resultados. Cada PDF de CI identifica o SHA compilado. Execução verificada: [GitHub Actions 41666168658](https://github.com/MPrazeres-1983/engenharia-de-prompts-codigo-oculto/actions/runs/41666168658), commit `5279d84f6e60d0cbc2d8f1d437fbda4db4ba4236`, resultado **success**. Os passos de testes, compilação, validação e upload terminaram com sucesso. O artefacto `Segunda-edicao-5279d84f6e60d0cbc2d8f1d437fbda4db4ba4236` contém o PDF de 199 páginas e evidências. A diferença face às 198 páginas locais ocorre entre distribuições TeX Live distintas; as mesmas fontes foram compiladas.
+
+[Draft PR #1](https://github.com/MPrazeres-1983/engenharia-de-prompts-codigo-oculto/pull/1). O commit que acrescenta estas ligações altera apenas este relatório; o manuscrito e os exemplos são os da execução identificada. O PDF da CI foi descarregado para inspeção visual e é a cópia entregue para revisão.
 
 ## Questões para validação humana
 
