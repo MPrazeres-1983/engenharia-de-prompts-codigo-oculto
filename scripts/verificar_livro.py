@@ -52,10 +52,20 @@ def verificar(log=None):
                 except json.JSONDecodeError as exc:
                     erros.append(f"Instância JSON inválida em {p.name}: {exc}")
     capitulos = len(re.findall(r"\\input\{capitulos/[0-9]", principal))
-    if capitulos != 29:
-        erros.append(f"Esperados 29 capítulos: {capitulos}")
-    if laboratorios != 47:
-        erros.append(f"Esperados 47 laboratórios: {laboratorios}")
+    manifesto = json.loads((ROOT / "docs/V3_ESTRUTURA.json").read_text(encoding="utf-8"))
+    esperados = [f for parte in manifesto['partes'] for f in parte['capitulos']]
+    encontrados = re.findall(r"\\input\{(capitulos/[0-9][^}]+)\}", principal)
+    if encontrados != esperados:
+        erros.append("Capítulos ou ordem diferentes do manifesto V3")
+    if len(set(esperados)) != len(esperados):
+        erros.append("Capítulo repetido no manifesto V3")
+    if re.findall(r"\\part\{([^}]+)\}", principal) != [p['titulo'] for p in manifesto['partes']]:
+        erros.append("Partes ou ordem diferentes do manifesto V3")
+    apendices = re.findall(r"\\input\{(capitulos/ap-[^}]+)\}", principal)
+    if apendices != manifesto['apendices']:
+        erros.append("Apêndices diferentes do manifesto V3")
+    if laboratorios != manifesto['laboratorios_esperados']:
+        erros.append(f"Esperados {manifesto['laboratorios_esperados']} laboratórios: {laboratorios}")
     for p in sorted((ROOT / "exemplos").rglob("*.json")):
         try:
             json.loads(p.read_text(encoding="utf-8"))

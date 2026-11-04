@@ -211,13 +211,13 @@ Mais à frente, quando falarmos de \emph{prompt chaining} e de RAG, vamos ver co
 
 \section{RLHF, RLAIF e camadas de alinhamento}
 
-Até agora falámos do modelo base enquanto preditor de texto. Mas o que encontras numa interface pública (tipo chat) não é só o modelo base; é um modelo \emph{alinhado}.
+Até agora falámos do modelo base enquanto preditor de texto. Mas o que encontras numa interface pública (tipo chat) não é só o modelo base; é um modelo que pode ter recebido pós-treino para seguir instruções e políticas. Alinhamento tem aceções mais amplas do que cortesia: precisamos de explicitar os comportamentos e objetivos avaliados.
 
 Uma receita histórica importante, a do RLHF com modelo de recompensa, é~\citep{ouyang2022}:
 
 \begin{enumerate}[leftmargin=*]
 \item Treinar um modelo base em montes de texto para prever o próximo token.
-\item Pedir a humanos (ou a outros modelos) que avaliem respostas do modelo a vários prompts.
+\item Realizar ajuste supervisionado com demonstrações de respostas; recolher depois comparações humanas entre respostas para treinar preferências.
 \item Treinar um \emph{modelo de recompensa} que aprenda a prever quais respostas agradam mais aos avaliadores.
 \item Ajustar o modelo base com \emph{Reinforcement Learning from Human Feedback} (RLHF) ou variações (como RLAIF), para maximizar essa recompensa.
 \end{enumerate}
@@ -244,6 +244,6 @@ Do ponto de vista de prompting, isto explica várias coisas que vês no dia a di
 Quando mais tarde falarmos de jailbreaks e DAN, estás na verdade a tentar contornar estas camadas de alinhamento. Quando falarmos de segurança e ética, vamos ver como usar esse conhecimento para \emph{defender} sistemas em produção, em vez de os rebentar.
 
 \begin{warningboxenv}{Não confundir alinhamento com competência}
-Um modelo pode ser altamente “alinhado” (educado, politicamente aceitável) e ao mesmo tempo alucinar factos básicos. Alinhamento não é sinónimo de precisão. Quando desenhas prompts, tens de lidar com estas duas dimensões em separado.
+Um modelo pode ser altamente “alinhado” segundo determinados objetivos e ao mesmo tempo alucinar factos básicos. Alinhamento não é sinónimo de precisão. Quando desenhas prompts, tens de lidar com estas duas dimensões em separado.
 \end{warningboxenv}
 

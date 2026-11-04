@@ -112,7 +112,7 @@ Para cada prompt candidato:
 Antes de confiares em resultados baseados num golden set:
 
 \begin{itemize}[leftmargin=*]
-\item Tens pelo menos algumas dezenas de exemplos (não 3 ou 4).
+\item O tamanho e a variedade do conjunto estão justificados pelo risco, diversidade e incerteza que precisas de avaliar; não há um mínimo universal.
 \item Há exemplos cobrindo a variedade de inputs reais.
 \item As respostas de referência foram revistas por alguém que percebe do assunto.
 \item Documentaste como o conjunto foi construído (para evitar enviesamentos óbvios).
@@ -406,6 +406,11 @@ Faz repetições quando há variabilidade e compara versões nos mesmos casos. G
 
 \section{Juízes também precisam de auditoria}
 Estudos de avaliação com LLMs documentam efeitos como preferência pela posição de uma resposta e pela verbosidade~\citep{zheng2023}. Baralha a ordem, oculta a identidade das versões, usa critérios ancorados em exemplos e compara uma amostra com avaliação humana. Uma resposta mais longa não é automaticamente mais correta. A nota do juiz é uma medição imperfeita, não uma autoridade que dispensa revisão.
+
+\section{Avaliar o sistema que mudou, não apenas a resposta}
+Numa skill, separa descoberta e ativação, cumprimento do procedimento, execução dos scripts e qualidade do resultado. Num sistema multiagente, acrescenta comunicação, fusão, orçamento, falhas parciais e recuperação. Um teste com adaptador determinístico verifica o controlador; uma avaliação real com LLM precisa dos pedidos e respostas desse modelo.
+
+Compara também versões em que retiras uma componente: pesquisa, revisão ou especialista. Esta ablação ajuda a perceber se o ganho depende dessa peça ou de contexto e recursos adicionais. Conserva condições e custos visíveis. Um conjunto público repetidamente usado em desenvolvimento pode deixar de estimar comportamento em situações novas; não basta chamar-lhe benchmark para o tornar independente.
 
 \section{Um ensaio real, incluindo o que correu mal}
 \label{sec:ensaio-real}

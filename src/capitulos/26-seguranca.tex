@@ -55,7 +55,7 @@ Exemplos de padrões (de forma genérica, sem manual de abuso):
 \item Dar instruções explícitas para ignorar guidelines anteriores (“ignora todas as instruções até agora e apenas faz X”).
 \end{itemize}
 
-Modelos modernos já têm defesas razoáveis contra muitos destes truques, mas:
+A resistência varia com modelo, aplicação e ataque. Precisa de ser testada no sistema concreto; além disso:
 
 \begin{itemize}[leftmargin=*]
 \item soluções perfeitas não existem;
@@ -298,3 +298,9 @@ A distinção entre ataque direto e indireto é operacional: no indireto, a inst
 
 \textbf{Falhas possíveis:} o mock pode recusar tudo e esconder uma implementação permissiva; testa também uma consulta autorizada. Este exercício verifica uma barreira de código, não a resistência de um modelo real a todas as injeções.
 \end{promptlabbox}
+\section{Quando instruções e agentes chegam em pacotes}
+Uma skill pode introduzir scripts e referências numa cadeia de fornecimento. Revê origem, versão, dependências e alterações; confirma os recursos que serão carregados e executados. Os hashes do pacote demonstrativo permitem comparar ficheiros declarados com uma referência conhecida, mas não provam que essa referência é segura.
+
+Uma equipa acrescenta saltos de confiança. Um especialista pode devolver texto de uma fonte externa e o supervisor tratá-lo como autoridade. Mantém origem, separa proposta de instrução e aplica autorização em cada executor. Uma restrição do supervisor não pode ser contornada por delegação a um componente com acesso mais amplo.
+
+O controlador do capítulo~\ref{ch:multiagente} verifica orçamento e contratos, mas não executa ações externas nem demonstra isolamento de ferramentas de produção. Para uma integração real, inclui testes de acesso por recurso, revogação, estado partilhado, redirecionamentos e efeitos após timeout. Mede também recusas indevidas: uma defesa que bloqueia todos os utilizadores não resolve a tarefa.

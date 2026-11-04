@@ -8,13 +8,13 @@
 \begin{itemize}[leftmargin=*]
 \item \textbf{Modelo unimodal}:
 \begin{itemize}[leftmargin=*]
-\item só lida com texto (input e output),
-\item tudo o resto tens de converter tu (imagens, áudio, etc.).
+\item trabalha com uma modalidade, que pode ser texto, imagem, áudio ou outra,
+\item outras modalidades exigem componentes ou conversões adicionais.
 \end{itemize}
 \item \textbf{Modelo multimodal}:
 \begin{itemize}[leftmargin=*]
 \item aceita mais do que um tipo de input (texto + imagem, texto + áudio, etc.),
-\item pode gerar mais do que um tipo de output (texto, imagem, áudio…),
+\item pode aceitar ou produzir diferentes modalidades; aceitar imagem não implica gerar imagem,
 \item pode combinar isto com ferramentas externas.
 \end{itemize}
 \end{itemize}
@@ -126,7 +126,7 @@ com os dados originais (não disponíveis na imagem).
 \end{lstlisting}
 
 Se não disseres que é um gráfico, o modelo normalmente percebe sozinho.
-Mas dizer o tipo de tarefa (descrever, interpretar, criticar) aumenta muito a utilidade.
+Indicar a tarefa permite avaliar se a descrição, interpretação ou crítica cumpre o objetivo.
 
 \subsection*{Padrões para documentos e slides}
 

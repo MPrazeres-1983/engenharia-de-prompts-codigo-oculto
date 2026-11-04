@@ -225,7 +225,7 @@ Compara as preocupações levantadas pelo modelo com as que já tinhas identific
 
 \section{Deriva de contexto e re-ancoragem}
 
-Quanto mais longa é uma conversa, maior a probabilidade de o modelo “derivar”:
+Numa conversa longa podem surgir falhas de continuidade, como:
 
 \begin{itemize}[leftmargin=*]
 \item começar a ignorar instruções iniciais,
@@ -237,11 +237,11 @@ Isto acontece por várias razões:
 
 \begin{itemize}[leftmargin=*]
 \item A janela de contexto é finita, e mensagens antigas podem ser truncadas.
-\item Mesmo quando não são truncadas, o padrão de atenção favorece as mensagens mais recentes.
+\item Mesmo sem truncagem, a utilização da informação pode variar com posição, tarefa e modelo; recência não é uma lei universal~\citep{liu2024}.
 \item Instruções contraditórias ao longo da conversa criam ambiguidade.
 \end{itemize}
 
-O antídoto é a \emph{re-ancoragem}: relembrar explicitamente quem o modelo é e o que está a fazer, de tempos a tempos.
+Uma medida a testar é a \emph{re-ancoragem}: fornecer um resumo fiel do objetivo e das decisões quando necessário. O capítulo~\ref{ch:context-engineering} desenvolve seleção, memória e compressão sem perder exceções.
 
 Técnicas simples:
 
@@ -266,4 +266,4 @@ Neste capítulo, o objetivo foi arrancar-te da fantasia “age como” e pôr-te
 \item re-ancoragem como manutenção de estado.
 \end{itemize}
 
-O contexto estruturado e os exemplos do capítulo~\ref{ch:contexto} completam este desenho. Na parte seguinte, abrimos a máquina para perceber melhor por que motivo a mesma instrução pode produzir respostas diferentes.
+O contexto estruturado e os exemplos do capítulo~\ref{ch:contexto} completam este desenho. Os fundamentos da Parte II ajudam a perceber por que motivo a mesma instrução pode produzir respostas diferentes.

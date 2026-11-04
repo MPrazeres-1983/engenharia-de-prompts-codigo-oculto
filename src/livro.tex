@@ -1,8 +1,8 @@
 % Entrada única. Compilar a partir de src com latexmk -pdf livro.tex.
 \input{preambulo}
-\title{Engenharia de Prompts:\\O Código Oculto\\[1em]\large Segunda edição}
+\title{O Código Oculto da Inteligência Artificial\\[0.7em]\Large Compreender, Criar e Construir\\[1em]\large Terceira edição em desenvolvimento}
 \author{Mário Prazeres}
-\date{3 de novembro de 2026\\[0.5em]\small Revisão: \texttt{\revisao}}
+\date{4 de novembro de 2026\\[0.5em]\small Revisão: \texttt{\revisao}}
 \begin{document}
 \newgeometry{margin=0pt}
 \begin{titlepage}
@@ -13,54 +13,82 @@
 \restoregeometry
 \frontmatter
 \maketitle
-\chapter*{Nota da segunda edição}
-\addcontentsline{toc}{chapter}{Nota da segunda edição}
-Este livro começa com perguntas práticas e introduz gradualmente a técnica necessária para compreender as respostas. Não exige programação nas primeiras partes; os capítulos de implementação usam exemplos pequenos em Python. A notação matemática é acompanhada da sua leitura em palavras.
+\chapter*{Nota da terceira edição em desenvolvimento}
+\addcontentsline{toc}{chapter}{Nota da terceira edição em desenvolvimento}
+Esta revisão amplia \emph{Engenharia de Prompts: O Código Oculto}, de Mário Prazeres, para compreender a IA, utilizá-la, criar com ela e construir sistemas verificáveis. O título da folha de rosto é provisório e fica sujeito à decisão do autor. A imagem da capa original é preservada como parte da proveniência; a capa comercial da nova obra continua por decidir.
 
-A voz direta e o humor da primeira edição mantêm-se. As explicações foram revistas para separar factos, resultados experimentais, recomendações e hipóteses. A informação verificável tem como data de corte 3 de novembro de 2026; não pressupõe acontecimentos posteriores nesse mês. APIs, protocolos e enquadramentos legais devem ser reconfirmados antes de uma implementação ou publicação.
+A estrutura tem dez partes. O leitor pode seguir a progressão dos conceitos até à prática ou começar por uma tarefa. Para experimentar já, lê o capítulo~\ref{ch:primeira-conversa}. Para criar sem programar, segue os capítulos~\ref{ch:imagem-design}, \ref{ch:audiovisual} e~\ref{ch:brincar}. Para construir, começa por Spec-First, no capítulo~\ref{ch:spec-first}. A matemática é comentada e pode ser retomada depois da primeira experiência.
 
-A Lavandaria das Meias Desaparecidas é inteiramente fictícia. Exemplos identificados como ilustrativos não são execuções de um modelo. A demonstração principal usa pesquisa lexical e templates; os testes verificam software e contratos. Um ensaio separado, descrito no capítulo~\ref{ch:avaliacao}, regista 52 inferências reais de um modelo local, incluindo as falhas.
+A data de corte da investigação desta revisão é \textbf{4 de novembro de 2026}. O livro distingue factos, resultados experimentais, boas práticas, interpretações e cenários. As referências históricas são mantidas para explicar métodos; APIs, protocolos, termos e normas precisam de confirmação na versão que vieres a usar. O registo de fontes explica o alcance efetivo da consulta, sem se apresentar como revisão sistemática de toda a literatura.
 
-Esta edição foi preparada com assistência de IA na auditoria, edição e desenvolvimento dos exemplos. A autoria permanece de Mário Prazeres, com a licença CC BY-NC-SA 4.0. Os documentos de acompanhamento registam verificações, decisões do autor e limites: não se declara um estudo com leitores independentes nem uma certificação jurídica ou de segurança.
+A Lavandaria das Meias Desaparecidas é fictícia. As demonstrações offline usam dados sintéticos, regras e contratos. A segunda edição conserva um ensaio real de 52 inferências, incluindo falhas. Os novos cálculos, a skill e o controlador foram testados como software. O novo piloto de comparação com LLM não foi executado: o modelo local estava incompleto e não foi possível obter outra cópia. Estudos com participantes humanos e treino LoRA/QLoRA também não foram realizados nesta revisão. Os capítulos identificam exercícios propostos e medições efetivas.
+
+Este é um manuscrito de trabalho para desenvolvimento e revisão, sem aprovação de publicação. O aprofundamento setorial e a avaliação independente continuam necessários para a ambição de obra de referência. Compilar um PDF não certifica qualidade científica, jurídica, pedagógica ou editorial. As pendências e o próximo passo estão registados em \texttt{docs/V3\_PROGRESSO.md}.
+
+A preparação contou com assistência de IA na auditoria, escrita, revisão e exemplos. A autoria permanece de Mário Prazeres, e mantém-se a licença CC BY-NC-SA 4.0. Nenhum recurso de terceiros recebe, por isso, uma licença que não possuía.
 \tableofcontents
 \mainmatter
 \pagestyle{plain}
-\part{Começar do Zero}
+\part{A Revolução da Inteligência Artificial}
 \input{capitulos/01-ia-sem-misterio}
+\input{capitulos/30-historia-identidade}
+\part{Compreender a Máquina}
+\input{capitulos/31-aprendizagem-automatica}
+\input{capitulos/32-aprendizagem-reforco}
+\input{capitulos/06-desligar-magia}
+\input{capitulos/07-transformer}
+\input{capitulos/08-tokens}
+\input{capitulos/33-modelos-generativos}
+\input{capitulos/09-multimodal}
+\part{Conversar e Pensar com IA}
 \input{capitulos/02-primeira-conversa}
 \input{capitulos/03-mentalidade}
 \input{capitulos/04-contexto}
 \input{capitulos/05-personas}
-\part{Dentro da Máquina}
-\input{capitulos/06-desligar-magia}
-\input{capitulos/07-transformer}
-\input{capitulos/08-tokens}
-\input{capitulos/09-multimodal}
-\part{Raciocínio e Verificação}
+\input{capitulos/34-engenharia-contexto}
 \input{capitulos/10-raciocinio}
 \input{capitulos/11-autocorrecao}
-\part{Comunicação e Aprendizagem}
+\input{capitulos/17-texto-dados}
+\part{Criar, Trabalhar e Brincar com IA}
 \input{capitulos/12-escrita}
 \input{capitulos/13-aprender}
 \input{capitulos/14-negocios}
 \input{capitulos/15-criatividade}
 \input{capitulos/16-investigacao}
-\part{Software e Dados}
-\input{capitulos/17-texto-dados}
 \input{capitulos/18-analise-dados}
 \input{capitulos/19-software}
+\input{capitulos/35-imagem-design}
+\input{capitulos/36-audiovisual}
+\input{capitulos/37-jogos-quotidiano}
+\part{Construir Sistemas Inteligentes}
 \input{capitulos/20-spec-first}
-\part{Construir Sistemas}
 \input{capitulos/21-rag}
 \input{capitulos/22-ferramentas-mcp}
 \input{capitulos/23-agentes}
+\input{capitulos/38-skills}
+\input{capitulos/39-multiagente}
+\input{capitulos/40-interoperabilidade}
 \input{capitulos/24-lavandaria}
-\part{Avaliar, Proteger e Operar}
+\part{Treinar, Adaptar e Executar Modelos}
+\input{capitulos/41-adaptacao-modelos}
+\input{capitulos/42-modelos-locais}
+\part{Testar, Proteger e Operar IA}
 \input{capitulos/25-avaliacao}
 \input{capitulos/26-seguranca}
 \input{capitulos/27-llmops}
 \input{capitulos/28-governacao}
+\part{A IA e a Transformação da Sociedade}
+\input{capitulos/43-trabalho-economia}
+\input{capitulos/44-ciencia-mundo-fisico}
+\input{capitulos/45-informacao-poder}
+\input{capitulos/46-relacoes-cognicao}
+\input{capitulos/47-energia-geopolitica}
+\part{O Futuro da Inteligência}
+\input{capitulos/48-fronteiras-futuros}
 \input{capitulos/29-futuro}
+\part{O Grande Laboratório de IA}
+\input{capitulos/49-grande-laboratorio}
+\input{capitulos/50-laboratorio-comparativo}
 \appendix
 \input{capitulos/ap-a-padroes}
 \input{capitulos/ap-b-glossario}

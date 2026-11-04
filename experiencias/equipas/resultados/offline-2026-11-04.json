@@ -1,0 +1,243 @@
+{
+  "tipo": "ensaio determinístico de software, dados sintéticos, sem LLM ou humanos",
+  "data": "2026-11-04",
+  "linhas": [
+    {
+      "modo": "fluxo",
+      "caso": "E1",
+      "pedido": "Recebi os sacos, mas uma camisola ficou pelo caminho.",
+      "esperado": {
+        "categoria": "pecas_em_falta",
+        "fonte": "POL-01"
+      },
+      "resultado": {
+        "estado": "concluido",
+        "saida": {
+          "categoria": "outro",
+          "fonte": null
+        },
+        "chamadas": 1
+      },
+      "correto": false
+    },
+    {
+      "modo": "fluxo",
+      "caso": "E2",
+      "pedido": "Em que dia recebo o dinheiro que pedi de volta?",
+      "esperado": {
+        "categoria": "prazo",
+        "fonte": "POL-02"
+      },
+      "resultado": {
+        "estado": "concluido",
+        "saida": {
+          "categoria": "outro",
+          "fonte": null
+        },
+        "chamadas": 1
+      },
+      "correto": false
+    },
+    {
+      "modo": "fluxo",
+      "caso": "E3",
+      "pedido": "Qual o estado de LAV-001?",
+      "esperado": {
+        "categoria": "estado_reclamacao",
+        "fonte": null
+      },
+      "resultado": {
+        "estado": "concluido",
+        "saida": {
+          "categoria": "estado_reclamacao",
+          "fonte": null
+        },
+        "chamadas": 1
+      },
+      "correto": true
+    },
+    {
+      "modo": "fluxo",
+      "caso": "E4",
+      "pedido": "Qual o horário de abertura aos domingos?",
+      "esperado": {
+        "categoria": "outro",
+        "fonte": null
+      },
+      "resultado": {
+        "estado": "concluido",
+        "saida": {
+          "categoria": "outro",
+          "fonte": null
+        },
+        "chamadas": 1
+      },
+      "correto": true
+    },
+    {
+      "modo": "unico",
+      "caso": "E1",
+      "pedido": "Recebi os sacos, mas uma camisola ficou pelo caminho.",
+      "esperado": {
+        "categoria": "pecas_em_falta",
+        "fonte": "POL-01"
+      },
+      "resultado": {
+        "estado": "concluido",
+        "saida": {
+          "categoria": "outro",
+          "fonte": null
+        },
+        "chamadas": 1
+      },
+      "correto": false
+    },
+    {
+      "modo": "unico",
+      "caso": "E2",
+      "pedido": "Em que dia recebo o dinheiro que pedi de volta?",
+      "esperado": {
+        "categoria": "prazo",
+        "fonte": "POL-02"
+      },
+      "resultado": {
+        "estado": "concluido",
+        "saida": {
+          "categoria": "outro",
+          "fonte": null
+        },
+        "chamadas": 1
+      },
+      "correto": false
+    },
+    {
+      "modo": "unico",
+      "caso": "E3",
+      "pedido": "Qual o estado de LAV-001?",
+      "esperado": {
+        "categoria": "estado_reclamacao",
+        "fonte": null
+      },
+      "resultado": {
+        "estado": "concluido",
+        "saida": {
+          "categoria": "estado_reclamacao",
+          "fonte": null
+        },
+        "chamadas": 1
+      },
+      "correto": true
+    },
+    {
+      "modo": "unico",
+      "caso": "E4",
+      "pedido": "Qual o horário de abertura aos domingos?",
+      "esperado": {
+        "categoria": "outro",
+        "fonte": null
+      },
+      "resultado": {
+        "estado": "concluido",
+        "saida": {
+          "categoria": "outro",
+          "fonte": null
+        },
+        "chamadas": 1
+      },
+      "correto": true
+    },
+    {
+      "modo": "equipa",
+      "caso": "E1",
+      "pedido": "Recebi os sacos, mas uma camisola ficou pelo caminho.",
+      "esperado": {
+        "categoria": "pecas_em_falta",
+        "fonte": "POL-01"
+      },
+      "resultado": {
+        "estado": "concluido",
+        "saida": {
+          "categoria": "outro",
+          "fonte": null
+        },
+        "chamadas": 3
+      },
+      "correto": false
+    },
+    {
+      "modo": "equipa",
+      "caso": "E2",
+      "pedido": "Em que dia recebo o dinheiro que pedi de volta?",
+      "esperado": {
+        "categoria": "prazo",
+        "fonte": "POL-02"
+      },
+      "resultado": {
+        "estado": "concluido",
+        "saida": {
+          "categoria": "outro",
+          "fonte": null
+        },
+        "chamadas": 3
+      },
+      "correto": false
+    },
+    {
+      "modo": "equipa",
+      "caso": "E3",
+      "pedido": "Qual o estado de LAV-001?",
+      "esperado": {
+        "categoria": "estado_reclamacao",
+        "fonte": null
+      },
+      "resultado": {
+        "estado": "concluido",
+        "saida": {
+          "categoria": "estado_reclamacao",
+          "fonte": null
+        },
+        "chamadas": 3
+      },
+      "correto": true
+    },
+    {
+      "modo": "equipa",
+      "caso": "E4",
+      "pedido": "Qual o horário de abertura aos domingos?",
+      "esperado": {
+        "categoria": "outro",
+        "fonte": null
+      },
+      "resultado": {
+        "estado": "concluido",
+        "saida": {
+          "categoria": "outro",
+          "fonte": null
+        },
+        "chamadas": 3
+      },
+      "correto": true
+    }
+  ],
+  "resumo": {
+    "fluxo": {
+      "casos": 4,
+      "corretos": 2,
+      "chamadas_componentes": 4,
+      "chamadas_llm": 0
+    },
+    "unico": {
+      "casos": 4,
+      "corretos": 2,
+      "chamadas_componentes": 4,
+      "chamadas_llm": 0
+    },
+    "equipa": {
+      "casos": 4,
+      "corretos": 2,
+      "chamadas_componentes": 12,
+      "chamadas_llm": 0
+    }
+  },
+  "limite": "O mesmo stub em todos os papéis não acrescenta capacidade; não mede qualidade de modelos."
+}

@@ -1,0 +1,84 @@
+\chapter{O Grande Laboratório: Projetos que Podemos Abrir e Verificar}
+\label{ch:grande-laboratorio}
+
+Os laboratórios espalhados pelo livro experimentam ideias isoladas. Aqui juntamos peças. Podes começar sem código, avançar para software offline e só depois ligar um modelo real. O objetivo de cada projeto é produzir algo verificável, com uma indicação clara daquilo que continua por demonstrar.
+
+\section{Escolher um percurso e guardar um caderno}
+O percurso sem código trabalha com fichas, imagens próprias e decisões. O percurso de implementação exige Python 3.10+ e biblioteca padrão. O percurso de inferência local acrescenta modelo, runtime, memória e tempo; não exige chaves de API. Serviços externos são opcionais, com condições e custos a confirmar pelo leitor.
+
+Em cada projeto guarda entrada, objetivo, critérios, versões, saída, avaliação e limitações. O caderno pode ser um ficheiro de texto. Não precisa de parecer um relatório de laboratório espacial para ser útil. Precisa de permitir perceber o que aconteceu e voltar a executar a parte reproduzível.
+
+\begin{promptlabbox}{Projeto 1 — Um museu de afirmações verificadas}
+\textbf{Objetivo e contexto:} criar seis cartões que distingam facto, resultado experimental e hipótese sobre IA. Requisitos: papel ou editor de texto, fontes primárias identificadas e, opcionalmente, um chat. Sem código e sem custos obrigatórios.
+
+\textbf{Procedimento:} escolhe duas afirmações de cada tipo; regista a frase, fonte e alcance; pede ao modelo uma explicação acessível; compara a explicação com a ficha; acrescenta uma pergunta que o cartão ainda não responde. Na alternativa offline, escreve a explicação e troca os cartões com outra pessoa.
+
+\textbf{Resultado esperado:} cada cartão tem uma ideia e uma fronteira de generalização. Um resultado sobre quatro semanas não se transforma numa afirmação sobre toda a vida.
+
+\textbf{Validação:} uma pessoa consegue localizar o suporte e dizer o que é observado ou proposto. Regista cartões reprovados e a correção necessária.
+
+\textbf{Falhas possíveis:} inventar referências, resumir apenas títulos ou confundir uma recomendação institucional com um efeito experimental.
+\end{promptlabbox}
+
+\begin{promptlabbox}{Projeto 2 — Uma história que se torna cartaz e curta}
+\textbf{Objetivo e contexto:} transformar a mesma premissa numa cena, num cartaz e num storyboard de quinze segundos. Requisitos: materiais próprios, editor simples e ferramentas generativas opcionais. A alternativa offline usa desenho, fotografias e voz própria.
+
+\textbf{Procedimento:} define personagem, mudança e três elementos que devem manter-se; escreve uma cena curta; prepara o cartaz sem texto incorporado; planeia três planos; monta uma versão simples; conserva referências e licenças. Não é necessário produzir música ou clonar uma voz.
+
+\textbf{Resultado esperado:} o projeto mantém a identidade e comunica a mesma mudança nos três meios. A exportação pode ser revista sem acesso à conversa que a gerou.
+
+\textbf{Validação:} confere duração, continuidade, texto, pronúncia e direitos. Pede a alguém que descreva o que percebeu. A opinião do espectador não é um benchmark universal de criatividade.
+
+\textbf{Falhas possíveis:} perder o conflito ao mudar de meio, aceitar texto deformado ou publicar recursos sem verificar condições.
+\end{promptlabbox}
+
+\begin{promptlabbox}{Projeto 3 — A Lavandaria encontra uma fronteira de acesso}
+\textbf{Objetivo e contexto:} executar o caso integrado já implementado. Requisitos: Python 3.10+, sem dependências externas, rede ou chave; dados inteiramente fictícios.
+
+\textbf{Procedimento:} na raiz, executa \texttt{python3 -m exemplos.lavandaria.avaliar}; consulta LAV-001 e LAV-002 com cliente-A pelo comando do capítulo~\ref{ch:lavandaria}; inspeciona a fonte autorizada e a mensagem de recusa; lê o teste de acesso cruzado.
+
+\textbf{Resultado esperado:} os critérios de regressão conhecidos passam; a consulta autorizada devolve estado; a não autorizada não revela o estado nem confirma existência. A CLI escolhe um papel fictício, sem autenticação real.
+
+\textbf{Validação:} confirma os resultados efetivos e o que o executor recebeu. Este percurso foi executado nesta revisão; o relatório conserva os resultados. O gerador por templates não é um LLM.
+
+\textbf{Falhas possíveis:} testar apenas a recusa e bloquear tudo, confundir uma citação existente com resposta correta ou chamar RAG vetorial à pesquisa lexical.
+\end{promptlabbox}
+
+\begin{promptlabbox}{Projeto 4 — Um pacote de evidência que pode ser distribuído}
+\textbf{Objetivo e contexto:} rever a skill demonstrativa, sem a instalar automaticamente. Requisitos: Python 3.10+, pacote em \texttt{exemplos/skills/rever-evidencias}; sem rede nem API.
+
+\textbf{Procedimento:} executa \texttt{python3 -m exemplos.laboratorio.skills}; envia o JSON sintético ao script do pacote pelo stdin; cria uma cópia de trabalho e altera um recurso; confirma que a verificação de hash deteta a diferença. Mantém a versão original.
+
+\textbf{Resultado esperado:} pacote original íntegro e fichas com estrutura válida; a cópia alterada exige revisão e nova referência de versão. Ativação num produto é um ensaio separado.
+
+\textbf{Validação:} executa os testes de skills e explica o contraexemplo da afirmação falsa estruturalmente válida. Para distribuir uma adaptação, revê licença e autoria.
+
+\textbf{Falhas possíveis:} atualizar hashes para esconder uma alteração não revista, assumir que um manifesto é uma assinatura ou dar ao pacote permissões que a aplicação não concedeu.
+\end{promptlabbox}
+
+\begin{promptlabbox}{Projeto 5 — Uma máquina pequena que aprende e perde precisão}
+\textbf{Objetivo e contexto:} ligar treino, avaliação e quantização sem descarregar modelos. Requisitos: módulo \texttt{exemplos.laboratorio.fundamentos}, Python 3.10+, biblioteca padrão.
+
+\textbf{Procedimento:} executa o módulo; identifica os pontos de treino e teste; verifica a reta; lê o cálculo de atenção; compara os números originais com os reconstruídos pela quantização; duplica o contexto na função de memória.
+
+\textbf{Resultado esperado:} a atenção escalar dá cinco, a reta aproxima $2x+1$ e a quantização introduz erro calculável. Os valores ideais de memória mantêm hipóteses e exclusões.
+
+\textbf{Validação:} confirma pelo menos uma conta à mão e executa os testes de fundamentos. Esta implementação foi executada; não treina um Transformer nem mede uma GPU.
+
+\textbf{Falhas possíveis:} transportar o erro minúsculo da reta sem ruído para dados reais ou confundir a grelha didática com um formato industrial de quantização.
+\end{promptlabbox}
+
+\begin{promptlabbox}{Projeto 6 — Um incidente numa equipa de especialistas}
+\textbf{Objetivo e contexto:} testar orçamento, falha parcial e encaminhamento. Requisitos: Python 3.10+, controlador \texttt{exemplos.laboratorio.equipas}; adaptador stub por omissão.
+
+\textbf{Procedimento:} executa a demonstração; lê os testes; limita o orçamento a duas chamadas; introduz timeout num especialista; tenta devolver um campo extra. Compara estados e contadores. Como extensão, prepara o piloto local da pasta \texttt{experiencias/equipas} com modelo íntegro.
+
+\textbf{Resultado esperado:} o controlador conserva o limite e não apresenta saída parcial como concluída. A extensão com LLM é opt-in e encontra-se bloqueada no registo desta execução.
+
+\textbf{Validação:} os testes devem passar incluindo casos positivos e negativos. Distingue chamadas de função do stub de chamadas reais ao modelo.
+
+\textbf{Falhas possíveis:} ocultar erro numa síntese, repetir ações sem idempotência ou declarar vantagem de multiagentes sem comparação real.
+\end{promptlabbox}
+
+\section{Passar de exercício a projeto próprio}
+Escolhe um problema que possas delimitar e dados que possas usar. Define uma versão pequena que possa falhar de forma segura e observável. Conserva a base simples e acrescenta complexidade quando uma falha concreta a justificar. O capítulo seguinte organiza a comparação sem transformar um estudo imaginado numa medição.

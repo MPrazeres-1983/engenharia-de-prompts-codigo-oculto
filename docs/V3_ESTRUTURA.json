@@ -1,0 +1,112 @@
+{
+  "edicao": 3,
+  "estado": "em_desenvolvimento",
+  "partes": [
+    {
+      "titulo": "A Revolução da Inteligência Artificial",
+      "capitulos": [
+        "capitulos/01-ia-sem-misterio",
+        "capitulos/30-historia-identidade"
+      ]
+    },
+    {
+      "titulo": "Compreender a Máquina",
+      "capitulos": [
+        "capitulos/31-aprendizagem-automatica",
+        "capitulos/32-aprendizagem-reforco",
+        "capitulos/06-desligar-magia",
+        "capitulos/07-transformer",
+        "capitulos/08-tokens",
+        "capitulos/33-modelos-generativos",
+        "capitulos/09-multimodal"
+      ]
+    },
+    {
+      "titulo": "Conversar e Pensar com IA",
+      "capitulos": [
+        "capitulos/02-primeira-conversa",
+        "capitulos/03-mentalidade",
+        "capitulos/04-contexto",
+        "capitulos/05-personas",
+        "capitulos/34-engenharia-contexto",
+        "capitulos/10-raciocinio",
+        "capitulos/11-autocorrecao",
+        "capitulos/17-texto-dados"
+      ]
+    },
+    {
+      "titulo": "Criar, Trabalhar e Brincar com IA",
+      "capitulos": [
+        "capitulos/12-escrita",
+        "capitulos/13-aprender",
+        "capitulos/14-negocios",
+        "capitulos/15-criatividade",
+        "capitulos/16-investigacao",
+        "capitulos/18-analise-dados",
+        "capitulos/19-software",
+        "capitulos/35-imagem-design",
+        "capitulos/36-audiovisual",
+        "capitulos/37-jogos-quotidiano"
+      ]
+    },
+    {
+      "titulo": "Construir Sistemas Inteligentes",
+      "capitulos": [
+        "capitulos/20-spec-first",
+        "capitulos/21-rag",
+        "capitulos/22-ferramentas-mcp",
+        "capitulos/23-agentes",
+        "capitulos/38-skills",
+        "capitulos/39-multiagente",
+        "capitulos/40-interoperabilidade",
+        "capitulos/24-lavandaria"
+      ]
+    },
+    {
+      "titulo": "Treinar, Adaptar e Executar Modelos",
+      "capitulos": [
+        "capitulos/41-adaptacao-modelos",
+        "capitulos/42-modelos-locais"
+      ]
+    },
+    {
+      "titulo": "Testar, Proteger e Operar IA",
+      "capitulos": [
+        "capitulos/25-avaliacao",
+        "capitulos/26-seguranca",
+        "capitulos/27-llmops",
+        "capitulos/28-governacao"
+      ]
+    },
+    {
+      "titulo": "A IA e a Transformação da Sociedade",
+      "capitulos": [
+        "capitulos/43-trabalho-economia",
+        "capitulos/44-ciencia-mundo-fisico",
+        "capitulos/45-informacao-poder",
+        "capitulos/46-relacoes-cognicao",
+        "capitulos/47-energia-geopolitica"
+      ]
+    },
+    {
+      "titulo": "O Futuro da Inteligência",
+      "capitulos": [
+        "capitulos/48-fronteiras-futuros",
+        "capitulos/29-futuro"
+      ]
+    },
+    {
+      "titulo": "O Grande Laboratório de IA",
+      "capitulos": [
+        "capitulos/49-grande-laboratorio",
+        "capitulos/50-laboratorio-comparativo"
+      ]
+    }
+  ],
+  "apendices": [
+    "capitulos/ap-a-padroes",
+    "capitulos/ap-b-glossario",
+    "capitulos/ap-c-fontes"
+  ],
+  "laboratorios_esperados": 73
+}

@@ -2,7 +2,7 @@
 \label{ch:fundamentos}
 
 \section{O que é realmente um LLM}
-Já temos prompts e exemplos. Falta abrir a máquina. Um \emph{large language model} (LLM) é um modelo de linguagem de grande escala. Neste capítulo focamo-nos nos modelos \emph{autoregressivos}: produzem uma sequência condicionando cada novo token nos anteriores. Existem outros objetivos de treino e outras arquiteturas; esta descrição não é uma definição de toda a IA generativa.
+Um \emph{large language model} (LLM) é um modelo de linguagem de grande escala. Neste capítulo focamo-nos nos modelos \emph{autoregressivos}: produzem uma sequência condicionando cada novo token nos anteriores. Existem outros objetivos de treino e outras arquiteturas; esta descrição não é uma definição de toda a IA generativa.
 
 A fatorização da probabilidade de uma sequência é
 \[
@@ -57,7 +57,7 @@ Resultado:
 \item Uma arquitetura que escala com mais dados e mais parâmetros.
 \end{itemize}
 
-Não vamos reconstruir o paper linha a linha, mas precisas de reter isto: o Transformer é a máquina que está por baixo dos LLMs modernos. As tuas decisões de prompt estão a mexer na forma como essa máquina distribui atenção pelo contexto.
+Não vamos reconstruir o paper linha a linha, mas precisas de reter isto: o Transformer é uma arquitetura central em muitos LLMs. As decisões de prompt alteram a entrada do cálculo; não revelam nem controlam diretamente os pesos de atenção.
 
 \section{O jogo das probabilidades na prática}
 

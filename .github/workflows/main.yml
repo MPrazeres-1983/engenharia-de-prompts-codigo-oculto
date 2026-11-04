@@ -1,8 +1,8 @@
-name: Compilar e validar segunda edicao
+name: Compilar e validar livro
 
 on:
   push:
-    branches: [main, segunda-edicao-2026]
+    branches: [main, segunda-edicao-2026, terceira-edicao-ia-referencia-2026]
   pull_request:
     branches: [main]
   workflow_dispatch:
@@ -20,16 +20,19 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
 
       - name: Identificar revisao e validar exemplos offline
         shell: bash
         run: |
+          set -euo pipefail
           mkdir -p build
           python3 - <<'PY'
           from pathlib import Path
-          import os
+          import subprocess
           import re
-          sha = os.environ['GITHUB_SHA']
+          sha = subprocess.check_output(['git', 'rev-parse', 'HEAD'], text=True).strip()
           if re.fullmatch(r'[0-9a-f]{40}', sha) is None:
               raise ValueError('SHA invalido')
           Path('src/revisao.tex').write_text('\\def\\revisao{' + sha + '}\n')
@@ -39,6 +42,10 @@ jobs:
           python3 -m exemplos.lavandaria.avaliar | tee build/avaliacao.json
           python3 scripts/verificar_livro.py | tee build/estrutura.json
           python3 experiencias/llm_local/verificar_registo.py | tee build/registo-llm.json
+          python3 -m exemplos.laboratorio.fundamentos | tee build/fundamentos.json
+          python3 -m exemplos.laboratorio.skills | tee build/skill.json
+          python3 -m exemplos.laboratorio.equipas | tee build/controlador.json
+          python3 experiencias/equipas/offline.py --verificar | tee build/equipas-offline.json
           python3 -m compileall -q exemplos scripts tests experiencias
 
       - name: Compilar LaTeX e BibTeX
@@ -55,7 +62,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: Segunda-edicao-${{ github.sha }}
+          name: Livro-${{ github.event.pull_request.head.sha || github.sha }}
           if-no-files-found: error
           path: |
             src/livro.pdf
