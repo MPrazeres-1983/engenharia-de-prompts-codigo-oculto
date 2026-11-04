@@ -1,0 +1,10 @@
+{
+  "versao": "1.0.0",
+  "autor": "Mário Prazeres",
+  "licenca": "CC-BY-NC-SA-4.0",
+  "ficheiros": {
+    "SKILL.md": "bc2d9b19efe7fba77e6593a5c55fa05be0406699d5e8173ead592e0cb7d178f8",
+    "scripts/validar_fichas.py": "0cd56463d724b4fc71469d485411dcf897c47a9b2599f0cb79e4c3590c6325c8",
+    "assets/fichas.json": "c73fa5cb3574c248683f0270e0603684ee71e6d6620c8fe41733ee002a64a016"
+  }
+}

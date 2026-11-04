@@ -1,0 +1,16 @@
+[
+  {
+    "afirmacao": "O exemplo de atenção com pesos 1/4 e 3/4 e valores 2 e 6 dá 5.",
+    "fonte": "Cálculo didático do livro",
+    "localizador": "exemplos/laboratorio/fundamentos.py: atencao_escalar",
+    "alcance": "Exemplo escalar sintético; não é medição interna de um LLM.",
+    "estado": "suportada"
+  },
+  {
+    "afirmacao": "O sistema responde sempre corretamente.",
+    "fonte": "",
+    "localizador": "",
+    "alcance": "",
+    "estado": "por_verificar"
+  }
+]
