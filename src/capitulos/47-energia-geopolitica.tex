@@ -1,0 +1,49 @@
+\chapter{A Nuvem Tem Cabos: Energia, Semicondutores e Dependências}
+\label{ch:energia}
+
+A palavra «nuvem» é uma excelente maneira de esconder um edifício. Há servidores, chips, memória, redes, refrigeração, água em determinados sistemas e trabalhadores a manter tudo ligado. A IA é software, mas a sua escala tem condições materiais.
+
+\section{Definir a fronteira antes de contar}
+Energia de treino, inferência, fabrico de equipamento e operação de centros de dados não são a mesma medida. Um relatório pode contar eletricidade do edifício; outro apenas potência atribuída ao acelerador. Comparar os números exige fronteiras e unidades equivalentes.
+
+A IEA estimou cerca de 415 TWh de eletricidade para centros de dados em 2024 no relatório de 2025~\citep{iea2025}. O valor inclui atividades além da IA. Na atualização publicada em abril de 2026, apresenta crescimento de 17\% da procura dos centros de dados em 2025 e uma projeção central próxima de 950 TWh em 2030~\citep{iea2026}. A primeira afirmação descreve uma estimativa histórica; a segunda parte projeta um cenário, não uma medição futura.
+
+Não transformes o total de centros de dados num total exclusivo de geração de texto. Também não uses a eficiência de uma consulta curta como estimativa de um vídeo ou de um agente com muitas chamadas. O tipo e o volume de trabalho importam.
+
+\section{Uma conta simples, com o que fica de fora}
+Se um dispositivo consome mais 100 watts durante dez minutos, a energia adicional nesse intervalo é $100\times(10/60)=16.67$ Wh. É uma conta ilustrativa, não uma medição do ensaio deste livro. Para medir, precisamos de um instrumento ou telemetria adequada, uma base comparável e a duração efetiva.
+
+Converter eletricidade em emissões exige considerar origem da energia e metodologia. Converter um pedido em consumo de água exige ainda sistema de refrigeração, local, período e fronteira. Um número universal por pergunta pode esconder mais variação do que esclarece.
+
+Para comparar arquiteturas, começa por chamadas, tokens, duração e recursos observáveis. Se não mediste eletricidade, não a inventes a partir do tempo de parede. Duas execuções com a mesma duração podem usar dispositivos e potências muito diferentes.
+
+\section{Eficiência unitária e procura total}
+Uma melhoria pode reduzir custo por tarefa e incentivar mais tarefas ou tarefas maiores. Este mecanismo torna possível maior eficiência com maior consumo total. Não implica que todo o ganho será anulado; indica que precisamos de medir ambos.
+
+Otimizações de projeto continuam úteis: eliminar chamadas redundantes, usar cálculo determinístico, escolher modelos adequados, reutilizar resultados válidos dentro das permissões e limitar loops. O benefício deve ser avaliado por tarefa aceite, incluindo falhas e revisão.
+
+Uma equipa de três agentes que não melhora o resultado pode consumir mais sem benefício. Uma equipa que evita uma operação dispendiosa pode justificar o custo. O resultado é empírico e depende da tarefa, em vez de estar decidido pelo número de componentes.
+
+\section{Chips, memória, redes e capacidade de fabricar}
+Computação em escala depende de mais do que desenhar um processador. Fabrico avançado, memória, encapsulamento, interligações, energia e construção têm prazos e fornecedores próprios. Um centro anunciado não é capacidade operacional disponível.
+
+A atualização da IEA de 2026 discute estrangulamentos de rede elétrica e cadeias de fornecimento que condicionam a expansão~\citep{iea2026}. A existência destes limites ajuda a perceber por que projeções técnicas e económicas precisam de hipóteses materiais. Não usamos uma fotografia da fábrica ou um investimento anunciado como medida direta de capacidade futura.
+
+Concentração pode criar dependência de poucas rotas de fornecimento e distribuição. Redundância, portabilidade de dados e possibilidade de mudar de fornecedor são escolhas de resiliência. Têm custos e limites: mudar um endpoint não garante equivalência de comportamento, contratos ou licenças.
+
+\section{Soberania tecnológica é uma combinação de capacidades}
+Executar um modelo local pode reduzir uma dependência e manter outras: hardware, compiladores, pesos, documentação ou atualizações. Usar um serviço nacional não demonstra por si só onde todos os dados e componentes são processados. Soberania precisa de perguntas concretas sobre controlo, acesso, continuidade e possibilidade de auditoria.
+
+No plano geopolítico, acesso a computação e conhecimento pode influenciar investigação, indústria e poder de negociação. Consequências específicas dependem de políticas, mercados e instituições; são matéria para análise com dados, não uma inevitabilidade deduzida da velocidade de um chip.
+
+Uma organização pequena pode começar pelo que controla: dados exportáveis, contratos claros, exemplos reprodutíveis, versões fixadas e alternativas em caso de indisponibilidade. A cópia incompleta do modelo nesta execução é uma lembrança bastante menos grandiosa, mas prática, de que dependências também falham ao nível de um ficheiro.
+
+\begin{promptlabbox}{Uma fatura de recursos que não inventa eletricidade}
+\textbf{Objetivo e contexto:} comparar dois fluxos de uma tarefa sintética. Requisitos: registos de chamadas ou o controlador offline; contador elétrico apenas se quiseres medir energia real.
+
+\textbf{Procedimento:} conta chamadas, tamanho das entradas, duração e tarefas aceites. Identifica chamadas redundantes. Se medires eletricidade, descreve dispositivo, base, intervalo e fronteira. Caso contrário, regista «energia não medida».
+
+\textbf{Resultado esperado e validação:} o relatório distingue contagem operacional, estimativa e medição. Uma projeção tem pressupostos e data.
+
+\textbf{Falhas possíveis:} usar centros de dados como sinónimo de IA, confundir potência com energia ou transformar uma média de consulta num valor universal.
+\end{promptlabbox}

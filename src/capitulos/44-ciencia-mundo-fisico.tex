@@ -1,0 +1,52 @@
+\chapter{Ciência, Saúde e Mundo Físico: da Previsão ao Benefício}
+\label{ch:ciencia}
+
+Prever uma estrutura molecular, sugerir uma hipótese e melhorar a vida de uma pessoa são resultados diferentes. A IA pode participar no caminho entre eles, mas não o percorre inteiro por decreto. A pergunta útil é onde acrescenta informação ou capacidade e que verificação continua por fazer.
+
+\section{Uma aceleração científica com objeto definido}
+AlphaFold apresentou resultados de previsão de estruturas de proteínas avaliados no CASP14, uma avaliação cega que permite comparar previsões com estruturas ainda não publicamente disponíveis~\citep{jumper2021}. É um avanço num problema concreto. Não equivale a explicar toda a biologia de uma proteína nem a demonstrar que um medicamento é eficaz e seguro.
+
+Entre estrutura prevista e intervenção existem interações, dinâmica, contexto celular, hipóteses e experiências. Um sistema pode reduzir trabalho numa etapa e deslocar o gargalo para a seguinte. Esta é uma forma útil de procurar oportunidades: identifica a etapa lenta, o objeto que o modelo prevê e a experiência capaz de a contrariar.
+
+Em investigação assistida, conserva hipóteses, dados e resultados separados. Uma sugestão de composto é uma proposta; uma simulação é um resultado de um modelo; uma medição em laboratório tem o seu procedimento e incerteza. Apagar estas distinções torna a investigação mais convincente no papel e menos reprodutível.
+
+\section{Saúde: prever bem não é cuidar bem}
+Um modelo pode ter bom desempenho num conjunto de imagens e falhar quando mudam equipamento, população ou prevalência. A utilidade clínica depende de decisões afetadas, falsos positivos, falsos negativos, integração e benefício observado. Uma avaliação de discriminação não substitui calibração, nem ambas substituem um estudo do processo de cuidado.
+
+A orientação da OMS sobre grandes modelos multimodais discute benefícios possíveis e riscos como erros, enviesamento, privacidade e confiança excessiva na automação~\citep{who2024}. É orientação institucional; não certifica um produto. Este capítulo analisa critérios de avaliação, sem fornecer diagnóstico ou tratamento.
+
+Uma tarefa administrativa, como resumir uma consulta para revisão profissional, também precisa de confirmar negações, doses, datas e atribuição de sintomas. Chamar «apenas documentação» ao texto não elimina consequências se esse documento for usado depois numa decisão.
+
+\section{Meteorologia não é climatologia}
+GraphCast foi apresentado como método de previsão meteorológica de médio prazo treinado em dados de reanálise, com avaliação sobre alvos definidos~\citep{graphcast2023}. Uma comparação desse tipo permite discutir previsões de variáveis e horizontes específicos. Não demonstra que o sistema resolve todas as escalas de previsão nem que substitui a física e a observação que contribuíram para os dados.
+
+Para clima, eventos raros ou condições fora do histórico, o horizonte e o problema mudam. Pergunta que dados de referência existem, que distribuição se está a avaliar e como se tratam incerteza e extremos. «Previsão» é uma palavra demasiado ampla para transportar uma percentagem de um estudo para outro domínio.
+
+\section{Indústria e agricultura: exemplos de desenho}
+Num caso industrial conceptual, sensores e registos podem apoiar manutenção preditiva. O resultado esperado não deve ser apenas «deteta anomalias», mas uma decisão útil antes de uma falha, com custo de alarme falso e de intervenção. Se as máquinas mais antigas são inspecionadas mais vezes, os registos podem refletir a política de inspeção além da condição física.
+
+Na agricultura, uma proposta de classificar sinais de doença em folhas exige testar iluminação, variedade, região, estação e doenças visualmente semelhantes. Um conjunto de fotografias de laboratório não representa automaticamente uma exploração agrícola. Trata estes exemplos como perguntas de projeto, não como resultados experimentais atribuídos a um produto.
+
+Em ambos, os operadores conhecem exceções e limites que podem não constar dos dados. A recolha dessa informação é trabalho técnico. Instalar um modelo antes de perceber como o sensor falha é uma maneira rápida de automatizar uma interpretação errada.
+
+\section{Robótica acrescenta consequências físicas}
+Uma ação errada num chat pode ser revista antes de uso. Uma ação errada de um braço robótico pode colidir com um objeto ou uma pessoa. Perceção, planeamento, controlo e limites físicos precisam de avaliação conjunta. Demonstrações gravadas devem indicar condições, supervisão, tentativas e intervenções.
+
+RT-2 estuda uma integração de visão, linguagem e ações representadas por tokens em tarefas robóticas~\citep{rt22023}. Isso mostra uma linha de investigação sobre transferência de representações. Não demonstra autonomia doméstica geral. A mesma instrução pode enfrentar geometria, força e objetos que nunca apareceram na avaliação.
+
+Uma estratégia de engenharia separa proposta de plano e controlo físico com limites. A validação pode começar em simulação e avançar para ambientes controlados. A passagem ao mundo físico continua a exigir análise própria de segurança; não se resolve com uma frase «tem cuidado» no prompt.
+
+\section{Benefício público e acesso}
+Mesmo uma ferramenta eficaz pode não chegar a quem mais precisa se exigir equipamento, dados, conectividade ou formação indisponíveis. A avaliação deve incluir a população e as condições de uso pretendidas. Métricas agregadas podem esconder grupos para os quais o erro é maior.
+
+Uma pergunta completa combina capacidade e distribuição: melhorou o resultado, para quem, com que recursos e com que possibilidade de contestação? É assim que um benchmark se liga a uma decisão de implementação, sem fingir que as duas coisas são iguais.
+
+\begin{promptlabbox}{Do resultado do artigo à decisão de projeto}
+\textbf{Objetivo e contexto:} ler uma fonte primária de ciência aplicada. Usa um dos artigos identificados neste capítulo e uma ficha de evidência.
+
+\textbf{Procedimento:} identifica objeto previsto, dados, comparação, horizonte e métrica. Escreve uma utilização que o estudo suporta discutir e outra que ainda exige evidência. Não experimentes intervenções clínicas ou físicas a partir do exercício.
+
+\textbf{Resultado esperado e validação:} cada conclusão tem localizador e alcance. A passagem da previsão ao benefício identifica as etapas que faltam.
+
+\textbf{Falhas possíveis:} trocar acerto em benchmark por eficácia clínica, generalizar entre horizontes ou apresentar um caso conceptual de agricultura como estudo executado.
+\end{promptlabbox}

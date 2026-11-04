@@ -1,0 +1,66 @@
+\chapter{Fronteiras da Inteligência: Modelos do Mundo, Consciência e Cenários}
+\label{ch:fronteiras}
+
+Uma previsão sobre IA costuma juntar três afirmações: uma capacidade técnica vai melhorar, alguém vai conseguir operá-la e a sociedade vai adotá-la de determinada maneira. Cada ligação pode falhar. Separar estas etapas permite pensar no futuro sem fingir que temos acesso antecipado às notícias.
+
+\section{Modelos do mundo: prever consequências para escolher ações}
+Um modelo do mundo representa regularidades de um ambiente que podem apoiar previsão e planeamento. Ha e Schmidhuber estudaram representações comprimidas e políticas em ambientes de aprendizagem por reforço~\citep{ha2018}. Dreamer, no trabalho de Hafner e colaboradores, mostra outra linha de investigação baseada em modelos aprendidos para tarefas de controlo~\citep{hafner2025}. Os resultados pertencem aos ambientes e avaliações estudados.
+
+O nome não implica uma simulação completa da realidade. Um modelo pode ser útil para certas consequências e falhar fora delas. Planear dentro de uma representação errada pode explorar precisamente os seus erros. Uma trajetória imaginada sem colisão não demonstra que o robô passaria pela mesma porta.
+
+Também convém separar aparência visual e dinâmica útil. Um vídeo coerente pode não conservar forças, geometria ou identidade de objetos de forma suficiente para controlo. O critério é a tarefa: para cinema pode bastar continuidade percebida; para planear uma ação física precisamos de outras verificações.
+
+\section{Robótica generalista: capacidades que têm de se encontrar}
+Perceção, linguagem, memória, planeamento e controlo podem contribuir para robôs mais flexíveis. A integração tem desafios próprios: ambiente parcial, contacto físico, atrasos, falhas de sensores e necessidade de agir em tempo útil. O capítulo~\ref{ch:ciencia} discutiu RT-2 como exemplo delimitado, sem converter demonstrações em autonomia universal.
+
+Uma avaliação de generalidade deve variar objetos, locais, instruções e condições, incluindo recuperação após erro. Guarda intervenções humanas e tentativas falhadas. Se o sistema resolve a tarefa depois de uma pessoa reposicionar o objeto, essa intervenção faz parte da evidência.
+
+O progresso pode surgir tanto de modelos mais capazes como de ambientes melhor preparados e ferramentas mais fiáveis. Uma casa desenhada para um robô e uma casa arbitrária são problemas diferentes. Saber qual foi testada evita discutir resultados incompatíveis como se fossem rivais diretos.
+
+\section{Mais computação e outras arquiteturas}
+Escala de treino, eficiência de inferência e computação durante a resolução são eixos distintos. Um sistema pode gastar mais tempo a procurar e verificar sem ter aumentado os parâmetros. Outro pode melhorar memória ou representação. Não há razão para assumir que todas as capacidades evoluem à mesma velocidade.
+
+Modelos de espaço de estados seletivos, como Mamba, exploram alternativas à atenção em modelação de sequências~\citep{gu2023}. O resultado específico não demonstra que Transformers serão substituídos em todas as tarefas. Arquiteturas híbridas, hardware especializado e novos métodos de aprendizagem são linhas de investigação a avaliar, não um calendário de sucessão inevitável.
+
+Uma alegação de eficiência precisa de qualidade equivalente, comprimento, lote, hardware e medição. Reduzir o custo de uma operação e degradar a tarefa não é automaticamente progresso útil. A inovação que interessa depende do objetivo e dos limites de operação.
+
+\section{Inteligência geral: escolher as provas antes do anúncio}
+Uma definição operacional de generalidade deve indicar amplitude, transferência, aprendizagem adicional, autonomia e recursos. Resolver um conjunto extenso de tarefas conhecidas é evidência de capacidade nesse conjunto. Transferir para tarefas novas, com pouco apoio e orçamento limitado, coloca outra pergunta.
+
+Benchmarks podem ser contaminados por dados de treino ou por desenvolvimento repetido sobre os mesmos testes. Uma avaliação nova precisa de controlo de divulgação e de condições. «Nunca vi esta pergunta» não é uma propriedade que um texto gerado possa certificar.
+
+Há ainda diferença entre capacidade e vontade de usar. Um sistema pode executar tarefas amplas e continuar dependente de objetivos, ferramentas e permissões definidos por pessoas. Não atribuímos intenções humanas apenas porque o plano usa a primeira pessoa.
+
+\section{Consciência: comportamento não encerra a questão}
+Consciência pode referir experiência subjetiva; outras utilizações da palavra dizem respeito a acesso e processamento de informação. É necessário dizer que questão estamos a discutir. Uma frase «sinto dor» pode ser produzida por treino de linguagem e contexto, sem constituir um teste suficiente de experiência.
+
+Butlin e colaboradores propõem avaliar propriedades computacionais relacionadas com várias teorias científicas da consciência~\citep{butlin2023}. O enquadramento depende das teorias e dos indicadores escolhidos. O relatório é de 2023: a sua conclusão sobre sistemas então avaliados não é uma inspeção de todos os sistemas de novembro de 2026.
+
+Não sabemos com segurança resolver a questão geral da consciência artificial com um único teste de conversação. Isso não obriga a escolher entre certeza de impossibilidade e certeza de presença. Podemos explicitar pressupostos, recolher evidência e discutir prudência moral sob incerteza, sem apresentar especulação como descoberta.
+
+\section{Três cenários que podem ser revistos}
+\begin{table}[htbp]
+\small
+\begin{tabularx}{\textwidth}{@{}lXXX@{}}
+\toprule
+Cenário & Pressuposto & Sinal a observar & Evidência contrária \\
+\midrule
+Integração gradual & Ferramentas melhoram tarefas delimitadas & Ganhos repetidos com revisão contabilizada & Custos e falhas impedem adoção \\
+Autonomia mais ampla & Planeamento e recuperação tornam-se fiáveis & Tarefas longas novas com menos intervenção & Erros acumulam-se fora dos testes \\
+Transformação radical & Transferência ampla e difusão rápida & Avaliação independente e efeitos sustentados & Limites técnicos ou institucionais persistem \\
+\bottomrule
+\end{tabularx}
+\caption{Cenários de análise. Não são previsões com probabilidades atribuídas ou datas prometidas.}
+\end{table}
+
+O terceiro cenário admite possibilidades mais especulativas; não ganha probabilidade por ser mais dramático. Para cada cenário, pergunta que decisão de hoje mudaria e se existe uma escolha robusta a vários futuros. Manter dados exportáveis, capacidade de verificar e alternativas operacionais pode ser útil em mais de um deles.
+
+\begin{promptlabbox}{Uma previsão que aceita perder}
+\textbf{Objetivo e contexto:} transformar uma previsão vaga sobre IA numa hipótese acompanhável. Não precisas de programar nem de atribuir datas a AGI.
+
+\textbf{Procedimento:} escolhe uma capacidade concreta; define tarefa, condições, critério e horizonte de revisão. Escreve o que aumentaria e o que reduziria a tua confiança. Identifica uma decisão reversível que possas tomar agora.
+
+\textbf{Resultado esperado e validação:} outra pessoa consegue decidir, na revisão, se o critério foi observado. Conserva a previsão original e os motivos de alteração.
+
+\textbf{Falhas possíveis:} mudar a definição depois do resultado, usar anúncios como confirmação independente ou tratar um cenário possível como inevitável.
+\end{promptlabbox}
