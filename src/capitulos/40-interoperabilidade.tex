@@ -1,0 +1,57 @@
+\chapter{Interoperabilidade: Ferramentas, Capacidades e Trabalho entre Agentes}
+\label{ch:interop}
+
+Uma equipa sabe consultar documentos, outra sabe calcular rotas. Queremos que cooperem sem reescrever cada integração. Um protocolo comum pode ajudar a descrever operações e trocar mensagens. Não faz os sistemas compreenderem automaticamente a mesma definição de «concluído», nem lhes concede acesso aos mesmos dados.
+
+\section{Três ligações com finalidades diferentes}
+Function calling descreve como um modelo propõe operações estruturadas à aplicação. MCP padroniza a ligação a ferramentas e contexto, como desenvolvido no capítulo~\ref{ch:mcp}. A2A trata de comunicação entre serviços de agentes, incluindo descoberta, mensagens, tarefas e resultados~\citep{a2a2026}. Uma skill pode organizar o procedimento que usa estas ligações.
+
+Não precisas de usar todos para chamar uma função interna. A interoperabilidade é útil quando existem fronteiras reais: aplicações diferentes, fornecedores, equipas ou ciclos de execução. Adotar três protocolos para somar dois números seria uma homenagem muito dispendiosa à arquitetura.
+
+\section{A2A: descobrir não significa confiar}
+Esta edição usa explicitamente a especificação A2A 1.0.0. A Agent Card descreve o serviço, interfaces, capacidades e requisitos de segurança. A localização conhecida indicada nessa versão é \texttt{/.well-known/agent-card.json}. Exemplos antigos podem usar outros caminhos; confirma a versão antes de os copiar.
+
+O campo \texttt{AgentSkill} dessa especificação descreve uma capacidade anunciada. Não é o pacote Agent Skills com \texttt{SKILL.md}. A palavra coincide, mas os contratos são distintos. Uma capacidade declarada precisa de validação do cliente e de autorização no servidor.
+
+Uma assinatura pode ajudar a verificar origem e integridade de um cartão. Não prova qualidade do trabalho anunciado. O mesmo se passa com um domínio conhecido ou um fornecedor conhecido: identidade, autorização e correção são verificações diferentes.
+
+\section{Mensagens, tarefas e artefactos}
+Uma mensagem é uma unidade de comunicação; uma tarefa pode continuar ao longo de várias interações e ter estado próprio; um artefacto é uma saída produzida no trabalho. Esses conceitos permitem distinguir «pedido recebido» de «resultado concluído» e de «preciso de mais dados».
+
+Numa aplicação de viagens fictícia, um agente pede uma proposta de percurso. O serviço pode precisar do local de partida ou devolver um resultado mais tarde. O cliente tem de saber se aguarda, fornece informação, cancela ou apresenta um erro. Uma ligação de rede aberta não é um estado de negócio.
+
+O exemplo do repositório não implementa um servidor A2A ou MCP. Implementa contratos e um controlador de domínio. Uma implementação de protocolo exigiria SDK ou transporte compatível, testes de mensagens e estados, autenticação e ensaios entre cliente e servidor. Não confundimos um diagrama com essa execução.
+
+\section{Compatibilidade tem mais do que uma dimensão}
+Dois sistemas podem aceitar o mesmo JSON e interpretar mal o conteúdo. Um chama «prazo» à estimativa, outro a uma garantia. Um usa hora local, outro UTC. Um identificador só é único dentro de uma organização; o outro assume que é global. São incompatibilidades semânticas, não erros de parsing.
+
+Versiona contratos e explicita unidade, âmbito, estados de erro e efeitos. Testa exemplos partilhados e casos proibidos. Uma nova propriedade opcional pode ser ignorada por um cliente antigo; uma mudança de significado pode quebrar tudo mesmo sem mudar o nome do campo.
+
+Também precisas de um limite de confiança para cada salto. Credenciais destinadas ao serviço A não devem ser passadas cegamente ao serviço B. O servidor confirma destinatário, identidade e âmbito, e a autorização de dados acompanha a tarefa. O facto de o pedido vir de um «agente colega» não o transforma num administrador.
+
+\section{Uma matriz antes de construir a ligação}
+\begin{table}[htbp]
+\small
+\begin{tabularx}{\textwidth}{@{}lXX@{}}
+\toprule
+Fronteira & Verificação & Caso que pode reprovar \\
+\midrule
+Descoberta & Identidade, versão e capacidades & Cartão alterado ou interface incompatível \\
+Pedido & Tipos e semântica & Unidade errada ou campo inesperado \\
+Autorização & Identidade e recurso & Acesso a outro cliente \\
+Execução & Prazo, repetição e estado & Resultado perdido após efeito \\
+Resultado & Conteúdo e proveniência & Artefacto válido mas sem suporte \\
+\bottomrule
+\end{tabularx}
+\caption{Controlos de integração que continuam necessários com protocolos comuns.}
+\end{table}
+
+\begin{promptlabbox}{Dois agentes que discordam sobre «concluído»}
+\textbf{Objetivo e contexto:} desenhar uma integração em papel, sem apresentar o resultado como teste de conformidade. Um agente pede um resumo; outro recebe documentos e devolve um artefacto.
+
+\textbf{Procedimento:} define versões, estados, dados necessários, timeout, cancelamento e resultado esperado. Introduz uma resposta que diz «concluído» sem o ficheiro e outra que entrega um ficheiro de outro cliente.
+
+\textbf{Resultado esperado e validação:} o contrato rejeita ambas por razões diferentes. A descrição permite implementar testes de cliente e servidor quando existir uma integração real.
+
+\textbf{Falhas possíveis:} confundir descoberta com acesso, aceitar o estado sem verificar o artefacto ou anunciar compatibilidade A2A por ter usado a palavra «agente».
+\end{promptlabbox}

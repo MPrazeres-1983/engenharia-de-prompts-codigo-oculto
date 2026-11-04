@@ -1,0 +1,67 @@
+\chapter{Quando um Agente Chama Outros: Equipas, Estado e Falhas}
+\label{ch:multiagente}
+
+Três agentes a concordar numa resposta errada não formam uma comissão científica. Formam três saídas concordantes. Uma equipa pode ser útil quando separa tarefas, acessos, capacidades ou verificações. Também pode acrescentar custo, atrasos e novas maneiras de perder informação. A pergunta de arquitetura é o que essa divisão permite fazer melhor, e como o vamos medir.
+
+\section{Separar tarefas antes de multiplicar vozes}
+Um fluxo fixo executa etapas conhecidas. Um agente único escolhe ações num conjunto autorizado. Uma equipa tem componentes com contextos, papéis ou estados de execução próprios, coordenados por um mecanismo de comunicação. Quatro personas num único texto não constituem quatro execuções independentes.
+
+AutoGen descreve uma infraestrutura de conversação entre agentes com diferentes modos de participação e ferramentas~\citep{autogen2023}. É um exemplo de arquitetura e implementação. Os resultados das aplicações estudadas não provam que qualquer equipa supera um agente único. Precisamos de uma comparação na nossa tarefa e com os custos visíveis.
+
+Uma divisão justificável pode colocar revisão de contrato e análise documental em componentes diferentes, com entradas próprias. Uma divisão fraca pede «pensador», «superpensador» e «pensador final» para reformular a mesma frase. Os nomes não acrescentam evidência nem diversidade real de erro.
+
+\section{Supervisor, especialistas e grafos de dependência}
+Um supervisor recebe um objetivo delimitado, atribui subtarefas e integra resultados. Cada subtarefa precisa de entrada, saída, critério de conclusão e orçamento. Se a tarefa B depende da conclusão de A, executá-las em paralelo só faz sentido se B puder trabalhar com uma hipótese provisória explicitamente marcada.
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[node distance=8mm and 10mm,every node/.style={draw,align=center,text width=39mm,minimum height=11mm,font=\small},>=Stealth]
+\node (sup) {Supervisor e orçamento};
+\node (tri) [below left=of sup] {Triagem: proposta de categoria};
+\node (doc) [below right=of sup] {Documental: proposta de fonte};
+\node (val) [below=30mm of sup] {Contratos e integração};
+\node (ok) [below left=of val] {Saída validada};
+\node (err) [below right=of val] {Erro ou encaminhamento};
+\draw[->](sup)--(tri);\draw[->](sup)--(doc);\draw[->](tri)--(val);\draw[->](doc)--(val);\draw[->](val)--(ok);\draw[->](val)--(err);
+\end{tikzpicture}
+\caption{Equipa delimitada. Os resultados dos especialistas são propostas, não novas permissões.}
+\label{fig:equipa}
+\end{figure}
+
+O controlador do repositório usa dois especialistas em paralelo e uma síntese. É um desenho fixo, com adaptadores substituíveis, não uma prova de planeamento autónomo. Com o stub por omissão, executa código determinístico. Com o adaptador HTTP e um modelo local válido, os três papéis podem realizar chamadas distintas. O limite mantém-se fora do modelo nos dois casos.
+
+\section{Comunicação: transmitir o necessário, incluindo a incerteza}
+Uma mensagem entre componentes deve indicar tarefa, versão, origem, dados relevantes, conclusão proposta e limitações. O recetor não deve confundir texto livre do colega com uma instrução de sistema. Um especialista que recuperou uma página maliciosa pode retransmitir a injeção numa síntese aparentemente respeitável.
+
+Prefere interfaces estreitas. «Categoria e fonte candidata» é verificável. «Faz tudo o que considerares necessário» deixa acesso e objetivo demasiado vagos. Se a subtarefa não precisa de nomes de clientes ou segredos, não os incluas por conveniência.
+
+Uma equipa com o mesmo modelo pode ter erros correlacionados. Contextos separados removem parte da influência conversacional direta, mas não criam populações independentes de especialistas. Diversidade útil pode vir de métodos diferentes: cálculo, pesquisa documental, regras e revisão humana. Precisa também de ser medida.
+
+\section{Estado partilhado sem uma guerra de edições}
+Define quem pode escrever cada campo. Um componente pode propor uma conclusão; outro pode aprová-la ou rejeitá-la com evidência. Usa versões ou snapshots para que uma execução saiba que dados leu. Se duas propostas entram em conflito, aplica uma política de reconciliação que preserve as origens, em vez de aceitar cegamente a última.
+
+No exemplo, os especialistas recebem o mesmo contexto textual imutável e o supervisor recebe cópias das propostas. A ordem de recolha é estável, mesmo que as execuções terminem por ordem inversa. Isso facilita reprodução do fluxo; não garante reprodução dos tokens de um modelo.
+
+Em sistemas maiores, um registo de eventos pode conservar atribuição, início, resultado e decisão de integração. Guarda metadados operacionais suficientes e respeita retenção e acesso. Não precisas de gravar uma suposta cadeia de pensamento interna para perceber que uma ferramenta falhou.
+
+\section{Falhas parciais e recuperação}
+Um especialista pode terminar e outro atingir timeout. A síntese pode devolver JSON inválido. Uma ferramenta pode concluir uma escrita e perder a confirmação. Cada situação exige um estado explícito. A frase final «feito» não substitui essas transições.
+
+O exemplo encaminha quando um componente falha, o contrato é inválido ou o orçamento se esgota. Não faz retries ocultos. Em produção, pode haver repetição limitada de operações idempotentes, confirmação do estado de uma operação e compensações próprias do domínio. Uma compensação não é necessariamente desfazer perfeitamente o passado: um email enviado não regressa à caixa do remetente por boa vontade do supervisor.
+
+Timeout de uma chamada, prazo da tarefa e cancelamento efetivo são coisas diferentes. Threads Python em execução não são interrompidas à força pelo controlador. O adaptador HTTP limita cada chamada; um adaptador novo precisa de ter comportamento limitado equivalente. Para isolamento e cancelamento fortes, escolhe processos ou infraestrutura que os suporte.
+
+\section{O orçamento é uma regra do sistema}
+Se cada agente chama outros dois durante cinco níveis, a contagem cresce rapidamente. Limita passos, profundidade, chamadas, tempo e custo no orquestrador. Uma reserva concorrente precisa de ser atómica: dois workers não podem ambos ler «ainda cabe uma chamada» e ultrapassar o limite.
+
+Os testes do exemplo verificam essa concorrência, falha parcial, campos extra, snapshots e bloqueio da síntese com orçamento insuficiente. São testes executados de software. O novo piloto com LLM ficou por executar porque a cópia local do modelo estava incompleta e não pôde ser novamente obtida; o capítulo~\ref{ch:comparar} distingue esse bloqueio da evidência histórica da segunda edição.
+
+\begin{promptlabbox}{A equipa que ficou sem orçamento}
+\textbf{Objetivo e contexto:} observar uma falha controlada sem rede nem modelo. Requisitos: Python 3.10+, apenas biblioteca padrão; módulo \texttt{exemplos.laboratorio.equipas}.
+
+\textbf{Procedimento:} executa a demonstração por omissão. Nos testes, compara modo único, equipa e limite de duas chamadas. Substitui um especialista por uma função que lança timeout e confirma o encaminhamento.
+
+\textbf{Resultado esperado e validação:} com o stub válido, há uma ou três chamadas de componente. Com limite dois, não há síntese nem saída apresentada como válida. Os contadores do stub não são tokens de LLM.
+
+\textbf{Falhas possíveis:} esconder a falha parcial numa resposta eloquente, contar papéis como independência estatística ou anunciar ganho de qualidade a partir de um controlador determinístico.
+\end{promptlabbox}

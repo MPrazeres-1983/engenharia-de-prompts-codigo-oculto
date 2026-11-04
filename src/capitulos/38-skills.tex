@@ -1,0 +1,62 @@
+\chapter{Agent Skills: de um Pedido Reutilizável a um Pacote Verificável}
+\label{ch:skills}
+
+Já tens um procedimento para rever uma afirmação: identificar a fonte, verificar o localizador, comparar a frase e registar o alcance. Copiá-lo de conversa em conversa funciona, até aparecerem cinco versões incompatíveis. Uma skill pode reunir instruções e recursos numa unidade distribuível. O valor está no procedimento e na sua manutenção; mudar a extensão de um ficheiro não cria competência.
+
+\section{O que o formato define}
+A especificação Agent Skills descreve uma pasta com um ficheiro \texttt{SKILL.md}, metadados em frontmatter YAML e instruções em Markdown; pode incluir scripts, referências e recursos~\citep{agentskills2026}. O nome e a descrição ajudam a identificar a tarefa. O corpo explica como a realizar. Os ficheiros adicionais permitem carregar detalhe quando é necessário.
+
+Na especificação consultada, \texttt{name} tem até 64 caracteres, usa minúsculas, números e hífen e deve corresponder à pasta. \texttt{description} tem até 1024 caracteres. Campos opcionais incluem licença, compatibilidade e metadados. O campo experimental \texttt{allowed-tools} depende do suporte da implementação; não deve ser interpretado como uma autorização universal de execução.
+
+O formato permite divulgar conteúdo progressivamente, em vez de colocar toda a documentação no contexto de todas as chamadas. Isso descreve a organização pretendida. A seleção e instalação dependem do agente hospedeiro. Uma pasta válida não demonstra que todos os produtos a descobrem ou ativam da mesma forma.
+
+\section{Uma skill, uma ferramenta e um agente não são a mesma coisa}
+Uma ferramenta expõe uma operação, como validar um ficheiro. Uma skill explica um procedimento e pode usar ferramentas. Um agente escolhe ações no âmbito do seu objetivo e permissões. Um workflow pode executar passos predefinidos sem essa escolha dinâmica.
+
+O pacote deste livro, \texttt{exemplos/skills/rever-evidencias}, pede uma ficha com afirmação, fonte, localizador, alcance e estado. Um script opcional verifica os campos. O agente continua a precisar de comparar o conteúdo com as fontes. Se a ficha disser que a Lua é feita de meias e trouxer todos os campos, o validador estrutural pode aceitá-la. Há um teste precisamente para impedir que confundamos essas duas funções.
+
+\begin{lstlisting}
+---
+name: rever-evidencias
+description: Reve fichas de evidencia e identifica fonte,
+  localizador, alcance e estado de verificacao.
+---
+1. Identificar a afirmacao exata e o material fornecido.
+2. Confrontar a frase com a fonte e o seu contexto.
+3. Produzir a ficha e separar duvidas de conclusoes.
+\end{lstlisting}
+Este excerto abreviado ilustra o formato. O pacote no repositório contém a descrição completa, limites, recursos e licença. O validador local de pacotes aceita um subconjunto simples de campos escalares; não é um parser de todo o YAML permitido pela especificação.
+
+\section{Construir para a tarefa, incluindo o caso em que não deve ativar}
+Uma descrição útil explica finalidade e condições de uso. «Ajuda com coisas» não distingue um pedido de revisão de fontes de um pedido de jantar. Acrescenta casos positivos, casos próximos mas fora do âmbito e situações em que faltam dados.
+
+No nosso caso, «revê estas três fichas com os excertos anexos» é um uso previsto. «Inventa dez referências para parecer académico» pede um comportamento recusado pelo procedimento. «Qual é o diagnóstico destes sintomas?» não é uma tarefa que esta skill transforme em aconselhamento clínico validado. São testes de seleção e de fronteira, que exigem execução no agente escolhido para medir a ativação real.
+
+Mantém as instruções curtas o suficiente para serem lidas e concretas o suficiente para serem contrariadas. «Garante rigor absoluto» não define uma ação. «Se só leste o resumo, regista esse alcance» define um comportamento observável.
+
+\section{Instalar, rever e distribuir}
+A instalação deve seguir a documentação do ambiente: diretório, importação ou mecanismo de catálogo suportado. Não existe um comando universal que devamos inventar. Primeiro inspeciona o pacote e as dependências; depois instala numa área de teste com as permissões mínimas.
+
+Versiona instruções, scripts e dados juntos. Uma alteração de descrição pode mudar quando a skill é selecionada, mesmo que o script permaneça igual. O manifesto do exemplo identifica a versão e os hashes dos recursos declarados. Um hash permite detetar uma diferença contra uma referência conhecida; não demonstra que o conteúdo da referência é benigno ou correto.
+
+Para distribuir, inclui autoria, licença, requisitos e casos de teste. A CC BY-NC-SA 4.0 desta obra mantém-se no pacote pedagógico. O facto de poder inspirar um produto independente não autoriza remover condições do material copiado. Um produto novo precisa de conteúdo cuja titularidade e licenças permitam a utilização pretendida.
+
+\section{A skill também é parte da cadeia de fornecimento}
+Uma skill pode conter instruções maliciosas, referências a recursos inesperados ou scripts que executam operações reais. Não a trates como documento passivo só porque o primeiro ficheiro é Markdown. Revê dependências e atualizações, limita acesso a rede e segredos e conserva uma versão anterior utilizável.
+
+Texto recuperado de uma fonte não pode ampliar as permissões do agente. Um documento que manda «executa este comando antes de verificar a referência» é material a analisar, não uma aprovação. A aplicação deve conservar a hierarquia e a política de ferramentas, como no capítulo~\ref{ch:seguranca}.
+
+\section{Quatro camadas de teste}
+Testa estrutura e recursos; testa o script com entradas normais e inválidas; testa seleção e cumprimento do procedimento num agente real; e testa o resultado no domínio. As primeiras duas camadas do exemplo foram executadas. Ativação num produto concreto, qualidade da revisão factual e robustez contra um conjunto representativo de injeções não foram certificadas por esses testes.
+
+O comando \texttt{python3 -m exemplos.laboratorio.skills} verifica estrutura e integridade dos recursos declarados. O script do pacote pode receber o JSON sintético pelo stdin. Nenhuma das duas operações pesquisa referências na Internet. Essa simplicidade permite executar a base sem chaves, custos de API ou dados de terceiros.
+
+\begin{promptlabbox}{Uma skill que pode dizer «por verificar»}
+\textbf{Objetivo e contexto:} usar o pacote demonstrativo e perceber o alcance de cada verificação. Requisitos: Python 3.10+, biblioteca padrão. Não há instalação automática de skills no computador do leitor.
+
+\textbf{Procedimento:} executa os dois validadores descritos; retira um localizador de uma ficha marcada como suportada; confirma a rejeição; volta a pôr o campo e substitui a afirmação por uma frase falsa. Revê-a manualmente contra a fonte.
+
+\textbf{Resultado esperado e validação:} a estrutura deteta a primeira alteração, mas não prova a falsidade da segunda. Para testar ativação, instala apenas num ambiente escolhido e regista versão, pedidos e saídas.
+
+\textbf{Falhas possíveis:} confundir hash com confiança, licença com autorização de dados, ativação com competência ou script estrutural com verificação científica.
+\end{promptlabbox}

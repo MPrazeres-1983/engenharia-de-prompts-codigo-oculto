@@ -43,6 +43,7 @@ def main():
     p.add_argument('--base-url', default='http://127.0.0.1:8766')
     p.add_argument('--modelo', default='Qwen2.5-0.5B-Instruct-Q4_K_M')
     p.add_argument('--modelo-ficheiro', type=Path, required=True)
+    p.add_argument('--sha256-esperado', default='74a4da8c9fdbcd15bd1f6d01d621410d31c6fc00986f5eb687824e7b93d7a9db')
     p.add_argument('--output', type=Path, required=True)
     args = p.parse_args()
     args.output.mkdir(parents=True, exist_ok=True)
@@ -50,18 +51,22 @@ def main():
     if any(args.output.iterdir()):
         p.error('Pasta não vazia; preservar ensaios anteriores')
     modelo_hash = hashlib.sha256(args.modelo_ficheiro.read_bytes()).hexdigest()
+    if modelo_hash != args.sha256_esperado:
+        p.error('Hash do modelo diferente da referência; nenhuma inferência foi iniciada')
     manifesto = {'data_utc': datetime.now(timezone.utc).isoformat(),
                  'modelo': args.modelo, 'sha256_modelo': modelo_hash,
                  'plataforma': platform.platform(), 'seeds': list(SEEDS),
                  'casos': CASOS, 'inferencias_planeadas': 32,
                  'temperatura': 0.2, 'max_tokens': 96,
-                 'runtime': 'llama.cpp b11960', 'threads': 4, 'parallel': 2,
-                 'ctx_size_servidor': 8192, 'gpu_layers': 0,
+                 'configuracao_servidor_a_confirmar_pelo_operador': {
+                     'runtime': 'llama.cpp b11960', 'threads': 4, 'parallel': 2,
+                     'ctx_size_servidor': 8192, 'gpu_layers': 0},
                  'sha256_fonte': {f: hashlib.sha256((RAIZ/f).read_bytes()).hexdigest()
                      for f in ['experiencias/equipas/executar.py', 'exemplos/laboratorio/equipas.py']},
                  'limites': 'Piloto sintético com quatro casos, duas seeds e o mesmo modelo pequeno. '
                  'Sem humanos, teste reservado, efeitos externos ou equivalência de custo entre arquiteturas. '
-                 'Segundos incluem fila e execução; não são benchmark isolado de paralelismo.'}
+                 'Segundos incluem fila e execução; não são benchmark isolado de paralelismo. '
+                 'O operador deve confirmar nos logs que o servidor carregou este ficheiro e configuração.'}
     (args.output/'manifesto.json').write_text(json.dumps(manifesto, ensure_ascii=False, indent=2)+'\n')
     registos = []
     for id_, pedido, categoria, fonte in CASOS:

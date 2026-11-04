@@ -91,6 +91,11 @@ class ClienteLocal:
         self.url = base_url.rstrip('/') + '/v1/chat/completions'
         self.modelo, self.timeout = modelo, timeout
         self.registos, self._lock = [], Lock()
+        class SemRedirecionamento(urllib.request.HTTPRedirectHandler):
+            def redirect_request(self, req, fp, code, msg, headers, newurl):
+                raise ValueError('Redirecionamento recusado no exercício local')
+        self._abrir = urllib.request.build_opener(
+            urllib.request.ProxyHandler({}), SemRedirecionamento())
 
     def __call__(self, papel, pedido, contexto, seed):
         enfoques = {'unico': 'Classifica e seleciona uma fonte pertinente.',
@@ -112,7 +117,7 @@ class ClienteLocal:
         try:
             req = urllib.request.Request(self.url, data=json.dumps(corpo).encode(),
                                          headers={'Content-Type': 'application/json'})
-            with urllib.request.urlopen(req, timeout=self.timeout) as resposta:
+            with self._abrir.open(req, timeout=self.timeout) as resposta:
                 bruto = resposta.read(1_000_001)
             if len(bruto) > 1_000_000:
                 raise ValueError('Resposta demasiado grande')
