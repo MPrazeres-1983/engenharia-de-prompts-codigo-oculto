@@ -2,19 +2,37 @@
 
 Atualização: 04-11-2026. Branch `terceira-edicao-ia-referencia-2026`. [PR #2 em Draft](https://github.com/MPrazeres-1983/engenharia-de-prompts-codigo-oculto/pull/2).
 
-**Estado global: manuscrito ampliado e tecnicamente validado, ainda em desenvolvimento.** Foram integrados 50 capítulos em dez partes, incluindo 21 novos, três apêndices, 73 Prompt Labs, 73 referências e 58 entradas de glossário. O PDF tem 268 páginas físicas, incluindo capa e preliminares. Não se declara a obra concluída, pronta para publicação ou aprovada para merge.
+**Estado atual: manuscrito ampliado e revisto em dois ciclos, ainda em desenvolvimento.** Tem 50 capítulos em dez partes, incluindo 21 novos, três apêndices, 73 Prompt Labs, 87 referências e 58 entradas de glossário. O segundo ciclo revê 16 capítulos e amplia o PDF de 268 para 299 páginas físicas, incluindo capa e preliminares. Os 70 testes passaram. Não se declara a obra concluída, pronta para publicação ou aprovada para merge.
+
+## Checkpoint G — progressão, narrativa e aprofundamento
+
+O autor autorizou continuar em 04-11-2026, com progressão do básico à especialização, rigor factual, humor e leitura envolvente. Base da retoma confirmada `e990b891`; `main` continua em `975ade8`. A orientação encontra-se em `V3_LINHA_NARRATIVA.md` e não envolve imitação de personagens, enredos ou prosa de outros autores.
+
+Concluído neste ciclo:
+
+- Revistos os ficheiros 01, 07, 30–33, 38–39, 41–47 e 49: 16 capítulos. Aberturas e transições aproximam problema, mecanismo, experiência e consequência. Há percursos de intuição e aprofundamentos opcionais, sem pressupor que o leitor já domina a notação.
+- A Lavandaria ganhou uma investigação recorrente sobre informação ausente e custo de revisão. História, saúde, persuasão, aprendizagem e energia usam entradas diferentes. Ficção, exemplos sintéticos e estudos publicados estão identificados; a curiosidade narrativa não altera o alcance das conclusões.
+- Corrigida a promessa errada de que a primeira conversa surgia logo após o primeiro capítulo. Clarificadas transformações afins, máscaras causais, multicabeça, alinhamento e as diferenças entre métricas condicionais e consequências.
+- Desenvolvidos os cinco capítulos de sociedade com estudos e decisões: PRAIM, proxy de custos em saúde, generalização de imagens agrícolas, inspeção industrial, persuasão, tutor de física e contabilização de recursos. As 14 fontes adicionais e os limites de consulta estão no registo; a bibliografia composta tem 87 entradas.
+- Executados novos exemplos de XOR e reforço, contas de decisão, produtividade e energia, e treino de um adaptador linear de posto um. Dados, configuração, resultado e hash do código do treino estão em `experiencias/adaptacao_linear`. O exemplo distingue um alvo representável de outro cujo mínimo de perda é 0,25. Não é treino de LLM.
+- **70 testes passaram**, mais 18 que no ciclo anterior. Compilação, estrutura, remissões, citações e sintaxe Python passaram. A composição final e a inspeção visual estão descritas em `V3_VALIDACAO.md`.
+
+O piloto de equipa com LLM continua bloqueado. A nova tentativa de ligação ao modelo oficial terminou por timeout, sem bytes recebidos. Não foram executados participantes humanos, produção multimédia ou fine-tuning de LLM. O adaptador linear não preenche essas linhas de resultado.
+
+### Próximo passo exato após este ciclo
+
+1. Confirmar o HEAD, ler este checkpoint e continuar na mesma branch e no PR #2. Não recomeçar a auditoria nem reescrever os 21 capítulos novos como se estivessem ausentes.
+2. Desenvolver e executar um projeto criativo completo da Parte IV, com materiais próprios ou autorizados, caminho sem código, ficheiros finais e critérios de continuidade, legibilidade e direitos. Integrar resultados observados e manter os restantes projetos como propostas até à execução.
+3. Acrescentar um caso empírico pormenorizado de justiça/serviço público com fonte primária e um caso de operação/incidente. A discussão normativa e as contas sintéticas atuais não são estudos desses serviços.
+4. Prosseguir a revisão de progressão e estilo nos restantes capítulos, por conjuntos coerentes, sem transformar cada abertura num diálogo ou cada fecho numa promessa. Submeter percursos de leitura a leitores quando houver participantes reais.
+5. Se houver uma cópia íntegra do modelo, confirmar hash e runtime e executar o piloto fechado numa pasta nova. Se o bloqueio persistir, conservar esse estado e continuar o trabalho editorial independente dele. Não substituir o ensaio por um stub.
+6. Reavaliar profundidade, evidência e critérios de aceitação antes de retirar o estado de desenvolvimento. Título comercial, revisão humana, publicação e merge continuam reservados ao autor.
+
+## Histórico do primeiro ciclo
+
+As secções A–F abaixo preservam o diagnóstico e a primeira entrega. Os seus valores de 268 páginas, 73 referências e 52 testes são históricos e foram superados pelo checkpoint G.
 
 ## Checkpoint A — diagnóstico e arquitetura
-
-### Retoma em curso: progressão e narrativa
-
-O autor autorizou continuar em 04-11-2026, com progressão do básico à especialização, rigor factual, humor e leitura envolvente. Base confirmada `e990b891`; `main` continua em `975ade8`. A orientação está em `V3_LINHA_NARRATIVA.md`.
-
-Já escritos: abertura investigativa original, história com fontes adicionais, camadas de explicação nos fundamentos e transições coerentes com a ordem real. O primeiro capítulo já não promete a primeira conversa num capítulo que afinal trata de história. Os aprofundamentos matemáticos são identificados como opcionais na primeira passagem.
-
-Já executados: XOR construído, retorno e atualização Q, taxas condicionais, produtividade e energia sintéticas. **65 testes passaram** no conjunto completo. O commit remoto `7bf38ddb` guarda o código e os testes. A primeira compilação desta retoma passou com 277 páginas; ainda não é a composição final do ciclo. A bibliografia contém 14 entradas novas consultadas, a integrar nos casos setoriais.
-
-Em curso: aprofundamento dos cinco capítulos da Parte VIII. Por fazer neste ciclo: fechar texto, compilar novamente, inspecionar PDF, atualizar contagens e confirmar CI do HEAD final. Os números de 268 páginas e 52 testes noutras secções deste registo descrevem o checkpoint anterior.
 
 - Concluído: estado real do GitHub, PR #1 integrado, inexistência inicial da branch V3, criação da branch a partir de `975ade8`.
 - Concluído: cópia local com a mesma árvore Git da base; leitura integral dos 29 capítulos e três apêndices; inspeção de bibliografia, validação estática, workflow e demonstração.
@@ -50,7 +68,7 @@ Foram corrigidas generalizações sobre recência de contexto, few-shot, unimoda
 - Implementado, mas bloqueado antes da primeira inferência: piloto local novo com 32 chamadas de modelo planeadas. O runtime recusou a cópia incompleta do modelo; a tentativa de obter outra cópia falhou por ligação indisponível. Tamanho, hashes, erro e protocolo estão em `experiencias/equipas/README.md`. Nenhum resultado foi preenchido por simulação.
 - Propostos, sem alegação de execução: treino LoRA/QLoRA, estudo com pessoas, produção multimédia e instalação/ativação real da skill. Os exemplos offline não precisam de API paga.
 
-## Checkpoints E e F — integração e entrega de trabalho
+## Checkpoints E e F — integração e primeira entrega de trabalho
 
 Compilação LaTeX/BibTeX, validação estrutural, citações, referências cruzadas e verificações do log passaram. Inspeção das 268 páginas em quatro folhas de contacto, revisão ampliada de 20 páginas e verificação geométrica de todos os blocos de texto não identificaram cortes ou extravasamentos. Não substituem revisão científica ou leitura editorial integral da edição composta.
 
@@ -72,10 +90,16 @@ SHAs abaixo são do GitHub, não da cópia local usada para preparar as alteraç
 | `1c2bf631` | Sociedade, evidência de impacto e cenários |
 | `deed918a` | Integração em dez partes, revisão de capítulos, 73 labs e CI |
 | `29364b65` | Correções tipográficas após composição |
+| `e990b891` | Checkpoint da primeira entrega, fontes e pendências |
+| `7bf38ddb` | Contas de XOR, reforço, decisão e custos com testes |
+| `9c48cbbd` | Progressão narrativa, fundamentos e fontes adicionais |
+| `ddea97f6` | Aprofundamento de trabalho, ciência, informação, relações e energia |
+| `5d4ec49b` | Treino linear de baixo posto e resultado reproduzível |
+| `2e0a2e26` | Pontes da intuição à especialização e laboratório integrado |
 
 O checkpoint final de documentação sucede a estes commits; o SHA pode ser obtido no HEAD da branch e na folha de rosto do PDF correspondente.
 
-## Próximo passo exato
+## Próximo passo registado no primeiro ciclo
 
 1. Verificar o HEAD e este checkpoint; continuar nesta branch e neste PR. Não reproduzir a auditoria nem reescrever os 21 capítulos como se não existissem.
 2. Obter uma cópia íntegra do modelo indicado, confirmar o SHA-256 e a revisão do runtime, iniciar o servidor local e executar o piloto descrito em `experiencias/equipas/README.md` numa pasta nova. Se continuar bloqueado, conservar esse estado; não substituir inferências por stubs.

@@ -12,6 +12,8 @@ A capa ilustrada original fica preservada como imagem histórica; a folha de ros
 
 ## Princípios de produção
 
+Na retoma de 04-11-2026, o autor reforçou a progressão do básico à especialização e uma leitura com curiosidade, investigação e humor pontual. A aplicação está documentada em `V3_LINHA_NARRATIVA.md`. Casos e diálogos originais podem envolver o leitor; não substituem fontes, medições ou declarações de incerteza. O livro mantém a arquitetura de dez partes e apresenta aprofundamentos matemáticos opcionais na primeira leitura.
+
 Ler o manuscrito existente antes de o mover; conservar explicações corretas e dados experimentais. Números nos nomes dos ficheiros são identificadores históricos, não a ordem final dos capítulos. `src/livro.tex` determina a ordem, e labels determinam as referências. Não renomear caminhos só por estética.
 
 Introduzir progressivamente os conceitos; oferecer um percurso rápido que leve à primeira conversa antes da matemática. Usar o corpo principal para explicação e os laboratórios para experimentação. Não acrescentar páginas por formatação, capítulos vazios ou listas de ferramentas. O intervalo 450–600 páginas é indicativo, nunca um teste de aceitação automatizado.

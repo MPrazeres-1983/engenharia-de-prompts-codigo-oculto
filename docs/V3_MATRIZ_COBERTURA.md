@@ -124,3 +124,18 @@ Os identificadores de ficheiros abaixo não são os números impressos dos capí
 | Padrões, glossário e fontes — A–C | Suficientemente coberto | Termos corrigidos, 58 entradas; 73 referências e remissões verificadas |
 
 As necessidades iniciais de atualização e reorganização foram tratadas nesta integração; continuam no registo inicial para rastreabilidade. Não há partes vazias ou capítulos apenas com títulos. Isso não basta para a profundidade pretendida de uma obra de referência. O próximo ciclo deve desenvolver os temas assinalados, sem aumentar páginas por repetição, figuras decorativas ou alterações de formatação.
+
+## Segundo ciclo — progressão e profundidade
+
+Retoma de `e990b891`, em 04-11-2026. A extensão passa a 299 páginas, mantendo 50 capítulos e 73 laboratórios. A bibliografia composta passa a 87 referências e os testes a 70. Esta reavaliação complementa as tabelas anteriores; não reescreve o diagnóstico histórico.
+
+| Área | O que foi resolvido neste ciclo | O que continua por validar ou aprofundar |
+|---|---|---|
+| Entrada e história | Caso investigativo original, informação ausente, exemplos iniciais, marcos documentados e transições reais | Revisão com leitores e maior desenvolvimento histórico, se necessário à edição final |
+| Fundamentos | Notação comentada, gradiente, XOR, retorno/Q, máscara causal, multicabeça e conta de difusão | Exercícios mais amplos com ruído e avaliação fora da distribuição; não foi treinado um Transformer |
+| Skills e equipas | Caso de ficha falsa completa, fronteira semântica, correlação de erros, fila e paralelismo | Instalação/ativação e comparação com LLM ainda não executadas |
+| Adaptação e execução local | Adaptador linear treinado, gradientes numericamente verificados, limite de posto demonstrado; margem e limiar de quantização | Fine-tuning de LLM e medições de hardware reais continuam por executar |
+| Sociedade | Estudos e decisões desenvolvidos em saúde, agricultura, indústria, educação e persuasão; contas de prevalência, custos e energia | Caso empírico completo em justiça/serviço público, revisão dos domínios e maior cobertura geopolítica |
+| Laboratório e progressão | Projeto 5 integra aprendizagem, adaptação e erro de representação; percurso da intuição à especialização explícito | Produção criativa, experiência com participantes e validação da leitura continuam pendentes |
+
+Os capítulos revistos são os ficheiros 01, 07, 30–33, 38–39, 41–47 e 49. Não se declara uma reescrita narrativa completa dos restantes 34 capítulos. A apreciação de prazer de leitura e suficiência editorial requer leitura humana; não é inferida a partir do build ou da contagem de páginas.

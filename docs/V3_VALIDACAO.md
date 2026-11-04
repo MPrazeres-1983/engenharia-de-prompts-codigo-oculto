@@ -2,6 +2,43 @@
 
 Data: 04-11-2026. Este ficheiro distingue a base existente das alterações V3.
 
+## Checkpoint G — segundo ciclo, progressão e narrativa
+
+Retoma verificada a partir de `e990b891`. Foram revistos 16 capítulos e a nota editorial, com novos casos, mecanismos e aprofundamentos. A estrutura mantém dez partes, 50 capítulos, três apêndices e 73 laboratórios. **A composição atual tem 299 páginas e 87 entradas bibliográficas; 70 testes passaram.** O trabalho continua Draft e não está aprovado para publicação ou merge.
+
+| Verificação executada neste ciclo | Resultado |
+|---|---|
+| Compilação LaTeX/BibTeX | 299 páginas; recompilação limpa bem-sucedida |
+| Estrutura e log | 50 capítulos, 73 labs, 87 referências, quatro JSON de exemplos; zero erros do verificador |
+| `unittest discover` | 70 passaram: 30 de Lavandaria, 12 de fundamentos, seis de skills, oito de equipa, nove de decisão e cinco de adaptação |
+| `compileall` | Passou para exemplos, scripts, testes e experiências |
+| XOR, retorno e Q | Tabela e contas executadas; não se declarou treino de uma política RL |
+| Decisão, tempo e energia | Frações e unidades conferidas em cenários sintéticos; sem dados clínicos ou telemetria elétrica |
+| Adaptador linear | Base 2×2 preservada; gradientes conferidos por diferenças finitas; alvo representável com MSE abaixo de 1e-12 |
+| Limite de capacidade | No segundo alvo, perda de 0,5 para 0,25, compatível com limite demonstrado para o conjunto construído |
+| Resultado da adaptação | Dados, configuração e pesos guardados; SHA-256 do código conferido com o ficheiro executado |
+| Bibliografia composta e glossário | 87 `bibitem` e 58 entradas de glossário |
+
+O resultado do adaptador está em `experiencias/adaptacao_linear/resultado-2026-11-04.json`; requisitos e limites no README adjacente. É treino de fatores de uma transformação linear, não LoRA/QLoRA de um LLM. Os três casos reservados são construídos a partir de uma relação exatamente representável, sem pretensão de validade externa.
+
+### Inspeção visual e falha incremental resolvida
+
+As 299 páginas foram inspecionadas em cinco folhas de contacto e verificadas geometricamente, sem blocos de texto fora da página. Foram também vistas ampliadas 23 páginas físicas: 2, 3, 15, 20, 21, 26, 30, 41, 42, 199, 201, 202, 205, 238, 244, 245, 247, 252, 253, 258, 259, 262 e 295. A amostra inclui aberturas, máscara e softmax, XOR, LoRA e prova de limite, tabelas de prevalência/aprendizagem, memória, energia e referências. Não foram identificados cortes, sobreposições ou fórmulas/tabelas ilegíveis. O texto das páginas alteradas na última revisão tipográfica foi novamente visto.
+
+Uma compilação incremental local falhou ao ler um `.aux` com 4096 bytes, terminado a meio de `\\@writefile`. A origem do truncamento não foi determinada. A limpeza dos ficheiros gerados com `latexmk -c -cd src/livro.tex`, seguida de recompilação, produziu o PDF completo; o `.aux` final tem 87775 bytes e termina com o total de páginas. O verificador do log passou depois da recuperação. Não foi necessário retirar conteúdo ou contornar uma validação.
+
+Esta inspeção é tipográfica e amostral; não demonstra prazer de leitura ou substitui revisão científica/editorial integral. Os casos ficcionais e os cálculos próprios foram separados dos resultados publicados. As 14 fontes adicionadas têm o alcance registado, sem alegação de leitura integral de todos os estudos.
+
+### CI e bloqueios atuais
+
+Na revisão de conteúdo `2e0a2e26983d658fb97c013e310aacf80a11a2c1`, passaram [o push 41930823603](https://github.com/MPrazeres-1983/engenharia-de-prompts-codigo-oculto/actions/runs/41930823603) e [o PR 41930831649](https://github.com/MPrazeres-1983/engenharia-de-prompts-codigo-oculto/actions/runs/41930831649). O checkpoint final acrescenta documentação, clarificação de proveniência na nota e agrupamento tipográfico de números; aciona nova CI, cujo estado do HEAD fica no PR. O workflow executa também `decisoes` e `adaptacao` e guarda as saídas nos artefactos.
+
+O novo piloto LLM continua com zero inferências: a segunda tentativa de ligação ao modelo oficial terminou em timeout sem bytes recebidos. Os 52 registos reais históricos permanecem separados e íntegros. Não há estudo com participantes, treino de LLM, medição de hardware ou produção multimédia novos para apresentar como concluídos. O treino linear e os 70 testes não preenchem essas lacunas.
+
+## Histórico da primeira entrega V3
+
+As verificações seguintes conservam a base e o primeiro ciclo: os seus números de páginas, referências e testes são históricos. O estado atual consta do checkpoint G acima.
+
 ## Base, antes de alterações ao manuscrito
 
 | Verificação executada | Resultado |
@@ -13,7 +50,7 @@ Data: 04-11-2026. Este ficheiro distingue a base existente das alterações V3.
 
 Não foi necessária nova execução das 52 inferências históricas. A segunda edição tem evidência de CI no PR #1; essa evidência não valida alterações V3 ainda não produzidas.
 
-## V3 — verificação executada
+## Primeiro ciclo V3 — verificação executada
 
 Revisão de conteúdo no GitHub: `29364b6558ce40426f5e682058ad97f698bc40b7`. A atualização posterior de README e checkpoints não altera o manuscrito ou o código. O PDF identifica a revisão da branch usada para o compor; na CI o checkout e a identificação usam o HEAD real do PR, não o commit de merge sintético do GitHub.
 

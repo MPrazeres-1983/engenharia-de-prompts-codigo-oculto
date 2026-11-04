@@ -10,6 +10,8 @@ A tentativa de ligação à revisão oficial do modelo terminou com `Proxy CONNE
 
 Isto não altera os registos históricos de 03-11-2026, que continuam na pasta `llm_local`, com respostas e hashes verificáveis. Não prova que o ficheiro estava incompleto quando essas execuções foram feitas. Prova que a cópia disponível nesta sessão não permitia iniciar o novo ensaio.
 
+Na retoma editorial do mesmo dia, a ligação à revisão fixada foi novamente tentada e terminou com `curl: (28) Operation timed out after 5010 milliseconds with 0 bytes received`. O estado continua bloqueado, sem inferências novas. O treino de adaptação linear 2×2 em `experiencias/adaptacao_linear` é outra experiência, executada sem esse modelo; não completa este piloto.
+
 ## Desenho fechado antes da tentativa
 
 Quatro pedidos sintéticos, duas seeds (42 e 1337), três modos. O fluxo usa regras, sem LLM. A chamada única usa um LLM. A equipa usa duas chamadas de especialistas em paralelo, com o mesmo snapshot, e uma síntese. No total estão planeadas 32 chamadas reais de modelo, com contexto novo, temperatura 0.2 e máximo de 96 tokens por chamada.

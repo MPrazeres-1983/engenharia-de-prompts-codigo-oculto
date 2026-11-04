@@ -22,9 +22,9 @@ Num exemplo hipotético com 32 camadas, oito cabeças KV, dimensão 128, 4096 to
 Ainda faltam ativações, buffers, runtime e memória de outros processos. Para treino faltam também estruturas como estados de otimizador e gradientes. Não concluas que o modelo cabe numa placa de quatro GB porque a soma ideal parece próxima desse número.
 
 \section{A margem desaparece antes do ficheiro}
-Vamos manter os valores hipotéticos e assumir uma reserva exata de 4 GiB, isto é, 4294967296 bytes. Os pesos ideais e a cache de 4096 tokens somam 4036870912 bytes. Sobram 258096384 bytes, cerca de 246 MiB, antes de contar as parcelas excluídas. Esta reserva é uma construção matemática, não a memória disponível de um computador ou GPU identificados.
+Vamos manter os valores hipotéticos e assumir uma reserva exata de 4 GiB, isto é, $4\,294\,967\,296$ bytes. Os pesos ideais e a cache de 4096 tokens somam $4\,036\,870\,912$ bytes. Sobram $258\,096\,384$ bytes, cerca de 246 MiB, antes de contar as parcelas excluídas. Esta reserva é uma construção matemática, não a memória disponível de um computador ou GPU identificados.
 
-Se duplicarmos o contexto para 8192 tokens nas mesmas condições, a parcela KV duplica para 1073741824 bytes. A soma com os pesos já passa para 4573741824 bytes, acima da reserva hipotética. O ficheiro dos pesos não cresceu. Cresceu o estado necessário à sequência.
+Se duplicarmos o contexto para 8192 tokens nas mesmas condições, a parcela KV duplica para $1\,073\,741\,824$ bytes. A soma com os pesos já passa para $4\,573\,741\,824$ bytes, acima da reserva hipotética. O ficheiro dos pesos não cresceu. Cresceu o estado necessário à sequência.
 
 O exemplo explica por que «consegui carregar» e «consigo executar a tarefa pretendida» são verificações diferentes. O contexto, a geração e o número de sequências podem mudar a utilização de memória depois do carregamento. Uma aplicação precisa de margem medida sob o perfil de trabalho que vai servir.
 
