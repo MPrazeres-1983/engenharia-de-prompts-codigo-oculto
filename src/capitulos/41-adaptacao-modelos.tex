@@ -1,0 +1,75 @@
+\chapter{Adaptar um Modelo: Prompting, RAG, Fine-Tuning e Distilação}
+\label{ch:adaptacao}
+
+O assistente conhece a política porque está no contexto, mas continua a usar a categoria errada. Alguém propõe fine-tuning. Pode fazer sentido; também pode haver um critério contraditório ou um erro no parser. Alterar os pesos antes de perceber a falha é como trocar a máquina de lavar porque o talão tem uma gralha.
+
+\section{Escolher a intervenção pelo problema}
+Prompting muda instruções e exemplos da chamada. RAG muda o acesso a evidência externa. Fine-tuning ajusta parâmetros de um modelo já treinado. Ferramentas permitem operações como consultar registos ou calcular. São intervenções diferentes e podem ser combinadas.
+
+\begin{table}[htbp]
+\small
+\begin{tabularx}{\textwidth}{@{}XXX@{}}
+\toprule
+Falha observada & Primeira comparação razoável & O que precisa de ser medido \\
+\midrule
+Falta informação atual & Fonte no contexto ou recuperação & Relevância, versão e suporte da resposta \\
+Formato inconsistente & Esquema e validação externa & Estrutura, recusas e conteúdo \\
+Comportamento repetitivo difícil de especificar & Exemplos e eventual fine-tuning & Acerto em casos novos e regressões \\
+Cálculo exato errado & Ferramenta determinística & Resultado, unidades e fronteiras \\
+Custo ou latência excessivos & Modelo menor, cache ou distilação & Custo por tarefa aceite e erros novos \\
+\bottomrule
+\end{tabularx}
+\caption{Pontos de partida de engenharia, não uma regra universal de seleção.}
+\end{table}
+
+Se a política muda diariamente, não queremos ter de treinar novamente para corrigir uma frase. Se a dificuldade é executar sempre uma tarefa especializada com exemplos suficientes, um ajuste pode merecer comparação. Primeiro constrói uma base simples e reserva avaliação independente.
+
+\section{Fine-tuning é um processo de dados}
+Num ajuste supervisionado de linguagem, usamos pares de entrada e resposta ou sequências formatadas segundo o modelo. A perda orienta atualizações de parâmetros. O formato de mensagens, a tokenização e as posições incluídas na perda fazem parte da implementação; copiar exemplos de outro modelo pode produzir treino errado sem erro de sintaxe.
+
+Recolhe casos de tarefas autorizadas, revê etiquetas e elimina duplicados que contaminem a avaliação. Conserva casos de recusa e informação insuficiente. Se só mostras exemplos em que existe uma resposta, podes ensinar um comportamento que responde mesmo quando falta a fonte.
+
+Dados sintéticos podem alargar variações, mas precisam de revisão e de origem registada. Cem paráfrases da mesma mensagem não equivalem a cem situações de negócio independentes. Uma avaliação deve incluir fenómenos não usados para fabricar os exemplos de treino.
+
+O plano de treino regista modelo e revisão, licença, dados, partições, objetivo, hiperparâmetros, sementes, versões e recursos. Guarda checkpoints e compara com a base antes de decidir se o novo modelo merece ser conservado. Mais passos podem reduzir a perda de treino e piorar o desempenho reservado.
+
+\section{LoRA: aprender uma atualização pequena}
+LoRA congela pesos base e aprende uma atualização de baixo posto~\citep{hu2022lora}. Para uma matriz $W\in\mathbb R^{d_{out}\times d_{in}}$, podemos escrever
+\[
+W'=W+\frac{\alpha}{r}BA,
+\quad A\in\mathbb R^{r\times d_{in}},\quad B\in\mathbb R^{d_{out}\times r}.
+\]
+O posto escolhido $r$ limita a forma desta atualização. Treinar $A$ e $B$ exige $r(d_{in}+d_{out})$ parâmetros, em vez de ajustar todos os de $W$. A economia concreta depende das matrizes selecionadas e do resto do processo.
+
+Para $W$ de $4096\times4096$ e $r=8$, há $16\,777\,216$ elementos na matriz base e $65\,536$ nos dois fatores. A contagem é 256 vezes menor para essa atualização, não para toda a memória de treino. Ativações, gradientes dos adaptadores, estados do otimizador e pesos base continuam a consumir recursos.
+
+Um adaptador precisa da base compatível. Misturar revisões pode invalidar o resultado. Fundir a atualização nos pesos pode ser uma opção de implementação; verifica o efeito na precisão, formato e capacidade de trocar adaptadores. A existência de um ficheiro pequeno não demonstra que a distribuição inclua todos os direitos e dependências necessários.
+
+\section{QLoRA: quantizar a base e treinar adaptadores}
+QLoRA descreve treino de adaptadores através de uma base congelada quantizada a quatro bits, com escolhas como NF4, dupla quantização e gestão de memória~\citep{dettmers2023}. Não significa que todas as operações e todos os dados do treino existam a quatro bits. A precisão de cálculo e as estruturas auxiliares fazem parte da configuração.
+
+O resultado publicado pertence aos modelos, dados e avaliações estudados. Não transforma a capacidade de uma GPU numa promessa para qualquer sequência, lote ou runtime. Para planear um ensaio, mede o pico de memória e o tempo com a configuração concreta, e inclui falhas por falta de memória no registo.
+
+Nesta edição, as fórmulas e contagens são explicadas e os cálculos elementares têm exemplos executáveis. Não foi executado um treino LoRA ou QLoRA de um LLM. O procedimento seguinte é uma proposta de trabalho para um ambiente com recursos e modelo íntegro, não um resultado experimental já obtido.
+
+\section{Distilar comportamento para outra máquina}
+Distilação treina um modelo a aproximar comportamento de um professor ou conjunto de professores. O trabalho de Hinton, Vinyals e Dean é uma referência original desta abordagem~\citep{hinton2015}. Podem usar-se distribuições de saída ou respostas produzidas, consoante o método. O aluno não recebe uma garantia de herdar toda a competência do professor.
+
+Escolhe os exemplos pela tarefa e verifica qualidade. Um professor que fabrica referências pode ensinar esse mesmo hábito. As condições de utilização das saídas e do modelo também precisam de permitir o processo. «Consegui obter a resposta» não é uma licença de treino.
+
+Depois compara aluno, professor e base pequena não adaptada nos mesmos casos. Mede custo total, correção, abstinência e erros críticos. Um aluno que aproxima a redação mas falha sistematicamente uma exceção não concluiu a tarefa.
+
+\section{Aceitar uma adaptação e poder voltar atrás}
+Além da métrica principal, inclui formato, instruções de segurança, capacidade geral necessária e grupos de casos raros. A mudança pode causar esquecimento ou degradar capacidades que o projeto usava implicitamente. Testa também privacidade: não queremos um ajuste que memorize dados pessoais e os devolva fora de contexto.
+
+Versiona o conjunto completo que será servido: base, adaptador, tokenizador, templates, parâmetros e validação. Um rollback precisa desses elementos compatíveis. A diferença entre prompting e treino não elimina o ciclo de mudança controlada do capítulo~\ref{ch:llmops}.
+
+\begin{promptlabbox}{Preparar um ajuste que ainda possa ser reprovado}
+\textbf{Objetivo e contexto:} desenhar um ensaio para classificar pedidos fictícios. Requisitos fundamentais: editor de texto e os exemplos de avaliação existentes; nenhum treino pago é necessário.
+
+\textbf{Procedimento:} define uma base com prompting; cria desenvolvimento e teste com situações distintas; escreve critérios de aceitação e de regressão; calcula parâmetros de uma atualização LoRA; identifica as medições que faltariam num treino real.
+
+\textbf{Resultado esperado e validação:} o plano permite rejeitar a adaptação se não melhorar a tarefa dentro do custo e risco definidos. O cálculo de parâmetros não é apresentado como memória total nem como treino executado.
+
+\textbf{Falhas possíveis:} treinar a política que devia ser consultada, contaminar o teste com paráfrases de treino ou escolher a melhor seed depois de ver os resultados.
+\end{promptlabbox}
