@@ -65,7 +65,7 @@ Há outra distinção a conservar: um score e uma probabilidade bem calibrada n�
 Precisão de classificação e consequências também se separam. Numa triagem, encaminhar um pedido simples para revisão pode custar tempo; ignorar um pedido urgente pode ter um custo diferente. Escolher um limiar é escolher um compromisso entre erros. Os capítulos~\ref{ch:avaliacao} e~\ref{ch:ciencia} abrirão essa conta. O acerto médio, sozinho, não escolhe a decisão por nós.
 
 \section{De uma unidade a uma rede profunda}
-Uma unidade simples calcula uma combinação de entradas e aplica uma função: $h=\sigma(Wx+b)$. Compor camadas permite representações mais flexíveis do que uma única transformação linear. Sem não linearidades, uma sequência de transformações lineares continua a ser linear. A palavra «profunda» descreve camadas, não profundidade filosófica.
+Uma unidade simples calcula uma combinação de entradas e aplica uma função: $h=\sigma(Wx+b)$. A soma de uma transformação linear com um termo constante é uma transformação afim. Sem funções de ativação não lineares, compor estas transformações continua a produzir uma transformação afim. As camadas ganham flexibilidade de representação ao combinar operações apropriadas, incluindo não linearidades. A palavra «profunda» descreve camadas, não profundidade filosófica.
 
 Parâmetros são valores aprendidos; hiperparâmetros são escolhas que configuram o processo, como taxa de aprendizagem e largura. Retropropagação calcula derivadas através da composição. Nada disto exige interpretar uma unidade como um pequeno ser humano. Para perceber o Transformer mais à frente, basta conservar a ligação entre representação, objetivo e atualização.
 

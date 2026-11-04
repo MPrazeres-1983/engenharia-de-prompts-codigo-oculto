@@ -57,13 +57,13 @@ Em cada projeto guarda entrada, objetivo, critérios, versões, saída, avaliaç
 \end{promptlabbox}
 
 \begin{promptlabbox}{Projeto 5 — Uma máquina pequena que aprende e perde precisão}
-\textbf{Objetivo e contexto:} ligar treino, avaliação e quantização sem descarregar modelos. Requisitos: módulo \texttt{exemplos.laboratorio.fundamentos}, Python 3.10+, biblioteca padrão.
+\textbf{Objetivo e contexto:} ligar treino, avaliação, adaptação e quantização sem descarregar modelos. Requisitos: módulos \texttt{exemplos.laboratorio.fundamentos} e \texttt{exemplos.laboratorio.adaptacao}, Python 3.10+, biblioteca padrão.
 
-\textbf{Procedimento:} executa o módulo; identifica os pontos de treino e teste; verifica a reta; lê o cálculo de atenção; compara os números originais com os reconstruídos pela quantização; duplica o contexto na função de memória.
+\textbf{Procedimento:} executa os dois módulos; identifica treino e teste da reta e do adaptador; verifica a atenção e a tabela de XOR; compara os números reconstruídos pela quantização; duplica o contexto na função de memória. No adaptador, explica por que o segundo alvo conserva erro mesmo depois do treino.
 
-\textbf{Resultado esperado:} a atenção escalar dá cinco, a reta aproxima $2x+1$ e a quantização introduz erro calculável. Os valores ideais de memória mantêm hipóteses e exclusões.
+\textbf{Resultado esperado:} a atenção escalar dá cinco, a reta aproxima $2x+1$, a quantização introduz erro e o adaptador conserva a base. O alvo de atualização de posto um é aprendido; no de posto dois, a perda mínima definida no exemplo é $0.25$. A memória ideal mantém hipóteses e exclusões.
 
-\textbf{Validação:} confirma pelo menos uma conta à mão e executa os testes de fundamentos. Esta implementação foi executada; não treina um Transformer nem mede uma GPU.
+\textbf{Validação:} confirma pelo menos uma conta à mão e executa os testes de fundamentos e adaptação. Os dados, configuração e resultados da adaptação estão em \nolinkurl{experiencias/adaptacao_linear}. A implementação foi executada; não treina um Transformer nem mede uma GPU.
 
 \textbf{Falhas possíveis:} transportar o erro minúsculo da reta sem ruído para dados reais ou confundir a grelha didática com um formato industrial de quantização.
 \end{promptlabbox}

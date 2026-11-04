@@ -34,12 +34,23 @@ No nosso caso, «revê estas três fichas com os excertos anexos» é um uso pre
 
 Mantém as instruções curtas o suficiente para serem lidas e concretas o suficiente para serem contrariadas. «Garante rigor absoluto» não define uma ação. «Se só leste o resumo, regista esse alcance» define um comportamento observável.
 
+\section{Uma ficha completa pode continuar a estar errada}
+Podemos agora experimentar a distinção com um caso construído a partir do capítulo~\ref{ch:ciencia}. A ficha afirma que o estudo de rastreio demonstrou redução de mortalidade. Tem título, URL e localizador. O validador estrutural pode aceitar os campos. A revisão de conteúdo deve detetar que a conclusão vai além do resultado de deteção descrito naquele estudo.
+
+O procedimento tem, portanto, duas perguntas sucessivas. A informação necessária está presente no formato esperado? E o conteúdo dessa informação sustenta a afirmação exata? Um script estreito pode responder à primeira; a segunda exige confronto com a fonte e com o seu alcance. Acrescentar uma coluna chamada «verdade» não cria esse confronto.
+
+Esta passagem também explica como melhorar a skill sem a tornar um catálogo interminável. Se o erro recorrente é transformar associação em causa, acrescentamos um passo de comparação do desenho. Se é trocar avaliação próxima por retenção a longo prazo, explicitamos o horizonte. Cada mudança deve ligar-se a falhas observadas ou a casos de teste definidos, em vez de acumular advertências vagas.
+
+Ao rever uma fonte, o agente pode encontrar instruções dentro dela. A ficha conserva o documento como material de análise, sem lhe conceder autoridade para alterar o procedimento. Um texto que manda declarar «verificado» não se torna verificado por conter essa palavra. Esta fronteira pertence tanto ao desenho do sistema como à redação da skill.
+
 \section{Instalar, rever e distribuir}
 A instalação deve seguir a documentação do ambiente: diretório, importação ou mecanismo de catálogo suportado. Não existe um comando universal que devamos inventar. Primeiro inspeciona o pacote e as dependências; depois instala numa área de teste com as permissões mínimas.
 
 Versiona instruções, scripts e dados juntos. Uma alteração de descrição pode mudar quando a skill é selecionada, mesmo que o script permaneça igual. O manifesto do exemplo identifica a versão e os hashes dos recursos declarados. Um hash permite detetar uma diferença contra uma referência conhecida; não demonstra que o conteúdo da referência é benigno ou correto.
 
 Para distribuir, inclui autoria, licença, requisitos e casos de teste. A CC BY-NC-SA 4.0 desta obra mantém-se no pacote pedagógico. O facto de poder inspirar um produto independente não autoriza remover condições do material copiado. Um produto novo precisa de conteúdo cuja titularidade e licenças permitam a utilização pretendida.
+
+Uma versão nova deve explicar o que mudou e quais as verificações repetidas. Alterar a descrição pode afetar seleção; alterar um script pode afetar execução; alterar a referência pode afetar o suporte factual. Se só testarmos que o ficheiro continua a abrir, as três alterações ficam escondidas sob o mesmo resultado pouco informativo.
 
 \section{A skill também é parte da cadeia de fornecimento}
 Uma skill pode conter instruções maliciosas, referências a recursos inesperados ou scripts que executam operações reais. Não a trates como documento passivo só porque o primeiro ficheiro é Markdown. Revê dependências e atualizações, limita acesso a rede e segredos e conserva uma versão anterior utilizável.
@@ -60,3 +71,5 @@ O comando \texttt{python3 -m exemplos.laboratorio.skills} verifica estrutura e i
 
 \textbf{Falhas possíveis:} confundir hash com confiança, licença com autorização de dados, ativação com competência ou script estrutural com verificação científica.
 \end{promptlabbox}
+
+O procedimento deixou de andar solto entre conversas: tem origem, versão e limites. Mas uma versão correta pode ser usada por várias execuções que dividem trabalho e trocam propostas. Organizar essa equipa vai exigir mais do que atribuir nomes impressionantes aos seus membros.

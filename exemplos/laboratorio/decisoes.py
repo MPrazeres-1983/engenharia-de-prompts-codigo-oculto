@@ -64,7 +64,7 @@ def quadro_esperado(populacao, prevalencia, sensibilidade, especificidade):
 
 def comparar_tempos(minutos_sem_ia, *, preparacao=0, geracao=0, revisao=0,
                     retrabalho=0):
-    """Mesma quantidade e qualidade de tarefas aceites; tempos completos dados."""
+    """Mesma quantidade e qualidade aceites; etapas seriais, sem sobreposição."""
     base = _nao_negativo(minutos_sem_ia)
     total = sum(map(_nao_negativo, (preparacao, geracao, revisao, retrabalho)))
     if base == 0 or total == 0:

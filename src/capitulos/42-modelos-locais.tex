@@ -21,6 +21,15 @@ Num exemplo hipotético com 32 camadas, oito cabeças KV, dimensão 128, 4096 to
 
 Ainda faltam ativações, buffers, runtime e memória de outros processos. Para treino faltam também estruturas como estados de otimizador e gradientes. Não concluas que o modelo cabe numa placa de quatro GB porque a soma ideal parece próxima desse número.
 
+\section{A margem desaparece antes do ficheiro}
+Vamos manter os valores hipotéticos e assumir uma reserva exata de 4 GiB, isto é, 4294967296 bytes. Os pesos ideais e a cache de 4096 tokens somam 4036870912 bytes. Sobram 258096384 bytes, cerca de 246 MiB, antes de contar as parcelas excluídas. Esta reserva é uma construção matemática, não a memória disponível de um computador ou GPU identificados.
+
+Se duplicarmos o contexto para 8192 tokens nas mesmas condições, a parcela KV duplica para 1073741824 bytes. A soma com os pesos já passa para 4573741824 bytes, acima da reserva hipotética. O ficheiro dos pesos não cresceu. Cresceu o estado necessário à sequência.
+
+O exemplo explica por que «consegui carregar» e «consigo executar a tarefa pretendida» são verificações diferentes. O contexto, a geração e o número de sequências podem mudar a utilização de memória depois do carregamento. Uma aplicação precisa de margem medida sob o perfil de trabalho que vai servir.
+
+O modelo da conta é uma cache densa com as dimensões indicadas. Arquiteturas, formatos, partilha de prefixos ou outras estratégias de runtime podem alterar o comportamento observado. Não devemos transportar a expressão sem verificar essas condições. A função de estimativa torna os pressupostos visíveis; a medição posterior mostra o que a implementação acrescentou ou mudou.
+
 \section{Quantização troca representação, não apenas tamanho}
 Quantizar aproxima valores usando uma representação com menos níveis. No exemplo local, uma grelha simétrica de quatro bits usa inteiros de $-7$ a $7$ e uma escala. Os valores $[-1,-0.3,0.2,1]$ são aproximados por $[-1,-2/7,1/7,1]$. O erro de arredondamento nessa grelha fica limitado a meia escala quando não há saturação.
 
@@ -28,12 +37,23 @@ O programa é deliberadamente simples: não empacota bits, não cria GGUF e não
 
 Para comparar, conserva base e avaliação e varia uma configuração de cada vez. Mede acerto, memória e tempo. Um formato que reduz memória pode não acelerar um dispositivo sem kernels adequados. O ficheiro pequeno não obrigou o processador a aprender uma instrução nova.
 
+\section{Um erro pequeno no peso pode mudar a decisão}
+Considera pesos sintéticos $[1,0.02]$ numa combinação linear e uma entrada $[0,1]$. O score é $0.02$. Na grelha simétrica de quatro bits do nosso exemplo, o maior valor fixa a escala em $1/7$; o peso $0.02$ arredonda para zero. O score da mesma entrada passa a zero.
+
+Se a regra construída decidir pela classe positiva acima de $0.01$, a decisão muda. O erro absoluto num peso foi pequeno e a consequência nesta tarefa foi uma troca de classe. Isto não mede a degradação de um LLM. Mostra por que um erro de representação e um erro na tarefa precisam de avaliações diferentes.
+
+Num sistema real, certas alterações podem não afetar saídas relevantes e outras podem ser amplificadas por operações seguintes ou por decisões perto de um limiar. A comparação com menos bits deve conservar tarefas, critérios e casos difíceis. Um tamanho de ficheiro reduzido é um resultado de armazenamento, não uma certificação das capacidades que interessam.
+
 \section{CPU, GPU e diferentes tempos de espera}
 CPUs podem executar modelos locais dentro de limites de memória e tempo. GPUs podem acelerar operações adequadas, com requisitos de drivers, memória e suporte do runtime. Offload parcial distribui trabalho, mas transferências e contenção podem dominar o desempenho.
 
 Separa processamento do contexto, tempo até ao primeiro token e geração seguinte. Uma aplicação que lê um documento longo e responde pouco tem perfil diferente de outra que escreve milhares de tokens. Mede também concorrência: duas sessões podem dividir memória e aumentar a espera mesmo quando cada uma isolada parece rápida.
 
 Os valores publicados por fornecedores ou comunidades precisam de configuração: modelo, quantização, contexto, lote, hardware, versões e comando. Um número de tokens por segundo sem essas condições não permite escolher uma máquina com rigor.
+
+Um ensaio útil mede separadamente a primeira utilização e execuções posteriores quando há carregamento ou caches que alteram o tempo. Também fixa a tarefa: contexto de entrada, comprimento de saída e critérios de paragem. Uma resposta curta pode parecer muito rápida porque fez menos trabalho; um resultado inválido não devia ganhar a comparação por ter terminado primeiro.
+
+Se o objetivo é escolher uma configuração, define primeiro o limite de qualidade e o perfil de recursos aceitável. Só depois compara alternativas dentro desses limites. Este procedimento liga a especialização técnica ao método do primeiro capítulo: a tarefa, a informação e a maneira de confirmar que resultou continuam a decidir a experiência.
 
 \section{Um manifesto para repetir o que aconteceu}
 Guarda revisão e hash do modelo, versão do runtime, hardware identificável, contexto, parâmetros, seeds, entradas e saídas. Regista se houve cache, warm-up, paralelismo e ferramentas. Usa pastas novas para experiências novas. Não substituas respostas antigas pelas melhores tentativas.
@@ -56,3 +76,5 @@ O adaptador V3 recusa endereços externos e redirecionamentos porque o seu objet
 
 \textbf{Falhas possíveis:} confundir GB e GiB, contar cabeças de queries em vez de KV, omitir buffers ou apresentar uma previsão de memória como medição de hardware.
 \end{promptlabbox}
+
+O tamanho do ficheiro revelou apenas a primeira parcela. Já sabemos procurar cache, buffers, tarefa e identidade dos bytes. A etapa seguinte pergunta como testar e operar o sistema que conseguimos executar, incluindo o dia em que uma atualização faz desaparecer a margem ou altera uma resposta importante.

@@ -1,6 +1,10 @@
 \chapter{Dentro da Máquina: Transformer sem Fumo Sagrado}
 \label{ch:transformer}
 
+«Depositei dinheiro no banco» e «sentei-me no banco» pedem interpretações diferentes da mesma palavra. As outras palavras dão contexto. Queremos abrir uma parte do mecanismo que permite combinar essa informação. Não vamos encontrar uma ficha de dicionário com uma pequena pessoa a escolher o significado. Vamos encontrar números, transformações e dependências entre posições.
+
+A primeira leitura pode conservar o percurso: tokens tornam-se vetores, as camadas combinam informação e a saída atribui scores aos próximos tokens. As fórmulas são aprofundamento. O exemplo numérico de atenção permite confirmar uma conta local, sem fingir que abrimos todos os pesos de um LLM.
+
 \section{Álgebra linear em modo de sobrevivência}
 
 Para perceberes o Transformer, precisas de um kit de sobrevivência de álgebra linear. Não é um curso completo; é apenas o mínimo para que as palavras “vetor” e “matriz” deixem de soar a trauma escolar.
@@ -43,6 +47,8 @@ De forma simplificada, para cada token temos três vetores:
 \item v — \emph{value}: “a informação que posso fornecer”.
 \end{itemize}
 
+As frases entre aspas são mnemónicas. Queries, keys e values são projeções calculadas a partir das representações, não intenções de pequenos agentes. «Procuro» não significa uma pesquisa num catálogo externo nem atribui vontade ao token. A analogia ajuda a ler o cálculo e termina aí.
+
 A atenção entre dois tokens é dada, grosso modo, pelo produto interno entre query e key, seguido de uma normalização por \emph{softmax}. Para um conjunto de queries Q, keys K e values V, a fórmula canónica é:
 
 \[
@@ -52,6 +58,15 @@ A atenção entre dois tokens é dada, grosso modo, pelo produto interno entre q
 Com $n$ posições, $Q,K\in\mathbb{R}^{n\times d_k}$ e $V\in\mathbb{R}^{n\times d_v}$. A softmax é aplicada por linha. Na máscara causal $M_{ij}=0$ se $j\leq i$ e $M_{ij}=-\infty$ se $j>i$, anulando os pesos de posições futuras. O fator $\sqrt{d_k}$ controla a escala dos produtos internos~\citep{vaswani2017}.
 
 Por exemplo, numa linha com dois scores permitidos, $[0,\ln 3]$, a softmax dá $[1/4,3/4]$. Se os valores escalares forem $[2,6]$, a combinação é $\tfrac14\times2+\tfrac34\times6=5$. Estes números são um exemplo didático, não uma medição de atenção de um LLM.
+
+Podemos abrir a normalização: $e^0=1$ e $e^{\ln3}=3$, pelo que dividimos cada valor pela soma quatro. A softmax converte estes scores em pesos positivos que somam um. O programa de fundamentos executa esta conta. Somar a mesma constante aos dois scores mantém os pesos; a implementação subtrai o máximo antes de exponenciar para evitar problemas numéricos com valores grandes.
+
+\section{Uma máscara impede uma pista vinda do futuro}
+Imagina agora três posições. Estamos a calcular a segunda e os dois valores acessíveis são os do exemplo, dois e seis. A terceira posição contém, na construção didática, o valor mil. Num descodificador causal, essa posição futura não pode participar. A máscara atribui-lhe peso zero, em vez de a deixar alterar a média.
+
+Na fórmula, o score dessa posição recebe $-\infty$ antes da softmax, tornando nula a sua contribuição na interpretação matemática. Uma implementação concreta precisa de uma representação e de operações apropriadas. Para repetir a nossa conta escalar, basta usar apenas os dois scores permitidos e os dois valores correspondentes; o helper didático não é uma biblioteca de máscaras tensoriais.
+
+O cuidado tem uma razão de treino. Se uma posição pudesse consultar o token futuro que se pretende prever, o sistema receberia uma pista que não existirá na geração. É outra forma de reconhecer a fuga de informação que investigámos no capítulo~\ref{ch:ml}. O treino em várias posições pode decorrer em paralelo sem lhes conceder acesso ao futuro.
 
 O que isto faz, em termos de desenho de guardanapo:
 
@@ -73,6 +88,13 @@ Do ponto de vista de prompts:
 \end{itemize}
 
 Mais tarde, quando falarmos de \emph{janela de contexto} e de “lost in the middle”, vais ver como isto se traduz em consequências práticas para o design de mensagens longas.
+
+\section{Várias cabeças e várias camadas não são vários especialistas humanos}
+Uma cabeça de atenção usa as suas projeções para produzir uma combinação. A atenção multicabeça permite várias dessas operações, cujos resultados são concatenados e novamente projetados. A arquitetura oferece canais de cálculo diferentes; não lhes atribui por definição profissões como «gramático» e «detetor de factos».
+
+Os parâmetros aprendidos podem levar a padrões interessantes, que exigem investigação para serem interpretados. Dar um nome a uma cabeça depois de observar alguns exemplos não demonstra uma função exclusiva em todos os contextos. Também não permite deduzir a verdade da saída a partir de um peso de atenção isolado.
+
+Camadas sucessivas recebem representações já transformadas. Ligações residuais preservam caminhos de informação e as transformações feed-forward acrescentam operações sobre as representações. A saída final depende do conjunto. Por isso o desenho de uma única cabeça é um modelo de leitura do mecanismo, não uma explicação completa de uma resposta específica.
 
 \begin{promptlabbox}{Ver o impacto da ordem das instruções}
 \textbf{Objetivo e contexto:} Comparar organização de instruções com o mesmo parágrafo, sem mudar os requisitos.
@@ -195,15 +217,15 @@ Um LLM não lê texto infinito. Ele trabalha com uma \emph{janela de contexto} f
 Dois problemas práticos aparecem aqui:
 
 \begin{enumerate}[leftmargin=*]
-\item \textbf{Corte duro}: se ultrapassas o limite, o modelo pura e simplesmente não vê o que ficou para trás (ou tens de o truncar/resumir).
+\item \textbf{Material omitido ou pedido rejeitado}: ao ultrapassar um limite, a aplicação pode rejeitar a entrada ou cortar parte dela. O modelo não utiliza diretamente o trecho que não recebeu; a estratégia de corte não é universal.
 \item \textbf{Lost in the middle}: Liu e colaboradores observaram degradação associada à posição da evidência nas tarefas e modelos que testaram~\citep{liu2024}. É um resultado experimental importante, não uma lei invariável de todos os modelos com contexto longo.
 \end{enumerate}
 
 Para prompting, isto significa:
 
 \begin{itemize}[leftmargin=*]
-\item Instruções importantes devem aparecer no início (system prompt ou início da conversa) e, se for crítico, podem ser repetidas perto do fim.
-\item Textos longos devem ser estruturados em secções claras com títulos, listas e marcadores; paredes de texto homogéneo são receita para o modelo se perder.
+\item Uma organização a testar coloca instruções na camada apropriada e compara posições da evidência, conservando os requisitos.
+\item Secções e marcadores podem facilitar seleção e verificação de material; o efeito sobre o modelo deve ser avaliado, sem os tratar como garantia de acerto.
 \item Muitas conversas longas com “pequenos ajustes” acabam num estado em que ninguém (nem tu, nem o modelo) sabe exatamente que instruções ainda estão ativas.
 \end{itemize}
 
@@ -218,8 +240,8 @@ Uma receita histórica importante, a do RLHF com modelo de recompensa, é~\citep
 \begin{enumerate}[leftmargin=*]
 \item Treinar um modelo base em montes de texto para prever o próximo token.
 \item Realizar ajuste supervisionado com demonstrações de respostas; recolher depois comparações humanas entre respostas para treinar preferências.
-\item Treinar um \emph{modelo de recompensa} que aprenda a prever quais respostas agradam mais aos avaliadores.
-\item Ajustar o modelo base com \emph{Reinforcement Learning from Human Feedback} (RLHF) ou variações (como RLAIF), para maximizar essa recompensa.
+\item Treinar um \emph{modelo de recompensa} que estime preferências a partir das comparações recolhidas.
+\item Ajustar o modelo após o treino supervisionado com um método de reforço orientado pela recompensa, na receita histórica descrita.
 \end{enumerate}
 
 Isto não é uma receita única. O ajuste supervisionado usa exemplos de respostas; RLAIF usa avaliações de IA~\citep{bai2022}; DPO otimiza preferências sem exigir a mesma sequência explícita de modelo de recompensa e otimização por reforço~\citep{rafailov2023}. Os fornecedores podem combinar métodos.
@@ -227,10 +249,10 @@ Isto não é uma receita única. O ajuste supervisionado usa exemplos de respost
 O resultado pretendido é um modelo mais:
 
 \begin{itemize}[leftmargin=*]
-\item mais educado,
+\item educado,
 \item menos tóxico,
-\item mais útil dentro de certos limites,
-\item mais obediente a políticas de segurança.
+\item útil dentro de certos limites,
+\item capaz de seguir as políticas avaliadas.
 \end{itemize}
 
 Do ponto de vista de prompting, isto explica várias coisas que vês no dia a dia:
@@ -246,4 +268,6 @@ Quando mais tarde falarmos de jailbreaks e DAN, estás na verdade a tentar conto
 \begin{warningboxenv}{Não confundir alinhamento com competência}
 Um modelo pode ser altamente “alinhado” segundo determinados objetivos e ao mesmo tempo alucinar factos básicos. Alinhamento não é sinónimo de precisão. Quando desenhas prompts, tens de lidar com estas duas dimensões em separado.
 \end{warningboxenv}
+
+O motor já tem peças reconhecíveis. Falta perceber a unidade que atravessa todo o percurso: o token. O seu tamanho e a maneira como o texto é dividido afetam limites e custos, mesmo quando a frase parece curta a quem a lê.
 
