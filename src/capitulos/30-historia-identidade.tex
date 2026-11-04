@@ -1,7 +1,9 @@
 \chapter{Uma História de Ideias, Máquinas e Promessas}
 \label{ch:historia}
 
-Uma máquina ganha um jogo. Outra escreve um poema. Uma terceira decide quem entra numa fila de inspeção. Chamamos «inteligência artificial» às três, mas os problemas, mecanismos e consequências são diferentes. A história da área ajuda a perceber como chegámos a esta palavra tão elástica. Também funciona como vacina contra anúncios de que alguém resolveu, finalmente, «a inteligência».
+Uma máquina ganha um jogo. Outra escreve um poema. Uma terceira decide quem entra numa fila de inspeção. Chamamos «inteligência artificial» às três, mas os problemas, mecanismos e consequências são diferentes. Se recolhêssemos apenas as manchetes, podíamos julgar que a inteligência foi resolvida várias vezes e se voltou a avariar entre conferências.
+
+A história fica mais interessante quando seguimos as perguntas que resistiram aos nomes. Como representar conhecimento? Como aprender com exemplos? Como escolher uma ação? E como saber se uma demonstração sobrevive fora do palco? Vamos procurar essas pistas em momentos documentados. Não precisamos de transformar uma área inteira numa corrida com um único vencedor.
 
 \section{Antes de haver um nome}
 Em 1950, Alan Turing discutiu a pergunta sobre máquinas que pensam através de um jogo de imitação~\citep{turing1950}. O artigo propõe uma forma de discutir comportamento observável e enfrenta objeções; não fornece um teste universal de consciência. Conseguir conversar convincentemente não determina, por si só, o mecanismo que produz a conversa ou a existência de experiência subjetiva.
@@ -10,6 +12,13 @@ A proposta de Dartmouth foi escrita em 1955 para um encontro no verão de 1956 p
 
 É útil distinguir três perguntas históricas: podemos descrever raciocínios por regras? Podemos aprender regularidades a partir de exemplos? Podemos agir num ambiente para alcançar um objetivo? A IA moderna combina respostas a estas perguntas, em vez de ter substituído de uma vez por todas uma escola antiga por outra nova.
 
+\section{A conversa apareceu antes dos grandes modelos}
+Em 1966, Joseph Weizenbaum descreveu ELIZA, um programa que analisava entradas através de palavras-chave e regras de decomposição, produzindo respostas por regras de recomposição~\citep{weizenbaum1966}. Não ajustava os milhares de milhões de parâmetros que associamos hoje a um LLM. O trabalho é um bom ponto de partida para separar a forma da interação do mecanismo que a produz.
+
+Imagina um programa didático que, ao ler «estou preocupado com o exame», devolve «porque estás preocupado com o exame?». A resposta preserva palavras da entrada e parece interessada. Esta frase foi construída para explicar a técnica, não copiada de uma sessão histórica. Podemos reconhecer utilidade conversacional na transformação sem lhe atribuir conhecimento sobre exames ou preocupação sentida.
+
+A pista histórica tem duas consequências. A primeira é técnica: sistemas com mecanismos muito diferentes podem produzir interações superficialmente semelhantes. A segunda é sobre avaliação: conversar com fluência não identifica, por si só, a arquitetura, o acesso a factos ou a existência de consciência. O capítulo~\ref{ch:relacoes} retomará a experiência de quem conversa; aqui importa não confundir essa experiência com uma inspeção do programa.
+
 \section{Regras, procura e conhecimento explícito}
 Num sistema simbólico, representamos elementos e relações de forma explícita. Uma regra pode dizer: se existe uma peça em falta e há talão válido, abrir investigação. Uma procura explora possibilidades, como percursos num mapa ou jogadas num tabuleiro. O programador não precisa de listar todas as sequências; define estados, movimentos e critérios.
 
@@ -17,12 +26,34 @@ O benefício é a possibilidade de inspecionar certas decisões. O custo surge q
 
 Sistemas baseados em conhecimento fizeram desta manutenção uma questão central. Se a política muda, quem altera as regras? Como se resolvem conflitos? A mesma pergunta regressa hoje quando alguém guarda uma política num prompt e se esquece de indicar a versão. A novidade da interface não elimina a antiguidade do problema.
 
+Um segundo limite aparece quando as possibilidades crescem. Um plano com três escolhas por etapa tem $3^{10}=59049$ sequências possíveis ao fim de dez etapas, se todas as combinações forem admissíveis. Com vinte etapas, são $3^{20}=3486784401$. O cálculo é uma construção didática; mostra por que «experimentar tudo» pode deixar de ser prático depressa. Procurar melhor, cortar ramos impossíveis e usar conhecimento relevante tornam-se parte do método.
+
+Nem todos os sistemas tentam percorrer esta árvore inteira. A utilidade da conta é perceber o obstáculo que a estratégia tem de evitar. Um programa que joga bem pode fazê-lo porque avalia posições, seleciona caminhos promissores e reutiliza resultados. Seria errado descrevê-lo como uma lista de todas as partidas possíveis só porque existe uma procura.
+
+\section{Um relatório ajuda a fazer a pergunta certa}
+O relatório \emph{Language and Machines}, publicado pelo National Research Council em 1966, dedicava secções a custos de tradução, qualidade, estado da tradução automática e apoio computacional ao trabalho humano~\citep{alpac1966}. O índice já mostra um problema que continua atual: avaliar tecnologia exige comparar uma tarefa e um processo, não apenas admirar algumas saídas.
+
+Não vamos transformar esse documento numa causa única de toda a desilusão posterior com IA. Financiamento, expectativas e resultados têm histórias diferentes conforme o país e a área. A designação «inverno da IA» é uma síntese histórica; precisa de contexto se quisermos explicar uma decisão concreta de investigação ou de investimento.
+
+O que podemos transportar com segurança é uma disciplina. Uma tradução pode parecer compreensível e exigir tanto trabalho de revisão que deixa de compensar no processo considerado. Inversamente, um sistema imperfeito pode ser útil numa função de apoio. Essa distinção regressará quando medirmos produtividade no capítulo~\ref{ch:trabalho}. Não é necessário esperar por uma máquina perfeita para fazer uma comparação honesta.
+
 \section{Aprender representações e aumentar a escala}
 A aprendizagem automática desloca parte do trabalho: em vez de programar toda a associação entre entrada e saída, escolhemos dados, modelo e objetivo. Redes neuronais profundas aprendem representações em várias camadas. Transformers acrescentaram uma arquitetura de atenção que se tornou central em modelos de linguagem~\citep{vaswani2017}. Os capítulos seguintes abrem estes mecanismos; aqui interessa a mudança de método.
+
+Em 1986, Rumelhart, Hinton e Williams apresentaram um trabalho influente sobre aprendizagem de representações através de retropropagação de erros~\citep{rumelhart1986}. O interesse não está numa máquina a descobrir intenções humanas. Está num procedimento para calcular como os pesos de uma rede contribuem para o erro e ajustá-los. O capítulo~\ref{ch:ml} começa por uma reta para que possamos observar essa ideia sem esconder o cálculo numa biblioteca.
+
+O artigo de Krizhevsky, Sutskever e Hinton de 2012 sobre classificação no ImageNet juntou redes convolucionais profundas, treino supervisionado e implementação em GPU num resultado importante de visão computacional~\citep{krizhevsky2012}. A lição histórica é uma combinação de método, dados e execução. Reduzi-la a «as redes ficaram maiores» apaga parte da engenharia que tornou o resultado possível.
 
 Mais dados e computação podem alargar capacidades. Não transformam automaticamente uma demonstração numa aplicação fiável. Há pelo menos três momentos diferentes: obter um resultado num conjunto de avaliação; fazê-lo funcionar sob condições operacionais; e demonstrar benefício para quem usa ou é afetado pelo sistema. Saltar do primeiro para o terceiro é uma forma bastante eficiente de escrever um comunicado e bastante ineficiente de fazer ciência.
 
 Também não existe apenas uma arquitetura vencedora. Um sistema atual pode juntar pesquisa clássica, regras, rede neuronal, simulação e otimização. Um produto que conversa pode esconder uma função determinística para calcular preços. Isso costuma ser uma qualidade do desenho, não uma confissão de que a IA «não era verdadeira».
+
+\section{O tabuleiro revelou uma combinação}
+O artigo de AlphaGo de janeiro de 2016 descreve redes para selecionar movimentos e avaliar posições, aprendizagem com partidas humanas e por autojogo, e procura em árvore~\citep{silver2016}. Essa combinação é mais instrutiva do que a frase «uma rede aprendeu Go». Componentes diferentes resolvem partes diferentes do problema.
+
+Há um detalhe histórico a preservar: o artigo relata a vitória sobre o campeão europeu Fan Hui. Não é o relato do encontro posterior com Lee Sedol. Misturar os dois acontecimentos tornaria a história mais familiar à custa de trocar a evidência citada. A data de um artigo e a data da demonstração de que nos lembramos nem sempre coincidem.
+
+O Go oferece regras, estados e um critério claro de vitória. Muitas decisões do quotidiano não têm essas condições: objetivos disputados, informação ausente, pessoas que mudam de comportamento. O sucesso no tabuleiro justifica investigar transferência de métodos, sem provar que um sistema domina qualquer situação fora dele. Esta fronteira é uma das personagens mais persistentes da história da IA: a diferença entre o problema que resolvemos e aquele para o qual gostaríamos de transportar a solução.
 
 \section{ANI, AGI e ASI: palavras precisam de critérios}
 \emph{ANI}, inteligência artificial estreita, designa habitualmente sistemas orientados a capacidades ou domínios delimitados. \emph{AGI}, inteligência artificial geral, refere uma ambição de competência ampla e transferência entre tarefas. \emph{ASI}, superinteligência artificial, é usada para capacidades superiores às humanas em domínios de grande amplitude. Não há aqui uma escala internacional única com três certificados para pendurar na parede.
@@ -46,4 +77,6 @@ O leitor pode aplicar uma disciplina simples a qualquer anúncio. Identifica a t
 \textbf{Falhas possíveis:} usar o anúncio comercial como avaliação independente, chamar consciência à conversação ou descartar um resultado útil por não ser AGI.
 \end{promptlabbox}
 
-O resto desta obra segue esta regra: compreender o mecanismo, experimentar numa tarefa e verificar o alcance. Não precisamos de esperar por uma definição definitiva de inteligência para contar as meias corretamente.
+O resto desta obra segue esta regra: compreender o mecanismo, experimentar numa tarefa e verificar o alcance. A história não terminou com uma arquitetura que dispensou as restantes. Deixou-nos uma caixa de métodos e uma obrigação de escolher.
+
+Na próxima parte, essa escolha começa com um problema pequeno: ajustar uma previsão a exemplos. Não vamos pedir à máquina que «compreenda a roupa». Vamos mostrar-lhe dados, definir um erro e descobrir se o acerto sobrevive quando mudamos o exame.

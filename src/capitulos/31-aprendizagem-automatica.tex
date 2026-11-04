@@ -1,7 +1,9 @@
 \chapter{Aprender com Dados sem Decorar o Exame}
 \label{ch:ml}
 
-Queres prever o tempo necessário para separar roupa. Tens o peso de cada lote e a duração observada. Uma regra escrita à mão seria «multiplica os quilos por dois e soma um minuto». Um método de aprendizagem procura parâmetros que ajustem uma relação aos exemplos. A diferença parece pequena até descobrires que os exemplos só incluem roupa leve e que amanhã chegam cortinados.
+\ficcao A contabilista da Lavandaria regressa com uma folha de cálculo. Contém pesos de lotes e tempos de separação. O gerente quer saber quanto demorará o próximo. A primeira proposta é simples: procurar uma relação entre quilos e minutos. A segunda chega quando alguém pergunta se um quilo de meias demora o mesmo que um quilo de cortinados.
+
+Este capítulo começa nesse intervalo entre encontrar um padrão e confiar nele. Primeiro vamos perceber o que se aprende. Depois abriremos uma previsão suficientemente pequena para calcular à mão. Só no aprofundamento aparecerão derivadas e uma rede com duas unidades. Podes seguir a investigação sem fazer essas contas na primeira passagem.
 
 \section{O problema começa na variável que queremos prever}
 Na aprendizagem supervisionada, fornecemos exemplos com um alvo: entrada $x$ e resultado $y$. Em regressão, o alvo pode ser uma quantidade, como minutos. Em classificação, uma categoria, como «peças em falta». Na aprendizagem não supervisionada, procuramos estrutura sem esse mesmo alvo fornecido, por exemplo grupos de mensagens. Aprendizagem auto-supervisionada cria objetivos a partir dos próprios dados, como prever partes ocultadas ou tokens seguintes. A taxonomia ajuda a distinguir tarefas; as aplicações podem combinar métodos~\citep{goodfellow2016}.
@@ -10,8 +12,21 @@ Um grupo encontrado por clustering não recebe automaticamente um significado de
 
 Escolhe primeiro a unidade de decisão. Prever por mensagem não é prever por cliente. Se um cliente escreve dez vezes, contar essas dez mensagens como dez pessoas independentes altera a análise. O desenho do conjunto de dados já contém decisões sobre o mundo, mesmo antes de treinar o primeiro parâmetro.
 
+\section{O exemplo ensina aquilo que foi possível observar}
+Uma linha de dados pode conter peso, tipo de tecido, número de peças e duração. Chamamos \emph{características} às entradas que o modelo recebe e \emph{alvo} ao resultado que pretendemos prever. Não existe uma lista universal de características certas. Algumas são úteis, outras redundantes, outras indisponíveis quando chega o momento de decidir.
+
+Se a duração só é registada quando o lote termina, pode servir de alvo para aprender com o passado. Já o campo «hora real de conclusão» não pode ajudar a prever o tempo antes de iniciar o lote. Seria uma pista demasiado boa: a solução estava escondida dentro da pergunta.
+
+Também precisamos de saber como foi produzida a etiqueta. Se «reclamação grave» significa apenas «mensagem que o supervisor decidiu escalar», o modelo aprende esse registo de decisões, que pode não coincidir com gravidade de dano ou de urgência. Uma etiqueta legível não resolve a definição do conceito. Por vezes, o primeiro trabalho útil de um projeto é descobrir que duas pessoas estavam a classificar coisas diferentes com o mesmo nome.
+
+No nosso caso fictício, começaremos por um alvo estreito: minutos para separar um lote sob um procedimento definido. Isso não mede satisfação do cliente, qualidade da lavagem ou eficiência da empresa inteira. Restringir a pergunta ajuda a perceber o resultado; a ambição pode crescer depois de o método sobreviver ao primeiro teste.
+
 \section{Uma reta que podemos abrir por dentro}
 Usaremos $\hat y=wx+b$: $w$ é a inclinação, $b$ a ordenada na origem e o chapéu indica previsão. Para três pontos sintéticos, $(-1,-1)$, $(0,1)$ e $(1,3)$, a relação é $y=2x+1$. O valor negativo de $x$ pertence à experiência matemática; não representa um lote de menos um quilo.
+
+Lê a expressão como uma receita: multiplica a entrada por um número e soma outro. Se $w=2$ e $b=1$, uma entrada $3$ produz $7$. Os símbolos substituem números que queremos descobrir. Não representam ingredientes misteriosos acrescentados por uma biblioteca.
+
+\textbf{Aprofundamento opcional.} Nos parágrafos seguintes, vamos escolher uma medida de erro e calcular uma atualização. O fio principal é este: comparar previsões com alvos, obter um sinal de correção e repetir. Se deixares as derivadas para depois, conserva essa sequência.
 
 Uma perda possível é o erro quadrático médio:
 \[
@@ -19,7 +34,13 @@ L(w,b)=\frac1n\sum_{i=1}^{n}(wx_i+b-y_i)^2.
 \]
 Se começamos em $w=b=0$, as previsões são todas zero. Os erros são $[1,-1,-3]$ e a perda é $11/3$. As derivadas nesse ponto são $\partial L/\partial w=-8/3$ e $\partial L/\partial b=-2$. Com um passo de $0.05$, a atualização dá $w=2/15$ e $b=0.1$. Não é inspiração: é um cálculo que podemos repetir e contrariar.
 
+De onde veio o $11$? Elevamos cada erro ao quadrado: $1+1+9$. Dividimos pelos três exemplos. A derivada indica como a perda varia quando alteramos ligeiramente um parâmetro, mantendo o outro fixo. Subtraímos uma fração desse sinal para procurar reduzir a perda. Neste exemplo, as duas derivadas iniciais são negativas, pelo que os dois parâmetros aumentam.
+
+A taxa de aprendizagem controla o tamanho do passo. Um passo pequeno pode precisar de muitas atualizações; um passo demasiado grande pode afastar-nos de uma região útil. Não há aqui um ritmo que sirva a qualquer conjunto de dados. Escala das entradas, forma da perda e método de otimização fazem diferença.
+
 O programa \texttt{exemplos/laboratorio/fundamentos.py} repete a atualização e encontra valores próximos de $2$ e $1$. Avalia depois $(2,5)$ e $(3,7)$, que não entraram no ajuste. A experiência foi executada com dados sem ruído. O erro muito pequeno mostra que o código recupera esta relação; não demonstra previsão de durações numa lavandaria real.
+
+O cuidado com os números negativos evita uma confusão de finalidade. Escolhemos estes pontos para tornar as contas transparentes. Não recolhemos medições de roupa, nem pretendemos que durações negativas façam sentido no negócio. Antes de usar uma reta num processo real, seria necessário escolher variáveis, unidades, dados e condições apropriadas.
 
 \section{Treino, validação e teste respondem a perguntas diferentes}
 O treino ajusta parâmetros. A validação ajuda a escolher opções como família de modelo, regularização e número de passos. O teste estima o comportamento de uma escolha já fechada em dados que não orientaram essa escolha. Se olhas para o teste e ajustas o sistema com base nele, passaste a usá-lo no desenvolvimento.
@@ -28,6 +49,10 @@ A separação tem de acompanhar o problema. Para prever o mês seguinte, baralha
 
 Há fuga de informação quando o treino recebe dados indisponíveis no momento da previsão. Exemplos: uma coluna com o desfecho final, um resumo escrito depois da resolução, normalização estimada no conjunto inteiro ou duplicados quase idênticos. Podes obter um resultado excelente e ter construído uma máquina de ler o futuro que só funciona no ficheiro de avaliação.
 
+Uma experiência mental ajuda a detetar o problema. Coloca uma folha sobre o registo e destapa apenas a informação que existiria no momento em que precisas da previsão. As características que continuam tapadas pertencem ao futuro da decisão. A analogia não substitui uma auditoria aos dados, mas revela rapidamente algumas colunas suspeitas.
+
+Na preparação de dados, ajustes como média e desvio usados na normalização devem ser estimados no treino e aplicados aos restantes conjuntos. Caso contrário, até um passo aparentemente neutro pode transportar informação do exame para a preparação. A disciplina tem de abranger o pipeline, não apenas o comando que ajusta os pesos.
+
 \section{Sobreajustamento e o valor de uma base simples}
 Um modelo demasiado flexível pode ajustar detalhes particulares dos exemplos. Isso é sobreajustamento quando prejudica a generalização. Um modelo demasiado limitado pode falhar mesmo relações relevantes presentes nos dados. A complexidade adequada depende da informação disponível e do objetivo, não de uma competição para usar a rede mais vistosa.
 
@@ -35,17 +60,53 @@ Compara com uma base: prever sempre a média, escolher a classe mais frequente o
 
 Uma separação estatística não impede ainda mudanças de distribuição. O negócio muda política, os utilizadores aprendem novas abreviaturas ou o sensor é substituído. Monitorizar desempenho por período e por grupo ajuda a perceber se o sistema continua dentro das condições em que foi avaliado.
 
+Há outra distinção a conservar: um score e uma probabilidade bem calibrada não são a mesma coisa. Se um sistema atribui probabilidade $0.8$ a muitos casos comparáveis, calibração pergunta se o acontecimento se verifica em cerca de 80\% desses casos, dentro da avaliação feita. A probabilidade anunciada numa única resposta não se valida por essa resposta parecer convincente.
+
+Precisão de classificação e consequências também se separam. Numa triagem, encaminhar um pedido simples para revisão pode custar tempo; ignorar um pedido urgente pode ter um custo diferente. Escolher um limiar é escolher um compromisso entre erros. Os capítulos~\ref{ch:avaliacao} e~\ref{ch:ciencia} abrirão essa conta. O acerto médio, sozinho, não escolhe a decisão por nós.
+
 \section{De uma unidade a uma rede profunda}
 Uma unidade simples calcula uma combinação de entradas e aplica uma função: $h=\sigma(Wx+b)$. Compor camadas permite representações mais flexíveis do que uma única transformação linear. Sem não linearidades, uma sequência de transformações lineares continua a ser linear. A palavra «profunda» descreve camadas, não profundidade filosófica.
 
 Parâmetros são valores aprendidos; hiperparâmetros são escolhas que configuram o processo, como taxa de aprendizagem e largura. Retropropagação calcula derivadas através da composição. Nada disto exige interpretar uma unidade como um pequeno ser humano. Para perceber o Transformer mais à frente, basta conservar a ligação entre representação, objetivo e atualização.
 
+\section{Uma rede pequena resolve um obstáculo visível}
+Vamos construir uma tarefa em que uma única fronteira linear não chega. Recebemos dois bits e queremos devolver $1$ quando são diferentes, $0$ quando são iguais. É o XOR: $(0,0)\mapsto0$, $(0,1)\mapsto1$, $(1,0)\mapsto1$, $(1,1)\mapsto0$.
+
+Se desenhares os quatro pontos nos cantos de um quadrado, os positivos ficam em cantos opostos. Uma reta não separa simultaneamente esses dois pontos dos dois negativos. Uma forma de o perceber é olhar para o centro do quadrado: tanto é o ponto médio dos positivos como o dos negativos. Uma transformação linear não pode colocar esse mesmo ponto estritamente dos dois lados da sua fronteira.
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[x=3.4cm,y=2.8cm]
+\draw[->] (-0.15,0) -- (1.45,0) node[right] {$x_1$};
+\draw[->] (0,-0.15) -- (0,1.4) node[above] {$x_2$};
+\draw[dashed,gray] (0,1) -- (1,1) -- (1,0);
+\fill (0,1) circle (2pt) node[above right] {classe 1};
+\fill (1,0) circle (2pt) node[above right] {classe 1};
+\draw[fill=white] (0,0) circle (2pt) node[below left] {classe 0};
+\draw[fill=white] (1,1) circle (2pt) node[above right] {classe 0};
+\node[below] at (1,0) {1};
+\node[left] at (0,1) {1};
+\end{tikzpicture}
+\caption{XOR: a disposição dos dados pede mais do que uma única fronteira linear. Desenho original de uma tarefa sintética.}
+\end{figure}
+
+Podemos construir duas unidades com ReLU, a função $\operatorname{ReLU}(z)=\max(0,z)$. Fazemos $h_1=\operatorname{ReLU}(x_1+x_2)$, $h_2=\operatorname{ReLU}(x_1+x_2-1)$ e saída $h_1-2h_2$. Para entradas $(1,1)$, temos $2-2\times1=0$. Para $(1,0)$, temos $1-2\times0=1$. Os outros dois casos completam a tabela.
+
+A função \texttt{xor\_relu} no módulo de fundamentos executa os quatro casos e os testes confirmam a tabela. Os pesos foram escolhidos por nós; esta demonstração prova que essa construção representa XOR, não que um treino os descobriu. \emph{Capacidade de representar}, \emph{capacidade de aprender com os dados disponíveis} e \emph{capacidade de generalizar} são três perguntas. Uma rede maior pode responder melhor à primeira e continuar a enfrentar as restantes.
+
+\section{O que regressa à folha de cálculo}
+A investigação fictícia já permite uma decisão. Podemos testar uma previsão, mas primeiro precisamos de saber o que cada linha representa, quais os dados disponíveis antes da tarefa e em que lotes faremos uma avaliação separada. A escolha entre uma reta e uma rede vem depois. A contabilista não derrotou a IA; impediu que o resultado fosse um mistério impossível de repetir.
+
+Esta ordem torna o trabalho menos dependente da ferramenta da moda. Guarda a definição da tarefa, uma base simples, a separação dos dados e o critério de aceitação. O modelo pode mudar e a pergunta continua verificável.
+
 \begin{promptlabbox}{Uma previsão correta pela razão errada}
 \textbf{Objetivo e contexto:} detetar fuga de informação numa experiência local. Requisitos: Python 3.10+, apenas biblioteca padrão. Executa \texttt{python3 -m exemplos.laboratorio.fundamentos}.
 
-\textbf{Procedimento:} identifica treino e teste da reta. Escreve uma nova experiência com um alvo sintético e uma coluna que copie esse alvo. Explica por que essa coluna não estaria disponível antes da decisão. Retira-a antes de comparar modelos.
+\textbf{Procedimento:} identifica treino e teste da reta; confirma os quatro casos de XOR e distingue pesos construídos de pesos aprendidos. Como extensão, escreve uma experiência com um alvo sintético e uma coluna que copie esse alvo. Explica por que essa coluna não estaria disponível antes da decisão. Retira-a antes de comparar modelos.
 
 \textbf{Resultado esperado e validação:} o exemplo original recupera a reta e a atenção dá $5$. O relatório distingue sucesso do cálculo de validade de um problema real. A extensão da coluna proibida é um exercício proposto, não uma medição publicada.
 
 \textbf{Falhas possíveis:} usar o teste para escolher a taxa, interpretar ruído como sinal ou apresentar a relação inventada como descoberta empírica.
 \end{promptlabbox}
+
+Até aqui, a previsão não mudava o lote que iríamos observar. No capítulo seguinte vamos escolher ações. Quando a decisão altera o que acontece depois, aprender deixa de ser apenas comparar uma resposta com uma etiqueta: passa também por descobrir as consequências de agir.

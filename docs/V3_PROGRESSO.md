@@ -6,6 +6,16 @@ Atualização: 04-11-2026. Branch `terceira-edicao-ia-referencia-2026`. [PR #2 e
 
 ## Checkpoint A — diagnóstico e arquitetura
 
+### Retoma em curso: progressão e narrativa
+
+O autor autorizou continuar em 04-11-2026, com progressão do básico à especialização, rigor factual, humor e leitura envolvente. Base confirmada `e990b891`; `main` continua em `975ade8`. A orientação está em `V3_LINHA_NARRATIVA.md`.
+
+Já escritos: abertura investigativa original, história com fontes adicionais, camadas de explicação nos fundamentos e transições coerentes com a ordem real. O primeiro capítulo já não promete a primeira conversa num capítulo que afinal trata de história. Os aprofundamentos matemáticos são identificados como opcionais na primeira passagem.
+
+Já executados: XOR construído, retorno e atualização Q, taxas condicionais, produtividade e energia sintéticas. **65 testes passaram** no conjunto completo. O commit remoto `7bf38ddb` guarda o código e os testes. A primeira compilação desta retoma passou com 277 páginas; ainda não é a composição final do ciclo. A bibliografia contém 14 entradas novas consultadas, a integrar nos casos setoriais.
+
+Em curso: aprofundamento dos cinco capítulos da Parte VIII. Por fazer neste ciclo: fechar texto, compilar novamente, inspecionar PDF, atualizar contagens e confirmar CI do HEAD final. Os números de 268 páginas e 52 testes noutras secções deste registo descrevem o checkpoint anterior.
+
 - Concluído: estado real do GitHub, PR #1 integrado, inexistência inicial da branch V3, criação da branch a partir de `975ade8`.
 - Concluído: cópia local com a mesma árvore Git da base; leitura integral dos 29 capítulos e três apêndices; inspeção de bibliografia, validação estática, workflow e demonstração.
 - Concluído: 30 testes existentes executados; 29 capítulos, 47 laboratórios e 41 referências verificados; integridade dos 52 registos reais de 03-11-2026 reavaliada, sem nova inferência.

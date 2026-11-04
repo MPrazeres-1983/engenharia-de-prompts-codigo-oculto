@@ -1,7 +1,9 @@
 \chapter{Aprender a Agir: Recompensas, Exploração e Consequências}
 \label{ch:rl}
 
-Um classificador recebe uma mensagem e propõe uma categoria. Um controlador de um jogo escolhe uma ação que muda aquilo que verá a seguir. A aprendizagem por reforço trata desta ligação entre ação, consequência e aprendizagem ao longo do tempo. Não é apenas dar uma estrela a uma resposta de chat.
+Um personagem está a dois movimentos de uma saída. Há uma moeda perto e uma chave mais longe. Se recolher a moeda, ganha já um ponto. Se procurar a chave, pode abrir uma porta que ainda não vê. A escolha altera as oportunidades seguintes. É essa diferença que separa este problema do classificador que apenas recebe uma mensagem e propõe uma categoria.
+
+A aprendizagem por reforço trata da ligação entre ação, consequência e aprendizagem ao longo do tempo. O jogo desta abertura é uma construção didática. Vamos usá-lo para distinguir uma boa recompensa imediata de uma boa sequência, antes de abrir a regra de atualização. Não é necessário começar por treinar um robô para perceber a dificuldade.
 
 \section{Estado, ação, recompensa e política}
 Num modelo simples, o agente observa um estado $s_t$, escolhe uma ação $a_t$, recebe uma recompensa $r_{t+1}$ e chega a outro estado. Uma política especifica como escolher ações a partir da informação disponível. O ambiente determina transições e recompensas. No mundo real, a observação pode não revelar o estado completo; uma câmara não mostra tudo o que existe atrás de uma porta.
@@ -14,6 +16,13 @@ A recompensa imediata e a soma futura são coisas diferentes. Num episódio fini
 
 Pensa num robô que leva uma peça até uma caixa. Se premiarmos apenas deslocação rápida, pode aprender a passar pela caixa sem a depositar. Se premiarmos o toque no sensor, pode explorar uma falha do sensor. Escolher uma recompensa é especificar uma aproximação do objetivo. Um número torna a intenção calculável; não garante que a aproximação seja boa.
 
+\section{A moeda visível e a conta completa}
+Construamos duas rotas num episódio fictício. A rota A dá recompensas $[1,-3]$: um ganho imediato, seguido de uma penalização. A rota B dá $[0,0,2]$: exige esperar, mas termina melhor. Com desconto $0.9$, os retornos iniciais são $1-0.9\times3=-1.7$ e $0.9^2\times2=1.62$. Se olhássemos apenas para o primeiro passo, escolheríamos a rota errada segundo este objetivo.
+
+O exemplo tem tudo aquilo que muitas situações reais nos recusam: conhecemos as duas sequências de antemão, o ambiente é simples e as consequências são certas. Um agente que aprende precisa de estimar o que vem depois a partir de experiência, de um modelo ou de ambos. À medida que o intervalo entre ação e resultado cresce, atribuir o mérito ou a culpa às decisões anteriores torna-se mais difícil.
+
+A recompensa define o que conta como melhor para o algoritmo. Se alterarmos a regra para premiar apenas o número de movimentos, o nosso aventureiro pode descobrir uma excelente carreira a andar em círculos. A brincadeira tem um ponto técnico: uma medida de atividade pode ser otimizada sem cumprir a finalidade que motivou o sistema.
+
 \section{Explorar sem destruir o laboratório}
 Exploração significa experimentar ações para aprender; exploração não autorizada de um sistema real é outro assunto. Um jogo simulado admite milhões de tentativas que seriam inaceitáveis num veículo ou numa fábrica. Transferir uma política da simulação para o mundo exige testar diferenças de sensores, dinâmica e situações raras.
 
@@ -21,7 +30,13 @@ Uma estratégia simples, epsilon-greedy, escolhe uma ação aleatória com proba
 
 O compromisso entre experimentar e aproveitar o que já parece funcionar aparece também numa tarefa banal: qual variante de mensagem recebe mais respostas? A observação pode ser confundida por público, horário e campanhas simultâneas. Um sistema que aprende durante a utilização exige um desenho de avaliação e uma política de ação, não apenas um loop que acumula cliques.
 
+Para comparar políticas, precisamos ainda de separar aprendizagem e avaliação. Se uma execução continua a explorar, parte do seu resultado reflete essa exploração. Uma avaliação de uma política já fixada responde a outra pergunta. Regista se a política mudou, como foram escolhidas as ações e se os episódios usados na comparação influenciaram o desenvolvimento.
+
+O ambiente também precisa de ser reiniciado de uma maneira definida. Avaliar sempre a partir de uma sala fácil não mostra o que acontece em estados difíceis. E mil episódios quase iguais não representam automaticamente mil situações diferentes. Tal como no capítulo anterior, a unidade de observação e a diversidade dos casos fazem parte da evidência.
+
 \section{Uma atualização de valor que cabe numa linha}
+\textbf{Aprofundamento opcional.} Pensa em $Q(s,a)$ como uma estimativa da qualidade de começar pela ação $a$ no estado $s$ e depois seguir um comportamento futuro. A expressão seguinte mostra como uma observação pode corrigir essa estimativa. O leitor que prefere seguir o mecanismo sem símbolos pode conservar três passos: observar a recompensa, estimar o que ainda vem e aproximar o valor antigo desse alvo.
+
 Q-learning mantém uma estimativa do retorno associado a um par estado--ação. Uma atualização tabular comum é
 \[
 Q(s,a)\leftarrow Q(s,a)+\alpha\bigl[r+\gamma\max_{a'}Q(s',a')-Q(s,a)\bigr].
@@ -29,6 +44,8 @@ Q(s,a)\leftarrow Q(s,a)+\alpha\bigl[r+\gamma\max_{a'}Q(s',a')-Q(s,a)\bigr].
 Com $Q(s,a)=0$, recompensa $1$, melhor valor seguinte $2$, $\alpha=0.5$ e $\gamma=0.9$, o novo valor é $1.4$. O termo entre parênteses compara a estimativa atual com um alvo de atualização. Num estado terminal, o termo futuro é zero; não inventamos mais uma jogada depois do fim.
 
 Este cálculo não demonstra convergência de uma rede profunda. As garantias de métodos tabulares dependem de hipóteses de exploração, passos e ambiente. Redes, dados recolhidos por outra política e ambientes em mudança acrescentam dificuldades. O exemplo serve para perceber o sinal que move a aprendizagem.
+
+O módulo de fundamentos executa este passo, o caso terminal que dá $0.5$ e o retorno $0.81$ da sequência $[0,0,1]$. Os testes verificam as contas e os limites dos argumentos. Não houve um treino completo de uma política. Esta distinção permite usar uma experiência pequena para aprender o mecanismo sem lhe atribuir um resultado que nunca mediu.
 
 \section{Aprender um modelo ou aprender uma política}
 Métodos baseados num modelo do ambiente usam uma representação das transições para planear ou aprender. Métodos sem esse modelo explícito aprendem valores ou políticas por outra via. A distinção não coincide com «usa uma rede» contra «não usa». Um modelo aprendido pode ser uma rede; um controlador tabular pode dispensá-la.
@@ -49,3 +66,5 @@ No pós-treino de linguagem, métodos de RL podem otimizar sinais de preferênci
 
 \textbf{Falhas possíveis:} premiar atividade em vez de resultado, esquecer o estado terminal ou propor exploração num sistema físico sem controlos.
 \end{promptlabbox}
+
+O personagem encontrou a porta; a questão seguinte muda de forma. Como pode uma máquina aprender regularidades suficientes para produzir uma frase, em vez de apenas escolher esquerda ou direita? É a entrada para os modelos de linguagem, onde o próximo elemento da sequência passa a ser uma previsão repetida muitas vezes.

@@ -73,6 +73,27 @@ As 41 entradas históricas mantêm o registo anterior. As 32 novas perfazem 73. 
 
 Em 04-11-2026 foram reconfirmados no texto oficial indexado do EUR-Lex o ato 2026/1744, considerando 40, alteração do artigo 113 e artigo 4, e a consolidação do AI Act de 27-07-2026. Mantêm-se os marcos de 02-12-2027 e 02-08-2028 nos âmbitos delimitados no capítulo. Isto não é leitura integral de toda a legislação ou parecer de conformidade. O capítulo preserva a data e a proveniência da verificação de 03-11, agora acompanhadas desta reconfirmação.
 
+## Segundo ciclo — narrativa, fundamentos e casos setoriais
+
+Retoma em 04-11-2026 a partir de `e990b891`. Acrescentadas 14 entradas: a bibliografia passa de 73 para 87. A consulta abaixo foi dirigida aos elementos indicados; não se declara leitura integral ou reprodução experimental destes trabalhos. Os cálculos novos são próprios e sintéticos.
+
+| Chave | Fonte primária e localizador | Alcance efetivamente verificado |
+|---|---|---|
+| `alpac1966` | [National Academies, DOI 10.17226/9547](https://www.nationalacademies.org/publications/9547), metadados e índice | Título, data, secções sobre custos, qualidade e tradução assistida. Recomendações completas não recuperadas; sem alegação de causalidade única sobre financiamento. |
+| `rumelhart1986` | [Nature 323, 533–536](https://www.nature.com/articles/323533a0), metadados/resumo | Autoria, data, retropropagação e representações. Não reivindicar invenção sem antecedentes. |
+| `krizhevsky2012` | [NeurIPS 25](https://proceedings.neurips.cc/paper/2012/hash/c399862d3b9d6b76c8436e924a68c45b-Abstract.html), página e PDF original indexado | Arquitetura, treino e GPU. Resumo da página e PDF divergem em números; o texto não usa essas percentagens ou contagens. |
+| `silver2016` | [Nature 529, 484–489](https://www.nature.com/articles/nature16961), resumo/metadados | Redes, aprendizagem, procura e vitória sobre campeão europeu; não confundir com encontro posterior de Lee Sedol. |
+| `weizenbaum1966` | [ACM, DOI 10.1145/365153.365168](https://dl.acm.org/doi/10.1145/365153.365168), resumo/metadados | Palavras-chave e regras de decomposição/recomposição. Frase didática do livro é original, não transcrição histórica. |
+| `mohanty2016` | [Frontiers, resumo e Results](https://www.frontiersin.org/journals/plant-science/articles/10.3389/fpls.2016.01419/full) | 99,35% no conjunto controlado; 31,40% e 31,69% em pequenos conjuntos externos de 121 e 119 imagens. Não é estimativa de todas as explorações agrícolas. |
+| `bergmann2019` | [CVPR 2019, 9592–9600](https://openaccess.thecvf.com/content_CVPR_2019/html/Bergmann_MVTec_AD_--_A_Comprehensive_Real-World_Dataset_for_Unsupervised_Anomaly_CVPR_2019_paper.html), resumo/metadados | Treino com imagens sem defeito, teste com anomalias e anotações. Dataset de inspeção visual, não ensaio de manutenção temporal. |
+| `eisemann2025` | [PRAIM, artigo em PMC](https://pmc.ncbi.nlm.nih.gov/articles/PMC11922743/), resumo, desenho e competing interests | 463094 participantes; adoção voluntária, observacional. 6,7 vs 5,7 deteções por mil; financiamento e participação da Vara declarados. Sem conclusão de mortalidade. |
+| `obermeyer2019` | [Science, DOI 10.1126/science.aax2342](https://doi.org/10.1126/science.aax2342), artigo primário disponibilizado por Berkeley | Resumo e descrição do alvo: custo como proxy de necessidade. Não se reproduz a análise. |
+| `kestin2025` | [Scientific Reports 15, 17458, PMC](https://pmc.ncbi.nlm.nih.gov/articles/PMC12179260/), Introduction/Results/Discussion | Curso com 194 alunos, duas aulas, condições alternadas e avaliação próxima. Registos por aula não são participantes independentes; não demonstra retenção universal. |
+| `salvi2025` | [Nature Human Behaviour, DOI 10.1038/s41562-025-02194-6](https://www.nature.com/articles/s41562-025-02194-6), texto primário indexado | Desenho e Discussion: 900 participantes, debate estruturado; comparação direta de duas condições IA não significativa (p=0,07). Sem inferência sobre resultado eleitoral. |
+| `chouldechova2017` | [arXiv 1703.00056](https://arxiv.org/abs/1703.00056), resumo/metadados | Conflito de critérios de equidade sob diferenças de prevalência; sem escolha normativa automática. |
+| `unctad2025` | [Relatório oficial](https://unctad.org/publication/technology-and-innovation-report-2025), página e registo DOI 10.18356/9789211068016 | Estrutura e orientação de política para capacidades/acesso; não evidência causal de cada recomendação. |
+| `henderson2020` | [JMLR 21(248), 1–43](https://www.jmlr.org/papers/v21/20-312.html), resumo/metadados | Contabilização explícita de energia e carbono. Exemplo numérico do livro é construído, sem telemetria real. |
+
 ## Recursos e licenças
 
 Texto novo, diagrama de equipa, tabelas, dados sintéticos e scripts foram produzidos para esta revisão sob as condições da obra. Capa original preservada byte a byte. Não se copiaram figuras dos estudos ou modelos; os artigos são citados e resumidos com alcance limitado. Python usa biblioteca padrão. Modelos e runtime mantêm as licenças indicadas no registo histórico; os pesos não são redistribuídos. O pacote SKILL.md não recebe uma licença comercial diferente da obra.

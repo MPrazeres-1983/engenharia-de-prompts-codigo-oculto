@@ -1,11 +1,22 @@
 \chapter{IA, Aprendizagem e Modelos: Começar do Zero}
 \label{ch:ia}
 
-Uma lavandaria descobre que recebe cada vez mais reclamações sobre meias desaparecidas. O gerente conclui que as máquinas de lavar têm preferência pelo pé esquerdo. A contabilista pede dados. Alguém sugere inteligência artificial. Ainda ninguém contou as meias.
+Às nove e dez, a Lavandaria das Meias Desaparecidas tem três reclamações, quatro explicações e nenhum par completo. O gerente suspeita das máquinas. Um funcionário culpa os sacos. Alguém propõe instalar inteligência artificial. A contabilista levanta os olhos do talão e faz a pergunta menos espetacular da manhã: «Quantas meias entraram?»
 
 \ficcao Esta é a \emph{Lavandaria das Meias Desaparecidas}, o caso que vamos desenvolver. O absurdo pertence à história; os problemas de dados, instruções, permissões e testes são reais. A empresa existe apenas neste livro e nos ficheiros de demonstração.
 
+Ninguém sabe. O sistema tem um campo para o peso do saco e outro para o nome do cliente. Não tem um inventário das peças. A primeira pista do nosso caso é esta ausência. Podemos ter uma máquina muito competente a conversar sobre um acontecimento que nunca foi registado.
+
 Antes de escolher uma ferramenta, precisamos de perceber que tipo de problema temos. Se queremos contar dez pares, uma soma chega. Se queremos agrupar milhares de reclamações escritas de formas diferentes, um modelo de linguagem pode ajudar. Se queremos saber onde está uma meia concreta, uma resposta eloquente não substitui o registo de entrada e saída.
+
+Vamos acompanhar esta investigação, mas não precisas de saber programar para entrar. Por agora, guarda três perguntas: o que queremos fazer, de que informação dispomos e como saberemos se resultou. Os nomes técnicos vão aparecer quando ajudarem a responder. Não é necessário decorar uma sigla antes de encontrar o problema que ela resolve.
+
+\section{A primeira pista: a mesma frase pode esconder tarefas diferentes}
+«Resolve as reclamações» parece um pedido simples. Pode significar ler mensagens, descobrir o que aconteceu, aplicar uma política, escrever uma resposta ou autorizar uma compensação. São operações diferentes. Algumas usam linguagem; outras exigem registos ou uma decisão com consequências.
+
+Experimenta dividir o pedido. «Separa mensagens sobre peças em falta das perguntas sobre horários» pede classificação. «Redige uma resposta com base nesta política» pede geração de texto condicionada em informação. «Confirma se recebemos duas ou três camisolas» pede uma consulta a um registo que tem de existir. A dificuldade de uma conversa não determina a dificuldade de obter o facto que a conversa discute.
+
+Esta separação evita um engano comum: atribuir à IA a responsabilidade por algo que o processo nunca conseguiu observar. Se ninguém contou as peças, a informação não se torna disponível por escrevermos «pensa cuidadosamente» em maiúsculas. A tipografia ainda não foi reconhecida como instrumento de medição.
 
 \section{IA é uma família de abordagens}
 Inteligência artificial é um campo de investigação e engenharia que procura construir sistemas capazes de executar tarefas associadas a capacidades como perceção, aprendizagem, raciocínio e decisão. Não é uma técnica única nem um selo de qualidade. Existem sistemas baseados em regras explícitas, procura, otimização e aprendizagem a partir de dados.
@@ -14,16 +25,27 @@ Num programa de regras, escrevemos condições: «se o pedido tem mais de dez di
 
 Uma rede neuronal é uma família de modelos que combina transformações parametrizadas. Os parâmetros são números ajustados durante o treino. Em \emph{deep learning}, várias camadas aprendem representações que ajudam na tarefa~\citep{goodfellow2016}. Não são pequenos neurónios humanos a trabalhar num escritório. A analogia biológica explica a origem do nome e deixa de ser útil bastante depressa.
 
+Podes imaginar três gavetas, com a ressalva de que os sistemas reais as combinam. Numa estão as regras que escrevemos: se falta um documento, pedir esse documento. Noutra estão modelos ajustados a exemplos: reconhecer formas diferentes de dizer que falta roupa. Na terceira estão métodos de procurar uma solução: experimentar sequências de ações num problema definido. Chamarmos IA ao conjunto não torna todos os elementos equivalentes nem obriga a substituir os mais simples.
+
 \begin{keyideabox}{Três coisas diferentes}
 O \textbf{algoritmo de treino} ajusta parâmetros; o \textbf{modelo treinado} usa esses parâmetros; a \textbf{aplicação} envolve o modelo com interface, dados, regras e ferramentas. Uma capacidade da aplicação não é necessariamente uma capacidade isolada do modelo.
 \end{keyideabox}
 
 \section{Prever uma classe e gerar uma resposta}
-Um classificador pode devolver «reclamação», «pergunta» ou «outro». Um modelo generativo pode produzir texto, imagem, áudio ou outras representações. O formato de entrada e saída depende do modelo e da aplicação. Generativo não significa criativo no sentido humano; significa que o sistema produz uma saída, em vez de se limitar a selecionar um registo existente.
+Um classificador pode devolver «reclamação», «pergunta» ou «outro». Um modelo generativo permite produzir amostras, como texto, imagem, áudio ou outras representações, a partir de regularidades aprendidas. O formato de entrada e saída depende do modelo e da aplicação. Gerar não garante originalidade: também pode haver repetição ou reprodução de materiais presentes nos dados. A criatividade humana é uma questão diferente da operação técnica de geração.
 
 Um modelo de linguagem atribui probabilidades a sequências de unidades de texto. Um LLM é um modelo de linguagem de grande escala. Mais à frente veremos tokens, redes e Transformers. Por agora, basta esta distinção: gerar uma continuação plausível e consultar um registo são operações diferentes. Uma aplicação pode combinar ambas.
 
 Quando perguntas «qual é a política de devoluções?», o sistema pode usar apenas o que aprendeu no treino, ler documentos fornecidos ou consultar uma ferramenta. A resposta final pode parecer idêntica nos três casos. Para avaliar confiança, interessa saber de onde veio a informação, se está atualizada e se a consegues confirmar.
+
+\section{Uma resposta que soa bem e outra que podemos usar}
+Voltemos ao balcão. O gerente escreve: «Um cliente diz que falta uma meia. Responde-lhe.» Uma saída possível seria um pedido de desculpa, seguido de uma promessa de indemnização. É um exemplo de resposta que um sistema poderia gerar; não é um registo de uma execução real. A promessa é o problema: ainda não fornecemos uma política, um montante ou autorização para compensar alguém.
+
+Agora acrescentamos material: «Neste exercício, a política fictícia manda pedir o talão e abrir uma verificação. Não promete compensação antes dessa verificação. Escreve uma resposta curta, cordial e sem acrescentar prazos.» A tarefa tornou-se mais verificável. Podemos procurar na resposta o pedido de talão, a indicação de verificação e a ausência de uma promessa que a fonte não permite.
+
+Não descobrimos onde está a meia. Descobrimos algo mais modesto e útil: como limitar uma resposta à informação disponível. Esta diferença vai atravessar o livro. Há tarefas em que gerar uma proposta é o resultado procurado; noutras, a proposta só pode avançar depois de um dado confirmado ou de uma autorização.
+
+Também poderíamos dispensar o modelo e usar uma resposta fixa. Isso seria suficiente se todas as mensagens fossem iguais. Um modelo torna-se interessante quando ajuda a interpretar variedade, adaptar a comunicação ou combinar informação dentro de limites. A pergunta de engenharia é quanto valor acrescenta e a que custo de erro e de revisão.
 
 \section{Treino, inferência e contexto}
 No \emph{treino}, os parâmetros mudam com os dados e com o objetivo escolhido. Na \emph{inferência}, usamos um modelo para produzir uma saída. Dar-lhe exemplos num prompt é, em geral, mudar a entrada dessa inferência; não é voltar a treinar o modelo. O ajuste posterior com novos dados, ou fine-tuning, é uma operação distinta.
@@ -34,10 +56,21 @@ Pensa numa reunião: a mesma pergunta, com ou sem o relatório em cima da mesa, 
 
 Também há três datas a distinguir: a data do documento, a data da sua atualização e o momento em que o sistema o consultou. «Esta informação estava no treino» não nos diz qual das três é relevante para decidir hoje.
 
+\section{O mapa de uma aplicação, sem abrir ainda o motor}
+Uma aplicação com IA pode ter uma entrada, um modelo, uma consulta a dados e uma saída sujeita a regras. O utilizador vê uma caixa de conversa; a aplicação pode fazer mais operações entre o pedido e a resposta. Se consultar o estado de uma encomenda, precisa de um acesso autorizado. Se calcular um preço, convém que use os valores e a regra aplicáveis. Se redigir uma explicação, essa explicação deve corresponder ao que aconteceu.
+
+Este mapa permite investigar uma falha. A mensagem foi transcrita incorretamente? O sistema recuperou uma política antiga? O modelo acrescentou um prazo? O executor permitiu uma ação indevida? «A IA enganou-se» pode ser uma descrição verdadeira e pouco útil. Identificar a etapa muda aquilo que podemos corrigir.
+
+Ao longo da obra, passaremos do mapa ao motor. Primeiro perceberemos como os dados permitem ajustar modelos; depois, como um modelo gera texto ou imagem; mais adiante, como ligar ferramentas, autorizações e testes. Os capítulos de especialização conservam estas mesmas perguntas, com maior detalhe. Um sistema com vinte componentes não está dispensado de saber de onde veio o número que apresentou.
+
 \section{O que não podemos concluir a partir de uma boa resposta}
 Uma resposta certa num exemplo não demonstra fiabilidade em todos os casos. Uma explicação convincente não prova que os passos descritos correspondem ao processo interno. Uma persona de «especialista» não concede credenciais. E uma recusa não prova que a aplicação está segura contra todas as formas de abuso.
 
 Estas limitações não tornam a ferramenta inútil. Definem o trabalho que continua a caber-nos: escolher a tarefa, fornecer dados adequados, estabelecer critérios e verificar resultados. É a diferença entre experimentar uma máquina e construir um processo à volta dela.
+
+Uma boa relação com a tecnologia começa por esta confiança delimitada. Podemos aceitar uma ideia de título e rejeitar uma referência que não conseguimos encontrar. Podemos usar uma classificação como ajuda à triagem e reservar a decisão final para um processo diferente. Não é incoerência: o risco e a informação disponível mudaram.
+
+Não prometemos aqui uma enciclopédia infalível. Prometemos um método visível: identificar fontes, explicar cálculos, testar o que foi implementado e dizer quando a evidência não chega. Um leitor deve poder discordar, repetir uma conta e encontrar o ponto exato onde uma conclusão deixou de ter suporte.
 
 \begin{promptlabbox}{Escolher a ferramenta antes de escrever o prompt}
 \textbf{Objetivo e contexto:} distinguir regras fixas, interpretação e consulta. Considera três tarefas fictícias: contar os pares recebidos; agrupar reclamações em linguagem livre; confirmar o estado da reclamação \texttt{LAV-001}.
@@ -49,4 +82,6 @@ Estas limitações não tornam a ferramenta inútil. Definem o trabalho que cont
 \textbf{Falhas possíveis:} confundir uma tarefa difícil de explicar com uma tarefa que precisa de IA; usar um modelo para inventar um dado ausente; automatizar antes de definir a decisão.
 \end{promptlabbox}
 
-No próximo capítulo vamos escrever o primeiro pedido e observar o que muda quando lhe acrescentamos informação útil. As matrizes podem esperar. As meias, aparentemente, já esperaram demasiado.
+No fim da manhã fictícia, a máquina de lavar continua sob suspeita. Mas a investigação mudou: antes de a interrogar, vamos registar entradas e saídas. O que falta deixou de ser uma resposta engenhosa; passou a ser uma observação.
+
+O capítulo seguinte recua na história para perceber de onde vieram estas ideias e por que os nomes mudam mais depressa do que certas perguntas. Se queres experimentar já uma conversa, o capítulo~\ref{ch:primeira-conversa} está preparado para isso. Se preferes abrir o motor por ordem, continua: a primeira peça não é uma matriz. É a diferença entre uma regra que alguém escreveu e um padrão que uma máquina aprendeu.
