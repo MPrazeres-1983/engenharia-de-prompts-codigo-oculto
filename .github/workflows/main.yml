@@ -44,6 +44,7 @@ jobs:
           python3 experiencias/llm_local/verificar_registo.py | tee build/registo-llm.json
           python3 -m exemplos.laboratorio.fundamentos | tee build/fundamentos.json
           python3 -m exemplos.laboratorio.decisoes | tee build/decisoes.json
+          python3 -m exemplos.laboratorio.adaptacao | tee build/adaptacao.json
           python3 -m exemplos.laboratorio.skills | tee build/skill.json
           python3 -m exemplos.laboratorio.equipas | tee build/controlador.json
           python3 experiencias/equipas/offline.py --verificar | tee build/equipas-offline.json

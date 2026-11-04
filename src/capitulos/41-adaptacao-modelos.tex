@@ -3,6 +3,8 @@
 
 O assistente conhece a política porque está no contexto, mas continua a usar a categoria errada. Alguém propõe fine-tuning. Pode fazer sentido; também pode haver um critério contraditório ou um erro no parser. Alterar os pesos antes de perceber a falha é como trocar a máquina de lavar porque o talão tem uma gralha.
 
+Vamos começar por essa escolha e avançar até uma atualização aprendida. A experiência deste capítulo usa apenas uma matriz pequena, para conseguirmos inspecionar a base, os fatores e o erro. Depois regressaremos aos modelos grandes, onde o mesmo princípio encontra dados, memória e avaliação muito mais exigentes.
+
 \section{Escolher a intervenção pelo problema}
 Prompting muda instruções e exemplos da chamada. RAG muda o acesso a evidência externa. Fine-tuning ajusta parâmetros de um modelo já treinado. Ferramentas permitem operações como consultar registos ou calcular. São intervenções diferentes e podem ser combinadas.
 
@@ -24,6 +26,13 @@ Custo ou latência excessivos & Modelo menor, cache ou distilação & Custo por 
 
 Se a política muda diariamente, não queremos ter de treinar novamente para corrigir uma frase. Se a dificuldade é executar sempre uma tarefa especializada com exemplos suficientes, um ajuste pode merecer comparação. Primeiro constrói uma base simples e reserva avaliação independente.
 
+\section{Quatro diagnósticos antes de abrir o treino}
+Considera um caso fictício em que a aplicação continua a responder com o prazo antigo. Primeiro verifica se recebeu a política nova. Se não recebeu, mudar os pesos pode ser uma intervenção cara numa falha de acesso a informação. Depois verifica se identificou a versão relevante. Se recebeu duas políticas incompatíveis sem datas claras, o problema inclui gestão documental.
+
+Num terceiro caso, a resposta tem a categoria certa no texto, mas o parser devolve outra. O modelo não precisa de ser corrigido para resolver um erro no código que interpreta a saída. Num quarto, dados e execução estão corretos, mas o comportamento desejado é repetidamente difícil de obter com instruções e exemplos. Aí existe uma hipótese de adaptação a comparar com alternativas.
+
+Esta sequência não demonstra que fine-tuning seja a última opção obrigatória. Dá-nos experiências que podem distinguir causas. O objetivo é evitar gastar recursos a treinar um erro que continuaria noutro componente. Um conjunto pequeno de casos bem diagnosticados pode ser mais informativo do que uma grande coleção de saídas sem explicação da falha.
+
 \section{Fine-tuning é um processo de dados}
 Num ajuste supervisionado de linguagem, usamos pares de entrada e resposta ou sequências formatadas segundo o modelo. A perda orienta atualizações de parâmetros. O formato de mensagens, a tokenização e as posições incluídas na perda fazem parte da implementação; copiar exemplos de outro modelo pode produzir treino errado sem erro de sintaxe.
 
@@ -32,6 +41,10 @@ Recolhe casos de tarefas autorizadas, revê etiquetas e elimina duplicados que c
 Dados sintéticos podem alargar variações, mas precisam de revisão e de origem registada. Cem paráfrases da mesma mensagem não equivalem a cem situações de negócio independentes. Uma avaliação deve incluir fenómenos não usados para fabricar os exemplos de treino.
 
 O plano de treino regista modelo e revisão, licença, dados, partições, objetivo, hiperparâmetros, sementes, versões e recursos. Guarda checkpoints e compara com a base antes de decidir se o novo modelo merece ser conservado. Mais passos podem reduzir a perda de treino e piorar o desempenho reservado.
+
+O teste reservado deve representar decisões que queremos tomar depois. Se todos os exemplos novos forem paráfrases construídas a partir dos mesmos poucos casos, é possível melhorar na coleção sem cobrir exceções ou situações realmente distintas. Regista a origem de cada família de exemplos e separa famílias quando esse é o tipo de novidade relevante.
+
+Também precisamos de distinguir perda de treino e medida de utilização. Um objetivo ao nível dos tokens pode melhorar enquanto uma categoria rara continua errada. A decisão de aceitar o modelo usa avaliações do sistema, incluindo ferramentas e regras que o rodeiam. Não é uma eleição entre a curva mais bonita e a opinião mais entusiasmada.
 
 \section{LoRA: aprender uma atualização pequena}
 LoRA congela pesos base e aprende uma atualização de baixo posto~\citep{hu2022lora}. Para uma matriz $W\in\mathbb R^{d_{out}\times d_{in}}$, podemos escrever
@@ -45,12 +58,41 @@ Para $W$ de $4096\times4096$ e $r=8$, há $16\,777\,216$ elementos na matriz bas
 
 Um adaptador precisa da base compatível. Misturar revisões pode invalidar o resultado. Fundir a atualização nos pesos pode ser uma opção de implementação; verifica o efeito na precisão, formato e capacidade de trocar adaptadores. A existência de um ficheiro pequeno não demonstra que a distribuição inclua todos os direitos e dependências necessários.
 
+\section{Uma atualização aprendida, com todos os números à vista}
+\textbf{Aprofundamento opcional.} Vamos reduzir a escala para dois valores de entrada e dois de saída. A base $W_0$ é a identidade: devolve a entrada sem alteração. Queremos aprender a transformação
+\[
+W_* = \begin{bmatrix}2&2\\-1&-1\end{bmatrix},
+\qquad
+\Delta W=W_*-W_0=\begin{bmatrix}1&2\\-1&-2\end{bmatrix}.
+\]
+A segunda linha da atualização é o oposto da primeira: a atualização tem posto um. Pode ser escrita como um vetor coluna vezes um vetor linha, por exemplo $B=(1,-1)^T$ e $A=(1,2)$, com escala $\alpha/r=1$.
+
+Na experiência, não damos estes fatores corretos ao treino. Começamos com $A=(0.1,-0.1)$ e $B=(0,0)^T$, usamos as quatro entradas $(\pm1,0)$ e $(0,\pm1)$ com alvos definidos por $W_*$, e atualizamos os dois fatores por gradiente. A base permanece inalterada. Os gradientes são calculados a partir dos mesmos pesos antigos antes de cada atualização simultânea.
+
+O comando \texttt{python3 -m exemplos.laboratorio.adaptacao} executa 1200 passos com taxa $0.05$. A perda média por componente começa em $2.5$ e termina abaixo de $10^{-12}$ nesta configuração. Os casos reservados $(1,1)$, $(-1,2)$ e $(2,-1)$ também ficam abaixo desse erro. O resultado guardado inclui configuração, fatores, dados e hash do código; os testes comparam os gradientes com diferenças finitas.
+
+Os fatores aprendidos podem ter valores diferentes dos que escrevemos à mão e produzir o mesmo produto. Multiplicar um fator por uma constante não nula e dividir o outro pela mesma constante mantém $BA$. O que queremos comparar é a atualização e o comportamento, não uma igualdade arbitrária entre coordenadas internas.
+
+Esta é uma adaptação efetivamente treinada de uma transformação linear sintética. Não é um Transformer nem treino LoRA de um LLM. Nesta escala, os fatores têm quatro parâmetros, tantos como a matriz 2×2; não há poupança de parâmetros. Escolhemos a dimensão para tornar o mecanismo visível. A vantagem de contagem em matrizes maiores continua a depender das dimensões e do posto escolhidos.
+
+\section{A experiência em que mais passos não chegam}
+Mudamos agora o alvo para $W_*=2I$, mantendo base identidade e um adaptador de posto um. A atualização necessária seria $I$, que tem posto dois. O treino não pode representar exatamente o alvo com essa restrição. Na execução guardada, a perda passa de $0.5$ para $0.25$ e permanece limitada pela capacidade da construção.
+
+Podemos verificar o limite neste caso, sem extrapolar para todas as redes. Com as quatro entradas escolhidas e a média por componente do programa, a perda é $\|BA-I\|_F^2/4$. Se $z=\|A\|\|B\|$, a desigualdade de Cauchy--Schwarz dá
+\[
+\|BA-I\|_F^2=2-2A B+\|A\|^2\|B\|^2
+\geq (z-1)^2+1\geq1.
+\]
+Logo a perda não pode descer abaixo de $1/4$. O treino observado atinge esse valor nesta configuração. A prova refere-se à tarefa linear definida; não é uma garantia de convergência do algoritmo em qualquer problema.
+
+A lição de especialização liga três coisas: classe de modelos, otimização e dados. Uma perda que deixou de descer pode resultar de capacidade insuficiente, de dificuldade de otimização ou de outros fatores. Antes de aumentar passos ou recursos, precisamos de uma experiência que distinga essas possibilidades.
+
 \section{QLoRA: quantizar a base e treinar adaptadores}
 QLoRA descreve treino de adaptadores através de uma base congelada quantizada a quatro bits, com escolhas como NF4, dupla quantização e gestão de memória~\citep{dettmers2023}. Não significa que todas as operações e todos os dados do treino existam a quatro bits. A precisão de cálculo e as estruturas auxiliares fazem parte da configuração.
 
 O resultado publicado pertence aos modelos, dados e avaliações estudados. Não transforma a capacidade de uma GPU numa promessa para qualquer sequência, lote ou runtime. Para planear um ensaio, mede o pico de memória e o tempo com a configuração concreta, e inclui falhas por falta de memória no registo.
 
-Nesta edição, as fórmulas e contagens são explicadas e os cálculos elementares têm exemplos executáveis. Não foi executado um treino LoRA ou QLoRA de um LLM. O procedimento seguinte é uma proposta de trabalho para um ambiente com recursos e modelo íntegro, não um resultado experimental já obtido.
+Nesta edição, a adaptação linear pequena e os cálculos elementares foram executados. Não foi executado um treino LoRA ou QLoRA de um LLM. O procedimento do laboratório para um modelo de linguagem continua a ser uma proposta para um ambiente com recursos e modelo íntegro.
 
 \section{Distilar comportamento para outra máquina}
 Distilação treina um modelo a aproximar comportamento de um professor ou conjunto de professores. O trabalho de Hinton, Vinyals e Dean é uma referência original desta abordagem~\citep{hinton2015}. Podem usar-se distribuições de saída ou respostas produzidas, consoante o método. O aluno não recebe uma garantia de herdar toda a competência do professor.
@@ -64,12 +106,16 @@ Além da métrica principal, inclui formato, instruções de segurança, capacid
 
 Versiona o conjunto completo que será servido: base, adaptador, tokenizador, templates, parâmetros e validação. Um rollback precisa desses elementos compatíveis. A diferença entre prompting e treino não elimina o ciclo de mudança controlada do capítulo~\ref{ch:llmops}.
 
+Uma comparação de aceitação pode conservar o mesmo conjunto de casos e variar apenas a intervenção: base, contexto melhorado, recuperação e adaptação, conforme a tarefa. Mede também custo de manter a informação correta. Um método que exige novo treino a cada alteração de regra pode perder uma vantagem observada numa fotografia estática do problema.
+
 \begin{promptlabbox}{Preparar um ajuste que ainda possa ser reprovado}
 \textbf{Objetivo e contexto:} desenhar um ensaio para classificar pedidos fictícios. Requisitos fundamentais: editor de texto e os exemplos de avaliação existentes; nenhum treino pago é necessário.
 
-\textbf{Procedimento:} define uma base com prompting; cria desenvolvimento e teste com situações distintas; escreve critérios de aceitação e de regressão; calcula parâmetros de uma atualização LoRA; identifica as medições que faltariam num treino real.
+\textbf{Procedimento:} executa primeiro a adaptação linear com \texttt{python3 -m exemplos.laboratorio.adaptacao}; confirma os dois problemas e os limites de posto. Para a extensão a linguagem, define uma base com prompting, desenvolvimento e teste com situações distintas, critérios de aceitação e de regressão. Identifica as medições que faltariam num treino de LLM.
 
-\textbf{Resultado esperado e validação:} o plano permite rejeitar a adaptação se não melhorar a tarefa dentro do custo e risco definidos. O cálculo de parâmetros não é apresentado como memória total nem como treino executado.
+\textbf{Resultado esperado e validação:} a matriz base permanece congelada; o alvo de atualização de posto um é aprendido, o de posto dois conserva erro. O plano de extensão permite rejeitar a adaptação se não melhorar a tarefa. O treino linear não é apresentado como treino de LLM ou medição de memória.
 
 \textbf{Falhas possíveis:} treinar a política que devia ser consultada, contaminar o teste com paráfrases de treino ou escolher a melhor seed depois de ver os resultados.
 \end{promptlabbox}
+
+O adaptador aprendeu o que a sua forma permitia aprender. Para levar esta ideia a um modelo real falta outra investigação: que recursos serão necessários e como verificamos que executámos exatamente o modelo que pretendíamos? A próxima etapa começa no tamanho de um ficheiro, mas não termina nessa conta.
