@@ -29,3 +29,50 @@ Uma página oficial suporta a descrição da própria interface; não demonstra 
 ## Integridade do trabalho anterior
 
 Foram executados o verificador dos registos e os 30 testes da base. As 52 inferências de 03-11-2026 continuam históricas: não foram repetidas nem convertidas em resultados da V3. O livro distingue testes determinísticos, execução real com modelo e protocolos ainda não executados com leitores ou utilizadores.
+
+## Índice das 32 entradas acrescentadas à bibliografia
+
+As 41 entradas históricas mantêm o registo anterior. As 32 novas perfazem 73. Foram verificados títulos, autoria identificada, datas/versões e ligações primárias ou registos primários. DOI é incluído quando identificado, sem inventar um DOI para cada página. Nos estudos, a leitura foi dirigida ao resumo e às secções indicadas; não equivale a reprodução ou revisão integral de todos os artigos.
+
+| Chave | Fonte / versão | Consulta e alcance |
+|---|---|---|
+| `turing1950` | [Mind, 1950](https://academic.oup.com/mind/article/LIX/236/433/986238), DOI 10.1093/mind/LIX.236.433 | Metadados e abertura no editor indexado; abertura direta do DOI bloqueada. Jogo de imitação, sem teste universal de consciência. |
+| `dartmouth1955` | [Proposta original](https://www-formal.stanford.edu/jmc/history/dartmouth/dartmouth.html), 31-08-1955 | Proposta para o verão de 1956; origem documental do programa. |
+| `sutton2018` | [MIT Press, 2.ª edição](https://mitpress.mit.edu/9780262039246/reinforcement-learning/) | Metadados de referência; definições e cálculos didáticos próprios, sem alegar reprodução experimental do livro. |
+| `ho2020` | [DDPM v2](https://arxiv.org/abs/2006.11239v2) | Metadados e resumo; descrição da família, sem importar resultados de benchmark. |
+| `rombach2022` | [CVPR 2022](https://openaccess.thecvf.com/content/CVPR2022/html/Rombach_High-Resolution_Image_Synthesis_With_Latent_Diffusion_Models_CVPR_2022_paper.html) | Metadados/resumo original, difusão em representação latente e condicionamento; sem reimplementação. |
+| `kingma2014` | [VAE](https://arxiv.org/abs/1312.6114), preprint 2013, ICLR 2014 | Metadados e resumo; descrição breve, sem números de desempenho. |
+| `gan2014` | [GAN](https://arxiv.org/abs/1406.2661), 2014 | Metadados e resumo; título de conferência difere do título atual no arXiv, registado no BibTeX. |
+| `radford2021clip` | [PMLR 139, 8748–8763](https://proceedings.mlr.press/v139/radford21a.html) | Metadados e resumo original; representação texto/imagem, sem universalizar capacidades. |
+| `doshi2024` | [Science Advances](https://doi.org/10.1126/sciadv.adn5290) | Título, autores, DOI e resultado no âmbito de histórias curtas; não prova sobre todos os meios criativos. |
+| `c2pa22` | [C2PA 2.2](https://spec.c2pa.org/specifications/specifications/2.2/specs/C2PA_Specification.html) | Definições de proveniência, autenticidade e content credentials; versão explícita, sem a declarar a mais recente. |
+| `unesco2023` | [UNESCO](https://doi.org/10.54675/EWZM9535), 2023 | Metadados e orientação institucional sobre educação; não lei universal nem estudo causal. |
+| `agentskills2026` | [Agent Skills Specification](https://agentskills.io/specification), consulta 04-11-2026 | Formato, frontmatter, limites e divulgação progressiva. Não há instalação universal nem ativação garantida. |
+| `autogen2023` | [AutoGen v2](https://arxiv.org/abs/2308.08155v2), DOI 10.48550/arXiv.2308.08155 | Metadados e resumo; padrão de arquitetura, não superioridade geral de equipas. |
+| `a2a2026` | [A2A 1.0.0](https://a2a-protocol.org/v1.0.0/specification/) | Visão geral; secções 4.4.5 e 8.2, tarefas e estados. Confirmado `/.well-known/agent-card.json`; não usar caminho de rascunho antigo. |
+| `hu2022lora` | [LoRA v2](https://arxiv.org/abs/2106.09685v2), preprint 2021 / ICLR 2022 | Metadados e resumo; fórmula/contagens didáticas independentes, sem atribuir redução de parâmetros a memória total. |
+| `dettmers2023` | [QLoRA, NeurIPS 2023](https://arxiv.org/abs/2305.14314) | Metadados e resumo com base congelada e adaptadores; não se importam percentagens comerciais de benchmark. |
+| `hinton2015` | [Distilling the Knowledge](https://arxiv.org/abs/1503.02531), 2015 | Metadados e resumo; mecanismo de distilação, sem ganhos garantidos. |
+| `brynjolfsson2025` | [QJE 140(2)](https://doi.org/10.1093/qje/qjae044), 889–942 | Abstract e IV.C (estratégia empírica). Artigo final: 5172 agentes e 15%; não misturar versões preliminares nem anunciar ensaio aleatório global. |
+| `ilo2025` | [OIT WP 140](https://www.ilo.org/publications/generative-ai-and-jobs-refined-global-index-occupational-exposure) | Resumo metodológico e estimativa de exposição; tarefas, entrada de especialistas e modelos, sem previsão de despedimentos. |
+| `bastani2025` | [PNAS](https://pmc.ncbi.nlm.nih.gov/articles/PMC12232635/), DOI 10.1073/pnas.2422633122 | Resumo, resultados e descrição da avaliação sem ferramenta; autoria reconfirmada no registo PubMed. Não se afirma dano universal. |
+| `jumper2021` | [Nature 596, 583–589](https://www.nature.com/articles/s41586-021-03819-2) | Resumo e desenho CASP14, avaliação cega; estrutura prevista não demonstra eficácia terapêutica. |
+| `who2024` | [Lançamento oficial OMS, 18-01-2024](https://www.who.int/news/item/18-01-2024-who-releases-ai-ethics-and-governance-guidance-for-large-multi-modal-models) | Benefícios/riscos e orientação. A página do catálogo ISBN apresenta 25-03-2025; a referência foi ajustada para citar explicitamente a notícia de lançamento de 2024, sem confundir as datas. |
+| `fang2025` | [Página dos autores MIT](https://www.media.mit.edu/publications/how-ai-and-human-behaviors-shape-psychosocial-effects-of-chatbot-use-a-longitudinal-controlled-study/) | Resumo revisto: condições experimentais sem efeitos significativos reportados; associação com uso voluntário não aleatorizado. Resumos antigos diferem; não foram fundidos. |
+| `iea2025` | [IEA Energy and AI](https://www.iea.org/reports/energy-and-ai), 10-04-2025 | Procura de eletricidade, estimativa de 2024; âmbito inclui centros de dados, não apenas IA. |
+| `iea2026` | [IEA Key Questions](https://www.iea.org/reports/key-questions-on-energy-and-ai/executive-summary), 16-04-2026 | Resumo executivo; crescimento de 2025, projeção central 2030 e limites físicos. Separados histórico e cenário. |
+| `ha2018` | [World Models v4](https://arxiv.org/abs/1803.10122v4) | Metadados e resumo; representação e controlo em ambientes estudados. |
+| `hafner2025` | [Nature / cópia primária em PMC](https://pmc.ncbi.nlm.nih.gov/articles/PMC12003158/), DOI 10.1038/s41586-025-08744-2 | Metadados/autoria e resumo; abertura direta de Nature limitada por redirecionamento. Sem percentagens de generalidade inventadas. |
+| `butlin2023` | [Consciousness in AI v3](https://arxiv.org/abs/2308.08708v3) | Metadados e resumo; indicadores dependem de teorias. Conclusão de 2023 não é avaliação de todos os sistemas de 2026. |
+| `metr2025` | [Relatório original METR](https://metr.org/Early_2025_AI_Experienced_OS_Devs_Study-paper.pdf), julho de 2025 | Abstract e metodologia na página dos autores: 16 programadores, 246 tarefas, atribuição por tarefa e 19% de aumento do tempo. Não generalizar para todo o software ou modelos posteriores. |
+| `graphcast2023` | [Science](https://doi.org/10.1126/science.adi2336) | Metadados e resumo; previsão meteorológica de médio prazo, sem concluir validade climática geral. |
+| `rt22023` | [RT-2](https://arxiv.org/abs/2307.15818), 2023 | Metadados e resumo original; visão/linguagem/ação em avaliação delimitada. |
+| `gu2023` | [Mamba v2](https://arxiv.org/abs/2312.00752v2) | Metadados/resumo, preprint de 2023 revisto em 2024; alternativa de arquitetura, sem proclamar substituição universal de Transformers. |
+
+## Reconfirmação dirigida do enquadramento jurídico
+
+Em 04-11-2026 foram reconfirmados no texto oficial indexado do EUR-Lex o ato 2026/1744, considerando 40, alteração do artigo 113 e artigo 4, e a consolidação do AI Act de 27-07-2026. Mantêm-se os marcos de 02-12-2027 e 02-08-2028 nos âmbitos delimitados no capítulo. Isto não é leitura integral de toda a legislação ou parecer de conformidade. O capítulo preserva a data e a proveniência da verificação de 03-11, agora acompanhadas desta reconfirmação.
+
+## Recursos e licenças
+
+Texto novo, diagrama de equipa, tabelas, dados sintéticos e scripts foram produzidos para esta revisão sob as condições da obra. Capa original preservada byte a byte. Não se copiaram figuras dos estudos ou modelos; os artigos são citados e resumidos com alcance limitado. Python usa biblioteca padrão. Modelos e runtime mantêm as licenças indicadas no registo histórico; os pesos não são redistribuídos. O pacote SKILL.md não recebe uma licença comercial diferente da obra.

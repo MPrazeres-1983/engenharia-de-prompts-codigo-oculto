@@ -100,3 +100,27 @@ Estados utilizados: **Suficientemente coberto**, **Necessita aprofundamento**, *
 ## Balanço inicial
 
 O núcleo de engenharia deve ser preservado. As maiores mudanças são de amplitude e de profundidade, com correções dirigidas de afirmações excessivas. O estado final por tema e as limitações de produção constarão de `V3_PROGRESSO.md`; esta auditoria inicial não será reescrita como se as lacunas nunca tivessem existido.
+
+## Reavaliação após a primeira integração V3 — 04-11-2026
+
+Os identificadores de ficheiros abaixo não são os números impressos dos capítulos. Todos os 29 capítulos existentes foram integrados e revistos; os 21 novos cobrem inicialmente os temas antes ausentes. «Produzido» significa texto e recursos presentes, não aceitação editorial final.
+
+| Tema / ficheiros | Estado após integração | Evidência e trabalho restante |
+|---|---|---|
+| História e definições — 01, 30 | Necessita aprofundamento | Texto com fontes originais; desenvolver os ciclos históricos e as diferenças entre programas de investigação |
+| ML, RL e arquiteturas — 06–09, 31–33 | Necessita aprofundamento | Explicações e cálculos testados; faltam exercícios desenvolvidos de redes e avaliação fora da distribuição |
+| Prompts, raciocínio e estrutura — 02–05, 10–11, 17 | Suficientemente coberto | Núcleo conservado com generalizações corrigidas; sujeito à leitura editorial integrada |
+| Contexto e memória — 34 | Necessita aprofundamento | Seleção, proveniência e compressão explicadas; faltam ensaios comparativos com modelos |
+| Aplicações pessoais e profissionais — 12–16, 18–19 | Suficientemente coberto | Casos práticos preservados; evidência de criatividade e aprendizagem delimitada |
+| Imagem, audiovisual e jogos — 35–37 | Necessita aprofundamento | Projetos sem código escritos, com critérios e direitos; falta execução e validação com leitores |
+| RAG, APIs e sistema — 20–24 | Suficientemente coberto | Implementação e 30 testes históricos preservados; protocolo e limites dos resultados reais mantidos |
+| Agent Skills — 38 | Necessita aprofundamento | Pacote versionado, recursos, hashes e seis testes; falta instalação/ativação real num produto |
+| Multiagentes e A2A — 39–40 | Necessita aprofundamento | Controlador, oito testes e ensaio offline; LLM bloqueado, interoperabilidade apenas explicada |
+| Adaptação e modelos locais — 41–42 | Necessita aprofundamento | LoRA/QLoRA, distilação, quantização e memória; treino e medições reais por executar |
+| Teste, segurança e operação — 25–28 | Suficientemente coberto | Núcleo revisto e estendido às novas arquiteturas; ensaio operacional com modelo é extensão pendente |
+| Trabalho e sociedade — 43–47 | Necessita aprofundamento | Cinco capítulos, estudos e limites metodológicos; vários setores ainda tratados de forma introdutória |
+| Futuro — 29, 48 | Necessita aprofundamento | Hipóteses e cenários distinguem evidência contrária; requer maior desenvolvimento e revisão especializada |
+| Laboratório integrado — 49–50 | Necessita aprofundamento | Seis projetos e protocolo comparativo; apenas parte offline executada, sem participantes ou novo LLM |
+| Padrões, glossário e fontes — A–C | Suficientemente coberto | Termos corrigidos, 58 entradas; 73 referências e remissões verificadas |
+
+As necessidades iniciais de atualização e reorganização foram tratadas nesta integração; continuam no registo inicial para rastreabilidade. Não há partes vazias ou capítulos apenas com títulos. Isso não basta para a profundidade pretendida de uma obra de referência. O próximo ciclo deve desenvolver os temas assinalados, sem aumentar páginas por repetição, figuras decorativas ou alterações de formatação.

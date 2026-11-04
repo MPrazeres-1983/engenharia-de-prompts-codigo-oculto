@@ -1,54 +1,64 @@
-# Engenharia de Prompts: O Código Oculto
+# O Código Oculto da Inteligência Artificial
 
-**Mário Prazeres — segunda edição (3 de novembro de 2026).**
+**Mário Prazeres — terceira edição em desenvolvimento, 4 de novembro de 2026.**
 
-O livro começa sem exigir conhecimentos técnicos e avança até modelos, raciocínio, software, RAG, ferramentas, agentes, avaliação, segurança e governação. Mantém a capa e a identidade da primeira edição. A revisão tem 29 capítulos, três apêndices, 47 laboratórios e bibliografia BibTeX.
+Esta branch amplia *Engenharia de Prompts: O Código Oculto* para fundamentos, utilização criativa, sistemas, operação e impacto social da IA. O título é provisório. **O manuscrito ainda não satisfaz a ambição editorial final e não está aprovado para publicação ou merge.**
 
-A segunda edição é integrada em `main` pelo [PR #1](https://github.com/MPrazeres-1983/engenharia-de-prompts-codigo-oculto/pull/1), com autorização expressa do autor. A primeira edição permanece no histórico em `f63d417fb655c6af013569c5381235625e0567d1`. O merge não cria tags ou releases automaticamente.
+A estrutura de trabalho tem dez partes, 50 capítulos, três apêndices, 73 laboratórios, 73 referências e 58 entradas de glossário. Os capítulos novos oferecem uma primeira cobertura; vários temas setoriais e experiências precisam de aprofundamento. Não se acrescentaram páginas para atingir o intervalo indicativo de 450–600.
 
-## Ler e rever
+A segunda edição permanece em `main@975ade89632700918786603dc23722e74f8610f7`, integrada pelo [PR #1](https://github.com/MPrazeres-1983/engenharia-de-prompts-codigo-oculto/pull/1). Esta revisão usa `terceira-edicao-ia-referencia-2026` e o [PR #2, Draft](https://github.com/MPrazeres-1983/engenharia-de-prompts-codigo-oculto/pull/2). Não cria tags ou releases nem altera diretamente `main`.
 
-O PDF e as evidências de teste são guardados nos [artefactos de GitHub Actions](https://github.com/MPrazeres-1983/engenharia-de-prompts-codigo-oculto/actions/workflows/main.yml). Escolhe a execução da branch e o commit pretendidos; cada PDF identifica a revisão compilada. O índice paginado é gerado pelo LaTeX.
+## Estado, fontes e revisão
 
-- [Auditoria integral](docs/AUDITORIA_EDITORIAL.md)
-- [Estrutura e plano editorial](docs/PLANO_SEGUNDA_EDICAO.md)
-- [Guia de escrita e terminologia](docs/GUIA_EDITORIAL.md)
-- [Alterações e mapeamento por capítulo](docs/CHANGELOG_SEGUNDA_EDICAO.md)
-- [Fontes e alcance da verificação](docs/FONTES_VERIFICADAS.md)
-- [Laboratórios](docs/LABORATORIOS.md)
-- [Validação e questões para revisão humana](docs/VALIDACAO_SEGUNDA_EDICAO.md)
-- [52 inferências reais: prompts, respostas, métricas e falhas](experiencias/llm_local/README.md)
+- [Plano e três alternativas de título](docs/V3_PLANO_EDITORIAL.md)
+- [Auditoria dos 29 capítulos e mapa de lacunas](docs/V3_MATRIZ_COBERTURA.md)
+- [Progresso, pendências e próximo passo exato](docs/V3_PROGRESSO.md)
+- [Fontes e alcance da consulta V3](docs/V3_FONTES_E_EVIDENCIAS.md)
+- [Validação e limites](docs/V3_VALIDACAO.md)
+- [Manifesto de estrutura](docs/V3_ESTRUTURA.json)
+- [Documentação histórica da segunda edição](docs/VALIDACAO_SEGUNDA_EDICAO.md)
 
-## Compilar
+O PDF e as evidências são guardados nos [artefactos de Actions](https://github.com/MPrazeres-1983/engenharia-de-prompts-codigo-oculto/actions/workflows/main.yml), com a revisão compilada. A folha de rosto indica o título provisório e a nota distingue o estado de trabalho da publicação definitiva. A capa original é preservada.
 
-Requer TeX Live com português, pdfLaTeX, latexmk, BibTeX, TikZ, natbib, tcolorbox e os pacotes habituais de LaTeX. Não usa Biber ou shell escape.
+## Compilar e verificar
+
+Requer TeX Live com português, pdfLaTeX, latexmk, BibTeX, TikZ, natbib e tcolorbox. Não usa Biber ou shell escape. Em Ubuntu/Debian, os conjuntos `texlive-latex-extra`, `texlive-fonts-recommended`, `texlive-lang-portuguese`, `texlive-science` e `latexmk` cobrem as dependências usuais.
 
 ```bash
 latexmk -cd -pdf -interaction=nonstopmode -halt-on-error -file-line-error src/livro.tex
 python3 scripts/verificar_livro.py --log src/livro.log
+python3 -m unittest discover -s tests -v
+python3 -m compileall -q exemplos scripts tests experiencias
 ```
 
-Em Ubuntu/Debian, os conjuntos `texlive-latex-extra`, `texlive-fonts-recommended`, `texlive-lang-portuguese`, `texlive-science` e `latexmk` cobrem as dependências usuais. A Actions existente foi adaptada para compilar e verificar o projeto em pushes e pull requests.
+O manifesto verifica dez partes, ordem dos capítulos e apêndices, laboratórios, labels, citações e JSON. Não certifica qualidade científica ou legibilidade. O log rejeita overfulls, referências indefinidas e outros erros relevantes; a revisão visual é um passo separado.
 
-## Executar os exemplos
+## Laboratórios offline
 
-Python 3.10+, apenas biblioteca padrão:
+Python 3.10+, apenas biblioteca padrão, sem rede ou chaves:
 
 ```bash
 python3 -m exemplos.lavandaria --cliente cliente-A --pergunta "Estado LAV-001"
 python3 -m exemplos.lavandaria.avaliar
-python3 -m unittest discover -s tests -v
-python3 scripts/verificar_livro.py
+python3 -m exemplos.laboratorio.fundamentos
+python3 -m exemplos.laboratorio.skills
+python3 -m exemplos.laboratorio.equipas
+python3 experiencias/equipas/offline.py --verificar
+python3 experiencias/llm_local/verificar_registo.py
 ```
 
-[A Lavandaria das Meias Desaparecidas](exemplos/lavandaria/README.md) é um caso fictício com pesquisa lexical, templates, contratos e autorização. Não executa um LLM, não implementa MCP e não precisa de rede ou chaves. Os dois scripts históricos foram corrigidos para identificar claramente as heurísticas e retirar confiança inventada.
+A [Lavandaria](exemplos/lavandaria/README.md) é fictícia e usa pesquisa lexical, templates, contratos e autorização. Os fundamentos executam cálculos didáticos de regressão, atenção, quantização e memória. O [pacote de skill](exemplos/skills/rever-evidencias/SKILL.md) tem validador estrutural e recursos com hashes; esses controlos não verificam verdade factual nem ativação num produto.
 
-O [ensaio opt-in com Qwen2.5-0.5B e llama.cpp](experiencias/llm_local/README.md) acrescenta inferência real, com configuração fixada e todas as saídas guardadas. Não altera a demonstração offline nem corre na CI. Os resultados incluem falhas de classificação, cálculo e conteúdo, mesmo em JSON válido.
+O controlador de equipa, por omissão, usa um **stub determinístico**. O ensaio offline acerta dois de quatro casos nos três modos; a equipa executa mais componentes sem acrescentar capacidade ao mesmo stub. Isto não mede desempenho de um LLM.
 
-## Organização
+## Inferência real e bloqueio atual
 
-`src/livro.tex` é a entrada; `src/preambulo.tex` contém a apresentação; `src/capitulos/` organiza o manuscrito; `src/referencias.bib` guarda fontes. `exemplos/`, `tests/` e `scripts/` contêm demonstrações e verificações; `docs/` regista a revisão.
+As [52 inferências reais da segunda edição](experiencias/llm_local/README.md) estão preservadas, com respostas brutas, configuração e resultados negativos. A CI reavalia integridade; não volta a executar o modelo.
 
-## Autor e licença
+O [novo piloto V3](experiencias/equipas/README.md) está implementado, com quatro casos e 32 chamadas de modelo planeadas. **Não foi executado com LLM:** a cópia disponível do modelo estava incompleta, e a tentativa de obter outra cópia falhou por falta de ligação. Não há medições com participantes humanos, treino LoRA/QLoRA ou resultados fictícios apresentados como reais. Esses percursos estão explicitamente propostos para execução futura.
 
-Mário Prazeres, licenciado em Engenharia Informática. Obra sob [CC BY-NC-SA 4.0](LICENSE). A nota de edição declara a assistência de IA e mantém a aprovação final a cargo do autor.
+## Organização, autoria e licença
+
+`src/livro.tex` determina a ordem; os prefixos numéricos dos ficheiros conservam identidade histórica. `src/preambulo.tex` contém os estilos e `src/referencias.bib` a bibliografia. `docs/` conserva decisões e checkpoints; `exemplos/`, `experiencias/`, `scripts/` e `tests/` fornecem o companheiro executável.
+
+Mário Prazeres, licenciado em Engenharia Informática. Obra sob [CC BY-NC-SA 4.0](LICENSE). A assistência de IA é declarada na nota editorial. Licenças de modelos e bibliotecas permanecem próprias; pesos não são redistribuídos no repositório. Título comercial, capa final, publicação e merge dependem de decisão do autor.
