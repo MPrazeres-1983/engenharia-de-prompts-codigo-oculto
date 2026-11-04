@@ -92,7 +92,7 @@ Retoma em 04-11-2026 a partir de `e990b891`. Acrescentadas 14 entradas: a biblio
 | `salvi2025` | [Nature Human Behaviour, DOI 10.1038/s41562-025-02194-6](https://www.nature.com/articles/s41562-025-02194-6), texto primário indexado | Desenho e Discussion: 900 participantes, debate estruturado; comparação direta de duas condições IA não significativa (p=0,07). Sem inferência sobre resultado eleitoral. |
 | `chouldechova2017` | [arXiv 1703.00056](https://arxiv.org/abs/1703.00056), resumo/metadados | Conflito de critérios de equidade sob diferenças de prevalência; sem escolha normativa automática. |
 | `unctad2025` | [Relatório oficial](https://unctad.org/publication/technology-and-innovation-report-2025), página e registo DOI 10.18356/9789211068016 | Estrutura e orientação de política para capacidades/acesso; não evidência causal de cada recomendação. |
-| `henderson2020` | [JMLR 21(248), 1–43](https://www.jmlr.org/papers/v21/20-312.html), resumo/metadados | Contabilização explícita de energia e carbono. Exemplo numérico do livro é construído, sem telemetria real. |
+| `henderson2020` | [JMLR 21(248), 1–43](https://www.jmlr.org/papers/v21/20-312.html), resumo, secções 3.1, 4.3 e limitações no PDF | Contabilização, PUE e fronteiras de telemetria. Exemplo numérico do livro é construído, sem medição elétrica real. |
 
 ## Recursos e licenças
 

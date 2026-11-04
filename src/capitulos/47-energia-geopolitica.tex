@@ -1,7 +1,9 @@
 \chapter{A Nuvem Tem Cabos: Energia, Semicondutores e Dependências}
 \label{ch:energia}
 
-A palavra «nuvem» é uma excelente maneira de esconder um edifício. Há servidores, chips, memória, redes, refrigeração, água em determinados sistemas e trabalhadores a manter tudo ligado. A IA é software, mas a sua escala tem condições materiais.
+A palavra «nuvem» é uma excelente maneira de esconder um edifício. A conversa termina no ecrã; algures, equipamento calculou a resposta. Houve servidores, chips, memória, redes, refrigeração, água em determinados sistemas e pessoas a manter tudo ligado. A IA é software, mas a sua escala tem condições materiais.
+
+Este capítulo segue uma pergunta que parece simples: quanto custa, em recursos, uma tarefa concluída? Para responder, precisamos de escolher uma fronteira. O número muda conforme contamos o chip, a máquina, o edifício ou a cadeia de produção. A investigação começa antes da multiplicação: começa por decidir o que está dentro da conta.
 
 \section{Definir a fronteira antes de contar}
 Energia de treino, inferência, fabrico de equipamento e operação de centros de dados não são a mesma medida. Um relatório pode contar eletricidade do edifício; outro apenas potência atribuída ao acelerador. Comparar os números exige fronteiras e unidades equivalentes.
@@ -10,12 +12,37 @@ A IEA estimou cerca de 415 TWh de eletricidade para centros de dados em 2024 no 
 
 Não transformes o total de centros de dados num total exclusivo de geração de texto. Também não uses a eficiência de uma consulta curta como estimativa de um vídeo ou de um agente com muitas chamadas. O tipo e o volume de trabalho importam.
 
+\section{A fronteira é parte do resultado}
+Um valor pode incluir apenas a computação atribuída a uma execução, acrescentar o equipamento em repouso ou repartir custos de infraestrutura. Outro pode incluir fabrico e substituição de hardware. Não há uma única fronteira adequada a todas as perguntas. Há fronteiras que precisam de ser declaradas para que a comparação faça sentido.
+
+Se queremos decidir entre dois fluxos no mesmo equipamento, a energia adicional de uma tarefa pode ser informativa. Se queremos analisar impacto de uma infraestrutura nova, deixar de fora construção e fabrico responde a uma pergunta mais limitada. Um número sem essa descrição parece preciso e continua incompleto.
+
+Também precisamos de uma unidade funcional. Comparar mil chamadas não diz se produziram o mesmo resultado. Um fluxo pode precisar de várias tentativas por tarefa aceite; outro pode resolver casos mais simples. Uma conta de recursos por resultado verificado obriga a incluir falhas, repetições e o custo de obter qualidade comparável.
+
 \section{Uma conta simples, com o que fica de fora}
 Se um dispositivo consome mais 100 watts durante dez minutos, a energia adicional nesse intervalo é $100\times(10/60)=16.67$ Wh. É uma conta ilustrativa, não uma medição do ensaio deste livro. Para medir, precisamos de um instrumento ou telemetria adequada, uma base comparável e a duração efetiva.
 
 Converter eletricidade em emissões exige considerar origem da energia e metodologia. Converter um pedido em consumo de água exige ainda sistema de refrigeração, local, período e fronteira. Um número universal por pergunta pode esconder mais variação do que esclarece.
 
 Para comparar arquiteturas, começa por chamadas, tokens, duração e recursos observáveis. Se não mediste eletricidade, não a inventes a partir do tempo de parede. Duas execuções com a mesma duração podem usar dispositivos e potências muito diferentes.
+
+\section{Uma unidade evita três confusões}
+Potência é uma taxa: watts. Energia acumula-se durante um intervalo: watt-hora ou quilowatt-hora. Um dispositivo a 100 watts durante uma hora consome 100 Wh, isto é, $0.1$ kWh, sob o pressuposto de potência constante. A mesma potência durante dez minutos dá um sexto dessa energia. O tempo só permite calcular energia quando temos uma potência adequada ao intervalo e à fronteira considerados.
+
+Nos cálculos construídos deste capítulo, chamamos PUE à razão entre energia total da instalação e energia do equipamento de TI, para a mesma fronteira e período. Um PUE de $1.2$ significa que $1$ kWh de TI corresponde a $1.2$ kWh na instalação, nesse enquadramento. Não significa que o modelo ficou 20\% menos eficiente. E não se deve aplicar novamente esse fator a um valor que já inclui o total do edifício.
+
+O exemplo anterior, 100 watts durante dez minutos, corresponde a $1/60$ kWh no equipamento. Com PUE construído de $1.2$, seriam $0.02$ kWh na instalação. Se escolhêssemos ainda um fator ilustrativo de $0.2$ kg de CO$_2$e por kWh, obteríamos $0.004$ kg, ou quatro gramas, para essa eletricidade. Nenhum destes valores é uma medição de um pedido real, de um fornecedor ou de um centro de dados.
+
+O módulo \texttt{exemplos.laboratorio.decisoes} executa a conta e valida as unidades e os limites dos argumentos. Um fator de emissões real teria de ter origem, local, período e metodologia. Média da rede e efeito marginal de um consumo adicional respondem a perguntas diferentes. O cálculo não inclui automaticamente fabrico de chips, transporte ou água.
+
+Henderson e colaboradores propõem um enquadramento de registo sistemático de energia e carbono em aprendizagem automática~\citep{henderson2020}. A contribuição relevante para a leitura é tornar método e fronteira visíveis. Usar uma ferramenta de contabilização não elimina a necessidade de explicar o que ela mede e como estima o que não consegue observar diretamente.
+
+\section{Medir tem uma base de comparação}
+Num ensaio com equipamento próprio, um procedimento possível compara um intervalo em repouso com outro sob a carga definida, usando instrumento ou telemetria adequada. A diferença pode ajudar a estimar consumo adicional. O procedimento deve descrever a resolução da medição, tarefas em segundo plano, duração e condições de execução.
+
+Mesmo essa conta tem limites. A potência varia, nem todos os sensores cobrem todos os componentes e cargas diferentes podem partilhar infraestrutura. Uma estimativa com esses limites declarados é informação útil. Apresentá-la como uma constante universal por pergunta seria perder precisamente a parte da medição que explica o resultado.
+
+Em serviços remotos, podemos não ter acesso a telemetria elétrica. Nesse caso, contagem de chamadas e tokens continua a ser uma medida operacional, não se transforma em energia por uma mudança de nome. A ausência de um dado deve ficar visível, tal como a ausência do inventário de meias no primeiro capítulo. O edifício pode ser maior; o princípio não mudou.
 
 \section{Eficiência unitária e procura total}
 Uma melhoria pode reduzir custo por tarefa e incentivar mais tarefas ou tarefas maiores. Este mecanismo torna possível maior eficiência com maior consumo total. Não implica que todo o ganho será anulado; indica que precisamos de medir ambos.
@@ -24,6 +51,12 @@ Otimizações de projeto continuam úteis: eliminar chamadas redundantes, usar c
 
 Uma equipa de três agentes que não melhora o resultado pode consumir mais sem benefício. Uma equipa que evita uma operação dispendiosa pode justificar o custo. O resultado é empírico e depende da tarefa, em vez de estar decidido pelo número de componentes.
 
+Podemos ver o efeito de escala sem inventar uma previsão. Num cenário sintético, cada tarefa passa a gastar metade da energia, mas o número de tarefas triplica. O consumo total fica em $0.5\times3=1.5$ vezes o inicial. Se o volume ficar constante, a mesma melhoria reduz o total para metade. A conta mostra uma possibilidade; não prova que a procura de um produto vá seguir qualquer um desses percursos.
+
+Uma análise de benefício também deve especificar a alternativa. Se um modelo evita uma deslocação ou uma operação material, esse efeito pode ser relevante; precisa de evidência sobre o que foi efetivamente substituído. Não basta imaginar uma poupança possível e subtraí-la a consumo observado. Comparações honestas usam cenários e fronteiras compatíveis.
+
+No desenho de aplicações, o ponto de partida pode ser bastante concreto: uma chamada que nunca é usada, uma repetição causada por um contrato mal definido ou uma equipa que reproduz o mesmo erro três vezes. Retirar essa atividade pode poupar recursos e simplificar manutenção. O ganho não precisa de uma narrativa planetária para ser verificado.
+
 \section{Chips, memória, redes e capacidade de fabricar}
 Computação em escala depende de mais do que desenhar um processador. Fabrico avançado, memória, encapsulamento, interligações, energia e construção têm prazos e fornecedores próprios. Um centro anunciado não é capacidade operacional disponível.
 
@@ -31,12 +64,27 @@ A atualização da IEA de 2026 discute estrangulamentos de rede elétrica e cade
 
 Concentração pode criar dependência de poucas rotas de fornecimento e distribuição. Redundância, portabilidade de dados e possibilidade de mudar de fornecedor são escolhas de resiliência. Têm custos e limites: mudar um endpoint não garante equivalência de comportamento, contratos ou licenças.
 
+Há um percurso físico entre o desenho de um chip e uma resposta disponível: fabrico, memória, encapsulamento, equipamento, rede elétrica, instalação e operação. Uma limitação numa etapa pode impedir que capacidade anunciada se torne capacidade utilizável. Uma organização que depende dessa capacidade precisa de considerar prazos e alternativas, além do preço publicado por unidade de computação.
+
+Os modelos também usam memória e comunicação. Uma operação aritmética muito rápida pode ficar à espera de dados; distribuir um trabalho pode acrescentar transferência e coordenação. Esta é uma razão técnica para distinguir desempenho teórico do processador e tempo observado na tarefa. O capítulo~\ref{ch:local} faz essa distinção à escala de uma máquina; na infraestrutura, ela reaparece com mais dependências.
+
+\section{Concentração não se mede com uma única fotografia}
+Quando dizemos que há concentração, precisamos de indicar a camada: fabrico, capacidade computacional, desenvolvimento de modelos, acesso a dados ou distribuição de produtos. Uma alternativa numa camada pode continuar dependente das mesmas entidades noutra. Executar pesos diferentes no mesmo fornecedor pode melhorar portabilidade de comportamento sem eliminar a dependência de infraestrutura.
+
+O relatório da UNCTAD de 2025 organiza o debate sobre IA inclusiva em torno de capacidades, trabalhadores, políticas nacionais e cooperação internacional~\citep{unctad2025}. É uma orientação institucional para escolhas de desenvolvimento, não uma experiência causal que demonstra o efeito de cada política. Ajuda a formular a pergunta distributiva: quem consegue construir, usar e examinar os sistemas, com que recursos?
+
+Para uma pequena organização, o problema pode aparecer num contrato difícil de mudar. Para uma universidade, no acesso a equipamento e dados. Para um país, na capacidade de formar pessoas, sustentar infraestrutura e participar na definição de regras. São escalas diferentes. Não precisamos de uma classificação única de «soberania» para identificar uma dependência concreta e decidir como reduzi-la.
+
 \section{Soberania tecnológica é uma combinação de capacidades}
 Executar um modelo local pode reduzir uma dependência e manter outras: hardware, compiladores, pesos, documentação ou atualizações. Usar um serviço nacional não demonstra por si só onde todos os dados e componentes são processados. Soberania precisa de perguntas concretas sobre controlo, acesso, continuidade e possibilidade de auditoria.
 
 No plano geopolítico, acesso a computação e conhecimento pode influenciar investigação, indústria e poder de negociação. Consequências específicas dependem de políticas, mercados e instituições; são matéria para análise com dados, não uma inevitabilidade deduzida da velocidade de um chip.
 
 Uma organização pequena pode começar pelo que controla: dados exportáveis, contratos claros, exemplos reprodutíveis, versões fixadas e alternativas em caso de indisponibilidade. A cópia incompleta do modelo nesta execução é uma lembrança bastante menos grandiosa, mas prática, de que dependências também falham ao nível de um ficheiro.
+
+Um ensaio de saída torna essa preparação mais concreta. Consegue-se exportar a informação autorizada? Uma alternativa respeita os mesmos contratos? Os testes continuam a passar? Que capacidades se perdem e que trabalho de migração é necessário? São perguntas verificáveis, em vez de uma promessa abstrata de independência.
+
+O piloto deste livro parou antes da primeira inferência porque o ficheiro disponível não tinha a integridade esperada. A decisão correta foi conservar o bloqueio. Substituir a verificação por uma esperança teria produzido um relatório mais bonito e menos informação. A resiliência começa também por reconhecer o ponto em que a infraestrutura deixou de permitir o ensaio.
 
 \begin{promptlabbox}{Uma fatura de recursos que não inventa eletricidade}
 \textbf{Objetivo e contexto:} comparar dois fluxos de uma tarefa sintética. Requisitos: registos de chamadas ou o controlador offline; contador elétrico apenas se quiseres medir energia real.
@@ -47,3 +95,5 @@ Uma organização pequena pode começar pelo que controla: dados exportáveis, c
 
 \textbf{Falhas possíveis:} usar centros de dados como sinónimo de IA, confundir potência com energia ou transformar uma média de consulta num valor universal.
 \end{promptlabbox}
+
+A nuvem ganhou, assim, um mapa: unidades, fronteiras, equipamento e dependências. No futuro da IA, as hipóteses sobre capacidades terão de atravessar esse mapa. O próximo capítulo volta às fronteiras da investigação, desta vez com uma pergunta adicional: que condições teriam de existir para que um cenário se tornasse possível?
