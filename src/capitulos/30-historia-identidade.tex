@@ -1,0 +1,49 @@
+\chapter{Uma História de Ideias, Máquinas e Promessas}
+\label{ch:historia}
+
+Uma máquina ganha um jogo. Outra escreve um poema. Uma terceira decide quem entra numa fila de inspeção. Chamamos «inteligência artificial» às três, mas os problemas, mecanismos e consequências são diferentes. A história da área ajuda a perceber como chegámos a esta palavra tão elástica. Também funciona como vacina contra anúncios de que alguém resolveu, finalmente, «a inteligência».
+
+\section{Antes de haver um nome}
+Em 1950, Alan Turing discutiu a pergunta sobre máquinas que pensam através de um jogo de imitação~\citep{turing1950}. O artigo propõe uma forma de discutir comportamento observável e enfrenta objeções; não fornece um teste universal de consciência. Conseguir conversar convincentemente não determina, por si só, o mecanismo que produz a conversa ou a existência de experiência subjetiva.
+
+A proposta de Dartmouth foi escrita em 1955 para um encontro no verão de 1956 por John McCarthy, Marvin Minsky, Nathaniel Rochester e Claude Shannon~\citep{dartmouth1955}. O nome da área ficou ligado a esse programa. Não significa que lógica, computação, estatística ou estudo do cérebro tenham começado naquela sala. Uma área científica ganha uma identidade pública em momentos que raramente coincidem com o início de todas as suas ideias.
+
+É útil distinguir três perguntas históricas: podemos descrever raciocínios por regras? Podemos aprender regularidades a partir de exemplos? Podemos agir num ambiente para alcançar um objetivo? A IA moderna combina respostas a estas perguntas, em vez de ter substituído de uma vez por todas uma escola antiga por outra nova.
+
+\section{Regras, procura e conhecimento explícito}
+Num sistema simbólico, representamos elementos e relações de forma explícita. Uma regra pode dizer: se existe uma peça em falta e há talão válido, abrir investigação. Uma procura explora possibilidades, como percursos num mapa ou jogadas num tabuleiro. O programador não precisa de listar todas as sequências; define estados, movimentos e critérios.
+
+O benefício é a possibilidade de inspecionar certas decisões. O custo surge quando o mundo resiste ao catálogo: descrições ambíguas, exceções, informação incompleta. A Lavandaria pode escrever cinquenta regras e descobrir uma reclamação que não encaixa em nenhuma. Isso não demonstra que regras são inúteis. Demonstra que precisamos de conhecer o domínio e de tratar casos fora das regras.
+
+Sistemas baseados em conhecimento fizeram desta manutenção uma questão central. Se a política muda, quem altera as regras? Como se resolvem conflitos? A mesma pergunta regressa hoje quando alguém guarda uma política num prompt e se esquece de indicar a versão. A novidade da interface não elimina a antiguidade do problema.
+
+\section{Aprender representações e aumentar a escala}
+A aprendizagem automática desloca parte do trabalho: em vez de programar toda a associação entre entrada e saída, escolhemos dados, modelo e objetivo. Redes neuronais profundas aprendem representações em várias camadas. Transformers acrescentaram uma arquitetura de atenção que se tornou central em modelos de linguagem~\citep{vaswani2017}. Os capítulos seguintes abrem estes mecanismos; aqui interessa a mudança de método.
+
+Mais dados e computação podem alargar capacidades. Não transformam automaticamente uma demonstração numa aplicação fiável. Há pelo menos três momentos diferentes: obter um resultado num conjunto de avaliação; fazê-lo funcionar sob condições operacionais; e demonstrar benefício para quem usa ou é afetado pelo sistema. Saltar do primeiro para o terceiro é uma forma bastante eficiente de escrever um comunicado e bastante ineficiente de fazer ciência.
+
+Também não existe apenas uma arquitetura vencedora. Um sistema atual pode juntar pesquisa clássica, regras, rede neuronal, simulação e otimização. Um produto que conversa pode esconder uma função determinística para calcular preços. Isso costuma ser uma qualidade do desenho, não uma confissão de que a IA «não era verdadeira».
+
+\section{ANI, AGI e ASI: palavras precisam de critérios}
+\emph{ANI}, inteligência artificial estreita, designa habitualmente sistemas orientados a capacidades ou domínios delimitados. \emph{AGI}, inteligência artificial geral, refere uma ambição de competência ampla e transferência entre tarefas. \emph{ASI}, superinteligência artificial, é usada para capacidades superiores às humanas em domínios de grande amplitude. Não há aqui uma escala internacional única com três certificados para pendurar na parede.
+
+Antes de aceitar uma alegação de generalidade, pergunta: que tarefas, com que ajuda, a que custo, com que aprendizagem adicional e com que taxa de falha? Um sistema pode dominar uma prova de matemática e falhar uma tarefa de navegação. Um resultado com ferramentas e tentativas ilimitadas não é equivalente ao de um modelo isolado numa única chamada. A comparação precisa de conservar essas condições.
+
+Autonomia também admite graus: sugerir o próximo passo, escolher entre ferramentas autorizadas, executar uma sequência ou alterar os próprios planos sob limites. Nenhum desses comportamentos exige atribuir vontade humana ao sistema. A fronteira de ação deve ser descrita por permissões e condições de paragem, não por um adjetivo impressionante.
+
+\section{Entusiasmo, desilusão e memória curta}
+Os ciclos de entusiasmo e desilusão aparecem quando promessas, financiamento e capacidade observada deixam de andar juntos. A explicação não deve reduzir toda uma época a «as máquinas eram fracas» ou «as pessoas não perceberam». Importam dados disponíveis, custos, métodos, expectativas e aplicações que conseguiam pagar a tecnologia.
+
+O leitor pode aplicar uma disciplina simples a qualquer anúncio. Identifica a tarefa que foi demonstrada, o recurso que a tornou possível e o obstáculo que continua por resolver. Se um vídeo mostra cinco sucessos e omite o número de tentativas, a taxa de sucesso é desconhecida. Se uma demonstração usa um operador escondido, mede o sistema humano e máquina em conjunto. São perguntas antigas que continuam a funcionar com nomes novos.
+
+\begin{promptlabbox}{A manchete e o que foi realmente demonstrado}
+\textbf{Objetivo e contexto:} analisar uma alegação pública sobre IA sem programar. Usa uma publicação com acesso ao artigo ou documentação original, e guarda a data.
+
+\textbf{Procedimento:} escreve a manchete, a tarefa efetivamente avaliada, os dados, a ajuda disponível, a comparação e as limitações. Reescreve a manchete com o alcance que a evidência permite. Se não há denominador ou método, marca-o como desconhecido.
+
+\textbf{Resultado esperado e validação:} outra pessoa deve conseguir ligar cada afirmação à fonte. «Não demonstrado» e «demonstrado falso» ficam separados.
+
+\textbf{Falhas possíveis:} usar o anúncio comercial como avaliação independente, chamar consciência à conversação ou descartar um resultado útil por não ser AGI.
+\end{promptlabbox}
+
+O resto desta obra segue esta regra: compreender o mecanismo, experimentar numa tarefa e verificar o alcance. Não precisamos de esperar por uma definição definitiva de inteligência para contar as meias corretamente.

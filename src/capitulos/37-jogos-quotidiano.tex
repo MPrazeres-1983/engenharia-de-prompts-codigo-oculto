@@ -1,0 +1,58 @@
+\chapter{Brincar, Inventar e Organizar sem Precisar de Programar}
+\label{ch:brincar}
+
+Nem toda a utilização de IA precisa de aumentar a produtividade de uma empresa. Inventar um jogo de jantar, transformar uma visita a um museu numa caça ao pormenor ou preparar uma história com vários caminhos também pode valer o tempo. O critério é o projeto funcionar para as pessoas envolvidas, não parecer uma demonstração de conferência.
+
+\section{Um jogo que continua a ter regras quando a história muda}
+Imagina uma aventura numa estação espacial onde a roupa desaparece. O jogador tem três decisões para encontrar uma meia antes da partida. O modelo pode descrever personagens e diálogos; o estado do jogo deve conservar inventário, locais e consequências.
+
+Define explicitamente o que conta como vitória, que ações são possíveis e o que pode ser inventado. Se a chave só pode estar numa gaveta, a narrativa não deve teletransportá-la para o bolso quando a história se atrasa. Para uma sessão em chat, podes manter uma ficha em papel. Num jogo programado, o estado deve ser validado pelo código.
+
+\begin{lstlisting}
+Jogo: tres decisoes para recuperar a meia.
+Estado inicial: local=corredor; chave=na_gaveta; porta=fechada.
+Regras fixas: a porta abre apenas com a chave.
+Liberdade criativa: dialogos, ambiente e pistas coerentes.
+Depois de cada escolha, mostra a alteracao de estado.
+Se uma acao for impossivel, explica e oferece duas opcoes.
+Nao mudes as regras para forcar a vitoria.
+\end{lstlisting}
+O pedido especifica um contrato narrativo. Não o impõe como código. Verifica o estado a cada turno, sobretudo quando o jogador propõe algo fora das opções.
+
+\section{Personagens com memória limitada e identidade explícita}
+Um personagem interativo pode ter objetivo, informação conhecida e limites de conhecimento. Um guarda não precisa de saber tudo o que o autor escreveu sobre a estação. Separar conhecimento do personagem e verdade do mundo evita diálogos que revelam pistas antes de serem descobertas.
+
+Uma ficha de continuidade pode incluir acontecimentos confirmados, relações e questões abertas. Evita guardar conclusões geradas como factos. Se o modelo sugeriu que o mecânico roubou a meia, isso ainda pode ser apenas uma hipótese. A engenharia de contexto do capítulo~\ref{ch:context-engineering} aplica-se tão bem a ficção como a documentos de trabalho.
+
+Para personagens inspirados em pessoas reais, distingue homenagem, interpretação e imitação enganosa. A personagem deve ser apresentada como ficcional. Um diálogo convincente não demonstra o que a pessoa real pensaria ou autorizaria.
+
+\section{Três projetos pequenos com critérios diferentes}
+Uma caça ao pormenor usa observação: escolhe um espaço público ou imagens autorizadas e cria pistas verificáveis sem exigir aproximação a zonas perigosas. A IA ajuda a variar dificuldade; uma pessoa confirma que os elementos existem.
+
+Um jogo de cartas absurdo usa combinação: escreve personagens, objetos e conflitos em conjuntos separados e sorteia um de cada. O desafio é construir uma cena coerente com os três. Pode ser feito inteiramente em papel. O modelo serve como parceiro de variação, e as pessoas escolhem o que vale a pena conservar.
+
+Um museu imaginário usa interpretação: cada participante inventa a história de um objeto banal e depois assinala as partes que são ficção. A distinção é o próprio jogo. Uma meia dentro de uma caixa pode ser «instrumento de navegação lunar», desde que não passe a ser apresentada como descoberta histórica.
+
+São abordagens diferentes porque exercitam observação, combinação e interpretação. Nenhuma exige que uma nota automática determine quem foi mais criativo.
+
+\section{Organização pessoal com dados que podes partilhar}
+Para um plano semanal, começa por horários, obrigações e margem disponível. O modelo pode propor uma distribuição; o calendário confirma conflitos. Não precisa de conhecer nomes completos, moradas ou detalhes íntimos para sugerir blocos de estudo.
+
+Para refeições, viagens ou tarefas familiares, separa preferências de requisitos que exigem fonte ou conhecimento especializado. Um plano textual não confirma disponibilidade de um serviço nem segurança alimentar para uma condição clínica. Mantém o objetivo do exercício claro e verifica os elementos que têm consequências práticas.
+
+Um bom teste de organização é executar um dia e registar o que coube. Se o plano exige três horas numa janela de noventa minutos, não precisas de outro prompt inspirador. Precisas de cortar ou redistribuir tarefas. A aritmética continua a ter excelente compatibilidade com a vida quotidiana.
+
+\section{Crianças, aprendizagem e limites do papel da ferramenta}
+Projetos em família podem incluir adultos na escolha de materiais, revisão de respostas e gestão do tempo. A adequação depende de idade, atividade e regras do serviço. A UNESCO recomenda uma abordagem pedagógica centrada na capacidade de agir das pessoas, privacidade e adequação ao contexto~\citep{unesco2023}. É orientação institucional, não uma idade universal de acesso aplicável a todas as plataformas.
+
+Para aprender, pede pistas antes da solução e termina com uma tarefa sem ajuda. Para brincar, permite surpresa e escolhas reais. Não é necessário transformar cada jogo numa avaliação. É necessário que os participantes saibam quando estão a imaginar e quando estão a consultar informação.
+
+\begin{promptlabbox}{A estação espacial em três decisões}
+\textbf{Objetivo e contexto:} concluir um jogo curto com estado verificável. Requisitos: papel e uma conversa opcional com IA; sem código, conta paga ou dados pessoais. Usa a ficha deste capítulo.
+
+\textbf{Procedimento:} escreve três locais, dois objetos e uma condição de vitória. Joga uma vez como previsto e outra tentando uma ação impossível. Guarda o estado após cada decisão. Na alternativa offline, outra pessoa interpreta as personagens.
+
+\textbf{Resultado esperado e validação:} os objetos não surgem sem causa, as ações impossíveis não alteram o inventário e a vitória respeita as regras. Pede ao jogador que explique uma consequência das suas escolhas.
+
+\textbf{Falhas possíveis:} mudar regras para agradar ao jogador, prolongar a sessão sem objetivo ou tratar um personagem simpático como relação humana. O capítulo~\ref{ch:relacoes} aprofunda essa última fronteira.
+\end{promptlabbox}

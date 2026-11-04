@@ -1,0 +1,56 @@
+\chapter{Uma Ideia Visível: Imagem, Edição e Design com IA}
+\label{ch:imagem-design}
+
+Queres um cartaz para um clube de leitura: uma mesa, uma chávena e um livro aberto, com espaço para a data. «Faz um cartaz bonito» entrega ao sistema quase todas as decisões. Especificar público, composição e destino permite-te avaliar o resultado. Não precisas de programar, mas precisas de olhar.
+
+\section{Começar pelo destino, antes do estilo}
+Uma imagem para o ecrã de um telemóvel e uma para impressão pedem proporções e detalhe diferentes. Define a orientação, a utilização, a zona de texto e os elementos que precisam de ficar legíveis. Se há informação exata, como data, preço ou morada, conserva-a numa camada de texto editável sempre que possível. Uma imagem de uma palavra não é a própria palavra armazenada como texto.
+
+O primeiro pedido pode ser um briefing curto:
+\begin{lstlisting}
+Ilustracao para cartaz de clube de leitura, publico adulto.
+Mesa de madeira, livro aberto e uma chavena, luz de fim de tarde.
+Composicao vertical; metade superior calma para titulo posterior.
+Paleta azul escuro e creme; sem marcas ou texto incorporado.
+Deve continuar reconhecivel em miniatura.
+\end{lstlisting}
+Estes critérios são escolhas editoriais, não fórmulas cientificamente superiores de prompting. Podemos compará-los com um pedido mais vago e observar quais ajudam naquele projeto.
+
+\section{Gerar alternativas e escolher uma direção}
+Pede poucas alternativas com uma diferença relevante: composição, iluminação ou linguagem visual. Se alterares tudo em simultâneo, será difícil explicar a preferência. Uma grelha simples pode avaliar presença dos elementos, espaço disponível, legibilidade em miniatura e adequação ao público.
+
+Não precisas de atribuir uma nota aparentemente precisa a gosto pessoal. Podes escrever: «A deixa espaço para o título; B comunica melhor a reunião; C perde o livro em miniatura». A comparação torna a escolha discutível e melhorável. «O algoritmo disse que B tem qualidade 9.2» só seria útil se soubéssemos o que esse número mede.
+
+Num estudo sobre histórias curtas, Doshi e Hauser distinguiram ganhos de avaliações individuais e menor diversidade coletiva com assistência generativa~\citep{doshi2024}. O resultado não mede cartazes nem todas as formas de criatividade. Sugere uma pergunta pertinente para o nosso processo: as três alternativas são realmente diferentes ou repetem a mesma solução com outra cor?
+
+\section{Editar com uma intenção localizada}
+Gerar de novo toda a cena para corrigir uma chávena pode mudar a mesa, a luz e a personagem. Uma edição localizada, quando suportada, tenta preservar o resto. Guarda uma cópia anterior e descreve precisamente o elemento, a alteração e o que precisa de continuar reconhecível.
+
+Uma máscara identifica uma região de edição; não garante uma fronteira perfeita. O sistema pode alterar transições, sombras ou detalhes próximos. Revê a imagem inteira, incluindo zonas que não pediste para mudar. É o equivalente visual de rever o diff de código: a intenção da mudança não demonstra o seu alcance real.
+
+Para remover um fundo, verifica bordas, cabelo, sombras e transparência. Um fundo axadrezado desenhado nos píxeis não é um canal alfa. Para preparar um objeto sobre várias cores, experimenta fundo claro e escuro; defeitos que não se viam num tornam-se óbvios no outro.
+
+\section{Consistência de personagens e de séries}
+Num conjunto de imagens, define uma ficha de identidade visual: traços, roupa, acessórios, proporções e paleta. Referências autorizadas ajudam a especificar a continuidade. Mesmo assim, compara rosto, mãos, símbolos e detalhes de roupa de imagem para imagem. A semelhança pode variar com pose, iluminação e ferramenta.
+
+Uma solução prática é aprovar primeiro uma folha de referência e reduzir a variação por cena. Outra é separar personagem e cenário em recursos editáveis. Uma terceira é aceitar deliberadamente variações e fazer delas uma regra do projeto, como num jogo de cartas surrealista. São decisões de direção artística, não correções obrigatórias da máquina.
+
+\section{Design editável e imagem de design}
+Uma imagem de um dashboard é uma maquete. Um dashboard funcional tem dados, controlos, estados e relações verificáveis. O capítulo~\ref{ch:multimodal} explica por que os gráficos de dados devem ser construídos com os valores de origem. O mesmo vale para diagramas técnicos: setas e legendas precisam de corresponder à arquitetura.
+
+Se queres um logótipo que será redimensionado, editado e impresso, considera um processo vetorial. Gerar uma imagem com «estilo vetorial» não a transforma num ficheiro SVG de curvas limpas. A conversão posterior pode exigir redesenho, simplificação e verificação. Escolhe o formato pela utilização, não pelo adjetivo do prompt.
+
+\section{Proveniência, consentimento e direitos}
+Usa imagens próprias, autorizadas ou com condições compatíveis. Regista origem, licença e transformações. Uma plataforma permitir uma operação não resolve direitos de imagem, marcas ou autoria. Condições comerciais dependem da ferramenta, da jurisdição e dos materiais usados; verifica-as antes de distribuir um projeto. A licença deste livro não concede direitos sobre imagens de terceiros.
+
+Credenciais de conteúdo, como as especificadas por C2PA, podem associar proveniência verificável a um recurso~\citep{c2pa22}. Não demonstram que a cena retratada aconteceu. Uma fotografia autêntica de uma encenação continua a ser uma encenação; ausência de credenciais também não prova falsidade.
+
+\begin{promptlabbox}{Um cartaz que sobrevive à miniatura}
+\textbf{Objetivo e contexto:} criar o cartaz fictício do clube de leitura. Requisitos: ferramenta de imagem disponível e editor de texto sobre imagem. Verifica o plano e eventuais custos antes de gerar; a alternativa offline é desenhar três composições em papel.
+
+\textbf{Procedimento:} escreve cinco critérios; gera ou desenha três composições; escolhe uma com razões; acrescenta título e data como texto; testa em tamanho pequeno e exporta uma versão de trabalho. Guarda a origem das referências.
+
+\textbf{Resultado esperado e validação:} o livro é reconhecível, o título lê-se e a data corresponde à informação fornecida. Outra pessoa consegue identificar o evento sem explicação adicional.
+
+\textbf{Falhas possíveis:} texto deformado, objetos extra, ausência de espaço, formato inadequado ou confundir o cartaz fictício com um evento anunciado. Este laboratório descreve um projeto a executar; não apresenta imagens geradas como resultados medidos.
+\end{promptlabbox}

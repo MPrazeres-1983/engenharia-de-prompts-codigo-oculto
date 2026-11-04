@@ -1,0 +1,51 @@
+\chapter{Aprender com Dados sem Decorar o Exame}
+\label{ch:ml}
+
+Queres prever o tempo necessário para separar roupa. Tens o peso de cada lote e a duração observada. Uma regra escrita à mão seria «multiplica os quilos por dois e soma um minuto». Um método de aprendizagem procura parâmetros que ajustem uma relação aos exemplos. A diferença parece pequena até descobrires que os exemplos só incluem roupa leve e que amanhã chegam cortinados.
+
+\section{O problema começa na variável que queremos prever}
+Na aprendizagem supervisionada, fornecemos exemplos com um alvo: entrada $x$ e resultado $y$. Em regressão, o alvo pode ser uma quantidade, como minutos. Em classificação, uma categoria, como «peças em falta». Na aprendizagem não supervisionada, procuramos estrutura sem esse mesmo alvo fornecido, por exemplo grupos de mensagens. Aprendizagem auto-supervisionada cria objetivos a partir dos próprios dados, como prever partes ocultadas ou tokens seguintes. A taxonomia ajuda a distinguir tarefas; as aplicações podem combinar métodos~\citep{goodfellow2016}.
+
+Um grupo encontrado por clustering não recebe automaticamente um significado de negócio. Podes descobrir um grupo que mistura elogios e reclamações porque ambos mencionam entrega. Interpretar e nomear os grupos é um trabalho adicional. Também não existe a categoria natural «cliente difícil» à espera de ser descoberta numa coluna de embeddings.
+
+Escolhe primeiro a unidade de decisão. Prever por mensagem não é prever por cliente. Se um cliente escreve dez vezes, contar essas dez mensagens como dez pessoas independentes altera a análise. O desenho do conjunto de dados já contém decisões sobre o mundo, mesmo antes de treinar o primeiro parâmetro.
+
+\section{Uma reta que podemos abrir por dentro}
+Usaremos $\hat y=wx+b$: $w$ é a inclinação, $b$ a ordenada na origem e o chapéu indica previsão. Para três pontos sintéticos, $(-1,-1)$, $(0,1)$ e $(1,3)$, a relação é $y=2x+1$. O valor negativo de $x$ pertence à experiência matemática; não representa um lote de menos um quilo.
+
+Uma perda possível é o erro quadrático médio:
+\[
+L(w,b)=\frac1n\sum_{i=1}^{n}(wx_i+b-y_i)^2.
+\]
+Se começamos em $w=b=0$, as previsões são todas zero. Os erros são $[1,-1,-3]$ e a perda é $11/3$. As derivadas nesse ponto são $\partial L/\partial w=-8/3$ e $\partial L/\partial b=-2$. Com um passo de $0.05$, a atualização dá $w=2/15$ e $b=0.1$. Não é inspiração: é um cálculo que podemos repetir e contrariar.
+
+O programa \texttt{exemplos/laboratorio/fundamentos.py} repete a atualização e encontra valores próximos de $2$ e $1$. Avalia depois $(2,5)$ e $(3,7)$, que não entraram no ajuste. A experiência foi executada com dados sem ruído. O erro muito pequeno mostra que o código recupera esta relação; não demonstra previsão de durações numa lavandaria real.
+
+\section{Treino, validação e teste respondem a perguntas diferentes}
+O treino ajusta parâmetros. A validação ajuda a escolher opções como família de modelo, regularização e número de passos. O teste estima o comportamento de uma escolha já fechada em dados que não orientaram essa escolha. Se olhas para o teste e ajustas o sistema com base nele, passaste a usá-lo no desenvolvimento.
+
+A separação tem de acompanhar o problema. Para prever o mês seguinte, baralhar todas as datas pode esconder mudanças temporais. Para prever novos clientes, mensagens do mesmo cliente nos dois lados podem revelar padrões que não existirão num cliente novo. A regra «80/20» não resolve estas dependências. É preciso decidir o que significa um caso novo.
+
+Há fuga de informação quando o treino recebe dados indisponíveis no momento da previsão. Exemplos: uma coluna com o desfecho final, um resumo escrito depois da resolução, normalização estimada no conjunto inteiro ou duplicados quase idênticos. Podes obter um resultado excelente e ter construído uma máquina de ler o futuro que só funciona no ficheiro de avaliação.
+
+\section{Sobreajustamento e o valor de uma base simples}
+Um modelo demasiado flexível pode ajustar detalhes particulares dos exemplos. Isso é sobreajustamento quando prejudica a generalização. Um modelo demasiado limitado pode falhar mesmo relações relevantes presentes nos dados. A complexidade adequada depende da informação disponível e do objetivo, não de uma competição para usar a rede mais vistosa.
+
+Compara com uma base: prever sempre a média, escolher a classe mais frequente ou usar uma regra simples. Se 95 de 100 mensagens pertencem à mesma classe, devolver sempre essa classe dá 95\% de acerto e pode falhar todos os casos que interessavam. Mostra a matriz de confusão e o custo dos erros, como aprofundamos no capítulo~\ref{ch:avaliacao}.
+
+Uma separação estatística não impede ainda mudanças de distribuição. O negócio muda política, os utilizadores aprendem novas abreviaturas ou o sensor é substituído. Monitorizar desempenho por período e por grupo ajuda a perceber se o sistema continua dentro das condições em que foi avaliado.
+
+\section{De uma unidade a uma rede profunda}
+Uma unidade simples calcula uma combinação de entradas e aplica uma função: $h=\sigma(Wx+b)$. Compor camadas permite representações mais flexíveis do que uma única transformação linear. Sem não linearidades, uma sequência de transformações lineares continua a ser linear. A palavra «profunda» descreve camadas, não profundidade filosófica.
+
+Parâmetros são valores aprendidos; hiperparâmetros são escolhas que configuram o processo, como taxa de aprendizagem e largura. Retropropagação calcula derivadas através da composição. Nada disto exige interpretar uma unidade como um pequeno ser humano. Para perceber o Transformer mais à frente, basta conservar a ligação entre representação, objetivo e atualização.
+
+\begin{promptlabbox}{Uma previsão correta pela razão errada}
+\textbf{Objetivo e contexto:} detetar fuga de informação numa experiência local. Requisitos: Python 3.10+, apenas biblioteca padrão. Executa \texttt{python3 -m exemplos.laboratorio.fundamentos}.
+
+\textbf{Procedimento:} identifica treino e teste da reta. Escreve uma nova experiência com um alvo sintético e uma coluna que copie esse alvo. Explica por que essa coluna não estaria disponível antes da decisão. Retira-a antes de comparar modelos.
+
+\textbf{Resultado esperado e validação:} o exemplo original recupera a reta e a atenção dá $5$. O relatório distingue sucesso do cálculo de validade de um problema real. A extensão da coluna proibida é um exercício proposto, não uma medição publicada.
+
+\textbf{Falhas possíveis:} usar o teste para escolher a taxa, interpretar ruído como sinal ou apresentar a relação inventada como descoberta empírica.
+\end{promptlabbox}

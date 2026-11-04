@@ -1,0 +1,59 @@
+\chapter{Imagem em Movimento, Voz e Música: um Pequeno Estúdio}
+\label{ch:audiovisual}
+
+Uma curta de quinze segundos parece pequena até precisarmos de manter a mesma personagem, a mesma chávena e o mesmo lado da mesa em três planos. O audiovisual junta problemas de geração a decisões de montagem, duração e continuidade. A IA pode produzir materiais; o projeto continua a precisar de um realizador, mesmo que sejas só tu à secretária.
+
+\section{O guião mais pequeno que ainda conta alguma coisa}
+Começa com uma mudança observável. Uma personagem procura uma meia, encontra-a dentro de uma chávena e olha para a máquina de lavar. Temos preparação, descoberta e reação. Não precisamos de quinze segundos de uma personagem a explicar a solidão dos eletrodomésticos.
+
+Escreve por plano: duração, enquadramento, ação, som e ligação ao seguinte. Três planos de cinco segundos dão uma duração nominal de quinze; transições e sobreposições podem alterá-la. A linha temporal do editor, e não a intenção no prompt, determina a duração exportada.
+
+\begin{table}[htbp]
+\small
+\begin{tabularx}{\textwidth}{@{}lXXX@{}}
+\toprule
+Plano & Imagem & Ação & Som \\
+\midrule
+1, 0–5 s & Mesa e personagem & Procura uma meia & Ambiente discreto \\
+2, 5–10 s & Pormenor da chávena & Retira a meia & Pequeno ruído de louça \\
+3, 10–15 s & Plano da reação & Olha para a máquina & Pausa e nota musical \\
+\bottomrule
+\end{tabularx}
+\caption{Storyboard textual fictício. Tempos planeados, não medições de um vídeo produzido.}
+\end{table}
+
+\section{Gerar planos curtos, montar a relação}
+Uma geração longa pode perder identidade ou transformar objetos. Dividir em planos permite controlar material e substituir apenas um trecho. Uma imagem de referência pode servir de ponto de partida, se a ferramenta suportar esse controlo. Regista os parâmetros efetivamente disponíveis, sem presumir funcionalidades a partir do nome de um produto.
+
+Avalia continuidade: posição de objetos, direção do olhar, lado por onde a personagem sai, quantidade de peças e iluminação. Uma mudança pode ser deliberada, como um corte de passagem de tempo. Se não é deliberada, pode parecer um erro de montagem. A beleza de cada plano isolado não resolve a relação entre eles.
+
+Para informação exata, como legendas e cronómetros, prefere camadas editáveis. Se o objetivo é demonstrar uma interface, grava a interação real ou constrói uma animação verificável. Um vídeo gerado de alguém a carregar num botão não demonstra que a aplicação executou a operação.
+
+\section{Voz: texto, pronúncia e consentimento}
+Para narração, prepara um texto que caiba no tempo e lê-o em voz alta. Uma frase com muitos números, siglas ou nomes pode exigir mais pausas. Testa a pronúncia antes da versão final. Uma voz natural pode continuar a ler mal um nome ou a tornar ambígua uma negação.
+
+TTS transforma texto em fala; ASR transforma fala em texto. Algumas arquiteturas trabalham diretamente com áudio. Estas capacidades não autorizam imitar uma pessoa real. Para uma voz própria ou licenciada, regista consentimento, finalidade e condições de utilização. Não uses uma imitação para criar a impressão enganosa de que alguém aprovou ou disse o que nunca disse.
+
+Para acessibilidade, oferece legendas e uma transcrição revista. Revê a sincronização e identifica quem fala quando necessário. Um ficheiro de legendas com texto correto e tempos errados continua a falhar para o espectador.
+
+\section{Música e desenho sonoro}
+Um pedido musical pode indicar função, duração aproximada, energia, instrumentação e espaço para a voz. «Uma base discreta para uma explicação» é uma finalidade diferente de «um refrão memorável». Compara versões pelo papel que cumprem no projeto, sem confundir semelhança a uma referência com autorização para a reproduzir.
+
+Música, composição, interpretação e gravação podem envolver direitos diferentes. Termos de uma plataforma, origem de amostras e materiais de referência precisam de verificação. Guarda também a licença de sons que adicionas na montagem. Um recurso anunciado como gratuito pode impor atribuição ou restrições de utilização.
+
+Na mistura, ouve com auscultadores e colunas simples. A voz tem de continuar percetível. Cortes bruscos, distorção e mudanças abruptas de volume merecem correção. O valor exato de normalização depende do destino; não existe um único nível obrigatório para todos os meios.
+
+\section{Animar com controlo explícito}
+Nem toda a animação pede geração de vídeo. Se uma bola precisa de cruzar uma linha exatamente ao segundo quatro, uma animação por keyframes ou código oferece controlo direto. Se queremos uma textura visual imprevisível, um gerador pode ser útil. Combinar recursos gerados com movimento determinístico pode dar o melhor controlo para um projeto pequeno.
+
+Esta separação evita gastar tentativas a pedir precisão temporal a um mecanismo que não a garante. Também ajuda na revisão: consegues mudar uma legenda ou atrasar um som sem regenerar o cenário.
+
+\begin{promptlabbox}{Uma curta de quinze segundos, sem equipa de cinema}
+\textbf{Objetivo e contexto:} produzir a cena da meia e da chávena com materiais próprios. Requisitos: editor de vídeo e, opcionalmente, ferramentas generativas. Alternativa offline: fotografias próprias, movimento simples e voz gravada por ti. Não exige subscrição paga.
+
+\textbf{Procedimento:} escreve o storyboard; prepara imagens ou planos; grava ou sintetiza uma narração autorizada; monta três planos; acrescenta legendas; exporta e revê o ficheiro inteiro.
+
+\textbf{Resultado esperado e validação:} a descoberta percebe-se sem explicação externa, a duração é confirmada no ficheiro e as legendas acompanham a fala. Regista continuidade, pronúncia, direitos e eventuais custos reais.
+
+\textbf{Falhas possíveis:} objetos que mudam de plano para plano, fala cortada, música que tapa a voz ou uma licença esquecida. A tabela deste capítulo é um plano de produção, sem alegar que a curta foi gerada nesta edição.
+\end{promptlabbox}

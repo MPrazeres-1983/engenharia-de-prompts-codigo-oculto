@@ -1,0 +1,51 @@
+\chapter{Aprender a Agir: Recompensas, Exploração e Consequências}
+\label{ch:rl}
+
+Um classificador recebe uma mensagem e propõe uma categoria. Um controlador de um jogo escolhe uma ação que muda aquilo que verá a seguir. A aprendizagem por reforço trata desta ligação entre ação, consequência e aprendizagem ao longo do tempo. Não é apenas dar uma estrela a uma resposta de chat.
+
+\section{Estado, ação, recompensa e política}
+Num modelo simples, o agente observa um estado $s_t$, escolhe uma ação $a_t$, recebe uma recompensa $r_{t+1}$ e chega a outro estado. Uma política especifica como escolher ações a partir da informação disponível. O ambiente determina transições e recompensas. No mundo real, a observação pode não revelar o estado completo; uma câmara não mostra tudo o que existe atrás de uma porta.
+
+O retorno descontado pode escrever-se
+\[
+G_t=\sum_{k=0}^{T-t-1}\gamma^k r_{t+k+1},\qquad 0\leq\gamma\leq1.
+\]
+A recompensa imediata e a soma futura são coisas diferentes. Num episódio finito com recompensas $[0,0,1]$ e $\gamma=0.9$, o retorno inicial é $0.81$. Atrasar um benefício pode mudar o valor atribuído à sequência. Esta formalização pertence ao enquadramento de decisão escolhido; não traduz toda a motivação humana~\citep{sutton2018}.
+
+Pensa num robô que leva uma peça até uma caixa. Se premiarmos apenas deslocação rápida, pode aprender a passar pela caixa sem a depositar. Se premiarmos o toque no sensor, pode explorar uma falha do sensor. Escolher uma recompensa é especificar uma aproximação do objetivo. Um número torna a intenção calculável; não garante que a aproximação seja boa.
+
+\section{Explorar sem destruir o laboratório}
+Exploração significa experimentar ações para aprender; exploração não autorizada de um sistema real é outro assunto. Um jogo simulado admite milhões de tentativas que seriam inaceitáveis num veículo ou numa fábrica. Transferir uma política da simulação para o mundo exige testar diferenças de sensores, dinâmica e situações raras.
+
+Uma estratégia simples, epsilon-greedy, escolhe uma ação aleatória com probabilidade $\varepsilon$ e uma ação de maior valor estimado nas restantes ocasiões. É um mecanismo didático, não uma receita universal. Se a ação aleatória pode causar dano, a restrição precisa de existir fora da preferência que o agente aprendeu.
+
+O compromisso entre experimentar e aproveitar o que já parece funcionar aparece também numa tarefa banal: qual variante de mensagem recebe mais respostas? A observação pode ser confundida por público, horário e campanhas simultâneas. Um sistema que aprende durante a utilização exige um desenho de avaliação e uma política de ação, não apenas um loop que acumula cliques.
+
+\section{Uma atualização de valor que cabe numa linha}
+Q-learning mantém uma estimativa do retorno associado a um par estado--ação. Uma atualização tabular comum é
+\[
+Q(s,a)\leftarrow Q(s,a)+\alpha\bigl[r+\gamma\max_{a'}Q(s',a')-Q(s,a)\bigr].
+\]
+Com $Q(s,a)=0$, recompensa $1$, melhor valor seguinte $2$, $\alpha=0.5$ e $\gamma=0.9$, o novo valor é $1.4$. O termo entre parênteses compara a estimativa atual com um alvo de atualização. Num estado terminal, o termo futuro é zero; não inventamos mais uma jogada depois do fim.
+
+Este cálculo não demonstra convergência de uma rede profunda. As garantias de métodos tabulares dependem de hipóteses de exploração, passos e ambiente. Redes, dados recolhidos por outra política e ambientes em mudança acrescentam dificuldades. O exemplo serve para perceber o sinal que move a aprendizagem.
+
+\section{Aprender um modelo ou aprender uma política}
+Métodos baseados num modelo do ambiente usam uma representação das transições para planear ou aprender. Métodos sem esse modelo explícito aprendem valores ou políticas por outra via. A distinção não coincide com «usa uma rede» contra «não usa». Um modelo aprendido pode ser uma rede; um controlador tabular pode dispensá-la.
+
+Uma simulação também pode estar errada. Se o planeador explora extensamente zonas em que o modelo aprendeu mal, pode encontrar planos excelentes na simulação e inviáveis fora dela. A qualidade dos mundos imaginados é parte da avaliação. Retomaremos os modelos do mundo no capítulo~\ref{ch:fronteiras}.
+
+\section{O que isto tem a ver com um assistente de linguagem}
+Um agente com ferramentas escolhe ações, mas não está necessariamente a aprender uma política online. Pode usar um modelo fixo, regras e estado mantido pela aplicação. «Agente» e «aprendizagem por reforço» descrevem aspetos diferentes.
+
+No pós-treino de linguagem, métodos de RL podem otimizar sinais de preferência ou resultados verificáveis. O capítulo~\ref{ch:transformer} apresenta RLHF e alternativas. Uma preferência por uma resposta não prova verdade; um verificador de código que aprova os testes disponíveis não prova ausência de todos os defeitos. O sinal tem sempre um alcance.
+
+\begin{promptlabbox}{A recompensa que deixou passar o objetivo}
+\textbf{Objetivo e contexto:} desenhar um pequeno jogo em papel, sem contas nem código. Um personagem deve recolher uma chave e sair por uma porta em seis movimentos.
+
+\textbf{Procedimento:} define estados, movimentos, fim do episódio e recompensas. Experimenta uma recompensa por movimento e outra por saída com chave. Procura uma sequência que obtenha pontuação alta sem cumprir a intenção. Calcula os retornos das duas sequências com o mesmo desconto.
+
+\textbf{Resultado esperado e validação:} as regras devem permitir verificar se houve sucesso para além da pontuação. Explica o comportamento que a recompensa incentiva. Trata as sequências como construções didáticas, sem afirmar que um algoritmo as aprendeu.
+
+\textbf{Falhas possíveis:} premiar atividade em vez de resultado, esquecer o estado terminal ou propor exploração num sistema físico sem controlos.
+\end{promptlabbox}
