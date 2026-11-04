@@ -27,6 +27,41 @@ def atencao_escalar(scores, valores):
     return sum(p * v for p, v in zip(pesos, dados))
 
 
+def xor_relu(a, b):
+    """Pesos construídos à mão; demonstra representação, não treino."""
+    if type(a) is not int or type(b) is not int or a not in (0, 1) or b not in (0, 1):
+        raise ValueError("Esperados dois bits inteiros")
+    h1 = max(0, a + b)
+    h2 = max(0, a + b - 1)
+    return h1 - 2 * h2
+
+
+def retorno_descontado(recompensas, desconto):
+    dados = [_finito(r) for r in recompensas]
+    desconto = _finito(desconto)
+    if not dados or not 0 <= desconto <= 1:
+        raise ValueError("Episódio vazio ou desconto inválido")
+    retorno = 0.0
+    for recompensa in reversed(dados):
+        retorno = recompensa + desconto * retorno
+    if not math.isfinite(retorno):
+        raise ValueError("Retorno fora do intervalo numérico")
+    return retorno
+
+
+def atualizar_q(valor, recompensa, melhor_seguinte, *, taxa, desconto, terminal=False):
+    """Um passo tabular; não aprende uma política completa nem garante convergência."""
+    valor, recompensa, seguinte, taxa, desconto = map(
+        _finito, (valor, recompensa, melhor_seguinte, taxa, desconto))
+    if type(terminal) is not bool or not 0 <= taxa <= 1 or not 0 <= desconto <= 1:
+        raise ValueError("Taxa, desconto ou terminal inválido")
+    alvo = recompensa + (0 if terminal else desconto * seguinte)
+    novo = valor + taxa * (alvo - valor)
+    if not math.isfinite(novo):
+        raise ValueError("Atualização fora do intervalo numérico")
+    return novo
+
+
 def ajustar_reta(pontos, *, passos=1000, taxa=0.05):
     """Gradiente de MSE, sem normalização implícita ou mistura com o teste."""
     dados = [(_finito(x), _finito(y)) for x, y in pontos]
@@ -89,6 +124,10 @@ def demo():
             "reta": {"peso": peso, "bias": bias,
                      "mse_teste": erro_quadratico(teste, peso, bias)},
             "atencao": atencao_escalar([0, math.log(3)], [2, 6]),
+            "xor_construido": [xor_relu(a, b) for a, b in ((0, 0), (0, 1), (1, 0), (1, 1))],
+            "reforco": {"retorno": retorno_descontado([0, 0, 1], 0.9),
+                         "q_passo": atualizar_q(0, 1, 2, taxa=0.5, desconto=0.9),
+                         "q_terminal": atualizar_q(0, 1, 2, taxa=0.5, desconto=0.9, terminal=True)},
             "quantizacao": {"escala": escala, "reconstruidos": reconstruidos},
             "memoria": memoria_teorica(7_000_000_000, 4, camadas=32, cabecas_kv=8,
                                       dimensao_cabeca=128, tokens=4096)}

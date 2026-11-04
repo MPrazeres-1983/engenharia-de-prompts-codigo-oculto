@@ -1,10 +1,35 @@
 import math
 import unittest
 from exemplos.laboratorio.fundamentos import (softmax, atencao_escalar, ajustar_reta,
-    erro_quadratico, quantizar_simetrico, memoria_teorica)
+    erro_quadratico, quantizar_simetrico, memoria_teorica, xor_relu,
+    retorno_descontado, atualizar_q)
 
 
 class FundamentosTests(unittest.TestCase):
+    def test_xor_tabela_completa_e_pesos_construidos(self):
+        self.assertEqual([xor_relu(a, b) for a, b in ((0, 0), (0, 1), (1, 0), (1, 1))],
+                         [0, 1, 1, 0])
+        with self.assertRaises(ValueError):
+            xor_relu(True, 0)
+
+    def test_retornos_com_desconto_e_sem_futuro(self):
+        self.assertAlmostEqual(retorno_descontado([0, 0, 1], 0.9), 0.81)
+        self.assertEqual(retorno_descontado([1, 2, 3], 0), 1)
+        self.assertEqual(retorno_descontado([1, 2, 3], 1), 6)
+
+    def test_q_terminal_nao_transporta_valor_de_outra_jogada(self):
+        self.assertAlmostEqual(atualizar_q(0, 1, 2, taxa=0.5, desconto=0.9), 1.4)
+        self.assertEqual(atualizar_q(0, 1, 2, taxa=0.5, desconto=0.9, terminal=True), 0.5)
+
+    def test_reforco_rejeita_estado_de_calculo_invalido(self):
+        for recompensas, desconto in (([], 0.9), ([1], -0.1), ([math.inf], 0.9)):
+            with self.subTest(recompensas=recompensas), self.assertRaises(ValueError):
+                retorno_descontado(recompensas, desconto)
+        with self.assertRaises(ValueError):
+            atualizar_q(0, 1, 2, taxa=1.1, desconto=0.9)
+        with self.assertRaises(ValueError):
+            atualizar_q(0, 1, 2, taxa=0.5, desconto=0.9, terminal=1)
+
     def test_atencao_exemplo_do_manuscrito(self):
         self.assertAlmostEqual(atencao_escalar([0, math.log(3)], [2, 6]), 5)
 
