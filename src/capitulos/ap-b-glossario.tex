@@ -9,18 +9,19 @@
 \item[AgentSkill em A2A] Capacidade descrita no catálogo de um agente; não equivale ao pacote SKILL.md, apesar do nome semelhante.
 \item[AGI e ASI] Termos usados para inteligência artificial geral e superinteligência. Exigem critérios operacionais de amplitude, recursos e avaliação; não há uma definição única adotada nesta obra como teste universal.
 \item[Antropomorfização] Atribuição de características humanas a entidades não humanas. Uma experiência de interação não demonstra consciência ou reciprocidade do sistema.
-\item[API] Interface de programação que define como componentes de software comunicam. Um chat e uma API podem expor controlos diferentes sobre a mesma família de modelos.
+\item[API] Interface de programação de aplicações. Indica que pedidos um programa aceita e como responde. Uma API de um arquivo pode aceitar um número de reclamação e devolver o seu estado.
 \item[Aprendizagem auto-supervisionada] Uso de objetivos construídos a partir dos próprios dados, como prever partes ocultadas ou elementos seguintes.
 \item[Aprendizagem não supervisionada] Procura de estrutura sem os mesmos alvos explícitos da aprendizagem supervisionada. Um grupo encontrado não recebe automaticamente significado de negócio.
 \item[Aprendizagem por reforço] Aprendizagem de comportamento a partir de interações e sinais de recompensa, com consequências ao longo do tempo. Um agente com modelo fixo não está necessariamente a aprender online.
 \item[Aprendizagem supervisionada] Ajuste a exemplos com alvos fornecidos, como categorias ou quantidades. A avaliação em casos novos é distinta do ajuste.
-\item[Atenção (Attention)] Mecanismo que permite ao modelo “ponderar” diferentes partes da sequência de entrada ao gerar cada token de saída, em vez de depender apenas de vizinhos imediatos.
-\item[Cache KV] Armazenamento de keys e values para reutilização na inferência de determinadas arquiteturas. Consome memória e não é memória pessoal persistente.
+\item[Atenção (Attention)] Combinação de informação de várias posições da sequência, atribuindo um peso a cada posição disponível.
+\item[Cache KV] Espaço que guarda números já calculados para as chaves (\emph{keys}) e valores (\emph{values}) da atenção. Permite reutilizá-los durante a geração e ocupa memória.
 \item[Calibração] Relação empírica entre confiança prevista e frequência de acerto. Uma confiança verbal isolada não estabelece essa relação.
 \item[Chain-of-Thought (CoT)] Técnica de prompting que encoraja o modelo a gerar raciocínios em passos, em vez de só a resposta final. Popularizada em trabalhos como os de Wei et al. (2022).
+\item[Denominador] Número que indica o total ou a base de uma fração. Em $8/10$, conta os dez talões observados.
 \item[Difusão] Família de métodos generativos associada a processos de ruído e transformações aprendidas de reversão ou transporte. O mecanismo concreto depende do método.
 \item[Distilação] Treino de um modelo para aproximar comportamento de um professor ou conjunto de professores. Requer avaliação e condições de utilização compatíveis.
-\item[Embedding] Representação vetorial aprendida de dados. A proximidade depende do modelo, camada e métrica e não garante sinonímia ou equivalência factual.
+\item[Embedding] Lista de números que representa uma entrada, como uma palavra ou uma imagem. Dois embeddings próximos são parecidos segundo a comparação escolhida.
 \item[Engenharia de contexto] Desenho do material disponibilizado em cada inferência: instruções, dados, exemplos, memória, ferramentas e estado. Não é um formato único.
 \item[Exposição ocupacional] Estimativa de tarefas ou profissões potencialmente afetadas por uma tecnologia. Não é contagem observada nem previsão direta de despedimentos.
 \item[Fine-tuning] Ajuste de parâmetros de um modelo já treinado com novos dados ou objetivos. É distinto de fornecer documentos no contexto.
@@ -29,35 +30,46 @@
 \item[Golden set] Conjunto de inputs (e outputs de referência) usados como base de teste e comparação de prompts/modelos, para avaliar qualidade e regressões.
 \item[Grounding] Ligação de afirmações a dados ou fontes identificáveis. A existência de uma citação não prova que a fonte sustenta a frase.
 \item[Guardrails] Mecanismos (dentro e fora do modelo) que limitam ou validam inputs/outputs: filtros de conteúdo, validações de formato, políticas de acesso, etc.
+\item[HTTP] Protocolo de pedidos e respostas usado na Web. No laboratório, a receção recebe um pedido HTTP na própria máquina. O código 200 pode acompanhar uma tarefa que ainda aguarda dados.
 \item[Idempotência] Propriedade de uma operação cujo efeito pretendido não se multiplica por a repetir. É relevante em repetições após falhas parciais.
 \item[Jailbreak] Conjunto de técnicas para tentar contornar restrições de segurança impostas ao modelo, levando-o a produzir respostas que supostamente seriam bloqueadas.
 \item[Janela de contexto] Limite de contexto utilizável numa chamada. Capacidade de entrada, geração, raciocínio e tratamento do histórico dependem da interface; confirmar os limites da versão.
 \item[JSON e JSON Schema] JSON representa dados; JSON Schema descreve restrições sobre a estrutura e os valores desses dados. Nenhum dos dois prova, por si só, correção factual.
+\item[JSON-RPC] Forma de pedir a um programa que execute uma operação, com mensagens em JSON. O identificador da chamada permite reconhecer a resposta correspondente.
 \item[LLM (Large Language Model)] Modelo de linguagem de grande escala. O termo abrange diferentes arquiteturas e objetivos de treino; os modelos autoregressivos geram tokens condicionados nos anteriores.
 \item[LLMOps] Conjunto de práticas para gerir o ciclo de vida de sistemas baseados em LLMs em produção: design, testes, deploy, monitorização, segurança, governance.
-\item[Logit] Score real atribuído a um candidato antes da transformação em probabilidades.
+\item[Logit] Pontuação atribuída a um candidato antes da conversão em probabilidades.
 \item[LoRA] Adaptação de baixo posto: congela pesos base e aprende fatores de uma atualização. Menos parâmetros treináveis não equivale à mesma redução de memória total.
 \item[Máscara causal] Restrição que impede uma posição de usar informação de posições futuras na atenção de um descodificador autoregressivo.
+\item[Matriz] Tabela de números com linhas e colunas. No capítulo~\ref{ch:transformer}, cada linha contém uma regra para transformar uma lista de entrada.
 \item[MCP] Model Context Protocol: protocolo para ligar aplicações a contexto e ferramentas. A compatibilidade depende da versão; não substitui autorização nem implementa o agente inteiro.
 \item[Memória persistente] Dados guardados pela aplicação para utilização futura, com origem, permissões, atualização e eliminação. Não é a janela de contexto nem a cache de atenção.
 \item[Modelo do mundo] Representação aprendida ou construída das regularidades de um ambiente, usada para prever ou planear. O nome não implica uma simulação completa da realidade.
 \item[Multimodal] Capacidade de um modelo de lidar com mais de um tipo de input/output (por exemplo, texto, imagem, áudio) e combinar essa informação.
+\item[Numerador] Número que indica a parte contada numa fração. Em $8/10$, conta os oito talões completos.
+\item[Parâmetro] Número que controla uma operação do modelo. Durante o treino, os parâmetros que podem ser aprendidos são ajustados para melhorar o objetivo escolhido.
+\item[Perda] Número que mede o erro segundo a regra escolhida para o treino. Uma perda pode, por exemplo, ser a média dos quadrados das diferenças entre previsões e valores observados.
 \item[Potência e energia] Potência é a taxa de utilização de energia; energia acumula-se num intervalo. Watts e watt-hora não são unidades intercambiáveis.
+\item[Precisão] Entre as ocorrências sinalizadas, a proporção que estava certa. Se três de quatro sinalizações são corretas, a precisão é 75\%.
 \item[Prompt] Instrução ou conjunto de instruções (incluindo contexto, exemplos, constraints) fornecidas ao modelo para orientar a resposta.
 \item[Prompt injection] Ataque em que o texto de utilizadores ou de documentos externos contém instruções que tentam sobrepor-se às do system prompt, manipulando o comportamento do modelo.
+\item[Protocolo] Regras que os programas seguem para trocar mensagens, incluindo o formato dos pedidos e o significado das respostas.
 \item[Proveniência] Origem e história identificável de dados ou recursos. Integridade de proveniência e verdade do conteúdo são verificações diferentes.
 \item[QLoRA] Método que combina base quantizada congelada e adaptadores treináveis, com técnicas específicas de memória. Não coloca todos os dados e cálculos do treino a quatro bits.
 \item[Quantização] Aproximação de valores por uma representação com menos níveis ou precisão. Qualidade, memória e velocidade dependem da técnica, tarefa e implementação.
 \item[RAG (Retrieval-Augmented Generation)] Padrão que recupera informação externa e a usa na geração. Pode melhorar o suporte documental, mas não garante correção nem obediência às fontes.
 \item[RLAIF] Variação de RLHF que usa feedback de outros modelos (em vez de, ou complementando, feedback humano) para orientar o ajuste de comportamento.
 \item[RLHF (Reinforcement Learning from Human Feedback)] Processo de ajustar modelos usando feedback humano (preferências entre respostas), para alinhar o comportamento com objetivos desejados.
+\item[Sensibilidade] Entre os casos realmente positivos, a proporção que foi sinalizada. Se detetamos três de cinco, a sensibilidade é 60\%.
 \item[Sobreajustamento] Ajuste a particularidades do desenvolvimento que prejudica o comportamento em dados novos relevantes.
 \item[Spec-First] Prática de explicitar comportamento e critérios de aceitação antes da implementação. Não existe um formato único nem garantia automática de cumprimento pelo modelo.
 \item[System prompt] Parte do prompt (normalmente invisível ao utilizador final) que define o comportamento de alto nível do modelo (persona, regras, prioridades).
 \item[Temperatura] Parâmetro que reescala logits antes da amostragem. Altera a concentração da distribuição, sem garantir criatividade, veracidade ou reprodução de um serviço.
 \item[Token] Unidade básica de entrada/saída de um LLM. Pode ser uma palavra, parte de palavra ou símbolo. Custos e limites de contexto medem-se tipicamente em tokens.
+\item[Token de acesso] Credencial apresentada a um serviço para aceder a operações autorizadas. A palavra \emph{token} tem aqui um sentido diferente de fragmento de texto.
 \item[Top-k / Top-p] Técnicas de sampling que restringem o conjunto de tokens candidatos: top-k limita ao “k” tokens mais prováveis; top-p (nucleus sampling) limita a um conjunto cuja soma de probabilidades atinge um limiar “p”.
 \item[Transformer] Arquitetura de rede neuronal introduzida em “Attention is All You Need” (Vaswani et al., 2017), baseada em mecanismos de atenção. É a base da maior parte dos LLMs modernos.
 \item[Tree-of-Thought (ToT)] Método de procura explícita sobre estados intermédios, com geração, avaliação e seleção de caminhos. Pedir várias propostas num texto não implementa, por si só, o método.
 \item[Treino e inferência] No treino ajustam-se parâmetros; na inferência usa-se o modelo para produzir uma saída. Fornecer exemplos em contexto não implica atualizar pesos.
+\item[Vetor] Lista ordenada de números. A posição de cada número faz parte da informação.
 \end{description}

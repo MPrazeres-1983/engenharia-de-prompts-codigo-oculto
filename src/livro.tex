@@ -17,13 +17,13 @@
 \addcontentsline{toc}{chapter}{Nota da terceira edição em desenvolvimento}
 Esta revisão amplia \emph{Engenharia de Prompts: O Código Oculto}, de Mário Prazeres, para compreender a IA, utilizá-la, criar com ela e construir sistemas verificáveis. O título da folha de rosto é provisório e fica sujeito à decisão do autor. A imagem da capa original é preservada como parte da proveniência; a capa comercial da nova obra continua por decidir.
 
-A estrutura tem dez partes. O guia de consulta indica onde começar por uma tarefa, onde encontrar o mecanismo e onde aprofundar. A matemática é comentada e pode ser retomada depois da primeira experiência.
+A estrutura tem dez partes. O guia de consulta indica onde começar por uma tarefa, onde encontrar o mecanismo e onde aprofundar. O ponto de partida explica as contas e os termos informáticos usados nos primeiros exercícios.
 
 A progressão vai de situações correntes ao mecanismo e, daí, à especialização. Podes acompanhar a explicação principal sem executar os aprofundamentos de cálculo na primeira leitura. Os casos colocam uma pergunta, as fontes ou experiências permitem investigá-la e a conclusão conserva os limites da evidência. O humor pertence à maneira de contar; não altera o estatuto dos factos. Os diálogos da Lavandaria são ficção declarada, não transcrições de estudos.
 
 A data de corte da investigação desta revisão é \textbf{5 de novembro de 2026}. O livro distingue factos, resultados experimentais, boas práticas, interpretações e cenários. As referências históricas são mantidas para explicar métodos; APIs, protocolos, termos e normas precisam de confirmação na versão que vieres a usar. O registo de fontes explica o alcance efetivo da consulta, sem se apresentar como revisão sistemática de toda a literatura.
 
-A Lavandaria das Meias Desaparecidas é fictícia e as demonstrações offline usam dados sintéticos. Podes ver o cartaz e a curta muda \emph{A Meia Testemunha} e repetir a montagem com a ilustração fornecida. O incidente de cache também foi executado localmente, com duas políticas fictícias. Cada capítulo assinala de onde vem o resultado e como o podes examinar.
+A Lavandaria das Meias Desaparecidas é fictícia e as demonstrações usam dados sintéticos. Podes ver o cartaz e a curta muda \emph{A Meia Testemunha}. Também foram executados o incidente de cache e a troca entre a receção e o arquivo, ambos na máquina local. Cada capítulo indica de onde vem o resultado e como o podes examinar.
 
 A segunda edição conserva um ensaio real de 52 inferências, incluindo falhas. Os cálculos, a skill, o controlador e a adaptação linear pequena foram executados. O piloto novo com LLM depende de uma cópia íntegra do modelo local. A avaliação com participantes e o ajuste de um LLM são percursos ainda por executar.
 
@@ -52,6 +52,44 @@ Avaliar ou operar & Critérios e casos de teste (cap.~\ref{ch:avaliacao}) e labo
 \end{center}
 
 Os exemplos de escrita, estudo e jogo podem ser feitos à mão. Os laboratórios executáveis indicam os requisitos e o que podes verificar localmente. Para sustentar uma afirmação ou conferir a origem de um resultado, consulta também o apêndice~\ref{ap:fontes}.
+
+Se uma conta ou um termo de informática te travar, o \hyperref[sec:ponto-de-partida]{ponto de partida} começa pelo talão da Lavandaria. Tem uma página para as contas e outra para os programas.
+
+\chapter*{Ponto de partida}
+\label{sec:ponto-de-partida}
+\addcontentsline{toc}{chapter}{Ponto de partida}
+
+\ficcao A contabilista tem dez talões e oito estão completos. A primeira pergunta da investigação cabe num guardanapo. «Oito em dez» quer dizer o mesmo que «oitenta em cem»? Para seguir o livro, podes começar por aqui. Se já fazes estas contas, usa o guia para saltar à tarefa que te interessa.
+
+\section*{Ler números e fórmulas}
+\label{sec:ler-numeros}
+
+\textbf{Frações e percentagens.} Em $\frac{8}{10}$, também escrito $8/10$, o 8 conta os talões completos e chama-se \emph{numerador}. O 10 conta os talões observados e chama-se \emph{denominador}. Multiplicar ambos por dez dá $80/100$, a mesma proporção. O sinal \% lê-se «por cem», pelo que $80/100=80\%$. A conta muda de significado se o denominador passar a contar clientes em vez de talões.
+
+\textbf{Duas maneiras de comparar.} Num exemplo separado, uma taxa sobe de 20\% para 30\%. Subtrai para obter a diferença de \emph{10 pontos percentuais}. Para saber quanto cresceu face ao valor inicial, divide a diferença pelo valor inicial: $10/20=1/2$. O aumento relativo foi de 50\%. As duas contas respondem a perguntas diferentes.
+
+\textbf{Médias e pesos.} Se dois lotes demoram 2 e 6 minutos, a média é $(2+6)/2=4$ minutos. Se o primeiro tempo aparece uma vez e o segundo aparece três, a média dos quatro tempos é $(2+6+6+6)/4=5$. Podes fazer a mesma conta dando um quarto do peso a 2 e três quartos a 6. Vais reencontrar esta ideia de combinação ponderada no capítulo~\ref{ch:transformer}.
+
+\textbf{Letras e unidades.} Uma letra pode guardar um número ainda desconhecido ou que muda de caso para caso. Se $x$ guarda o peso do lote em quilos, $2x+1$ lê-se «duas vezes $x$, mais um». Neste exemplo, a regra acrescenta dois minutos por quilo e um minuto de preparação. Para três quilos, substitui $x$ por $3$: $2\times3+1=7$ minutos. As letras tornam a regra reutilizável. As unidades dizem o que o número quer dizer.
+
+\clearpage
+\thispagestyle{plain}
+\section*{Ler e experimentar um programa}
+\label{sec:ler-programas}
+
+Um \textbf{programa} é um conjunto de instruções que um computador consegue executar. Num exemplo, a entrada é o identificador \texttt{LAV-001}, a operação consulta um registo e a saída é o estado «em análise». O \emph{código-fonte} é o texto das instruções que podemos ler e alterar. Um \emph{ficheiro} guarda dados ou código. Uma \emph{pasta} agrupa ficheiros, e um \emph{caminho} indica onde os encontrar.
+
+\textbf{Terminal e comandos.} O terminal é uma janela em que escreves instruções para o sistema. Os exemplos executáveis usam Python, a linguagem em que os programas foram escritos. Com Python 3 instalado, este comando pede a versão que o terminal encontra:
+
+\begin{lstlisting}
+python3 --version
+\end{lstlisting}
+
+No Windows, se tiveres o lançador Python, podes usar \texttt{py -3 --version}. Nos comandos deste livro, usa \texttt{py -3} no lugar de \texttt{python3} nesse caso. Quando o exercício diz «na raiz do repositório», abre o terminal na pasta principal dos ficheiros do livro. A opção \texttt{-m} manda o Python executar um módulo, um conjunto de código que pode encontrar pelo nome.
+
+\textbf{Quando dois programas conversam.} A receção pede o estado de uma reclamação. O arquivo recebe o pedido e responde. Em informática, o programa que pede é o \emph{cliente} e o que disponibiliza a operação é o \emph{servidor}. Ambos podem correr no mesmo computador. Uma interface de programação de aplicações, ou \emph{API}, define o que se pode pedir e que resposta esperar. Um \emph{protocolo} estabelece as regras da troca. O JSON é uma forma de escrever dados em texto, com campos como «reclamação» e «estado». O capítulo~\ref{ch:texto-dados} mostra como ler e verificar esses campos.
+
+O livro oferece exercícios em papel e exemplos para executar. Se quiseres começar com uma conversa, experimenta o capítulo~\ref{ch:primeira-conversa}. Se quiseres confirmar um termo encontrado mais adiante, tens o glossário no apêndice~\ref{ap:glossario}.
 
 \tableofcontents
 \mainmatter

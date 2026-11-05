@@ -343,7 +343,9 @@ Sem este ciclo, estás só a colecionar dashboards bonitos.
 
 \section{Medir acerto, cobertura e custo do erro}
 \label{sec:metricas}
-Para uma classe de interesse, precisão é $TP/(TP+FP)$ e sensibilidade é $TP/(TP+FN)$. A primeira pergunta «das deteções, quantas estavam certas?»; a segunda pergunta «dos casos positivos, quantos detetámos?». Define o comportamento quando o denominador é zero. F1 é a média harmónica das duas quando ambas estão definidas. Não resolves desequilíbrio apenas escrevendo «F1»: explicita a classe e a agregação macro ou micro.
+Imagina cinco pedidos que exigem atenção. O sistema sinaliza três desses cinco e ainda um pedido normal. Das quatro sinalizações, três estavam certas. A \emph{precisão} é $3/4=75\%$. Dos cinco pedidos que exigiam atenção, três foram sinalizados. A \emph{sensibilidade} é $3/5=60\%$. O numerador é o mesmo, mas a primeira pergunta conta as sinalizações e a segunda conta os casos reais.
+
+\textbf{Aprofundamento opcional.} Nas fórmulas, $TP$ conta os verdadeiros positivos (3 no exemplo), $FP$ os falsos positivos (1) e $FN$ os falsos negativos (2). A precisão é $TP/(TP+FP)$ e a sensibilidade é $TP/(TP+FN)$. Regista como o cálculo trata denominadores iguais a zero. A medida F1 combina precisão $p$ e sensibilidade $s$ como $2ps/(p+s)$ quando esta expressão está definida. Com várias classes, diz se calculas por classe e fazes a média (\emph{macro}) ou se juntas as contagens antes de calcular (\emph{micro}).
 
 Na Lavandaria, encaminhar todos os pedidos para uma pessoa evita algumas decisões automáticas erradas, mas não significa resolver a tarefa. Mede cobertura automática (respostas emitidas/pedidos), acerto entre respostas emitidas e erros graves por pedido. Define antecipadamente se uma abstinência correta conta como sucesso operacional e apresenta-a separadamente. Num exemplo sintético de dez pedidos, A responde a todos e acerta oito. B responde a cinco e acerta os cinco. B tem maior acerto entre respostas, 100\% contra 80\%, e menor cobertura, 50\% contra 100\%. Para escolher, falta saber o custo dos erros e dos cinco encaminhamentos.
 

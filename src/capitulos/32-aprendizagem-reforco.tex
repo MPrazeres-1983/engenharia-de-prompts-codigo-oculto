@@ -6,13 +6,15 @@ Um personagem está a dois movimentos de uma saída. Há uma moeda perto e uma c
 A aprendizagem por reforço trata da ligação entre ação, consequência e aprendizagem ao longo do tempo. O jogo desta abertura é uma construção didática. Vamos usá-lo para distinguir uma boa recompensa imediata de uma boa sequência, antes de abrir a regra de atualização. Não é necessário começar por treinar um robô para perceber a dificuldade.
 
 \section{Estado, ação, recompensa e política}
-Num modelo simples, o agente observa um estado $s_t$, escolhe uma ação $a_t$, recebe uma recompensa $r_{t+1}$ e chega a outro estado. Uma política especifica como escolher ações a partir da informação disponível. O ambiente determina transições e recompensas. No mundo real, a observação pode não revelar o estado completo; uma câmara não mostra tudo o que existe atrás de uma porta.
+No jogo, o \emph{estado} descreve a situação, como a casa onde estás e se tens a chave. A \emph{ação} é o movimento que escolhes. A \emph{recompensa} é o número de pontos que a regra do jogo atribui depois desse movimento. A \emph{política} indica como o agente escolhe uma ação com a informação que tem. O ambiente determina a consequência. No mundo real, a observação pode revelar só parte do estado. Uma câmara vê a porta, mas pode ignorar o que está atrás dela.
 
-O retorno descontado pode escrever-se
+Para comparar caminhos inteiros, podemos somar as recompensas. Chamamos \emph{retorno} a essa conta. Se queremos dar menos peso ao futuro, multiplicamos pelo mesmo fator de desconto a cada passo adicional. Com fator $0{,}9$, um ponto imediato vale 1 na conta. Um ponto no segundo passo vale $0{,}9$. No terceiro passo vale $0{,}9\times0{,}9=0{,}81$.
+
+\textbf{Aprofundamento opcional.} A expressão abaixo escreve a conta quando o episódio termina ao fim de um número definido de passos:
 \[
 G_t=\sum_{k=0}^{T-t-1}\gamma^k r_{t+k+1},\qquad 0\leq\gamma\leq1.
 \]
-A recompensa imediata e a soma futura são coisas diferentes. Num episódio finito com recompensas $[0,0,1]$ e $\gamma=0.9$, o retorno inicial é $0.81$. Atrasar um benefício pode mudar o valor atribuído à sequência. Esta formalização pertence ao enquadramento de decisão escolhido; não traduz toda a motivação humana~\citep{sutton2018}.
+$G_t$ é o retorno a partir do momento $t$. $T$ indica o fim do episódio e $\gamma$, a letra grega gama, é o fator de desconto. Começamos em $k=0$, pelo que a recompensa do primeiro movimento, $r_{t+1}$, tem peso 1. Somamos até ao último movimento. Para $[0,0,1]$, o cálculo dá $0+0+0{,}81=0{,}81$ com o fator escolhido. Alterar o desconto pode alterar a preferência entre caminhos~\citep{sutton2018}.
 
 Pensa num robô que leva uma peça até uma caixa. Se premiarmos apenas deslocação rápida, pode aprender a passar pela caixa sem a depositar. Se premiarmos o toque no sensor, pode explorar uma falha do sensor. Escolher uma recompensa é especificar uma aproximação do objetivo. Um número torna a intenção calculável; não garante que a aproximação seja boa.
 
@@ -41,7 +43,7 @@ Q-learning mantém uma estimativa do retorno associado a um par estado--ação. 
 \[
 Q(s,a)\leftarrow Q(s,a)+\alpha\bigl[r+\gamma\max_{a'}Q(s',a')-Q(s,a)\bigr].
 \]
-Com $Q(s,a)=0$, recompensa $1$, melhor valor seguinte $2$, $\alpha=0.5$ e $\gamma=0.9$, o novo valor é $1.4$. O termo entre parênteses compara a estimativa atual com um alvo de atualização. Num estado terminal, o termo futuro é zero; não inventamos mais uma jogada depois do fim.
+A letra $r$ é a recompensa imediata. A plica em $s'$ indica o estado seguinte. Entre as ações $a'$ disponíveis aí, $\max$ escolhe o maior valor estimado. Se esse valor for 2, o desconto de $0{,}9$ reduz a sua contribuição a $1{,}8$. Com recompensa imediata de 1, o alvo é $1+1{,}8=2{,}8$. Partimos da estimativa zero e $\alpha$, a letra alfa, manda percorrer metade da diferença se for $0{,}5$. A nova estimativa é $1{,}4$. Num estado terminal o termo futuro é zero, pois o episódio acabou.
 
 Este cálculo não demonstra convergência de uma rede profunda. As garantias de métodos tabulares dependem de hipóteses de exploração, passos e ambiente. Redes, dados recolhidos por outra política e ambientes em mudança acrescentam dificuldades. O exemplo serve para perceber o sinal que move a aprendizagem.
 

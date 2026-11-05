@@ -6,16 +6,16 @@
 \section{Pesos disponíveis não significam todas as liberdades}
 Um modelo com pesos disponíveis permite obter esses parâmetros nas condições da licença. Isso não implica acesso aos dados de treino, código completo, direito de redistribuição irrestrito ou licença open-source. Verifica a licença da revisão concreta, usos permitidos, atribuição e condições de materiais associados.
 
-Um runtime local evita enviar automaticamente pedidos para uma API remota, mas privacidade depende do sistema inteiro: telemetria, extensões, sincronização, logs e ficheiros. Executar localmente também não torna os resultados mais verdadeiros. A vantagem pode ser controlo, disponibilidade ou custo; cada uma precisa de uma comparação própria.
+Chamamos \emph{runtime} ao programa e componentes que carregam e executam o modelo. Correr o modelo na tua máquina permite processar o pedido sem o enviar a um servidor remoto. Para saber se a aplicação inteira trabalha dessa forma, verifica também os registos de atividade, as extensões e a sincronização. Controlo, disponibilidade, custo e qualidade da resposta medem-se separadamente.
 
 \section{Uma estimativa de memória com hipóteses visíveis}
-Para $P$ parâmetros a $b$ bits, a memória ideal de pesos é aproximadamente $Pb/8$ bytes. Com sete mil milhões de parâmetros a quatro bits, obtemos $3.5\times10^9$ bytes: 3.5 GB decimais, cerca de 3.26 GiB. Formatos reais acrescentam escalas, metadados e tensores com outras precisões.
+Um bit pode ter dois valores, 0 ou 1. Oito bits formam um byte. Se guardarmos cada peso em quatro bits, dois pesos cabem num byte ideal. Sete mil milhões de pesos divididos por dois dão três mil e quinhentos milhões de bytes. Isso são $3{,}5$ GB, usando mil milhões de bytes por GB, ou cerca de $3{,}26$ GiB, usando $2^{30}$ bytes por GiB. Os formatos reais guardam ainda informação para interpretar os pesos e podem misturar representações com números de bits diferentes.
 
-Num descodificador com cache KV densa, uma estimativa ideal é
+\textbf{Aprofundamento opcional.} Para $P$ parâmetros a $b$ bits, a conta ideal dos pesos é $Pb/8$ bytes. Outra parcela é a \emph{cache KV}. É uma zona de memória que guarda as keys e values já calculadas para os tokens anteriores, para as podermos reutilizar no cálculo de atenção. Com as listas guardadas integralmente, uma estimativa ideal é
 \[
 M_{KV}=2L H_{KV}d_h N B\,\frac{b_{KV}}8.
 \]
-$L$ é o número de camadas, $H_{KV}$ o de cabeças de keys/values, $d_h$ a dimensão da cabeça, $N$ o número de tokens, $B$ o lote e $b_{KV}$ a precisão da cache em bits. O fator dois conta keys e values. Variantes de arquitetura e de cache podem mudar esta conta.
+$L$ é o número de camadas, $H_{KV}$ o de cabeças que guardam keys e values, $d_h$ o número de elementos em cada lista da cabeça e $N$ o número de tokens guardados por sequência. $B$ conta as sequências de igual comprimento processadas no lote. Cada número ocupa $b_{KV}$ bits. O fator dois conta keys e values. Variantes de arquitetura e de cache podem mudar esta conta.
 
 Num exemplo hipotético com 32 camadas, oito cabeças KV, dimensão 128, 4096 tokens, lote um e cache de 16 bits, o resultado é 536\,870\,912 bytes, ou 512 MiB. O script \texttt{fundamentos.py} executa ambas as contas e os testes conferem os valores. São dimensões didáticas, sem as atribuir a um produto específico.
 
@@ -45,7 +45,7 @@ Se a regra construída decidir pela classe positiva acima de $0.01$, a decisão 
 Num sistema real, certas alterações podem não afetar saídas relevantes e outras podem ser amplificadas por operações seguintes ou por decisões perto de um limiar. A comparação com menos bits deve conservar tarefas, critérios e casos difíceis. Um tamanho de ficheiro reduzido é um resultado de armazenamento, não uma certificação das capacidades que interessam.
 
 \section{CPU, GPU e diferentes tempos de espera}
-CPUs podem executar modelos locais dentro de limites de memória e tempo. GPUs podem acelerar operações adequadas, com requisitos de drivers, memória e suporte do runtime. Offload parcial distribui trabalho, mas transferências e contenção podem dominar o desempenho.
+A CPU é o processador de uso geral da máquina. Uma GPU, ou unidade de processamento gráfico, pode fazer muitas operações semelhantes ao mesmo tempo. Isso pode acelerar as multiplicações do modelo quando o programa, a memória e os controladores do equipamento o permitem. \emph{Offload} é passar parte do trabalho para outro componente, por exemplo da CPU para a GPU. Mover dados entre ambos custa tempo. O resultado depende de quanto trabalho consegues acelerar e de quanto precisas de transferir.
 
 Separa processamento do contexto, tempo até ao primeiro token e geração seguinte. Uma aplicação que lê um documento longo e responde pouco tem perfil diferente de outra que escreve milhares de tokens. Mede também concorrência: duas sessões podem dividir memória e aumentar a espera mesmo quando cada uma isolada parece rápida.
 
@@ -56,7 +56,7 @@ Um ensaio útil mede separadamente a primeira utilização e execuções posteri
 Se o objetivo é escolher uma configuração, define primeiro o limite de qualidade e o perfil de recursos aceitável. Só depois compara alternativas dentro desses limites. Este procedimento liga a especialização técnica ao método do primeiro capítulo: a tarefa, a informação e a maneira de confirmar que resultou continuam a decidir a experiência.
 
 \section{Um manifesto para repetir o que aconteceu}
-Guarda revisão e hash do modelo, versão do runtime, hardware identificável, contexto, parâmetros, seeds, entradas e saídas. Regista se houve cache, warm-up, paralelismo e ferramentas. Usa pastas novas para experiências novas. Não substituas respostas antigas pelas melhores tentativas.
+Guarda a revisão e o \emph{hash} do modelo, um valor calculado a partir do ficheiro para o comparar com a cópia de referência. Regista também a versão do programa que o executa, o equipamento, as entradas, as saídas e a configuração. Uma \emph{seed} fixa o ponto de partida das escolhas pseudoaleatórias onde o programa o permite. Anota se houve uma execução de preparação (\emph{warm-up}), dados reutilizados da memória, trabalhos em paralelo ou ferramentas. Usa pastas novas para experiências novas.
 
 O ensaio de 03-11-2026 conserva 52 inferências reais com Qwen e llama.cpp~\citep{qwengguf,llamacpp}. A tentativa V3 encontrou uma cópia incompleta do modelo: o runtime recusou o carregamento e o hash diferia da referência. Sem conseguir obter uma cópia íntegra, não houve novo ensaio com LLM. É precisamente o tipo de falha que o manifesto deve tornar visível.
 

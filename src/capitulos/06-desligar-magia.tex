@@ -8,11 +8,13 @@ Um \emph{large language model} (LLM) é um modelo de linguagem de grande escala.
 
 Um token é uma unidade de representação do texto. Pode ser uma palavra, um fragmento ou outro elemento do vocabulário. O capítulo~\ref{ch:tokens} mostra como é construído. Para seguir a ideia, imagina que cada palavra do exemplo ocupa um token.
 
-A probabilidade de uma sequência pode ser escrita como
+Imagina dez finais de frase possíveis, todos igualmente prováveis neste exemplo. Cinco começam por «a». Desses cinco, três continuam com «meia». Para contar «a meia», usamos três dos dez finais, ou $3/10$. Podemos chegar à mesma conta em duas etapas. Metade dos finais começa por «a» e, dentro dessa metade, $3/5$ continuam com «meia». Multiplicar $1/2$ por $3/5$ dá $3/10$.
+
+\textbf{Aprofundamento opcional.} Esta conta em etapas dá a regra para mais unidades:
 \[
 P(t_1,\ldots,t_n)=\prod_{k=1}^{n}P(t_k\mid t_1,\ldots,t_{k-1}).
 \]
-Aqui, $t_k$ é o identificador de um token. A fórmula diz: a probabilidade do texto completo é o produto das probabilidades condicionais dos seus passos. Não diz que o sistema escolhe sempre o token mais provável. Essa escolha depende do método de descodificação, que estudaremos no capítulo~\ref{ch:tokens}.
+$P$ indica probabilidade, $t_k$ é o token na posição $k$ e a barra vertical lê-se «dado que». À direita da barra estão os tokens que já apareceram. O símbolo $\prod$ manda multiplicar, desde a primeira posição até à última. Isto descreve a probabilidade do texto completo. A regra que escolhe cada token chama-se \emph{descodificação} e é explicada no capítulo~\ref{ch:tokens}.
 
 Durante o treino, os parâmetros aprendem regularidades de linguagem e representações úteis para muitas tarefas. O facto de o objetivo envolver previsão não implica que o modelo só consiga copiar expressões superficiais. Há conhecimento factual e capacidades de generalização nos parâmetros, como mostram as tarefas avaliadas por Brown e colaboradores~\citep{brown2020}. O problema é outro: uma resposta fluente não vem acompanhada de uma prova de verdade.
 

@@ -47,12 +47,14 @@ O teste reservado deve representar decisões que queremos tomar depois. Se todos
 Também precisamos de distinguir perda de treino e medida de utilização. Um objetivo ao nível dos tokens pode melhorar enquanto uma categoria rara continua errada. A decisão de aceitar o modelo usa avaliações do sistema, incluindo ferramentas e regras que o rodeiam. Não é uma eleição entre a curva mais bonita e a opinião mais entusiasmada.
 
 \section{LoRA: aprender uma atualização pequena}
-LoRA congela pesos base e aprende uma atualização de baixo posto~\citep{hu2022lora}. Para uma matriz $W\in\mathbb R^{d_{out}\times d_{in}}$, podemos escrever
+Imagina que uma tabela de números já sabe transformar entradas em saídas. Queremos corrigir parte desse comportamento. Podemos conservar a tabela original e somar uma tabela de correções. Em LoRA, da expressão inglesa \emph{low-rank adaptation}, os pesos base ficam fixos e a correção é construída com o produto de duas tabelas menores~\citep{hu2022lora}. O capítulo~\ref{ch:transformer} mostra como aplicar uma tabela à entrada.
+
+\textbf{Aprofundamento opcional.} Se $W$ tem $d_{out}$ linhas para as saídas e $d_{in}$ colunas para as entradas, a atualização escreve-se
 \[
 W'=W+\frac{\alpha}{r}BA,
 \quad A\in\mathbb R^{r\times d_{in}},\quad B\in\mathbb R^{d_{out}\times r}.
 \]
-O posto escolhido $r$ limita a forma desta atualização. Treinar $A$ e $B$ exige $r(d_{in}+d_{out})$ parâmetros, em vez de ajustar todos os de $W$. A economia concreta depende das matrizes selecionadas e do resto do processo.
+$A$ transforma a entrada numa lista intermédia de $r$ números. $B$ transforma essa lista numa correção da saída. O \emph{posto} diz quantas direções independentes a matriz consegue representar. Passar por apenas $r$ números limita a correção a, no máximo, esse posto. O fator $\alpha/r$ ajusta a escala da correção. Para contar parâmetros, multiplica linhas por colunas em cada tabela e soma. São $rd_{in}$ em $A$ e $d_{out}r$ em $B$. A economia concreta depende das matrizes selecionadas e do resto do processo.
 
 Para $W$ de $4096\times4096$ e $r=8$, há $16\,777\,216$ elementos na matriz base e $65\,536$ nos dois fatores. A contagem é 256 vezes menor para essa atualização, não para toda a memória de treino. Ativações, gradientes dos adaptadores, estados do otimizador e pesos base continuam a consumir recursos.
 

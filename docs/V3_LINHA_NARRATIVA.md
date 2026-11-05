@@ -29,6 +29,8 @@ Apresentar primeiro uma situação e palavras correntes. Dar nome ao conceito qu
 
 As camadas não exigem quatro caixas em cada capítulo. São uma sequência de compreensão, não um formulário. O texto deve apresentar uma saída para quem quer seguir o fio principal e uma entrada para quem quer aprofundar.
 
+No ponto de partida, uma conta identifica o que é contado, a unidade e o total usado como base. Nos capítulos, os exemplos de atenção, treino e avaliação seguem a ordem da operação antes da notação. Um símbolo novo ganha um nome e uma função. Para cada laboratório executável, deve existir uma entrada que explique o resultado esperado sem correr código, seguida do comando ou da remissão precisa. As definições retomadas no glossário ajudam quem abre o livro a meio.
+
 ## Revisão de cada capítulo alterado
 
 - A abertura coloca uma pergunta que o capítulo realmente resolve?

@@ -6,9 +6,9 @@
 Este capítulo começa nesse intervalo entre encontrar um padrão e confiar nele. Primeiro vamos perceber o que se aprende. Depois abriremos uma previsão suficientemente pequena para calcular à mão. Só no aprofundamento aparecerão derivadas e uma rede com duas unidades. Podes seguir a investigação sem fazer essas contas na primeira passagem.
 
 \section{O problema começa na variável que queremos prever}
-Na aprendizagem supervisionada, fornecemos exemplos com um alvo: entrada $x$ e resultado $y$. Em regressão, o alvo pode ser uma quantidade, como minutos. Em classificação, uma categoria, como «peças em falta». Na aprendizagem não supervisionada, procuramos estrutura sem esse mesmo alvo fornecido, por exemplo grupos de mensagens. Aprendizagem auto-supervisionada cria objetivos a partir dos próprios dados, como prever partes ocultadas ou tokens seguintes. A taxonomia ajuda a distinguir tarefas; as aplicações podem combinar métodos~\citep{goodfellow2016}.
+Imagina três mensagens de clientes com uma categoria escrita à mão ao lado de cada uma. São exemplos com resposta conhecida. Na \emph{aprendizagem supervisionada}, esses exemplos ajudam a ajustar uma regra para mensagens novas. À informação recebida chamamos \emph{entrada}, e à resposta que queremos prever chamamos \emph{alvo}. Se o alvo for uma categoria, a tarefa é de \emph{classificação}. Se for uma quantidade, como minutos de trabalho, é de \emph{regressão}.
 
-Um grupo encontrado por clustering não recebe automaticamente um significado de negócio. Podes descobrir um grupo que mistura elogios e reclamações porque ambos mencionam entrega. Interpretar e nomear os grupos é um trabalho adicional. Também não existe a categoria natural «cliente difícil» à espera de ser descoberta numa coluna de embeddings.
+Na \emph{aprendizagem não supervisionada}, podemos procurar grupos sem fornecer as categorias. Esse agrupamento chama-se \emph{clustering}. Um grupo pode misturar elogios e reclamações porque ambos mencionam entrega. Interpretar o grupo é um trabalho adicional. Na \emph{aprendizagem auto-supervisionada}, a própria entrada permite construir a resposta a prever. Podemos tapar uma parte de um texto e usar a parte tapada como alvo. As aplicações podem combinar estes métodos~\citep{goodfellow2016}.
 
 Escolhe primeiro a unidade de decisão. Prever por mensagem não é prever por cliente. Se um cliente escreve dez vezes, contar essas dez mensagens como dez pessoas independentes altera a análise. O desenho do conjunto de dados já contém decisões sobre o mundo, mesmo antes de treinar o primeiro parâmetro.
 
@@ -22,19 +22,21 @@ Também precisamos de saber como foi produzida a etiqueta. Se «reclamação gra
 No nosso caso fictício, começaremos por um alvo estreito: minutos para separar um lote sob um procedimento definido. Isso não mede satisfação do cliente, qualidade da lavagem ou eficiência da empresa inteira. Restringir a pergunta ajuda a perceber o resultado; a ambição pode crescer depois de o método sobreviver ao primeiro teste.
 
 \section{Uma reta que podemos abrir por dentro}
-Usaremos $\hat y=wx+b$: $w$ é a inclinação, $b$ a ordenada na origem e o chapéu indica previsão. Para três pontos sintéticos, $(-1,-1)$, $(0,1)$ e $(1,3)$, a relação é $y=2x+1$. O valor negativo de $x$ pertence à experiência matemática; não representa um lote de menos um quilo.
+Escreve primeiro a regra por palavras. Multiplica o valor recebido por um número e soma outro. Em $\hat y=wx+b$, $x$ guarda a entrada, $w$ é o multiplicador e $b$ é o valor de partida quando $x$ é zero. A letra $y$ guarda o alvo observado. O chapéu em $\hat y$ distingue a previsão do alvo.
 
-Lê a expressão como uma receita: multiplica a entrada por um número e soma outro. Se $w=2$ e $b=1$, uma entrada $3$ produz $7$. Os símbolos substituem números que queremos descobrir. Não representam ingredientes misteriosos acrescentados por uma biblioteca.
+Com $w=2$ e $b=1$, a entrada 3 produz $2\times3+1=7$. O multiplicador $w$ diz quanto a previsão sobe por cada unidade a mais na entrada. Para o ensaio usamos três pares fictícios, $(-1,-1)$, $(0,1)$ e $(1,3)$. Em cada par, lê primeiro a entrada e depois o alvo. A primeira entrada é negativa porque estamos a testar a conta com números construídos. Os números têm uma função matemática; o ensaio não usa pesos reais de roupa.
 
 \textbf{Aprofundamento opcional.} Nos parágrafos seguintes, vamos escolher uma medida de erro e calcular uma atualização. O fio principal é este: comparar previsões com alvos, obter um sinal de correção e repetir. Se deixares as derivadas para depois, conserva essa sequência.
 
-Uma perda possível é o erro quadrático médio:
+Começa com $w=0$ e $b=0$. A previsão é zero em cada um dos três casos. Subtrai o alvo à previsão: $0-(-1)=1$, $0-1=-1$ e $0-3=-3$. Se somasses os erros com o sinal, uns poderiam anular outros. Uma forma de os reunir é elevar cada erro ao quadrado, ou seja, multiplicá-lo por si próprio. A soma dos quadrados é $1+1+9=11$. A média é $11/3$.
+
+Esta medida chama-se \emph{erro quadrático médio}. A expressão abaixo escreve a conta para qualquer número de exemplos:
 \[
 L(w,b)=\frac1n\sum_{i=1}^{n}(wx_i+b-y_i)^2.
 \]
-Se começamos em $w=b=0$, as previsões são todas zero. Os erros são $[1,-1,-3]$ e a perda é $11/3$. As derivadas nesse ponto são $\partial L/\partial w=-8/3$ e $\partial L/\partial b=-2$. Com um passo de $0.05$, a atualização dá $w=2/15$ e $b=0.1$. Não é inspiração: é um cálculo que podemos repetir e contrariar.
+$L$ é a perda, o número que mede o erro segundo a regra escolhida. $n$ conta os exemplos. O índice $i$ diz de que exemplo vêm a entrada $x_i$ e o alvo $y_i$. O símbolo $\sum$ manda somar os resultados de $i=1$ até $i=n$. O fator $1/n$ divide pelo número de exemplos.
 
-De onde veio o $11$? Elevamos cada erro ao quadrado: $1+1+9$. Dividimos pelos três exemplos. A derivada indica como a perda varia quando alteramos ligeiramente um parâmetro, mantendo o outro fixo. Subtraímos uma fração desse sinal para procurar reduzir a perda. Neste exemplo, as duas derivadas iniciais são negativas, pelo que os dois parâmetros aumentam.
+Uma derivada mede a inclinação local. Aqui descreve como a perda varia se aumentarmos ligeiramente um parâmetro, mantendo o outro fixo. As duas inclinações no ponto inicial são $-8/3$ para $w$ e $-2$ para $b$. Uma inclinação negativa indica que aumentar um pouco esse parâmetro reduz a perda nas imediações do ponto. Para dar o primeiro passo, subtraímos $0{,}05$ vezes cada inclinação ao valor antigo. Assim $w$ passa a $0-0{,}05\times(-8/3)=2/15$ e $b$ passa a $0-0{,}05\times(-2)=0{,}1$. Na entrada zero, a nova previsão é $0{,}1$ e o alvo é 1. A distância desceu de 1 para $0{,}9$.
 
 A taxa de aprendizagem controla o tamanho do passo. Um passo pequeno pode precisar de muitas atualizações; um passo demasiado grande pode afastar-nos de uma região útil. Não há aqui um ritmo que sirva a qualquer conjunto de dados. Escala das entradas, forma da perda e método de otimização fazem diferença.
 

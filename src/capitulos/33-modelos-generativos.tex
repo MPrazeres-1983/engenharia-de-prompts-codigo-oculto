@@ -21,14 +21,18 @@ Uma intuição útil é restaurar progressivamente uma imagem degradada. O limit
 
 Sistemas de difusão latente operam num espaço comprimido por um codificador e descodificador, em vez de executar todo o processo no espaço de píxeis~\citep{rombach2022}. A compressão pode reduzir o custo, mas também participa nos limites de detalhe. O texto condicionante orienta a amostra por mecanismos da arquitetura. «Luz suave» não é uma chamada a uma lâmpada dentro da máquina.
 
-\textbf{Aprofundamento opcional: uma conta de ruído.} Numa formulação DDPM, uma versão ruidosa pode escrever-se como $x_t=\sqrt{\bar\alpha_t}x_0+\sqrt{1-\bar\alpha_t}\,\epsilon$, com $\epsilon$ gaussiano padrão e $\bar\alpha_t$ determinado pelo processo de ruído. O primeiro termo preserva parte do sinal; o segundo acrescenta ruído com escala controlada. As letras podem representar vetores de muitos valores. Aqui vamos usar um único número.
+\textbf{Aprofundamento opcional.} Num modelo probabilístico de difusão para remoção de ruído (DDPM), $x_0$ é o sinal inicial e $x_t$ a versão ruidosa no passo $t$. A letra $\epsilon$ (épsilon) representa o ruído, sorteado de uma distribuição normal padrão. A sua média é zero e a sua variância, uma medida da dispersão, é um. O processo fixa $\bar\alpha_t$, um número entre zero e um que controla a escala das duas parcelas. A raiz quadrada de um número é o valor não negativo que, multiplicado por si mesmo, dá esse número:
+\[
+x_t=\sqrt{\bar\alpha_t}x_0+\sqrt{1-\bar\alpha_t}\,\epsilon.
+\]
+A primeira parcela é o sinal original com escala alterada. A segunda é o ruído com a sua própria escala. Uma imagem teria muitos valores. Aqui vamos acompanhar só um.
 
 Escolhemos sinteticamente $x_0=2$, $\bar\alpha_t=0.64$ e uma realização $\epsilon=-1$. Obtemos $0.8\times2+0.6\times(-1)=1$. Não reconstruímos uma imagem nem treinámos um modelo: abrimos uma operação do processo direto. A tarefa de aprender a inverter o processo estatisticamente e o procedimento de geração são etapas adicionais. «Retirar ruído» é uma intuição de entrada; não dispensa essas escolhas.
 
 A diferença entre treino e geração aparece de novo. No treino, dispomos de dados que permitem criar exemplos ruidosos e um objetivo de aprendizagem. Ao gerar uma amostra nova, não recebemos a fotografia final que queremos revelar. O condicionamento restringe o tipo de amostra procurada; não transforma uma instrução ambígua numa geometria completamente especificada.
 
 \section{Duas outras maneiras de formular a geração}
-Um autoencoder variacional aprende uma representação latente probabilística e um mecanismo de reconstrução, com um objetivo que combina ajuste aos dados e regularização da representação~\citep{kingma2014}. Uma rede generativa adversarial coloca um gerador e um discriminador num problema de aprendizagem em confronto~\citep{gan2014}. São famílias históricas e técnicas com usos próprios, não degraus obrigatórios que todos os produtos tenham atravessado.
+Num \emph{autoencoder variacional}, uma parte do modelo converte a entrada numa representação interna, chamada \emph{latente}, e outra usa essa representação para reconstruir a entrada. A primeira parte aprende uma distribuição de possibilidades para essa representação. O treino concilia reconstruir os dados com manter uma distribuição interna utilizável para gerar amostras~\citep{kingma2014}. Numa rede generativa adversarial, o gerador cria amostras e o discriminador tenta distingui-las das que vêm dos dados. A dificuldade que cada um põe ao outro faz parte do treino~\citep{gan2014}.
 
 As distinções ajudam a escolher perguntas. Num gerador adversarial, a dinâmica do treino entre componentes importa. Numa reconstrução latente, interessa a informação que a compressão preserva. Numa geração iterativa, interessam o número de passos e o método de amostragem. Não se deduz qualidade final apenas contando parâmetros.
 

@@ -42,14 +42,18 @@ Depois disso, nunca mais vais olhar para “contar palavras” da mesma forma.
 \textbf{Falhas possíveis:} Usar tokenizador de outro modelo, confundir caracteres com tokens ou introduzir normalização sem a registar.
 \end{promptlabbox}
 
-\section{Parâmetros de \emph{sampling}: temperatura, top-k e top-p}
-O modelo produz \emph{logits}, scores reais $z_i$ para tokens candidatos. Para $T>0$, uma forma comum de obter probabilidades é
+\section{Como se escolhe o próximo token}
+Quando chega a vez de escolher o token seguinte, o modelo atribui uma pontuação a cada candidato. Chamamos \emph{logits} às pontuações antes da conversão em probabilidades. \emph{Amostragem}, ou \emph{sampling}, é fazer uma escolha ao acaso com essas probabilidades. Se dois candidatos tiverem pesos de $3/4$ e $1/4$, imagina quatro papéis num saco. Três têm o primeiro candidato e um tem o segundo. Tirar um papel faz com que o primeiro seja mais provável, mas ambos podem sair.
+
+A \emph{temperatura} altera a diferença entre as probabilidades. Baixá-la dá mais peso aos candidatos mais pontuados. Isso ajuda a repetir escolhas, incluindo escolhas erradas. Se quisermos saber porquê, podemos abrir a conta.
+
+\textbf{Aprofundamento opcional.} Para temperatura positiva $T$, divide cada pontuação $z_i$ por $T$ e aplica a softmax do capítulo~\ref{ch:transformer}. A função $\exp(x)$ quer dizer $e^x$. Em baixo somamos os valores obtidos para todos os candidatos $j$, para que as probabilidades somem um:
 \[
 p_i(T)=\frac{\exp(z_i/T)}{\sum_j\exp(z_j/T)}.
 \]
-Reduzir $T$ concentra a distribuição nos scores maiores. Num exemplo com dois tokens e logits $\ln 2$ e $0$, o primeiro tem probabilidade $2/3$ a $T=1$. A $T=0{,}5$, tem $4/5$. A $T=2$, desce para cerca de $0{,}586$. Pensa na temperatura como controlo da distribuição de escolha. Se o token mais favorecido fizer parte de uma resposta errada, baixar $T$ dá-lhe mais peso.
+Com dois logits, $\ln 2$ e $0$, a $T=1$ os valores antes da divisão final são 2 e 1. O primeiro candidato tem probabilidade $2/(2+1)=2/3$. A $T=0{,}5$, dividir a primeira pontuação por meio duplica o expoente. Os valores passam a 4 e 1, e a probabilidade a $4/5$. A $T=2$, desce para cerca de $0{,}586$.
 
-\emph{Top-k} restringe a escolha aos $k$ candidatos de maior probabilidade. \emph{Top-p}, ou nucleus sampling, retém o menor prefixo da lista ordenada cuja probabilidade acumulada atinge pelo menos $p$; depois renormaliza~\citep{holtzman2020}. Empates e combinação de filtros dependem da implementação.
+\emph{Top-k} restringe a escolha aos $k$ candidatos de maior probabilidade. Com $k=2$, ficam os dois primeiros. \emph{Top-p}, ou \emph{nucleus sampling}, começa pelo candidato mais provável e vai acrescentando os seguintes até a soma chegar pelo menos a $p$. Recalcula então os pesos entre os candidatos que ficaram~\citep{holtzman2020}. Empates e combinação de filtros dependem da implementação.
 
 Com probabilidades ilustrativas $[0.60,0.25,0.10,0.05]$, top-p de $0.80$ retém os dois primeiros candidatos, cuja massa é $0.85$. Depois de renormalizar, as probabilidades são $12/17$ e $5/17$. Top-k igual a 1 corresponde a escolha gulosa no passo considerado. O limite $T\to0^+$ também concentra a escolha nos máximos; muitos serviços tratam o valor zero como opção especial. Não substituas essa convenção pela divisão por zero na fórmula.
 
@@ -168,21 +172,8 @@ Claro que isto não é perfeito. O modelo pode ignorar-te ocasionalmente. Mas é
 Pedir “exatamente 137 palavras” é pedir ao modelo que alinhe um pedido em “palavras” com uma realidade interna em “tokens”. Mesmo que acerte, não contes com isso como contrato. Em contextos de produção, usa limites de tokens na API e valida o tamanho do output com código.
 \end{warningboxenv}
 
-\section{Quando não usar LLMs}
+\section{Escolher a ferramenta pelo trabalho}
 
-Antes de avançarmos, convém dizer o óbvio que muitas equipas ignoram: há situações em que usar um LLM é simplesmente má ideia.
+Se a data do talão vem no formato ano, mês e dia, uma regra pode pô-la na ordem dia, mês e ano. A mesma entrada dá sempre o mesmo resultado. Chamamos \emph{determinista} a esse comportamento. Se o talão vier escrito à mão e a data estiver ilegível, o problema já exige interpretação e uma forma de assinalar a dúvida.
 
-Casos típicos onde \emph{não} é a melhor ferramenta:
-
-\begin{itemize}[leftmargin=*]
-\item \textbf{Cálculos exatos e de alto risco}: impostos, dosagem de medicamentos, controlo de infraestruturas críticas.
-\item \textbf{Verificações formais}: provas matemáticas, validação de protocolos criptográficos.
-\item \textbf{Regras fixas e simples}: transformações deterministas (por exemplo, converter \texttt{YYYY-MM-DD} em \texttt{DD/MM/YYYY}).
-\item \textbf{Dados ultra-sensíveis} quando não tens garantias fortes de privacidade.
-\end{itemize}
-
-Nestes casos, usa código normal, algoritmos tradicionais, bases de dados. O LLM pode ajudar a \emph{escrever} esse código, a explicar o problema ou a gerar testes — mas não deve ser o motor principal de decisão.
-
-\begin{keyideabox}{LLM é martelo, mas nem tudo é prego}
-Sempre que pensares “podíamos pôr um LLM aqui”, pergunta primeiro se não há uma função determinista simples que faça melhor, mais rápido e mais barato. Só depois envolve tokens.
-\end{keyideabox}
+Para cálculos exatos ou verificações formais, usa a regra e o verificador adequados à tarefa. Em decisões com consequências sérias, confirma também dados, permissões e procedimento. Um modelo pode ajudar a explicar a regra ou a propor casos de teste. Para executar a decisão, mede o que o sistema consegue verificar, incluindo como trata os dados sensíveis.

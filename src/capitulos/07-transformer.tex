@@ -3,41 +3,21 @@
 
 «Depositei dinheiro no banco» e «sentei-me no banco» pedem interpretações diferentes da mesma palavra. As outras palavras dão contexto. Queremos abrir uma parte do mecanismo que permite combinar essa informação. Não vamos encontrar uma ficha de dicionário com uma pequena pessoa a escolher o significado. Vamos encontrar números, transformações e dependências entre posições.
 
-A primeira leitura pode conservar o percurso: tokens tornam-se vetores, as camadas combinam informação e a saída atribui scores aos próximos tokens. As fórmulas são aprofundamento. O exemplo numérico de atenção permite confirmar uma conta local, sem fingir que abrimos todos os pesos de um LLM.
+A primeira leitura pode seguir três passos. Os fragmentos de texto tornam-se listas de números. As camadas combinam informação dessas listas. A saída atribui pontuações às unidades que podem aparecer a seguir. Vamos fazer uma destas contas à mão. A notação geral fica no aprofundamento.
 
-\section{Álgebra linear em modo de sobrevivência}
+\section{Da lista de números à regra de transformação}
 
-Para perceberes o Transformer, precisas de um kit de sobrevivência de álgebra linear. Não é um curso completo; é apenas o mínimo para que as palavras “vetor” e “matriz” deixem de soar a trauma escolar.
+Imagina a lista $(2,3)$ numa ficha de inventário. O primeiro número conta meias e o segundo conta toalhas. Chamamos \emph{vetor} a uma lista ordenada de números deste género. Esta lista tem duas posições, ou duas \emph{dimensões}. Se trocares os números de lugar, mudas a ficha.
 
-\subsection*{Vetores como setas de significado}
+Num Transformer de texto, cada identificador de token permite consultar uma linha de uma tabela aprendida. A lista devolvida chama-se \emph{embedding} inicial. Com a tabela fixa, o mesmo identificador recupera a mesma lista. Na ficha de inventário, demos um nome a cada posição. Numa representação aprendida, em geral é a combinação dos números que interessa. O contexto entra nas transformações das camadas seguintes~\citep{vaswani2017}.
 
-Um \emph{vetor} é, aqui, uma lista ordenada de números:
+Uma \emph{matriz} é uma tabela de números com linhas e colunas. Cada linha pode escrever uma regra. Se a primeira linha é $(1,2)$, multiplica o primeiro número da ficha por 1 e o segundo por 2. Soma os resultados: $1\times2+2\times3=8$. Se a segunda linha é $(0,1)$, obténs $0\times2+1\times3=3$. Aplicar a matriz à ficha $(2,3)$ dá a nova lista $(8,3)$. Cada linha produziu um número da saída.
 
-\[\mathbf{v}=(v_1,v_2,\ldots,v_d)\in\mathbb{R}^{d}.\]
+Este tipo de multiplicação permite que o modelo construa listas diferentes a partir da mesma entrada. O Transformer também usa operações que não se reduzem a multiplicar por uma matriz. Mais adiante, vamos separar o trabalho de cada uma.
 
-Podes imaginá-lo como uma seta num espaço de 
-d dimensões. Num Transformer de texto, o identificador de cada token seleciona um vetor aprendido, o \emph{embedding} inicial. Com os parâmetros fixos, essa consulta devolve o mesmo vetor para o mesmo identificador. As camadas seguintes produzem representações que dependem do contexto~\citep{vaswani2017}.
+\section{Atenção com desenhos de guardanapo}
 
-\subsection*{Matrizes como transformações}
-
-Uma \emph{matriz} é uma tabela de números. Multiplicar uma matriz por um vetor é aplicar uma transformação linear: rodar, esticar, comprimir esse vetor no espaço. O Transformer não faz magia; faz muitas multiplicações de matrizes por vetores, com algumas não-linearidades pelo meio.
-
-Do ponto de vista de prompting, o que importa é:
-
-\begin{itemize}[leftmargin=*]
-\item O embedding inicial é aprendido durante o treino; as representações nas camadas seguintes variam com os tokens e posições disponíveis.
-\item Transformar vetores corresponde a olhar para a mesma frase com “óculos” diferentes (atenção cabeça X, projeção para queries, etc.).
-\end{itemize}
-
-Não precisas de calcular nenhuma destas matrizes à mão. Mas a intuição “texto \(\to\) vetores \(\to\) operações \(\to\) texto” é fundamental para entender porque é que o contexto e a ordem das coisas importam.
-
-\begin{keyideabox}{Texto \texorpdfstring{$\to$}{->} vetores \texorpdfstring{$\to$}{->} operações \texorpdfstring{$\to$}{->} texto}
-Um Transformer pega em texto, converte-o em vetores, faz operações em cima desses vetores (atenção, projeções, não-linearidades) e volta a texto. Cada decisão de prompt é, literalmente, uma decisão sobre que vetores vão estar presentes e como vão interagir.
-\end{keyideabox}
-
-\section{Self-attention com desenhos de guardanapo}
-
-O coração do Transformer é o mecanismo de \emph{self-attention}. A ideia é combinar informação das posições permitidas. No descodificador causal, uma máscara impede cada posição de usar tokens futuros durante o treino. Na geração, só existem o contexto e os tokens já produzidos.
+A \emph{autoatenção}, ou \emph{self-attention}, combina informação de posições da mesma sequência. Pensa nas palavras à volta de «banco». Para formar uma representação daquela posição, o modelo calcula quanto pesa a informação de cada posição disponível. Num modelo que gera da esquerda para a direita, a \emph{máscara causal} indica quais as posições permitidas. Durante o treino, impede o acesso aos tokens seguintes.
 
 De forma simplificada, para cada token temos três vetores:
 
@@ -49,17 +29,21 @@ De forma simplificada, para cada token temos três vetores:
 
 As frases entre aspas são mnemónicas. Queries, keys e values são projeções calculadas a partir das representações, não intenções de pequenos agentes. «Procuro» não significa uma pesquisa num catálogo externo nem atribui vontade ao token. A analogia ajuda a ler o cálculo e termina aí.
 
-A atenção entre dois tokens é dada, grosso modo, pelo produto interno entre query e key, seguido de uma normalização por \emph{softmax}. Para um conjunto de queries Q, keys K e values V, a fórmula canónica é:
+Comparamos uma query com cada key. Um \emph{produto interno} multiplica os números que estão na mesma posição e soma os produtos, como fizemos com uma linha da matriz. O resultado, depois de um ajuste de escala, é uma pontuação. Para combinar os valores, precisamos de transformar as pontuações em pesos que somem um. A regra que faz essa transformação chama-se \emph{softmax}.
+
+Supõe que os pesos de duas posições são um quarto e três quartos, e que os dois valores são 2 e 6. Dás a cada valor a sua parte: $\tfrac14\times2+\tfrac34\times6=5$. É a média ponderada da página de \hyperref[sec:ler-numeros]{números e fórmulas}. A mesma conta pode ser aplicada a cada componente se os valores forem listas. Os números são didáticos.
+
+\textbf{Aprofundamento opcional.} $Q$, $K$ e $V$ agrupam, por linha, as queries, keys e values das posições. A fórmula escreve a comparação, a conversão em pesos e a combinação:
 
 \[
 \operatorname{Attention}(Q,K,V)=
 \operatorname{softmax}\!\left(\frac{QK^{\mathsf T}}{\sqrt{d_k}}+M\right)V.
 \]
-Com $n$ posições, $Q,K\in\mathbb{R}^{n\times d_k}$ e $V\in\mathbb{R}^{n\times d_v}$. A softmax é aplicada por linha. Na máscara causal $M_{ij}=0$ se $j\leq i$ e $M_{ij}=-\infty$ se $j>i$, anulando os pesos de posições futuras. O fator $\sqrt{d_k}$ controla a escala dos produtos internos~\citep{vaswani2017}.
+Com $n$ posições, $Q$ e $K$ têm $n$ linhas e $d_k$ colunas. $V$ tem $n$ linhas e $d_v$ colunas. O $\mathsf T$ em cima de $K$ indica a \emph{transposição}, que troca as suas linhas e colunas. Cada entrada de $QK^{\mathsf T}$ compara uma query com uma key. O símbolo $\sqrt{d_k}$ representa a raiz quadrada, como 2 para $d_k=4$. Dividir por esse valor controla a escala. A softmax é aplicada a cada linha, uma por query~\citep{vaswani2017}.
 
-Por exemplo, numa linha com dois scores permitidos, $[0,\ln 3]$, a softmax dá $[1/4,3/4]$. Se os valores escalares forem $[2,6]$, a combinação é $\tfrac14\times2+\tfrac34\times6=5$. Estes números são um exemplo didático, não uma medição de atenção de um LLM.
+$M_{ij}$ é a entrada da máscara na linha $i$, coluna $j$. Para a máscara causal, vale zero quando $j\leq i$ e $-\infty$ quando $j>i$. Isto permite as posições anteriores e a atual. O símbolo $-\infty$ representa um limite que dá peso zero às futuras. O capítulo usa uma implementação didática com apenas as posições permitidas.
 
-Podemos abrir a normalização: $e^0=1$ e $e^{\ln3}=3$, pelo que dividimos cada valor pela soma quatro. A softmax converte estes scores em pesos positivos que somam um. O programa de fundamentos executa esta conta. Somar a mesma constante aos dois scores mantém os pesos; a implementação subtrai o máximo antes de exponenciar para evitar problemas numéricos com valores grandes.
+Numa linha com pontuações permitidas $[0,\ln 3]$, a softmax calcula $e^0=1$ e $e^{\ln 3}=3$. Aqui, $e$ é uma constante próxima de $2{,}718$ e $\ln 3$ é o expoente a que a elevamos para obter 3. Divide por $1+3$ e obténs os pesos $[1/4,3/4]$ usados acima. Somar a mesma constante às duas pontuações multiplica os dois valores exponenciados pelo mesmo fator. A divisão pela soma cancela esse fator. O programa de fundamentos subtrai o máximo antes de exponenciar, o que evita elevar $e$ a um número positivo muito grande.
 
 \section{Uma máscara impede uma pista vinda do futuro}
 Imagina agora três posições. Estamos a calcular a segunda e os dois valores acessíveis são os do exemplo, dois e seis. A terceira posição contém, na construção didática, o valor mil. Num descodificador causal, essa posição futura não pode participar. A máscara atribui-lhe peso zero, em vez de a deixar alterar a média.
@@ -77,7 +61,7 @@ O que isto faz, em termos de desenho de guardanapo:
 \item Faz uma média ponderada das \emph{values} V usando esses pesos.
 \end{enumerate}
 
-No fim, a representação de cada token passa a ser uma mistura das informações dos tokens a que decidiu prestar mais atenção.
+No fim, a representação que resulta da atenção combina os valores das posições disponíveis. Um peso maior dá a uma posição mais influência nessa combinação.
 
 Do ponto de vista de prompts:
 
@@ -180,7 +164,7 @@ Cada palavra que usas no prompt empurra o contexto para uma região diferente do
 \end{keyideabox}
 
 \section{O que existe para além da atenção}
-A entrada começa por identificadores de tokens e embeddings. Informação de posição permite distinguir «o cão mordeu o homem» de «o homem mordeu o cão». Cada bloco combina atenção, transformações feed-forward, normalização e ligações residuais; a saída é projetada para scores sobre o vocabulário. Há variantes de cada componente.
+A entrada começa por identificadores de tokens e embeddings. Informação de posição permite distinguir «o cão mordeu o homem» de «o homem mordeu o cão». Depois de combinar informação de várias posições, o bloco aplica também transformações \emph{feed-forward}. Estas operam na lista de cada posição. Uma \emph{ligação residual} soma o resultado de uma operação à entrada dessa operação, criando um caminho direto para a informação anterior. A \emph{normalização} ajusta a escala dos números em etapas do cálculo. A composição e a ordem têm variantes. Na saída, uma transformação calcula pontuações sobre o vocabulário.
 
 No treino, conhecemos a sequência de referência e calculamos perdas em várias posições em paralelo, respeitando a máscara. Na geração autoregressiva, acrescentamos tokens sucessivamente. Uma cache de keys e values pode evitar recalcular parte do histórico; não é uma memória permanente de conversas.
 
@@ -199,14 +183,16 @@ No treino, conhecemos a sequência de referência e calculamos perdas em várias
 
 Uma alteração no prompt muda a entrada deste cálculo. Não te dá acesso direto aos parâmetros, às posições internas ou a um interruptor de «verdade». O desenho é útil precisamente porque mantém essas fronteiras visíveis.
 \section{Como os parâmetros aprendem}
-Uma rede começa com parâmetros e um objetivo de treino. Para previsão autoregressiva, uma perda comum é a média da log-probabilidade negativa dos tokens de referência:
+Uma rede começa com parâmetros e um objetivo de treino. Imagina que nos dados a palavra seguinte é «meia». Um modelo atribui-lhe 90\% de probabilidade e outro atribui-lhe 10\%. A regra de treino penaliza mais a segunda previsão. Repete a comparação em muitas posições e ajusta os parâmetros na direção que reduz a perda, como na reta do capítulo~\ref{ch:ml}.
+
+\textbf{Aprofundamento opcional.} Uma perda comum é a média da log-probabilidade negativa dos tokens de referência:
 \[
 \mathcal{L}(\theta)=-\frac{1}{N}\sum_{k=1}^{N}
 \log P_{\theta}(t_k\mid t_{<k}).
 \]
-Aqui, $\theta$ representa os parâmetros, $N$ o número de posições avaliadas e $t_{<k}$ os tokens anteriores. A perda aumenta quando o modelo atribui pouca probabilidade ao token que aparece nos dados. Não mede diretamente se uma afirmação do mundo é verdadeira.
+Aqui, $\theta$ (teta) representa os parâmetros, $N$ conta as posições avaliadas e $t_{<k}$ reúne os tokens anteriores à posição $k$. O sinal negativo faz com que a perda cresça quando a probabilidade do token correto baixa. Com logaritmo natural, $-\ln(0{,}9)$ é cerca de $0{,}11$ e $-\ln(0{,}1)$ é cerca de $2{,}30$. Esta conta mede o ajuste aos exemplos.
 
-O gradiente indica como a perda varia com os parâmetros. Uma atualização simples de descida do gradiente seria $\theta\leftarrow\theta-\eta\nabla_{\theta}\mathcal{L}$, com passo $\eta>0$. Otimizadores práticos usam variantes mais elaboradas. A retropropagação calcula derivadas através das camadas; os problemas de gradientes referidos no capítulo anterior dizem respeito à transmissão desse sinal de aprendizagem~\citep{goodfellow2016}.
+O \emph{gradiente} reúne as inclinações da perda quando mexemos em cada parâmetro. O símbolo $\nabla_{\theta}\mathcal{L}$ representa essa lista. Uma atualização simples escreve-se $\theta\leftarrow\theta-\eta\nabla_{\theta}\mathcal{L}$. A seta indica que substituímos os valores antigos pelos novos e $\eta$ (eta) define o tamanho do passo. Os otimizadores, programas que escolhem os passos de ajuste, podem usar variantes. A retropropagação permite calcular essas inclinações através das camadas~\citep{goodfellow2016}.
 
 Treinar exige muitos exemplos, computação e avaliação. Durante a inferência normal, não repetimos esta atualização por cada mensagem: usamos parâmetros fixos para calcular uma distribuição condicionada ao contexto. É por isso que fornecer uma política no prompt e alterar os pesos são operações diferentes.
 
