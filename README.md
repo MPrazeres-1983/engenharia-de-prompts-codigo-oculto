@@ -12,6 +12,7 @@ A segunda edição permanece em `main@975ade89632700918786603dc23722e74f8610f7`,
 
 - [Plano e três alternativas de título](docs/V3_PLANO_EDITORIAL.md)
 - [Progressão, narrativa e contrato factual](docs/V3_LINHA_NARRATIVA.md)
+- [Ancoragem da retoma e estado dos blocos](docs/V3_ANCORAGEM.md)
 - [Auditoria dos 29 capítulos e mapa de lacunas](docs/V3_MATRIZ_COBERTURA.md)
 - [Progresso, pendências e próximo passo exato](docs/V3_PROGRESSO.md)
 - [Fontes e alcance da consulta V3](docs/V3_FONTES_E_EVIDENCIAS.md)

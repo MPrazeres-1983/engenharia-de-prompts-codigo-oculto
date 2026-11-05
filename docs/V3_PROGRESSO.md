@@ -6,6 +6,8 @@ Atualização: 04-11-2026. Branch `terceira-edicao-ia-referencia-2026`. [PR #2 e
 
 ## Checkpoint G — progressão, narrativa e aprofundamento
 
+A retoma de 05-11-2026 tem a sua base, divisão de trabalho e registo em [V3_ANCORAGEM.md](V3_ANCORAGEM.md). Os resultados do checkpoint G abaixo são a base validada dessa retoma.
+
 O autor autorizou continuar em 04-11-2026, com progressão do básico à especialização, rigor factual, humor e leitura envolvente. Base da retoma confirmada `e990b891`; `main` continua em `975ade8`. A orientação encontra-se em `V3_LINHA_NARRATIVA.md` e não envolve imitação de personagens, enredos ou prosa de outros autores.
 
 Concluído neste ciclo:
