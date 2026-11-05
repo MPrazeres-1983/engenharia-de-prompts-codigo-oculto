@@ -2,6 +2,29 @@
 
 Atualização de 05-11-2026. O [registo de retoma](V3_ANCORAGEM.md) liga as verificações aos blocos e aos commits.
 
+## Checkpoint K — validação da edição final
+
+| Verificação | Resultado observado |
+|---|---|
+| Ordem e estrutura | Dez partes, 50 capítulos, três apêndices, 74 laboratórios, 93 referências compostas, 70 termos e quatro exemplos JSON. Primeira conversa no capítulo 2 |
+| Compilação | 244 páginas A4. Verificador de estrutura e log sem erros. O ficheiro da ilustração da capa é o da edição anterior |
+| Navegação e composição | 25 ligações no guia e 621 ligações internas com destino resolvido no PDF. Geometria verificada em todas as páginas. Capa, primeiras tarefas, código, tabelas e fórmulas revistos em amostra ampliada |
+| Testes | 76 testes Python, 12 regressões da Lavandaria, 10 verificações de interoperabilidade local e reconferência de 52 registos históricos. Compilação dos módulos Python e demonstrações executadas |
+| Exemplos no texto | Consultas copiadas do capítulo de dados devolvem `(3,90,30)` na junção e `(2,60)` com `EXISTS`. A função de média conserva o zero. A conta ilustrativa de eletricidade dá quatro gramas de CO₂e com as hipóteses declaradas |
+| Verificador | Foram induzidas três falhas em cópia temporária. O verificador detetou capítulo na parte errada, ligação para uma etiqueta em falta e âncora duplicada no log |
+
+### Escolha do exemplo inicial
+
+| Caso considerado | O que o leitor precisa de entender | Decisão |
+|---|---|---|
+| Biblioteca do bairro | Uma ficha, dois estados e a decisão de se deslocar. O estado em falta tem uma consequência imediata | Abre a edição e serve para formular, testar e rever o primeiro pedido em papel |
+| Oficina de bicicletas | Receção, diagnóstico, espera de peças e prazo. As etapas ganham valor quando se quer discutir dependências | Avaliada como alternativa editorial |
+| Lavandaria | Diferença entre peça e par, contagem de entrada e recolha, políticas, titularidade e exceções | Usada onde o leitor pode executar a consulta, os testes e o incidente com dados e registos do projeto |
+
+Na passagem editorial de entrada, a ficha R-014 recebida leva a aguardar aviso. A variante pronta permite confirmar o levantamento. A ficha sem estado deixa a confirmação em aberto. «Amanhã às dez» falha quando a ficha não dá data nem hora. No percurso de dados, as contagens foram refeitas à mão e no SQLite. No percurso técnico, a receção devolveu HTTP 200 com a tarefa ainda em aberto e só produziu o artefacto autorizado depois de receber o número.
+
+Estas verificações foram realizadas durante a edição. A avaliação por participantes independentes e o piloto com LLM são experiências separadas. As [fontes reconfirmadas](V3_FONTES_E_EVIDENCIAS.md) têm localizador e âmbito. A revisão da folha de rosto corresponde à revisão compilada no [PR #2](https://github.com/MPrazeres-1983/engenharia-de-prompts-codigo-oculto/pull/2).
+
 ## Checkpoint J — entrada acessível, ensaios e fontes
 
 | Verificação | Resultado observado |

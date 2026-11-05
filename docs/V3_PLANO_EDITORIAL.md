@@ -1,5 +1,7 @@
 # Terceira edição: plano editorial e mapa de migração
 
+Registo do planeamento inicial. A ordem entregue e o título utilizado constam do [manifesto](V3_ESTRUTURA.json) e do [checkpoint K](V3_ANCORAGEM.md).
+
 Data de início: 04-11-2026. Base verificada: `main@975ade89632700918786603dc23722e74f8610f7`, PR #1 integrado em 03-11-2026. Árvore de base: `13de7f25f76d803ed5f68878b6cab804727fd985`. A cópia de trabalho foi confrontada por hashes de blobs com a árvore do GitHub. Branch: `terceira-edicao-ia-referencia-2026`. Sem merge, tag, release ou publicação nesta execução.
 
 ## Identidade e títulos para decisão do autor

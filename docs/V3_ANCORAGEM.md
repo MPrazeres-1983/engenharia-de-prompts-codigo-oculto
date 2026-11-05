@@ -1,5 +1,17 @@
 # Ancoragem e retoma da terceira edição
 
+## Checkpoint K — edição final
+
+Retoma de 5 de novembro de 2026 a partir de `17366bfca079b14e4a38e16070aac4c347e6abde`, árvore `17f1ce1da23ec9bba1f9215383eb686ef45311d3`. O autor pediu o fecho do manuscrito, com ordem gradual, revisão de prosa, exemplos verificáveis e compilação.
+
+| Bloco | Decisão e resultado |
+|---|---|
+| K1. Ordem | Primeira conversa no capítulo 2. Aplicações de escrita, estudo, criação e trabalho antes da parte dos modelos. Dados e código antes de pesquisa, ferramentas e agentes. O [manifesto](V3_ESTRUTURA.json) fixa capítulos e partes |
+| K2. Exemplos e texto | A biblioteca abre os conceitos com a ficha R-014. A Lavandaria concentra os exercícios com implementação e dados. Corrigidos fechos que apontavam para a ordem antiga e concentradas explicações de contexto, revisão, multimodalidade, avaliação e energia |
+| K3. Entrega | Título coerente na capa, folha de rosto e metadados. Compilação e verificações no [PR #2](https://github.com/MPrazeres-1983/engenharia-de-prompts-codigo-oculto/pull/2). [Resultados e verificação editorial](V3_VALIDACAO.md) |
+
+O título usado é *O Código Oculto da Inteligência Artificial — Compreender, Criar e Construir*. A capa reaproveita a ilustração original na composição da terceira edição. O manuscrito fica pronto para compilar e apreciar no PR. A leitura por participantes independentes e o piloto com um modelo íntegro conservam protocolos próprios.
+
 ## Checkpoint J — entrada acessível, fontes e ensaio
 
 Base remota `d981608d579e893bd132ab2ab231b1359277f692`, árvore `480561ecd2f29082742f4b6974f576b24309b641`. A prova anterior tinha 264 páginas. Nesta retoma o autor pediu explicações para leitores com e sem bases de matemática e informática. O trabalho prosseguiu na mesma branch e no [PR #2 em Draft](https://github.com/MPrazeres-1983/engenharia-de-prompts-codigo-oculto/pull/2).
@@ -13,7 +25,7 @@ Base remota `d981608d579e893bd132ab2ab231b1359277f692`, árvore `480561ecd2f2908
 
 O [piloto com modelo local](../experiencias/equipas/README.md) continua pendente. A ligação à revisão fixada esgotou o tempo antes de transferir dados. O ensaio de protocolos verifica mensagens e autorizações em ambiente controlado. Testes com outros clientes ou servidores, participantes e treino de um LLM têm dependências e critérios próprios.
 
-**Próxima retoma.** Confirma o HEAD no PR e começa a leitura da prova pelo guia, pelo Transformer e pelo capítulo de interoperabilidade, usando os três percursos da [validação](V3_VALIDACAO.md). Em seguida percorre o manuscrito completo, corrige as transições, fontes ou dificuldades encontradas, compila uma candidata e regista as escolhas que exigem apreciação do autor. Incorpora uma leitura independente quando houver comentários reais. A ordem de trabalho conserva os resultados já observados.
+A retoma prevista em J foi executada em K. O [registo de validação](V3_VALIDACAO.md) distingue os percursos verificados durante a edição da avaliação por participantes independentes.
 
 ## Checkpoint I — fecho editorial
 
@@ -99,15 +111,15 @@ Os números são prefixos dos ficheiros, de acordo com `V3_ESTRUTURA.json`. A re
 
 O piloto de equipa depende de uma cópia íntegra do GGUF na revisão fixada. As duas tentativas anteriores terminaram por timeout e há zero inferências novas nesse piloto. O próximo passo desse ensaio é validar o SHA-256 e o runtime quando existir uma cópia íntegra. Estudos com participantes e ajuste de um LLM têm os seus próprios requisitos. Estas dependências têm registos próprios e a retoma editorial pode avançar em paralelo.
 
-## Próximas iterações
+## Planeamento histórico das iterações
 
-A estimativa feita em H previa três iterações até uma candidata e uma quarta se necessária. As duas primeiras estão registadas em I e J. Segue-se a prova candidata, com revisão adicional se surgirem correções da leitura independente ou se um ensaio se desbloquear mais tarde.
+A estimativa feita em H previa três iterações e uma quarta se necessária. As três iterações realizadas estão registadas em I, J e K. A última fecha a edição para compilação e apreciação pelo autor.
 
 | Iteração | Primeiro passo e âmbito | Evidência de fecho |
 |---|---|---|
 | 1. Fecho editorial | Concluída em I. Lotes B, D e F e guia de consulta | 17 ficheiros revistos com alterações e fontes localizáveis. Percursos introdutório, prático e técnico com remissões verificadas. Um commit por lote |
 | 2. Ensaios e fontes | Execução disponível fechada em J. Revisão de fontes, explicações desde a base e interoperabilidade local | Resultados e âmbito registados. Piloto, adaptação de LLM e leitura independente com dependências explícitas |
-| 3. Candidata a publicação | Leitura integral, revisão independente, correções, prova A4 e critérios de aceitação. Levar título, capa e aprovação ao autor | PDF identificado com a revisão, fontes conferidas, validação local e CI do HEAD. Registo de decisões para aprovação |
+| 3. Edição final | Concluída em K. Ordem, exemplos, prosa, fontes prioritárias e prova A4 | PDF identificado com a revisão e verificações de compilação. A leitura por participantes mantém protocolo próprio |
 | 4. Se necessária | Corrigir observações da leitura independente ou fechar um ensaio desbloqueado depois da candidata | Diferenças, nova prova e validação do conteúdo afetado |
 
-Para retomar, confirma o HEAD no PR #2 e segue o próximo passo do checkpoint J, no início deste documento.
+O checkpoint K, no início deste documento, identifica a edição entregue e liga aos resultados.

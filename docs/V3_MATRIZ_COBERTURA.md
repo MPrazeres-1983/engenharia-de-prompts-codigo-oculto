@@ -154,3 +154,7 @@ H integrou um projeto audiovisual completo, um caso em serviço público e um in
 ### Estado após o checkpoint J
 
 Os capítulos selecionados ganharam exemplos que precedem a notação e o glossário inclui 70 termos. O [ensaio local](../experiencias/interoperabilidade/README.md) cobre operações específicas de MCP e A2A entre duas implementações do projeto. As fontes prioritárias acima têm passagens identificadas no [registo](V3_FONTES_E_EVIDENCIAS.md). A candidata precisa de uma leitura integral, da validação do percurso com leitores reais e do registo das dependências de ensaios que persistam.
+
+### Estado após o checkpoint K
+
+A ordem, as explicações e as remissões foram revistas no fecho editorial. A biblioteca passou a abrir o percurso e a Lavandaria serve os casos que têm dados e implementação. A [prova compilada e as verificações](V3_VALIDACAO.md) identificam a edição final e o alcance dos ensaios. A leitura com participantes independentes e o piloto com um modelo íntegro conservam protocolos próprios.

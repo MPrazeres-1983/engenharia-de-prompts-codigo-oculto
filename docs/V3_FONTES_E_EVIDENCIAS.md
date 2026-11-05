@@ -149,6 +149,14 @@ O exemplo da média do capítulo de programação executou as quatro verificaç�
 
 As passagens acima foram verificadas para as afirmações usadas. Os números de exercícios e as observações do ensaio local permanecem separados das fontes publicadas.
 
+## Checkpoint K — conferência de fecho
+
+Em 05-11-2026 foram reconferidos o âmbito do [estudo PRAIM](https://www.nature.com/articles/s41591-024-03408-6), a comparação sem ferramenta no [ensaio de Bastani e colaboradores](https://pmc.ncbi.nlm.nih.gov/articles/PMC12232635/), a estimativa e a projeção no [relatório da IEA](https://www.iea.org/reports/key-questions-on-energy-and-ai) e os marcos do artigo 113 na [alteração do AI Act](https://eur-lex.europa.eu/eli/reg/2026/1744/oj). Mantêm-se os localizadores e o alcance do checkpoint J.
+
+Para os capítulos de sistemas, foram reconferidos o [changelog MCP de 28-07-2026](https://modelcontextprotocol.io/specification/2026-07-28/changelog), os estados da [especificação A2A 1.0.0](https://a2a-protocol.org/v1.0.0/specification/), os campos do [formato Agent Skills](https://agentskills.io/specification) e os papéis da [especificação OpenAI de 29-10-2026](https://model-spec.openai.com/2026-10-29.html). O ensaio local corresponde às versões descritas no próprio registo. Os papéis de mensagem são apresentados como específicos do serviço.
+
+As fichas R-014 e os respetivos critérios são construções editoriais. A validação manual compara os estados recebido, pronto e desconhecido. Os exemplos não correspondem a uma política de uma biblioteca real.
+
 ## Recursos e licenças
 
 Texto novo, diagrama de equipa, tabelas, dados sintéticos e scripts foram produzidos para esta revisão sob as condições da obra. Capa original preservada byte a byte. Não se copiaram figuras dos estudos ou modelos; os artigos são citados e resumidos com alcance limitado. Os laboratórios de software usam a biblioteca padrão de Python. A montagem do ateliê usa também Pillow, ReportLab, Inkscape e FFmpeg. A origem da ilustração, o pedido utilizado e as licenças tipográficas estão em `exemplos/atelier`. Modelos e runtime mantêm as licenças indicadas no registo histórico; os pesos não são redistribuídos. O pacote SKILL.md não recebe uma licença comercial diferente da obra.

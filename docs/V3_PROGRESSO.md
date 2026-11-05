@@ -2,13 +2,21 @@
 
 Atualização de 05-11-2026. Branch `terceira-edicao-ia-referencia-2026`, [PR #2 em Draft](https://github.com/MPrazeres-1983/engenharia-de-prompts-codigo-oculto/pull/2).
 
+## Checkpoint K — edição final
+
+A sequência dos 50 capítulos foi revista a partir dos objetivos, exemplos e transições. A primeira conversa passou para o capítulo 2. O leitor pode experimentar tarefas em papel antes de abrir treino, atenção e geração. Dados, código e especificação formam uma passagem para a construção de sistemas.
+
+A reserva da biblioteca foi escolhida para a entrada depois de comparar três casos. A ficha separa o que chegou, o que está confirmado e o que a pessoa pode fazer a seguir. A Lavandaria tem um percurso próprio para os laboratórios com consultas, regras de acesso, cache e resultados reproduzíveis.
+
+O título está alinhado na capa, na folha de rosto e nos metadados. Os capítulos, os 74 laboratórios, as 93 referências e os 70 termos constam da edição compilada. A [ancoragem](V3_ANCORAGEM.md) liga a revisão aos blocos e a [validação](V3_VALIDACAO.md) regista os resultados e o alcance da leitura.
+
 ## Checkpoint J — explicações de base e ensaios
 
 O ponto de partida explica proporções, médias, letras, unidades, programas e pedidos entre serviços. Foram revistos os capítulos 01, 06–08, 13, 21–22, 25, 28, 31–33, 40–42, 44, 47 e 49 pelos prefixos dos ficheiros. As fórmulas preservam o detalhe técnico e passam a ter uma conta comentada ou um percurso acessível antes da notação. O glossário tem 70 termos.
 
 - **Fontes.** Confirmados o alcance dos estudos de rastreio e aprendizagem, os marcos de aplicação da alteração ao AI Act e a distinção entre estimativa histórica e projeção no relatório energético. [Fontes e passagens](V3_FONTES_E_EVIDENCIAS.md)
 - **Ensaio.** Dez verificações numa troca local A2A e MCP, incluindo retoma da mesma tarefa e recusa por identidade. [Comando e resultado](../experiencias/interoperabilidade/README.md)
-- **Retoma.** A próxima iteração prepara a candidata e inclui a leitura integral, a validação dos percursos e a correção dos problemas encontrados. A leitura independente aguarda leitores reais. O piloto continua dependente do ficheiro do modelo. [Ancoragem](V3_ANCORAGEM.md)
+- **Retoma.** O checkpoint K fechou a edição e os percursos editoriais. A avaliação independente e o piloto com LLM têm registos próprios. [Ancoragem](V3_ANCORAGEM.md)
 
 ## Checkpoint I — fecho editorial e consulta
 

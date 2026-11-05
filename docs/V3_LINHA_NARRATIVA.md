@@ -1,6 +1,6 @@
 # Progressão e narrativa da terceira edição
 
-Orientação do autor recebida em 04-11-2026, após o checkpoint `e990b891`: avançar do introdutório à especialização, com factos verificáveis, humor pontual e leitura envolvente. Esta direção complementa o plano editorial; não altera o título definitivo, a licença ou a necessidade de aprovação antes do merge.
+Orientação editorial de 4 e 5 de novembro de 2026. Avançar do introdutório à especialização, com factos verificáveis, humor pontual e exemplos que funcionem para quem começa e para quem já trabalha com IA.
 
 ## Contrato com o leitor
 
@@ -10,7 +10,7 @@ Não é possível prometer infalibilidade. O compromisso executável é verifica
 
 ## Três formas de criar continuidade
 
-1. **Uma investigação recorrente:** a Lavandaria apresenta um problema concreto, recolhe pistas, elimina explicações e muda de método. Regressa onde ajuda a entender o mecanismo; não ocupa à força saúde, política ou relações humanas.
+1. **Uma dúvida que se pode seguir.** A biblioteca apresenta a diferença entre uma reserva recebida e uma pronta a levantar. A ficha, a regra e a resposta mudam de função ao longo dos primeiros capítulos. A Lavandaria reaparece quando o leitor já pode seguir uma consulta, um teste de autorização ou um incidente até ao código e aos dados.
 2. **Um resultado que pede explicação:** uma avaliação quase perfeita falha fora do conjunto original; um ganho de velocidade desaparece na revisão; dois estudos aparentemente opostos investigam tarefas diferentes. A surpresa nasce de evidência ou de cálculos identificados, não de dramatização dos resultados.
 3. **Uma decisão com consequências:** o leitor acompanha o que é preciso saber para autorizar uma resposta, escolher um limiar, aceitar uma previsão ou mudar de fornecedor. A resolução explica uma escolha e deixa uma questão concreta para o capítulo seguinte.
 
@@ -19,6 +19,8 @@ Variar estas entradas. Não começar todos os capítulos com o mesmo diálogo ou
 ## Do primeiro contacto à especialização
 
 Apresentar primeiro uma situação e palavras correntes. Dar nome ao conceito quando já existe uma pergunta que o justifica. A seguir abrir o mecanismo, mostrar um exemplo e, quando necessário, introduzir notação comentada. O aprofundamento matemático fica identificado e não é requisito implícito para perceber a ideia principal.
+
+Na ordem final, o primeiro pedido vem no capítulo 2. A Parte II permite aplicar o método em tarefas de escrita, estudo, criação e trabalho. A Parte III abre treino, atenção, geração, modalidades e raciocínio. A Parte IV liga a resposta a dados, código e critérios de aceitação antes de os sistemas da Parte V acrescentarem pesquisa, ferramentas e agentes.
 
 | Camada | O leitor deve conseguir | Evidência de aprendizagem |
 |---|---|---|
