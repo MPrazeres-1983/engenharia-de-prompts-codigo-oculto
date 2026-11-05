@@ -166,7 +166,7 @@ Cada palavra que usas no prompt empurra o contexto para uma região diferente do
 \section{O que existe para além da atenção}
 A entrada começa por identificadores de tokens e embeddings. Informação de posição permite distinguir «o cão mordeu o homem» de «o homem mordeu o cão». Depois de combinar informação de várias posições, o bloco aplica também transformações \emph{feed-forward}. Estas operam na lista de cada posição. Uma \emph{ligação residual} soma o resultado de uma operação à entrada dessa operação, criando um caminho direto para a informação anterior. A \emph{normalização} ajusta a escala dos números em etapas do cálculo. A composição e a ordem têm variantes. Na saída, uma transformação calcula pontuações sobre o vocabulário.
 
-No treino, conhecemos a sequência de referência e calculamos perdas em várias posições em paralelo, respeitando a máscara. Na geração autoregressiva, acrescentamos tokens sucessivamente. Uma cache de keys e values pode evitar recalcular parte do histórico; não é uma memória permanente de conversas.
+No treino, conhecemos a sequência de referência e calculamos perdas em várias posições em paralelo, respeitando a máscara. Na geração autorregressiva, acrescentamos tokens sucessivamente. Uma cache de keys e values pode evitar recalcular parte do histórico; não é uma memória permanente de conversas.
 
 \begin{figure}[htbp]
 \centering

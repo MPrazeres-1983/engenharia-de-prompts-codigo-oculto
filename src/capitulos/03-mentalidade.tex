@@ -1,13 +1,13 @@
-\chapter{Mentalidade de Engenheiro de Prompts}
+\chapter{Pensar como Quem Testa um Pedido}
 \label{ch:mentalidade}
 Um colega pede-te o prompt que usaste ontem. Tens o texto, mas já não tens a mensagem original nem sabes qual das quatro respostas foi enviada. Conseguirias repetir o teste? Guardar só a frase que escrevemos é como anotar a receita e deitar fora a lista de ingredientes.
 
 \section{Tratar o pedido como uma especificação}
-Para uma tarefa que se repete, identifica a entrada, a saída e os critérios de aceitação. Numa resposta da Lavandaria, a entrada contém a reclamação e a política. A saída é um rascunho que alguém pode rever. Pedir o talão e preservar a dúvida sobre a causa são critérios que outra pessoa consegue verificar.
+Um critério de aceitação diz o que tem de acontecer para podermos usar a resposta. Na ficha de R-014, uma resposta aceitável informa que o pedido foi recebido e indica que o levantamento fica por confirmar. Se a ficha passar a «pronto para levantamento», o aviso permitido muda. Tens dois casos que exercitam lados diferentes da mesma regra.
 
 A comparação com código ajuda na disciplina. Guarda versões e casos de teste, anota erros que consegues reproduzir e regista por que mudaste o pedido. Ao executar código, a linguagem define operações precisas. Num modelo de linguagem, a resposta depende do modelo, do contexto e da configuração. A especificação diz o que aceitamos da saída. Os testes mostram como se comportou nos exemplos avaliados.
 
-Podes fazer este percurso num chat. Uma API, ou interface de programação, permite que um programa envie pedidos e leia respostas. Quando a aplicação distingue regras reutilizáveis de pedidos individuais, podes guardar cada parte separadamente. O capítulo~\ref{ch:personas} explica como esses papéis variam entre serviços.
+Podes fazer este percurso num chat. Num programa que trata vários pedidos, guarda a regra reutilizável separada das fichas de cada caso. O capítulo~\ref{ch:personas} mostra como a aplicação pode fazer essa separação.
 
 \begin{promptlabbox}{Reescrever um pedido solto como “função”}
 \textbf{Objetivo e contexto:} Tornar verificável um pedido de resumo. Usa um texto fictício ou autorizado e define os factos essenciais.
@@ -19,12 +19,12 @@ Pega num pedido típico que fazes a um LLM (por exemplo, “faz um resumo deste 
 \begin{lstlisting}
 Função: RESUMO_EXECUTIVO
 Papel do modelo: Assistente de comunicação clara, concisa e pragmática.
-Input:
+Entrada:
 
 Texto original (até 2000 palavras)
 
 Perfil do destinatário (ex: "gestor ocupado", "equipa técnica")
-Output:
+Saída:
 
 Resumo em 5 a 7 frases curtas
 
@@ -39,36 +39,36 @@ Não inventar factos que não estejam no texto original.
 Se o texto for demasiado vago, pedir esclarecimentos em vez de adivinhar.
 \end{lstlisting}
 
-Depois, transforma isto em system prompt + user prompt e compara o resultado com a tua versão original “solta”.
+Experimenta o mesmo texto e destinatário com o pedido original e com a versão organizada.
 
-\textbf{Resultado esperado e validação:} Verifica comprimento, público, cobertura dos factos e ausência de informação acrescentada. Se a interface não permitir mensagens system, apresenta a separação de forma conceptual.
+\textbf{Resultado esperado e validação:} Verifica comprimento, público, cobertura dos factos e informação acrescentada. Assinala o trecho do texto de origem que sustenta cada decisão mencionada.
 
 \textbf{Falhas possíveis:} Não fornecer o texto, alterar o público entre condições ou presumir que um formato de função cria execução determinística.
 \end{promptlabbox}
 
 \section{Quatro maneiras de perder o controlo da tarefa}
 
-\subsection*{1. Prompt Google}
+\subsection*{1. Pedir uma recomendação sem critérios}
 
 Escrever perguntas como se o modelo fosse um motor de pesquisa:
 
 \begin{quote}
 \small
-“melhor framework frontend 2025”
+«Qual é a melhor ferramenta para construir este site?»
 \end{quote}
 
 A pergunta omite o tipo de aplicação, a equipa e os critérios de escolha. Antes de procurar nomes, decide que informação te permitiria compará-los.
 
-\subsection*{2. Pedido multi-tudo sem estrutura}
+\subsection*{2. Empilhar tarefas}
 
 Misturar tarefas diferentes numa sopa única:
 
 \begin{quote}
 \small
-“Explica-me o que é RAG, compara com fine-tuning, dá exemplos em Python e depois faz um plano de implementação para a minha empresa (somos uma PME de logística) e já agora sugere KPIs.”
+«Resume estas mensagens, responde a todas, prepara a lista de decisões e escreve o relatório da semana.»
 \end{quote}
 
-Começa por perceber a arquitetura do teu caso. Só depois passa ao exemplo de código e ao plano. Assim podes corrigir um pressuposto antes de ele se espalhar pelas cinco tarefas.
+Se o resumo omitir um pedido importante, a resposta e o relatório podem repetir a omissão. Separa o trabalho e confirma primeiro a lista de pedidos.
 
 \subsection*{3. Falta de exemplos quando o formato importa}
 
@@ -79,7 +79,7 @@ Pedir algo complexo sem mostrar um exemplo:
 “Organiza estes e-mails numa tabela com colunas úteis.”
 \end{quote}
 
-Colunas “úteis” para quem? Com que nomes? Com que tipos de dados? Um exemplo de input-output aqui vale ouro.
+Indica quem vai usar a tabela, para que decisão e o que deve aparecer em cada coluna. Uma linha preenchida mostra a diferença entre «data do pedido» e «data em que podemos responder».
 
 \subsection*{4. Confiança cega}
 
@@ -95,7 +95,7 @@ Escreve a tua melhor tentativa inicial. Não te preocupes com perfeição; preoc
 
 \begin{itemize}[leftmargin=*]
 \item Define a tarefa e, se ajudar, o papel do modelo.
-\item Especifica input e output.
+\item Especifica a entrada e a saída.
 \item Indica restrições básicas (comprimento, tom, formato).
 \end{itemize}
 
@@ -116,7 +116,7 @@ Quando o modelo falhar, não culpes “a IA” em abstrato. Pergunta:
 \begin{itemize}[leftmargin=*]
 \item Que instrução faltou?
 \item Que exemplo podia ter evitado este erro?
-\item O output ideal foi claramente especificado?
+\item Ficou claro o que a resposta deve entregar?
 \end{itemize}
 
 Depois, ajusta o prompt como ajustarias código após um bug report.
@@ -143,7 +143,7 @@ Escolhe uma tarefa que fazes \emph{muitas} vezes com LLMs (por exemplo, traduzir
 Passos:
 
 \begin{enumerate}[leftmargin=*]
-\item Escreve um prompt protótipo com papel, input e output.
+\item Escreve uma primeira versão do pedido, com a entrada e a saída esperada.
 \item Testa com cinco casos fictícios representativos ou autorizados.
 \item Para cada falha, guarda a entrada e a razão da alteração. Avalia a nova versão em casos reservados antes de começar.
 \item Quando estiveres satisfeito, dá um nome de versão e guarda.
@@ -156,21 +156,19 @@ Agora tens uma versão e evidência do que funcionou. Ainda falta testar casos q
 \textbf{Falhas possíveis:} Ajustar o prompt até decorar o teste ou apagar resultados negativos do registo.
 \end{promptlabbox}
 
-\section{Checklist de um bom prompt (v1)}
-
-Vamos montar a primeira versão de uma checklist geral. Ao longo do livro vamos refiná-la, mas isto já cobre muito.
+\section{Antes de voltar a usar um pedido}
 
 \begin{checklistbox}{Checklist rápida de qualidade de prompt}
 Antes de usar um prompt de forma recorrente, verifica:
 
 \begin{itemize}[leftmargin=*]
 \item \textbf{Papel, quando útil}: a perspetiva pedida ajuda a tarefa sem fingir credenciais?
-\item \textbf{Objetivo definido}: o que é que o output vai permitir decidir ou fazer?
+\item \textbf{Objetivo definido}: o que vai a resposta permitir decidir ou fazer?
 \item \textbf{Formato de saída}: está especificado (lista, JSON, tabela conceptual, texto corrido)?
-\item \textbf{Exemplos}: há pelo menos um exemplo de input-output para casos não triviais?
+\item \textbf{Exemplos}: há uma entrada e uma resposta esperada para um caso difícil?
 \item \textbf{Limites}: está dito o que o modelo \emph{não} deve fazer (inventar dados, dar opiniões legais, etc.)?
 \item \textbf{Gestão de incerteza}: está explicado como agir se a informação for insuficiente (pedir mais dados, indicar “não sei”)?
-\item \textbf{Linguagem do público-alvo}: está definido para quem é o output (júnior, sénior, técnico, não técnico)?
+\item \textbf{Linguagem}: está definido quem vai usar a resposta e o que já conhece?
 \end{itemize}
 \end{checklistbox}
 
@@ -179,4 +177,4 @@ Escolhe os critérios que alteram a aceitação da resposta. Para um título, o 
 \section{O caso que fica para o teste}
 Reserva alguns exemplos antes de começares a afinar o pedido. Se uma falha num caso reservado te levar a mudar o prompt, esse caso passa a fazer parte do desenvolvimento. Usa casos novos para voltar a avaliar. Cinco mensagens da mesma pessoa com a mesma dúvida dizem pouco sobre situações diferentes.
 
-Na Lavandaria, um pedido para classificar reclamações pode guardar a categoria e o excerto que a sustenta. Quando chegam duas intenções na mesma mensagem, o classificador precisa de uma regra para as tratar. No próximo capítulo, vamos mostrar essa regra com exemplos e ver o que muda quando os exemplos passam a fazer parte da conversa.
+Na biblioteca, uma mensagem pode pedir ao mesmo tempo o estado de uma reserva e a renovação de outro empréstimo. No próximo capítulo, esse caso obriga-nos a explicar a regra com um exemplo.

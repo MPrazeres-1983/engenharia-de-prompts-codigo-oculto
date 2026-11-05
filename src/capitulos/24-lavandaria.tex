@@ -1,7 +1,7 @@
 \chapter{A Lavandaria Funcional: Integrar sem Fingir que Tudo Está Resolvido}
 \label{ch:lavandaria}
 
-A empresa começou com uma hipótese sobre meias esquerdas. Chegou a um sistema que consulta uma política, verifica a autorização de uma reclamação e prepara uma resposta com evidência. Ainda não encontrou a meia. Encontrou uma fronteira mais útil: aquilo que consegue afirmar sem inventar.
+\ficcao A Lavandaria recebe uma pergunta sobre uma reclamação. Para preparar a resposta, o sistema tem de decidir se precisa de uma política pública ou de um registo privado. Este capítulo junta as peças da especificação, da pesquisa e da autorização num exemplo que podes executar e observar.
 
 \ficcao Todos os documentos, clientes e pedidos deste capítulo são inventados. O exemplo executa-se localmente, sem conta, chave de API ou envio de dados. Usa pesquisa lexical e um gerador por templates. \textbf{Não é uma execução de um LLM, um servidor MCP ou um benchmark de raciocínio.} Podemos assim testar contratos e barreiras antes de ligar uma componente estocástica.
 
@@ -92,4 +92,4 @@ São testes de software. A resistência de um LLM real a prompt injection exige 
 \section{O que falta para operar com pessoas reais}
 Faltam autenticação, armazenamento com permissões, tratamento de dados pessoais, monitorização, limites de custo e latência, avaliação de mensagens representativas e procedimento de incidente. «Pedir a um humano» também exige fila, responsável e tempo de resposta; sem isso, é só uma frase para deixar o pedido parado.
 
-Para acrescentar um modelo, implementa o adaptador segundo a API escolhida, com timeout e tratamento de recusa. Preserva os contratos e acrescenta avaliação semântica. Para MCP, implementa transporte e requisitos da versão sem deslocar autorização para o prompt.
+Para acrescentar um modelo, implementa o adaptador para a API escolhida, define um tempo limite e trata a recusa. Conserva os contratos e verifica também se o texto respeita os registos. O ensaio do capítulo~\ref{ch:interop} permite seguir uma consulta local através dos protocolos. Uma integração com outro servidor precisa de repetir as verificações com esse servidor.

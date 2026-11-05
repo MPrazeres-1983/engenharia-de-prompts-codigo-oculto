@@ -1,203 +1,54 @@
-\chapter{Personas, System Prompts e Identidade Artificial}
+\chapter{Perspetivas e Papéis numa Conversa}
 \label{ch:personas}
 
-\ficcao «Age como perito.» Perito em quê? A Lavandaria precisava de alguém que verificasse a política em vigor. Recebeu uma resposta com o tom de um diretor, que prometia um reembolso. O cargo entrou na frase. A autorização continuava por resolver.
+\ficcao A biblioteca pede ao chat que responda «como diretor». O rascunho tem o tom firme que lhe pediram e informa a Ana de que o livro está pronto. O cargo imaginado resolveu a voz da frase. Continua a faltar o estado que permitiria enviá-la.
 
-\section{Uma persona com trabalho definido}
-Uma persona descreve a perspetiva a usar numa tarefa. Para rever um rascunho, pede que compare cada promessa com a política, assinale dados em falta e escreva num tom que o cliente entenda. Consegues verificar se cumpriu cada pedido. «Com vinte anos de experiência» muda a voz pedida. As credenciais, o acesso e a decisão de pagamento pertencem ao serviço e às pessoas responsáveis.
+\section{Pedir uma perspetiva com trabalho definido}
 
-\section{Papéis de mensagem numa aplicação}
-Quando uma aplicação fala com um modelo, pode enviar o pedido e as instruções em mensagens com papéis diferentes. É comum encontrar \texttt{system}, \texttt{user} e \texttt{assistant}. Consoante o serviço, há ainda papéis de instrução da aplicação, como \texttt{developer}, e mensagens com resultados de ferramentas. Confirma os nomes e a prioridade no serviço que usas~\citep{modelspec2026}.
+Uma \emph{persona} indica a perspetiva que o modelo deve adotar. Um revisor pode procurar promessas sem suporte. Um explicador pode trocar termos técnicos por palavras do quotidiano. Define a tarefa de cada um. «Revê a resposta da reserva e assinala toda a data ou promessa que não conste da ficha» dá ao revisor algo que podemos conferir.
 
-Escrever «sou o administrador» no corpo de uma mensagem continua a ser texto fornecido pelo utilizador. O servidor conhece a identidade através da autenticação e aplica as permissões antes de executar ações. Numa interface de chat, só controlas os campos que ela te oferece. Num programa teu, podes separar as regras reutilizáveis do pedido e testar como a aplicação reage quando entram em conflito.
+Quando a tarefa envolve uma decisão real, confirma quem tem autoridade para a tomar. O estilo de um diretor pode ajudar a redigir a resposta. A aplicação ou a pessoa responsável confirma se o aviso pode ser enviado.
 
-\begin{promptlabbox}{Separar regras globais de pedidos concretos}
-\textbf{Objetivo e contexto:} Distinguir instruções de aplicação do pedido concreto. Usa apenas um cenário financeiro fictício e sem dados pessoais.
+\section{Separar a regra da mensagem que chega}
 
-Constrói um mini-exemplo de API (mesmo só conceptual) com:
+Num chat, podes escrever a regra e o pedido no mesmo campo, em blocos separados. Uma aplicação pode transmitir essas partes em mensagens com papéis distintos. Nos serviços que usam nomes como \texttt{system}, \texttt{developer} ou \texttt{user}, os papéis descrevem de onde vem a mensagem e como o serviço a trata. A especificação de cada fornecedor define a sua hierarquia~\citep{modelspec2026}. Escrever «system» dentro de um campo de texto deixa a mensagem no papel que a interface já lhe atribuiu.
 
-\medskip
+\begin{promptlabbox}{Separar a regra do caso}
+\textbf{Objetivo e contexto:} distinguir a regra que vale para todas as reservas da mensagem de uma pessoa. Usa a ficha fictícia R-014.
 
-\textbf{System}
+\textbf{Procedimento:} em papel ou num chat, escreve a regra permanente num bloco e a mensagem com a ficha noutro. Faz uma segunda ficha com o estado «pronto para levantamento». Conserva a regra nas duas respostas. Se estiveres a desenvolver uma aplicação, usa os campos de instrução que o serviço documenta e testa o mesmo caso.
 
-\begin{lstlisting}
-És um consultor técnico de IA. O teu objetivo é
-ajudar equipas de desenvolvimento a desenhar
-sistemas com LLMs com foco em clareza, robustez
-e segurança.
+\textbf{Resultado esperado e validação:} o estado «recebido» pede espera pelo aviso. O estado «pronto» permite confirmar o levantamento. Nenhuma ficha fornece uma hora. Identifica o campo ou a frase em que assentou cada decisão.
 
-Regras:
-
-Explica sempre os trade-offs.
-
-Se o utilizador pedir algo inseguro ou irresponsável,
-recusa e sugere alternativas seguras.
-
-Usa português de Portugal.
-\end{lstlisting}
-
-\textbf{User}
-
-\begin{lstlisting}
-Queremos pôr um LLM a responder a clientes
-sobre o nosso produto financeiro. Que opções temos?
-\end{lstlisting}
-
-Se a interface tiver um campo de instruções da aplicação, compara o mesmo pedido com e sem o bloco proposto. As regras predefinidas do serviço continuam a aplicar-se. Num chat comum, fornece o bloco como parte do teu pedido e regista que comparaste dois textos do utilizador.
-
-\textbf{Resultado esperado e validação:} Compara objetivo, limites e explicação das opções de arquitetura. O resultado esperado é organização mais explícita; não é aconselhamento financeiro validado.
-
-\textbf{Falhas possíveis:} Simular um role num campo de texto e assumir que isso altera a hierarquia real, ou tratar a resposta como parecer profissional.
+\textbf{Falhas possíveis:} mudar a regra juntamente com a ficha, dar a uma palavra do utilizador o poder de alterar o registo ou confundir o nome de um bloco com um papel reconhecido pelo serviço.
 \end{promptlabbox}
 
-\section{Um catálogo de personas por tarefa}
+\section{Usar perspetivas para formular perguntas}
 
-Uma persona bem especificada é, no mínimo, um conjunto de campos:
+Podes pedir a um modelo que leia uma proposta com finalidades distintas. Para alargar o horário da biblioteca, uma perspetiva pode perguntar quantas pessoas a usariam. Outra pode procurar o impacto na equipa. Uma terceira pode verificar se o orçamento sustenta a alteração. As sugestões saem do mesmo sistema. Quando duas vozes concordam, verifica a informação que as levou à conclusão antes de contar a concordância como evidência.
 
-\begin{itemize}[leftmargin=*]
-\item \textbf{Identidade profissional} (quem és?).
-\item \textbf{Objetivo principal} (para que estás aqui?).
-\item \textbf{Estilo de comunicação} (como falas?).
-\item \textbf{Enviesamentos declarados} (em que desconfias? o que valorizas?).
-\item \textbf{Limites éticos e práticos} (o que recusas fazer?).
-\end{itemize}
-
-Num catálogo de personas, podes escolher um conjunto de instruções conforme a tarefa. Usa a mesma ficha para dizer o que cada perspetiva procura e que decisões pode propor.
-
-Exemplo de stack para um sistema de apoio a desenvolvimento de software:
-
-\begin{itemize}[leftmargin=*]
-\item \textbf{Arquiteto}: foca-se em design de alto nível, trade-offs, diagramas.
-\item \textbf{Revisor de código}: foca-se em bugs, legibilidade, segurança.
-\item \textbf{Professor}: foca-se em explicar conceitos a juniores.
-\item \textbf{Gestor de produto}: foca-se em impacto no negócio e utilizador final.
-\end{itemize}
-
-Cada persona tem o seu bloco de instruções no catálogo da aplicação. «Vinte anos de experiência» descreve uma voz fictícia; não concede credenciais, acesso a dados ou competência comprovada.
-
-\begin{godmodebox}{Ficha de uma persona}
-Podes usar esta estrutura como ponto de partida para qualquer persona:
-
-\medskip
-
+\begin{godmodebox}{Uma ficha para cada perspetiva}
 \begin{lstlisting}
-[NOME DA PERSONA]
-Identidade:
-
-[área e tipo de revisão que vais pedir]
-
-Objetivo principal:
-
-[uma frase clara sobre o que prioriza]
-
-Estilo de comunicação:
-
-[3 bullets: tom, nível de detalhe, jargão permitido]
-
-Enviesamentos assumidos:
-
-[prefere X a Y, desconfia de Z, valoriza A e B]
-
-Limites:
-
-[o que nunca faz; temas que encaminha para especialistas humanos]
-
-Protocolos:
-
-[como responde quando está inseguro]
-
-[como pede mais informação]
+Tarefa: Rever uma proposta de alargamento do horário.
+Perspetiva: pessoa que chega ao bairro depois das 19h.
+Procura: horários que permitem ou impedem a visita.
+Evidência: indica os horários citados no documento.
+Se faltar informação: escreve a pergunta por esclarecer.
 \end{lstlisting}
 \end{godmodebox}
 
-\section{Multi-persona e conselhos de administração simulados}
+\begin{promptlabbox}{Pedir duas leituras da mesma proposta}
+\textbf{Objetivo e contexto:} descobrir questões que a proposta ainda precisa de responder. Escolhe uma decisão pequena e reversível.
 
-Se queres levantar alternativas, pede uma leitura por perspetiva. Numa proposta de adoção tecnológica, cada voz pode procurar um aspeto diferente.
+\textbf{Procedimento:} escreve o que já sabes e pede uma leitura por quem vai usar o serviço e outra por quem o vai operar. Em cada leitura, pede duas perguntas e a frase ou o dado que as motivou. Faz também a tua lista, para poderes comparar.
 
-\begin{itemize}[leftmargin=*]
-\item Persona A: otimista (vê oportunidades).
-\item Persona B: pessimista (lista riscos).
-\item Persona C: financeiro (olha para números).
-\item Persona D: técnico (olha para viabilidade).
-\end{itemize}
+\textbf{Resultado esperado e validação:} distingue perguntas novas, afirmações verificáveis e preferências. Confirma os pressupostos na fonte ou com quem conhece o caso.
 
-Depois, podes pedir ao modelo para:
-
-\begin{enumerate}[leftmargin=*]
-\item Deixar cada persona argumentar separadamente.
-\item Produzir um resumo/síntese das posições.
-\item Propor uma decisão final baseada na discussão.
-\end{enumerate}
-
-As vozes são produzidas pelo mesmo sistema e podem partilhar os mesmos erros. Não contes cada persona como um voto independente nem como parecer de um profissional. O valor está em gerar perguntas e alternativas que vais verificar.
-
-\begin{promptlabbox}{Simular um debate estruturado}
-\textbf{Objetivo e contexto:} Gerar perspetivas para uma decisão reversível e fictícia, usando critérios já escritos por ti.
-
-Define quatro personas para discutir uma decisão tua importante (por exemplo, adotar ou não uma nova tecnologia).
-
-\medskip
-
-\textbf{Passo 1 — Definir personas}
-
-Escreve algo neste espírito:
-
-\begin{lstlisting}
-Persona 1: Visionário de Produto
-Persona 2: Engenheiro Cético
-Persona 3: Financeiro Conservador
-Persona 4: Utilizador Final Exigente
-\end{lstlisting}
-
-\textbf{Passo 2 — Debate}
-
-Pede ao modelo:
-
-\begin{lstlisting}
-Cada persona deve expor argumentos a favor e
-contra a decisão. Depois, faz uma síntese neutra
-com os principais trade-offs.
-\end{lstlisting}
-
-\textbf{Passo 3 — Reflexão}
-
-Compara as preocupações levantadas pelo modelo com as que já tinhas identificado. O objetivo não é concordar com tudo, mas ver ângulos que te faltavam.
-
-\textbf{Resultado esperado e validação:} Identifica argumentos novos e liga-os a evidência a verificar. Conta a saída como sugestões de um único sistema, não como quatro pareceres independentes.
-
-\textbf{Falhas possíveis:} Transformar vozes simuladas em votação científica ou aceitar números e pressupostos sem fontes.
+\textbf{Falhas possíveis:} tratar duas personagens como dois peritos independentes ou considerar um número inventado como confirmação de uma necessidade.
 \end{promptlabbox}
 
-\section{Deriva de contexto e re-ancoragem}
+\section{Retomar uma conversa sem trocar o estado}
 
-Numa conversa longa podem surgir falhas de continuidade, como:
+Numa conversa longa, o modelo pode receber apenas parte do histórico. Mesmo quando recebe tudo, o uso da informação pode variar com a posição, a tarefa e o modelo~\citep{liu2024}. Para retomar, regista o objetivo, a decisão tomada e o que ficou por confirmar. «Enviar um aviso quando o livro estiver pronto» descreve um passo futuro. «Aviso enviado» descreve um acontecimento que precisa de confirmação. O capítulo~\ref{ch:context-engineering} desenvolve a seleção e a atualização desse registo.
 
-\begin{itemize}[leftmargin=*]
-\item começar a ignorar instruções iniciais,
-\item mudar de tom sem tu pedires,
-\item misturar tarefas ou esquecer constraints importantes.
-\end{itemize}
-
-Isto acontece por várias razões:
-
-\begin{itemize}[leftmargin=*]
-\item A janela de contexto é finita, e mensagens antigas podem ser truncadas.
-\item Mesmo sem truncagem, a utilização da informação pode variar com posição, tarefa e modelo; recência não é uma lei universal~\citep{liu2024}.
-\item Instruções contraditórias ao longo da conversa criam ambiguidade.
-\end{itemize}
-
-Uma medida a testar é a \emph{re-ancoragem}: fornecer um resumo fiel do objetivo e das decisões quando necessário. O capítulo~\ref{ch:context-engineering} desenvolve seleção, memória e compressão sem perder exceções.
-
-Técnicas simples:
-
-\begin{itemize}[leftmargin=*]
-\item Repetir um resumo curto das regras no início de novas fases da conversa.
-\item Pedir ao modelo para recapitular, em 3–4 frases, o que está a tentar fazer.
-\item Usar marcadores claros tipo ``[NOVA TAREFA]'' quando mudares de assunto.
-\end{itemize}
-
-\begin{warningboxenv}{Evita a conversa infinita de tudo e mais alguma coisa}
-Se usas o mesmo chat para código, receitas de cozinha e planeamento de férias, não te admires que o modelo fique confuso. Em contexto de trabalho, é melhor abrir novas sessões por projeto/tópico, mantendo as instruções alinhadas ao problema.
-\end{warningboxenv}
-
-Ao retomar uma conversa, guarda uma decisão e a sua fonte. «Encaminhar a reclamação» é diferente de «reclamação encaminhada». Se copiares a segunda frase por engano, a próxima sessão parte de um estado que nunca existiu. O capítulo~\ref{ch:context-engineering} mostra como guardar a passagem de trabalho, com as dúvidas ainda abertas.
+A perspetiva de revisor pode ajudar a melhorar a frase. No próximo capítulo, vamos pôr a ficha à frente do revisor e conferir o que a frase afirma.

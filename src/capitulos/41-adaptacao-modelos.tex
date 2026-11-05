@@ -113,11 +113,15 @@ Uma comparação de aceitação pode conservar o mesmo conjunto de casos e varia
 \begin{promptlabbox}{Preparar um ajuste que ainda possa ser reprovado}
 \textbf{Objetivo e contexto:} desenhar um ensaio para classificar pedidos fictícios. Requisitos fundamentais: editor de texto e os exemplos de avaliação existentes; nenhum treino pago é necessário.
 
-\textbf{Procedimento:} executa primeiro a adaptação linear com \texttt{python3 -m exemplos.laboratorio.adaptacao}; confirma os dois problemas e os limites de posto. Para a extensão a linguagem, define uma base com prompting, desenvolvimento e teste com situações distintas, critérios de aceitação e de regressão. Identifica as medições que faltariam num treino de LLM.
+\textbf{Procedimento:} executa primeiro a adaptação linear.
+
+\begin{lstlisting}
+python3 -m exemplos.laboratorio.adaptacao
+\end{lstlisting}
+
+Confirma o que a atualização pode representar em cada problema. Para a extensão a um modelo de linguagem, define uma referência com instruções e separa situações de desenvolvimento e de teste. Escreve critérios de aceitação e de regressão. Identifica as medições necessárias para avaliar o treino.
 
 \textbf{Resultado esperado e validação:} a matriz base permanece congelada; o alvo de atualização de posto um é aprendido, o de posto dois conserva erro. O plano de extensão permite rejeitar a adaptação se não melhorar a tarefa. O treino linear não é apresentado como treino de LLM ou medição de memória.
 
 \textbf{Falhas possíveis:} treinar a política que devia ser consultada, contaminar o teste com paráfrases de treino ou escolher a melhor seed depois de ver os resultados.
 \end{promptlabbox}
-
-O adaptador aprendeu o que a sua forma permitia aprender. Para levar esta ideia a um modelo real falta outra investigação: que recursos serão necessários e como verificamos que executámos exatamente o modelo que pretendíamos? A próxima etapa começa no tamanho de um ficheiro, mas não termina nessa conta.

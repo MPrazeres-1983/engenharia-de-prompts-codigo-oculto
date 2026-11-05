@@ -1,10 +1,10 @@
 \chapter{Desligar a Magia, Ligar a Engenharia}
 \label{ch:fundamentos}
 
-Escreve «A meia ficou no» e experimenta acabar a frase. Podes escolher «cesto», «tambor» ou «bolso». Agora troca o início por «O talão ficou no». As opções continuam a existir, mas a frase mudou a plausibilidade de cada uma. Um modelo autoregressivo usa uma distribuição para fazer essa escolha a cada passo.
+Escreve «A meia ficou no» e experimenta acabar a frase. Podes escolher «cesto», «tambor» ou «bolso». Agora troca o início por «O talão ficou no». A frase mudou a plausibilidade de cada opção. Num modelo autorregressivo, as probabilidades das próximas unidades também dependem do texto anterior. A regra de geração usa essas probabilidades para escolher o que vem a seguir.
 
 \section{Prever uma continuação}
-Um \emph{large language model} (LLM) é um modelo de linguagem de grande escala. Neste capítulo focamo-nos nos modelos \emph{autoregressivos}: produzem uma sequência condicionando cada novo token nos anteriores. Existem outros objetivos de treino e outras arquiteturas; esta descrição não é uma definição de toda a IA generativa.
+Um \emph{large language model} (LLM) é um modelo de linguagem de grande escala. Neste capítulo focamo-nos nos modelos \emph{autorregressivos}: produzem uma sequência condicionando cada novo token nos anteriores. Existem outros objetivos de treino e outras arquiteturas; esta descrição não é uma definição de toda a IA generativa.
 
 Um token é uma unidade de representação do texto. Pode ser uma palavra, um fragmento ou outro elemento do vocabulário. O capítulo~\ref{ch:tokens} mostra como é construído. Para seguir a ideia, imagina que cada palavra do exemplo ocupa um token.
 
@@ -139,7 +139,7 @@ Um pormenor ajuda a ler a fórmula. Imagina dois primeiros tokens, A com probabi
 \section{Alucinações: quando a fluência ultrapassa a evidência}
 Uma resposta pode conter um título de artigo perfeito, autores plausíveis e um DOI inexistente. Chamamos frequentemente \emph{alucinação} a conteúdo fabricado ou sem suporte. Em tarefas documentais, convém distinguir erro factual de falta de sustentação: uma afirmação pode até ser verdadeira e, mesmo assim, não constar dos documentos autorizados.
 
-O pré-treino autoregressivo não verifica cada frase num repositório de factos. Mas seria incorreto dizer que o modelo nunca foi treinado para admitir incerteza: o pós-treino pode premiar utilidade, veracidade ou abstinência e penalizar determinadas respostas~\citep{ouyang2022}. Nada disso garante correção em todos os casos.
+O pré-treino autorregressivo não verifica cada frase num repositório de factos. Mas seria incorreto dizer que o modelo nunca foi treinado para admitir incerteza: o pós-treino pode premiar utilidade, veracidade ou abstinência e penalizar determinadas respostas~\citep{ouyang2022}. Nada disso garante correção em todos os casos.
 
 Em ficção, inventar uma lavandaria intergaláctica pode ser o objetivo. Numa reclamação de cliente, inventar a política de indemnização é uma falha. Não são apenas dois níveis de uma mesma «criatividade»: mudam os critérios de aceitação.
 

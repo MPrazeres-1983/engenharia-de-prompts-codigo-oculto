@@ -27,7 +27,9 @@ def verificar(log=None):
     labels = re.findall(r"\\label\{([^}]+)\}", fonte)
     duplicados = sorted({label for label in labels if labels.count(label) > 1})
     erros += [f"Label duplicada: {label}" for label in duplicados]
-    refs = re.findall(r"\\(?:c|C|page)?ref\{([^}]+)\}", fonte)
+    grupos_refs = re.findall(r"\\(?:c|C|page)?ref\{([^}]+)\}", fonte)
+    refs = [ref.strip() for grupo in grupos_refs for ref in grupo.split(",")]
+    refs.extend(re.findall(r"\\hyperref\[([^]]+)\]", fonte))
     erros += [f"Referência sem label: {ref}" for ref in refs if ref not in labels]
     bib = (ROOT / "src/referencias.bib").read_text(encoding="utf-8")
     chaves = re.findall(r"@\w+\{([^,]+),", bib)
@@ -59,8 +61,12 @@ def verificar(log=None):
         erros.append("Capítulos ou ordem diferentes do manifesto V3")
     if len(set(esperados)) != len(esperados):
         erros.append("Capítulo repetido no manifesto V3")
-    if re.findall(r"\\part\{([^}]+)\}", principal) != [p['titulo'] for p in manifesto['partes']]:
-        erros.append("Partes ou ordem diferentes do manifesto V3")
+    partes = [
+        {"titulo": titulo, "capitulos": re.findall(r"\\input\{(capitulos/[0-9][^}]+)\}", corpo)}
+        for titulo, corpo in re.findall(r"\\part\{([^}]+)\}(.*?)(?=\\part\{|$)", principal, re.S)
+    ]
+    if partes != manifesto['partes']:
+        erros.append("Partes ou capítulos dentro de cada parte diferentes do manifesto V3")
     apendices = re.findall(r"\\input\{(capitulos/ap-[^}]+)\}", principal)
     if apendices != manifesto['apendices']:
         erros.append("Apêndices diferentes do manifesto V3")
@@ -80,7 +86,8 @@ def verificar(log=None):
             conteudo = path.read_text(encoding="utf-8", errors="replace")
             padroes = [r"Overfull \\[hv]box", r"Citation .+ undefined", r"Reference .+ undefined",
                        r"There were undefined", r"Missing character", r"LaTeX Error", r"Package .+ Error",
-                       r"Rerun to get", r"Rerun to get citations", r"Negative labelwidth"]
+                       r"Rerun to get", r"Rerun to get citations", r"Negative labelwidth",
+                       r"destination with the same identifier"]
             for padrao in padroes:
                 if re.search(padrao, conteudo): erros.append(f"Aviso/erro no log: {padrao}")
     resultado = {"capitulos": capitulos, "laboratorios": laboratorios,

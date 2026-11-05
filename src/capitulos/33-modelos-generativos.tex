@@ -5,8 +5,8 @@ Uma aplicação escreve, desenha e fala na mesma janela. A interface convida a i
 
 Vamos entrar por uma experiência mental: pedes uma bicicleta vermelha numa rua molhada. A imagem surge, mas uma roda parece pertencer à bicicleta de trás. Uma nova tentativa resolve a roda e troca a cor. Perceber esta dificuldade não exige assumir que existe uma pequena oficina dentro do computador. Exige distinguir como a saída é construída, como o pedido a condiciona e como verificamos relações entre elementos.
 
-\section{Autoregressão: construir uma sequência}
-Nos modelos autoregressivos, cada elemento é gerado condicionado nos anteriores. O capítulo~\ref{ch:fundamentos} apresenta a fatorização da probabilidade. O elemento não tem de ser uma palavra: pode representar parte de texto, áudio ou outra codificação. A geração sequencial introduz uma dependência temporal, mesmo quando o treino permite bastante paralelismo.
+\section{Autorregressão: construir uma sequência}
+Nos modelos autorregressivos, cada elemento é gerado condicionado nos anteriores. O capítulo~\ref{ch:fundamentos} apresenta a fatorização da probabilidade. O elemento não tem de ser uma palavra: pode representar parte de texto, áudio ou outra codificação. A geração sequencial introduz uma dependência temporal, mesmo quando o treino permite bastante paralelismo.
 
 Uma sequência provável não é necessariamente uma sequência verdadeira. Uma frase sobre uma política inexistente pode ser coerente com padrões de linguagem. Acrescentar recuperação e verificadores muda o sistema, sem transformar o objetivo de previsão numa definição de verdade.
 
@@ -36,7 +36,7 @@ Num \emph{autoencoder variacional}, uma parte do modelo converte a entrada numa 
 
 As distinções ajudam a escolher perguntas. Num gerador adversarial, a dinâmica do treino entre componentes importa. Numa reconstrução latente, interessa a informação que a compressão preserva. Numa geração iterativa, interessam o número de passos e o método de amostragem. Não se deduz qualidade final apenas contando parâmetros.
 
-Estas famílias também podem combinar-se. A existência de uma representação latente não prova, por si só, que a geração usa difusão; a presença de atenção não implica geração autoregressiva. «Usa redes neuronais» seria uma descrição tão insuficiente como explicar uma estação ferroviária dizendo que usa metal. Para escolher uma experiência, precisamos das operações que afetam a tarefa.
+Estas famílias também podem combinar-se. A existência de uma representação latente não prova, por si só, que a geração usa difusão; a presença de atenção não implica geração autorregressiva. «Usa redes neuronais» seria uma descrição tão insuficiente como explicar uma estação ferroviária dizendo que usa metal. Para escolher uma experiência, precisamos das operações que afetam a tarefa.
 
 \section{Representações multimodais e alinhamento entre modalidades}
 Para relacionar texto e imagem, um método pode aprender representações que aproximam pares correspondentes e afastam pares não correspondentes, como no trabalho CLIP~\citep{radford2021clip}. Essa associação não equivale a uma compreensão infalível de tudo o que uma imagem contém. Texto pequeno, negações e relações espaciais continuam a exigir avaliação específica.
@@ -63,7 +63,7 @@ Num projeto criativo, guarda o original, as referências autorizadas, o pedido, 
 \toprule
 Família / mecanismo & Pergunta útil & Inferência a evitar \\
 \midrule
-Autoregressão & Que unidades e limites de geração? & Texto provável significa facto confirmado. \\
+Autorregressão & Que unidades e limites de geração? & Texto provável significa facto confirmado. \\
 Difusão & Que condicionamento, passos e espaço? & A seed contém uma imagem original. \\
 Representação conjunta & Que relações foram avaliadas? & Proximidade vetorial prova compreensão geral. \\
 Pipeline multimodal & Que componente pode perder informação? & Uma única janela implica um único modelo. \\

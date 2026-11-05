@@ -1,33 +1,43 @@
 % Entrada única. Compilar a partir de src com latexmk -pdf livro.tex.
 \input{preambulo}
-\title{O Código Oculto da Inteligência Artificial\\[0.7em]\Large Compreender, Criar e Construir\\[1em]\large Terceira edição em desenvolvimento}
+\title{O Código Oculto da Inteligência Artificial\\[0.7em]\Large Compreender, Criar e Construir\\[1em]\large Terceira edição}
 \author{Mário Prazeres}
 \date{5 de novembro de 2026\\[0.5em]\small Revisão: \texttt{\revisao}}
 \begin{document}
-\newgeometry{margin=0pt}
+\hypersetup{pageanchor=false}
 \begin{titlepage}
 \thispagestyle{empty}
-\centering
-\includegraphics[width=\paperwidth,height=\paperheight,keepaspectratio]{capa_livro.png}
+\definecolor{fundocapa}{HTML}{050B13}
+\definecolor{azulcapa}{HTML}{9DDFFF}
+\begin{tikzpicture}[remember picture,overlay]
+\fill[fundocapa] (current page.south west) rectangle (current page.north east);
+\node[anchor=south,inner sep=0pt] at ([yshift=2.1cm]current page.south)
+  {\includegraphics[width=.85\paperwidth,trim=3.5bp 0bp 3.5bp 150bp,clip]{capa_livro.png}};
+\node[text=azulcapa,font=\sffamily\small\bfseries] at ([yshift=-2.0cm]current page.north)
+  {TERCEIRA EDIÇÃO};
+\node[text=white,align=center,font=\sffamily\bfseries\fontsize{32}{38}\selectfont]
+  at ([yshift=-5.4cm]current page.north) {O Código Oculto\\da Inteligência Artificial};
+\node[text=azulcapa,font=\sffamily\large] at ([yshift=-8.0cm]current page.north)
+  {Compreender, Criar e Construir};
+\node[text=white,font=\sffamily\Large] at ([yshift=-9.45cm]current page.north)
+  {Mário Prazeres};
+\end{tikzpicture}
+\null
 \end{titlepage}
-\restoregeometry
 \frontmatter
 \maketitle
-\chapter*{Nota da terceira edição em desenvolvimento}
-\addcontentsline{toc}{chapter}{Nota da terceira edição em desenvolvimento}
-Esta revisão amplia \emph{Engenharia de Prompts: O Código Oculto}, de Mário Prazeres, para compreender a IA, utilizá-la, criar com ela e construir sistemas verificáveis. O título da folha de rosto é provisório e fica sujeito à decisão do autor. A imagem da capa original é preservada como parte da proveniência; a capa comercial da nova obra continua por decidir.
+\hypersetup{pageanchor=true}
+\chapter*{Nota da terceira edição}
+\addcontentsline{toc}{chapter}{Nota da terceira edição}
+Esta edição amplia \emph{Engenharia de Prompts: O Código Oculto}, de Mário Prazeres, para compreender a IA, utilizá-la, criar com ela e construir sistemas verificáveis. A capa retoma a ilustração da edição anterior.
 
-A estrutura tem dez partes. O guia de consulta indica onde começar por uma tarefa, onde encontrar o mecanismo e onde aprofundar. O ponto de partida explica as contas e os termos informáticos usados nos primeiros exercícios.
+Começamos com um pedido e um registo que podes conferir em papel. A seguir vêm aplicações do quotidiano, os mecanismos dos modelos e, por fim, a construção, a operação e as consequências dos sistemas. As fórmulas aparecem depois das ideias que descrevem. Os aprofundamentos dão ao leitor as hipóteses e as contas para as examinar.
 
-A progressão vai de situações correntes ao mecanismo e, daí, à especialização. Podes acompanhar a explicação principal sem executar os aprofundamentos de cálculo na primeira leitura. Os casos colocam uma pergunta, as fontes ou experiências permitem investigá-la e a conclusão conserva os limites da evidência. O humor pertence à maneira de contar; não altera o estatuto dos factos. Os diálogos da Lavandaria são ficção declarada, não transcrições de estudos.
+A biblioteca do bairro e a Lavandaria são fictícias. A primeira acompanha as explicações de entrada. A segunda serve de fio a demonstrações técnicas, incluindo uma consulta entre dois programas, um incidente de cache e o projeto criativo \emph{A Meia Testemunha}.
 
-A data de corte da investigação desta revisão é \textbf{5 de novembro de 2026}. O livro distingue factos, resultados experimentais, boas práticas, interpretações e cenários. As referências históricas são mantidas para explicar métodos; APIs, protocolos, termos e normas precisam de confirmação na versão que vieres a usar. O registo de fontes explica o alcance efetivo da consulta, sem se apresentar como revisão sistemática de toda a literatura.
+A data de corte da revisão é \textbf{5 de novembro de 2026}. O livro distingue estudos publicados, medições dos laboratórios, cálculos ilustrativos e cenários. As referências identificam as versões dos protocolos e as passagens em que assentam as afirmações. Para reproduzir uma experiência, consulta também a configuração e os dados que a acompanham.
 
-A Lavandaria das Meias Desaparecidas é fictícia e as demonstrações usam dados sintéticos. Podes ver o cartaz e a curta muda \emph{A Meia Testemunha}. Também foram executados o incidente de cache e a troca entre a receção e o arquivo, ambos na máquina local. Cada capítulo indica de onde vem o resultado e como o podes examinar.
-
-A segunda edição conserva um ensaio real de 52 inferências, incluindo falhas. Os cálculos, a skill, o controlador e a adaptação linear pequena foram executados. O piloto novo com LLM depende de uma cópia íntegra do modelo local. A avaliação com participantes e o ajuste de um LLM são percursos ainda por executar.
-
-Este manuscrito está em desenvolvimento. O aprofundamento setorial e a leitura independente continuam por completar. A ordem de retoma consta de \texttt{docs/V3\_PROGRESSO.md}.
+O laboratório comparativo distingue as 52 inferências históricas da segunda edição, os ensaios executados com regras e os protocolos para experiências futuras. O leitor encontra no capítulo~\ref{ch:comparar} o alcance de cada comparação e o que pode repetir.
 
 A preparação teve assistência de IA na auditoria, escrita, revisão e exemplos. Mário Prazeres é o autor. A obra mantém a licença CC BY-NC-SA 4.0. Os materiais de terceiros conservam as suas licenças.
 \chapter*{Guia de consulta}
@@ -53,18 +63,18 @@ Avaliar ou operar & Critérios e casos de teste (cap.~\ref{ch:avaliacao}) e labo
 
 Os exemplos de escrita, estudo e jogo podem ser feitos à mão. Os laboratórios executáveis indicam os requisitos e o que podes verificar localmente. Para sustentar uma afirmação ou conferir a origem de um resultado, consulta também o apêndice~\ref{ap:fontes}.
 
-Se uma conta ou um termo de informática te travar, o \hyperref[sec:ponto-de-partida]{ponto de partida} começa pelo talão da Lavandaria. Tem uma página para as contas e outra para os programas.
+O \hyperref[sec:ponto-de-partida]{ponto de partida} começa pelas fichas da biblioteca. Tem uma página para as contas e outra para os programas. Em leitura seguida, podes experimentar o primeiro pedido no capítulo~\ref{ch:primeira-conversa} e regressar aos mecanismos na Parte~\ref{parte:maquina}.
 
 \chapter*{Ponto de partida}
 \label{sec:ponto-de-partida}
 \addcontentsline{toc}{chapter}{Ponto de partida}
 
-\ficcao A contabilista tem dez talões e oito estão completos. A primeira pergunta da investigação cabe num guardanapo. «Oito em dez» quer dizer o mesmo que «oitenta em cem»? Para seguir o livro, podes começar por aqui. Se já fazes estas contas, usa o guia para saltar à tarefa que te interessa.
+\ficcao A biblioteca tem dez fichas de reserva e oito estão completas. A primeira pergunta cabe num guardanapo. «Oito em dez» quer dizer o mesmo que «oitenta em cem»? Podes seguir a conta abaixo ou ir diretamente à tarefa que te interessa no guia.
 
 \section*{Ler números e fórmulas}
 \label{sec:ler-numeros}
 
-\textbf{Frações e percentagens.} Em $\frac{8}{10}$, também escrito $8/10$, o 8 conta os talões completos e chama-se \emph{numerador}. O 10 conta os talões observados e chama-se \emph{denominador}. Multiplicar ambos por dez dá $80/100$, a mesma proporção. O sinal \% lê-se «por cem», pelo que $80/100=80\%$. A conta muda de significado se o denominador passar a contar clientes em vez de talões.
+\textbf{Frações e percentagens.} Em $\frac{8}{10}$, também escrito $8/10$, o 8 conta as fichas completas e chama-se \emph{numerador}. O 10 conta as fichas observadas e chama-se \emph{denominador}. Multiplicar ambos por dez dá $80/100$, a mesma proporção. O sinal \% lê-se «por cem», pelo que $80/100=80\%$. A conta muda de significado se o denominador passar a contar leitores em vez de fichas.
 
 \textbf{Duas maneiras de comparar.} Num exemplo separado, uma taxa sobe de 20\% para 30\%. Subtrai para obter a diferença de \emph{10 pontos percentuais}. Para saber quanto cresceu face ao valor inicial, divide a diferença pelo valor inicial: $10/20=1/2$. O aumento relativo foi de 50\%. As duas contas respondem a perguntas diferentes.
 
@@ -77,7 +87,7 @@ Se uma conta ou um termo de informática te travar, o \hyperref[sec:ponto-de-par
 \section*{Ler e experimentar um programa}
 \label{sec:ler-programas}
 
-Um \textbf{programa} é um conjunto de instruções que um computador consegue executar. Num exemplo, a entrada é o identificador \texttt{LAV-001}, a operação consulta um registo e a saída é o estado «em análise». O \emph{código-fonte} é o texto das instruções que podemos ler e alterar. Um \emph{ficheiro} guarda dados ou código. Uma \emph{pasta} agrupa ficheiros, e um \emph{caminho} indica onde os encontrar.
+Um \textbf{programa} é um conjunto de instruções que um computador consegue executar. Num exemplo, a entrada é o número de reserva \texttt{R-014}, a operação procura a ficha e a saída é o estado «pedido recebido». O \emph{código-fonte} é o texto das instruções que podemos ler e alterar. Um \emph{ficheiro} guarda dados ou código. Uma \emph{pasta} agrupa ficheiros, e um \emph{caminho} indica onde os encontrar.
 
 \textbf{Terminal e comandos.} O terminal é uma janela em que escreves instruções para o sistema. Os exemplos executáveis usam Python, a linguagem em que os programas foram escritos. Com Python 3 instalado, este comando pede a versão que o terminal encontra:
 
@@ -87,17 +97,32 @@ python3 --version
 
 No Windows, se tiveres o lançador Python, podes usar \texttt{py -3 --version}. Nos comandos deste livro, usa \texttt{py -3} no lugar de \texttt{python3} nesse caso. Quando o exercício diz «na raiz do repositório», abre o terminal na pasta principal dos ficheiros do livro. A opção \texttt{-m} manda o Python executar um módulo, um conjunto de código que pode encontrar pelo nome.
 
-\textbf{Quando dois programas conversam.} A receção pede o estado de uma reclamação. O arquivo recebe o pedido e responde. Em informática, o programa que pede é o \emph{cliente} e o que disponibiliza a operação é o \emph{servidor}. Ambos podem correr no mesmo computador. Uma interface de programação de aplicações, ou \emph{API}, define o que se pode pedir e que resposta esperar. Um \emph{protocolo} estabelece as regras da troca. O JSON é uma forma de escrever dados em texto, com campos como «reclamação» e «estado». O capítulo~\ref{ch:texto-dados} mostra como ler e verificar esses campos.
+\textbf{Quando dois programas conversam.} O programa do balcão pede a ficha de uma reserva. O arquivo recebe o pedido e responde. Em informática, o programa que pede é o \emph{cliente} e o que disponibiliza a operação é o \emph{servidor}. Ambos podem correr no mesmo computador. Uma interface de programação de aplicações, ou \emph{API}, define o que se pode pedir e que resposta esperar. Um \emph{protocolo} estabelece as regras da troca. O JSON é uma forma de escrever dados em texto, com campos como «reserva» e «estado». O capítulo~\ref{ch:texto-dados} mostra como ler e verificar esses campos.
 
 O livro oferece exercícios em papel e exemplos para executar. Se quiseres começar com uma conversa, experimenta o capítulo~\ref{ch:primeira-conversa}. Se quiseres confirmar um termo encontrado mais adiante, tens o glossário no apêndice~\ref{ap:glossario}.
 
 \tableofcontents
 \mainmatter
 \pagestyle{plain}
-\part{A Revolução da Inteligência Artificial}
+\part{Começar e Conversar com IA}
 \input{capitulos/01-ia-sem-misterio}
-\input{capitulos/30-historia-identidade}
+\input{capitulos/02-primeira-conversa}
+\input{capitulos/03-mentalidade}
+\input{capitulos/04-contexto}
+\input{capitulos/05-personas}
+\input{capitulos/11-autocorrecao}
+\part{Criar, Trabalhar e Brincar com IA}
+\input{capitulos/12-escrita}
+\input{capitulos/13-aprender}
+\input{capitulos/14-negocios}
+\input{capitulos/15-criatividade}
+\input{capitulos/16-investigacao}
+\input{capitulos/35-imagem-design}
+\input{capitulos/36-audiovisual}
+\input{capitulos/37-jogos-quotidiano}
 \part{Compreender a Máquina}
+\label{parte:maquina}
+\input{capitulos/30-historia-identidade}
 \input{capitulos/31-aprendizagem-automatica}
 \input{capitulos/32-aprendizagem-reforco}
 \input{capitulos/06-desligar-magia}
@@ -105,28 +130,14 @@ O livro oferece exercícios em papel e exemplos para executar. Se quiseres come�
 \input{capitulos/08-tokens}
 \input{capitulos/33-modelos-generativos}
 \input{capitulos/09-multimodal}
-\part{Conversar e Pensar com IA}
-\input{capitulos/02-primeira-conversa}
-\input{capitulos/03-mentalidade}
-\input{capitulos/04-contexto}
-\input{capitulos/05-personas}
-\input{capitulos/34-engenharia-contexto}
 \input{capitulos/10-raciocinio}
-\input{capitulos/11-autocorrecao}
+\part{Do Texto aos Dados e ao Código}
 \input{capitulos/17-texto-dados}
-\part{Criar, Trabalhar e Brincar com IA}
-\input{capitulos/12-escrita}
-\input{capitulos/13-aprender}
-\input{capitulos/14-negocios}
-\input{capitulos/15-criatividade}
-\input{capitulos/16-investigacao}
 \input{capitulos/18-analise-dados}
 \input{capitulos/19-software}
-\input{capitulos/35-imagem-design}
-\input{capitulos/36-audiovisual}
-\input{capitulos/37-jogos-quotidiano}
-\part{Construir Sistemas Inteligentes}
 \input{capitulos/20-spec-first}
+\part{Construir Sistemas Inteligentes}
+\input{capitulos/34-engenharia-contexto}
 \input{capitulos/21-rag}
 \input{capitulos/22-ferramentas-mcp}
 \input{capitulos/23-agentes}

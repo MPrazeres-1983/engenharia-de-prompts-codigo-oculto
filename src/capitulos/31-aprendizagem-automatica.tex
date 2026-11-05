@@ -1,14 +1,14 @@
 \chapter{Aprender com Dados sem Decorar o Exame}
 \label{ch:ml}
 
-\ficcao A contabilista da Lavandaria regressa com uma folha de cálculo. Contém pesos de lotes e tempos de separação. O gerente quer saber quanto demorará o próximo. A primeira proposta é simples: procurar uma relação entre quilos e minutos. A segunda chega quando alguém pergunta se um quilo de meias demora o mesmo que um quilo de cortinados.
+\ficcao A contabilista de uma lavandaria tem uma folha de cálculo com pesos de lotes e tempos de separação. O gerente quer saber quanto demorará o próximo. A primeira proposta é procurar uma relação entre quilos e minutos. Alguém pergunta se um quilo de meias demora o mesmo que um quilo de cortinados. A folha precisa agora de outra coluna.
 
 Este capítulo começa nesse intervalo entre encontrar um padrão e confiar nele. Primeiro vamos perceber o que se aprende. Depois abriremos uma previsão suficientemente pequena para calcular à mão. Só no aprofundamento aparecerão derivadas e uma rede com duas unidades. Podes seguir a investigação sem fazer essas contas na primeira passagem.
 
 \section{O problema começa na variável que queremos prever}
 Imagina três mensagens de clientes com uma categoria escrita à mão ao lado de cada uma. São exemplos com resposta conhecida. Na \emph{aprendizagem supervisionada}, esses exemplos ajudam a ajustar uma regra para mensagens novas. À informação recebida chamamos \emph{entrada}, e à resposta que queremos prever chamamos \emph{alvo}. Se o alvo for uma categoria, a tarefa é de \emph{classificação}. Se for uma quantidade, como minutos de trabalho, é de \emph{regressão}.
 
-Na \emph{aprendizagem não supervisionada}, podemos procurar grupos sem fornecer as categorias. Esse agrupamento chama-se \emph{clustering}. Um grupo pode misturar elogios e reclamações porque ambos mencionam entrega. Interpretar o grupo é um trabalho adicional. Na \emph{aprendizagem auto-supervisionada}, a própria entrada permite construir a resposta a prever. Podemos tapar uma parte de um texto e usar a parte tapada como alvo. As aplicações podem combinar estes métodos~\citep{goodfellow2016}.
+Na \emph{aprendizagem não supervisionada}, podemos procurar grupos sem fornecer as categorias. Esse agrupamento chama-se \emph{clustering}. Um grupo pode misturar elogios e reclamações porque ambos mencionam entrega. Interpretar o grupo é um trabalho adicional. Na \emph{aprendizagem autossupervisionada}, a própria entrada permite construir a resposta a prever. Podemos tapar uma parte de um texto e usar a parte tapada como alvo. As aplicações podem combinar estes métodos~\citep{goodfellow2016}.
 
 Escolhe primeiro a unidade de decisão. Prever por mensagem não é prever por cliente. Se um cliente escreve dez vezes, contar essas dez mensagens como dez pessoas independentes altera a análise. O desenho do conjunto de dados já contém decisões sobre o mundo, mesmo antes de treinar o primeiro parâmetro.
 

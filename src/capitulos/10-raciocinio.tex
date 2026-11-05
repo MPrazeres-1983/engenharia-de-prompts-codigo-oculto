@@ -1,4 +1,4 @@
-\chapter{Raciocínio: CoT, ToT e Modelos que Trabalham Mais Tempo}
+\chapter{Raciocínio, Procura e Verificação}
 \label{ch:raciocinio}
 
 «Pensa passo a passo» tornou-se uma espécie de chave de fendas universal. O problema é que nem todas as tarefas têm parafusos. E escrever uma explicação longa não garante que a resposta esteja certa.
@@ -34,7 +34,7 @@ Resolve o problema e apresenta:
 Se faltar informacao, identifica-a sem a inventar.
 \end{lstlisting}
 
-\ficcao A reclamação dos seis pares permite um cálculo condicional. Se as duas contagens estiverem certas e forem pares completos, entraram $6 \times 2 = 12$ peças e saíram $5 \times 2 = 10$. A diferença é de duas peças. Para concluir o que aconteceu, falta confirmar as contagens e consultar o registo. O cálculo resolve uma parte do problema e indica precisamente onde procurar a próxima pista.
+\ficcao Um cliente diz ter entregue seis pares de meias e recebido cinco. Se as contagens estiverem certas e forem pares completos, entraram $6 \times 2 = 12$ peças e saíram $5 \times 2 = 10$. A diferença seria de duas peças. A conta pode ser verificada já. Para confirmar o que aconteceu, precisamos dos registos de entrada e de recolha.
 
 Para aritmética, confirma com código ou uma conta independente. Para programação, executa testes. Para decisões documentais, confronta as fontes. Se pedires uma revisão sem dar informação nova, o modelo pode repetir o mesmo erro.
 
@@ -45,7 +45,7 @@ Para aritmética, confirma com código ou uma conta independente. Para programa�
 
 \textbf{Resultado e validação:} compara respostas com soluções escritas antes do teste; regista também latência e tamanho. O resultado pode ser empate. Não concluas que a instrução causou melhoria geral a partir destes seis casos.
 
-\textbf{Falhas possíveis:} confundir comprimento com acerto, dar pistas só numa condição ou usar o próprio modelo como único oráculo.
+\textbf{Falhas possíveis:} confundir comprimento com acerto, dar pistas só numa condição ou pedir ao mesmo modelo o único resultado de referência.
 \end{promptlabbox}
 
 \section{Exemplos de resolução: mostrar o critério}
@@ -54,7 +54,7 @@ Exemplos podem ensinar a distinguir uma exceção de um caso normal. Na Lavandar
 \begin{promptlabbox}{Criar um mini-dataset de Few-shot CoT}
 \textbf{Objetivo e contexto:} demonstrar uma regra com exemplos explicados. Usa três casos fictícios de uma política simples: consultar o registo apenas com identificador válido e cliente autenticado autorizado.
 
-\textbf{Instruções:} escreve input, decisão esperada e motivo verificável para cada caso. Inclui identificador ausente e acesso cruzado. Fornece esses exemplos ao modelo e reserva outros seis casos para testar.
+\textbf{Instruções:} escreve entrada, decisão esperada e motivo verificável para cada caso. Inclui identificador ausente e acesso cruzado. Fornece esses exemplos ao modelo e reserva outros seis casos para testar.
 
 \textbf{Resultado e validação:} a decisão deve seguir a regra nos casos novos. A recusa por falta de acesso deve decorrer da autorização no executor, mesmo que o modelo proponha a consulta. Compara decisões, não a semelhança entre justificações.
 
@@ -86,4 +86,4 @@ O protocolo experimental mínimo compara uma chamada com várias chamadas no mes
 \section{Escolher o mecanismo pelo sinal de erro}
 Se a dificuldade é falta de informação, procura a fonte. Se é cálculo, chama uma ferramenta. Se há vários caminhos com estados verificáveis, considera procura. Se o resultado varia entre amostras, uma agregação pode merecer teste. Se o problema é uma regra não autorizada, resolve-o na aplicação.
 
-Se a dúvida é sobre a conta, usa o cálculo. Se é sobre o que entrou, pede o talão. O capítulo seguinte acompanha um rascunho que já passou por uma revisão e ainda tem um número por confirmar.
+Quando precisamos de verificar muitos pedidos, comparar frases soltas torna-se difícil. Na próxima parte, vamos transformar uma mensagem em campos que conservem a origem do que afirmam.

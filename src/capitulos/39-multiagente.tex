@@ -77,9 +77,13 @@ Se cada agente chama outros dois durante cinco níveis, a contagem cresce rapida
 Os testes do exemplo verificam essa concorrência, falha parcial, campos extra, snapshots e bloqueio da síntese com orçamento insuficiente. São testes executados de software. O novo piloto com LLM ficou por executar porque a cópia local do modelo estava incompleta e não pôde ser novamente obtida; o capítulo~\ref{ch:comparar} distingue esse bloqueio da evidência histórica da segunda edição.
 
 \begin{promptlabbox}{A equipa que ficou sem orçamento}
-\textbf{Objetivo e contexto:} observar uma falha controlada sem rede nem modelo. Requisitos: Python 3.10+, apenas biblioteca padrão; módulo \texttt{exemplos.laboratorio.equipas}.
+\textbf{Objetivo e contexto:} observar uma falha controlada com dados locais. O exemplo usa Python 3.10 ou posterior e a biblioteca padrão.
 
-\textbf{Procedimento:} executa a demonstração por omissão. Nos testes, compara modo único, equipa e limite de duas chamadas. Substitui um especialista por uma função que lança timeout e confirma o encaminhamento.
+\begin{lstlisting}
+python3 -m exemplos.laboratorio.equipas
+\end{lstlisting}
+
+\textbf{Procedimento:} corre a demonstração. Nos testes, compara o modo único, a equipa e o limite de duas chamadas. Faz um especialista exceder o tempo limite e confirma o encaminhamento.
 
 \textbf{Resultado esperado e validação:} com o stub válido, há uma ou três chamadas de componente. Com limite dois, não há síntese nem saída apresentada como válida. Os contadores do stub não são tokens de LLM.
 

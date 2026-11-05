@@ -11,7 +11,7 @@ Podes fazer a conta sem computador. Depois da junção, vês 30, 30 e 30. A soma
 
 \section{Executar a consulta num conjunto pequeno}
 
-O exemplo pode ser repetido numa base SQLite de teste. Cria as tabelas e começa pela consulta com a junção. O operador \texttt{DISTINCT} do agregado elimina valores iguais~\citep{sqliteagregados2026}.
+SQL é uma linguagem para pedir operações a uma base de dados. Podes repetir o exemplo no SQLite, um sistema que guarda as tabelas localmente. Cria-as e começa pela consulta que as junta. Dentro de \texttt{SUM}, o operador \texttt{DISTINCT} elimina valores iguais antes da soma~\citep{sqliteagregados2026}.
 
 \begin{lstlisting}
 CREATE TABLE pedidos (id INTEGER PRIMARY KEY, total INTEGER);
