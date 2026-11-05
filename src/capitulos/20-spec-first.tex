@@ -43,7 +43,7 @@ CA-06 & Citação sem excerto na fonte & Resposta rejeitada ou encaminhada. \\
 \label{tab:spec-lav}
 \end{table}
 
-O critério CA-03 não diz «o prompt contém uma frase de privacidade». Diz que um dado não aparece para quem não tem direito a ele. É mais trabalhoso de implementar e muito mais útil de testar.
+Para testar CA-03, fixa a identidade de A no contexto e pede LAV-002. O estado, a existência e os excertos privados devem ficar fora da resposta. Depois testa a mesma reclamação com B, que tem acesso. Esta segunda verificação deteta uma implementação que recusa tudo.
 
 \section{Separar facto, decisão e dúvida}
 Uma nota de trabalho pode conter três tipos de informação. \textbf{Facto observado:} o registo LAV-001 devolve «em análise». \textbf{Decisão funcional:} apenas o titular pode consultar. \textbf{Dúvida:} um representante autorizado pode fazê-lo? A última não deve transformar-se silenciosamente numa regra inventada pelo assistente.
@@ -55,9 +55,11 @@ Esta disciplina também ajuda em QA de sistemas existentes. Um erro observado na
 \section{Do requisito ao teste e ao diff}
 Liga cada critério a pelo menos um teste e cada alteração a um requisito. Mantém exemplos normais, limites e proibições. Um teste positivo de consulta autorizada impede que a «solução de segurança» seja bloquear todos os pedidos. Um teste de acesso cruzado impede que o caso feliz esconda uma fuga de dados.
 
-O modelo pode propor casos, mas alguém deve verificar se o conjunto cobre o domínio. Se a implementação e os testes forem gerados a partir da mesma interpretação errada, podem concordar entre si e continuar errados. Usa dados de referência e propriedades independentes, como «alterar o cliente autenticado nunca aumenta os dados a que esse cliente tem acesso».
+A ficha de cada caso identifica a pré-condição, a ação e a observação que decide se passou. Para CA-05, uma resposta de texto com \texttt{"true"} no lugar de um booleano deve ser rejeitada antes de ser usada. Para CA-06, um excerto inventado deve falhar mesmo se o identificador da fonte existir. Os testes em \nolinkurl{tests/test_lavandaria.py} exercitam estas duas situações.
 
-Quando a especificação muda, atualiza-a, regista a decisão e revê os testes. Não forces um teste antigo a passar apagando a regra que estava a verificar. Testes a passar são evidência de um conjunto definido de condições; não são um acordo retroativo sobre qualquer alteração.
+Se a implementação e os testes forem gerados a partir da mesma interpretação, ambos podem repetir o erro. Deriva a resposta esperada da política e dos dados de referência. Uma propriedade verificável é que o pedido de um cliente sem acesso a um registo tem a mesma resposta externa que um identificador inexistente, no âmbito da demonstração.
+
+Quando a especificação muda, liga a alteração à decisão funcional e aos testes que a protegem. Se a equipa aprovar consulta por representante, define primeiro como se prova essa relação, quando caduca e como é revogada. Conserva os casos de titular e de pessoa sem autorização. Atualiza o teste que mudou por decisão e deixa visível a razão no diff.
 
 \begin{promptlabbox}{Do requisito ambíguo ao teste que o pode reprovar}
 \textbf{Objetivo e contexto:} preparar uma alteração da Lavandaria: «permitir consultar uma reclamação». Usa a tabela~\ref{tab:spec-lav} e os dados fictícios do repositório.

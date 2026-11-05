@@ -123,6 +123,13 @@ Consulta de 05-11-2026. Os resultados sintéticos e as consultas executadas abai
 
 O exemplo da média do capítulo de programação executou as quatro verificações, incluindo a preservação do zero. As contas de percentagens e tempo da aprendizagem e de proporção entre respondentes também foram verificadas localmente.
 
+### Construção e interoperabilidade
+
+- [MCP 2026-07-28](https://modelcontextprotocol.io/specification/2026-07-28/changelog) e [versionamento](https://modelcontextprotocol.io/specification/2026-07-28/basic/versioning) consultados em 05-11-2026. Reconfirmados metadados por pedido e remoção do handshake anterior. A [autorização](https://modelcontextprotocol.io/specification/2026-07-28/basic/authorization) distingue destinatário do token e serviços a montante.
+- [A2A 1.0.0](https://a2a-protocol.org/v1.0.0/specification/), secções 4.2.3, 4.4.1, 4.4.5 e 8.2. Confirmados campo «skills», tipo «AgentSkill», estado de pedido de informação e caminho de descoberta. Verificar artefacto e titularidade é um critério do exemplo de negócio.
+- [ReAct, resumo do preprint dos autores](https://arxiv.org/abs/2210.03629). Intercalação de passos de raciocínio textual e ações. O capítulo apresenta a escolha de arquitetura como hipótese de projeto.
+- Executadas quatro consultas locais da Lavandaria e os 30 testes desse módulo. Verificados os resultados de A e B, a equivalência das duas recusas e as contas didáticas de RRF e recall@2. Os resultados são do núcleo offline. Conformidade MCP e A2A pede uma integração própria.
+
 ## Recursos e licenças
 
 Texto novo, diagrama de equipa, tabelas, dados sintéticos e scripts foram produzidos para esta revisão sob as condições da obra. Capa original preservada byte a byte. Não se copiaram figuras dos estudos ou modelos; os artigos são citados e resumidos com alcance limitado. Os laboratórios de software usam a biblioteca padrão de Python. A montagem do ateliê usa também Pillow, ReportLab, Inkscape e FFmpeg. A origem da ilustração, o pedido utilizado e as licenças tipográficas estão em `exemplos/atelier`. Modelos e runtime mantêm as licenças indicadas no registo histórico; os pesos não são redistribuídos. O pacote SKILL.md não recebe uma licença comercial diferente da obra.

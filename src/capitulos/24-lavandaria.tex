@@ -22,6 +22,26 @@ python3 -m unittest discover -s tests -v
 
 O argumento \texttt{--cliente} escolhe um papel fictício; \textbf{não autentica ninguém}. Num serviço real, a aplicação teria de autenticar a identidade antes de chamar este núcleo. O modelo não pode fornecer ou alterar esse valor nos argumentos da ferramenta.
 
+\section{Ler as respostas lado a lado}
+
+Executámos as consultas com os papéis fictícios. A coluna «resposta» resume o que chegou ao utilizador.
+
+\begin{center}
+\small
+\begin{tabularx}{\textwidth}{@{}p{.26\textwidth}XX@{}}
+\toprule
+Pedido & Resposta observada & Critério exercitado \\
+\midrule
+A pede LAV-001 & Estado «em análise», com excerto do registo. & CA-02, consulta autorizada. \\
+B pede LAV-002 & Estado «aguarda contacto», com excerto do registo. & CA-02, o segundo titular também consegue consultar. \\
+A pede LAV-002 & Consulta não disponível, encaminhamento. & CA-03, sem estado ou excertos privados. \\
+A pede LAV-999 & A mesma resposta externa. & CA-03, a resposta não distingue ausência de acesso e ausência de registo. \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+Nas duas recusas, o objeto devolvido tem identificador nulo, lista de evidências vazia e indicador de encaminhamento ativo. O indicador descreve a decisão do núcleo. A entrega a uma equipa depende da fila do serviço que integrar este núcleo.
+
 \section{Dados pequenos, origens explícitas}
 POL-01 explica como iniciar uma investigação de peças em falta. POL-02 não estabelece prazo fixo nem reembolso automático. Há documentos privados para testar filtragem. LAV-001 pertence a cliente-A; LAV-002 a cliente-B. Os estados vêm de uma ferramenta autorizada, não do tom da mensagem.
 

@@ -11,21 +11,23 @@ Não precisas de usar todos para chamar uma função interna. A interoperabilida
 \section{A2A: descobrir não significa confiar}
 Esta edição usa explicitamente a especificação A2A 1.0.0. A Agent Card descreve o serviço, interfaces, capacidades e requisitos de segurança. A localização conhecida indicada nessa versão é \texttt{/.well-known/agent-card.json}. Exemplos antigos podem usar outros caminhos; confirma a versão antes de os copiar.
 
-O campo \texttt{AgentSkill} dessa especificação descreve uma capacidade anunciada. Não é o pacote Agent Skills com \texttt{SKILL.md}. A palavra coincide, mas os contratos são distintos. Uma capacidade declarada precisa de validação do cliente e de autorização no servidor.
+O campo \texttt{skills} da Agent Card contém descrições do tipo \texttt{AgentSkill}. Cada uma anuncia uma capacidade. O pacote Agent Skills do capítulo~\ref{ch:skills} organiza instruções e recursos a partir de \texttt{SKILL.md}. Uma capacidade anunciada no cartão precisa de ser autorizada no servidor quando alguém a utiliza.
 
 Uma assinatura pode ajudar a verificar origem e integridade de um cartão. Não prova qualidade do trabalho anunciado. O mesmo se passa com um domínio conhecido ou um fornecedor conhecido: identidade, autorização e correção são verificações diferentes.
 
 \section{Mensagens, tarefas e artefactos}
 Uma mensagem é uma unidade de comunicação; uma tarefa pode continuar ao longo de várias interações e ter estado próprio; um artefacto é uma saída produzida no trabalho. Esses conceitos permitem distinguir «pedido recebido» de «resultado concluído» e de «preciso de mais dados».
 
-Numa aplicação de viagens fictícia, um agente pede uma proposta de percurso. O serviço pode precisar do local de partida ou devolver um resultado mais tarde. O cliente tem de saber se aguarda, fornece informação, cancela ou apresenta um erro. Uma ligação de rede aberta não é um estado de negócio.
+Imagina dois serviços que preparam um resumo de documentos autorizados. O cliente guarda o identificador da tarefa. Se receber o estado \nolinkurl{TASK_STATE_INPUT_REQUIRED}, a especificação indica que o trabalho precisa de informação adicional~\citep{a2a2026}. O cliente deve mostrar o que falta e usar a tarefa correspondente para continuar. Para aceitar um resumo concluído nesta integração, verifica também se o artefacto pedido está presente, acessível e ligado à tarefa certa. Essa é uma regra do nosso contrato de negócio.
+
+Se a ligação cair, separa a falha de transporte do estado da tarefa. Quando a tarefa já foi identificada, consulta-a antes de enviar uma nova. Para repetir uma operação com efeitos, aplica as regras do executor do capítulo~\ref{ch:agentes}. Um identificador de conversa ajuda a seguir o contexto. A autorização continua a ser verificada pelo serviço que conhece o recurso.
 
 O exemplo do repositório não implementa um servidor A2A ou MCP. Implementa contratos e um controlador de domínio. Uma implementação de protocolo exigiria SDK ou transporte compatível, testes de mensagens e estados, autenticação e ensaios entre cliente e servidor. Não confundimos um diagrama com essa execução.
 
 \section{Compatibilidade tem mais do que uma dimensão}
 Dois sistemas podem aceitar o mesmo JSON e interpretar mal o conteúdo. Um chama «prazo» à estimativa, outro a uma garantia. Um usa hora local, outro UTC. Um identificador só é único dentro de uma organização; o outro assume que é global. São incompatibilidades semânticas, não erros de parsing.
 
-Versiona contratos e explicita unidade, âmbito, estados de erro e efeitos. Testa exemplos partilhados e casos proibidos. Uma nova propriedade opcional pode ser ignorada por um cliente antigo; uma mudança de significado pode quebrar tudo mesmo sem mudar o nome do campo.
+Versiona contratos e explicita unidade, âmbito, estados de erro e efeitos. Testa os pares de versões que vais suportar. Uma nova propriedade opcional pode ser ignorada por um cliente antigo, dependendo da sua política de validação. Se mudares um prazo de dias úteis para dias de calendário, o tipo continua a ser inteiro. Um teste com sexta-feira e um fim de semana pode revelar que o contrato mudou de significado.
 
 Também precisas de um limite de confiança para cada salto. Credenciais destinadas ao serviço A não devem ser passadas cegamente ao serviço B. O servidor confirma destinatário, identidade e âmbito, e a autorização de dados acompanha a tarefa. O facto de o pedido vir de um «agente colega» não o transforma num administrador.
 
