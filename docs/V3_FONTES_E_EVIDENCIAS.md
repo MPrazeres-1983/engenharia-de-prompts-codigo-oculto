@@ -108,6 +108,21 @@ O terceiro ciclo reconfirmou em 05-11-2026 o [Regulamento (UE) 2026/1744](https:
 
 No lote de mecanismos, reconfirmou-se no [resumo do relatório técnico GPT-4 de 2023](https://arxiv.org/abs/2303.08774) a entrada de imagem e texto com saída de texto. A descrição refere-se à versão documentada. As contas de probabilidades condicionais, temperatura e comprimento Unicode são exemplos construídos e conferidos em Python.
 
+## Quarto ciclo — escrita, aprendizagem e verificação de dados
+
+Consulta de 05-11-2026. Os resultados sintéticos e as consultas executadas abaixo servem para explicar o método.
+
+| Chave | Fonte primária e localizador | Alcance conferido |
+|---|---|---|
+| `sadasivan2023` | [Preprint v4, resumo e revisão](https://arxiv.org/abs/2303.11156v4) | Parafrasear os trechos do estudo reduziu a deteção em vários esquemas. A afirmação refere-se aos detetores e textos avaliados. |
+| `roedigerkarpicke2006` | [Resumo do artigo no PubMed](https://pubmed.ncbi.nlm.nih.gov/16507066/), resultados a 5 min e com atraso | Dois ensaios com textos em prosa. A releitura teve vantagem imediata e os testes de evocação favoreceram retenção nos prazos mais longos estudados. |
+| `bastani2025` | [Artigo PNAS](https://doi.org/10.1073/pnas.2422633122), resumo e resultados do exame sem assistência | Cerca de 17% de diferença relativa para GPT Base face ao controlo. O desenho do tutor mitigou a diferença. A [correção](https://pmc.ncbi.nlm.nih.gov/articles/PMC12403119/) foi publicada para uma afiliação. |
+| `doshi2024` | [Artigo Science Advances](https://doi.org/10.1126/sciadv.adn5290), método e figuras 2 e 4 | 293 participantes escreveram histórias curtas. Avaliações de novidade e proximidade à média das outras histórias dentro da condição são medidas distintas. |
+| `prisma2020` | [Artigo BMJ](https://www.bmj.com/content/372/bmj.n71), resumo e finalidade | Orientação para reportar revisões sistemáticas. |
+| `sqliteagregados2026` | [Agregados](https://sqlite.org/lang_aggfunc.html) e [EXISTS](https://sqlite.org/lang_expr.html#the_exists_operator), SQLite | Execução da listagem do livro em SQLite 3.53.1. A junção produz 3 linhas, soma 90 e soma distinta 30. A consulta por pedido com existência de artigo produz 2 pedidos e soma 60. |
+
+O exemplo da média do capítulo de programação executou as quatro verificações, incluindo a preservação do zero. As contas de percentagens e tempo da aprendizagem e de proporção entre respondentes também foram verificadas localmente.
+
 ## Recursos e licenças
 
 Texto novo, diagrama de equipa, tabelas, dados sintéticos e scripts foram produzidos para esta revisão sob as condições da obra. Capa original preservada byte a byte. Não se copiaram figuras dos estudos ou modelos; os artigos são citados e resumidos com alcance limitado. Os laboratórios de software usam a biblioteca padrão de Python. A montagem do ateliê usa também Pillow, ReportLab, Inkscape e FFmpeg. A origem da ilustração, o pedido utilizado e as licenças tipográficas estão em `exemplos/atelier`. Modelos e runtime mantêm as licenças indicadas no registo histórico; os pesos não são redistribuídos. O pacote SKILL.md não recebe uma licença comercial diferente da obra.

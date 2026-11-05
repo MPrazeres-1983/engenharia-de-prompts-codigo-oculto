@@ -1,345 +1,75 @@
 \chapter{Negócios, Gestão e Comunicação Profissional}
 \label{ch:negocios}
 
-\section{IA como assistente de comunicação (sem virar robô corporativo)}
+\ficcao Na nota da reunião lê-se «ver se há sala na quinta-feira». No resumo aparece «reunião marcada para quinta-feira». A frase ficou mais curta. A reserva da sala, que era o trabalho todo, desapareceu pelo caminho.
 
-No contexto de negócios, a IA pode:
+\section{Uma mensagem com um pedido claro}
 
-\begin{itemize}[leftmargin=*]
-\item rascunhar e-mails,
-\item resumir reuniões e documentos,
-\item adaptar mensagens a públicos diferentes,
-\item ajudar a cortar bullshit antes de enviar algo.
-\end{itemize}
-
-O problema é que, se usares prompts vagos, vais receber:
-
-\begin{itemize}[leftmargin=*]
-\item jargão genérico,
-\item promessas inchadas,
-\item textos vagos que o destinatário tem dificuldade em usar. Um detetor automático não constitui prova fiável de autoria.
-\end{itemize}
-
-Padrão melhor para e-mails:
+Antes de escrever, decide o que o destinatário precisa de saber e que ação lhe cabe. Para a reunião fictícia, podes enviar um rascunho com um pedido concreto. «Podes confirmar se há sala na quinta-feira? Aguardo a confirmação antes de marcar.» A frase funciona mesmo quando ainda faltam a hora e o local. Quem recebe sabe o que pode resolver.
 
 \begin{lstlisting}
-Preciso de um e-mail para [pessoa/equipa],
-sobre [assunto], com o seguinte objetivo:
-[objetivo].
-
-Contexto:
-[3-5 bullets com factos relevantes]
-
-Tom:
-
-português de Portugal
-
-direto, educado, sem jargão desnecessário
-
-máximo 2 parágrafos + uma lista de próximos passos
-
-Primeiro, sugere um rascunho.
-Depois, destaca frases que achas demasiado vagas
-ou "corporate" para eu poder ajustar.
+Prepara um rascunho para [destinatário].
+O objetivo é [decisão ou pedido].
+Usa apenas os factos confirmados abaixo.
+Indica o responsável e o prazo se estiverem nas notas.
+Se faltar algo necessário, coloca-o como pergunta.
 \end{lstlisting}
 
-Note que:
+\begin{promptlabbox}{Reescrever um email que pede uma decisão}
+\textbf{Objetivo e contexto:} Preparar um email fictício de até seis frases a partir da nota sobre a sala.
 
-\begin{itemize}[leftmargin=*]
-\item defines objetivo e contexto,
-\item restringes o tamanho,
-\item pedes auto-crítica da IA em relação ao próprio texto.
-\end{itemize}
+Escreve primeiro os factos que podes usar. Pede uma versão curta, dirigida à pessoa que pode confirmar a disponibilidade. Lê-a como se fosses essa pessoa. Consegues responder ao pedido sem adivinhar o que ficou decidido?
 
-\begin{promptlabbox}{Anti-bullshit em e-mails}
-\textbf{Objetivo e contexto:} Reescrever um email fictício para tornar claros o pedido e a decisão.
+\textbf{Resultado esperado e validação:} O texto contém um pedido identificável, distingue a proposta da reserva e deixa explícita a informação em falta. Confirma o rascunho antes de o utilizar.
 
-Pega num e-mail genérico tipo:
-
-\begin{lstlisting}
-"Estimados,
-
-No cenário atual em rápida mudança, torna-se
-cada vez mais importante alinharmos as nossas
-sinergias de forma estratégica..."
-
-\end{lstlisting}
-
-Pede ao modelo:
-
-\begin{lstlisting}
-Reescreve este e-mail para:
-
-português de Portugal,
-
-máximo 6 frases,
-
-remover jargão vazio,
-
-deixar claras as decisões e pedidos concretos.
-\end{lstlisting}
-
-Compara antes/depois. O objetivo é transformar espuma em informação.
-
-\textbf{Resultado esperado e validação:} Confirma os mesmos factos, no máximo seis frases e uma ação identificável. Revê antes de usar: o exercício produz um rascunho, não envia mensagens.
-
-\textbf{Falhas possíveis:} Acrescentar prazos, responsáveis ou compromissos ausentes do original.
+\textbf{Falhas possíveis:} Acrescentar hora, sala, responsável ou prazo ausente da nota.
 \end{promptlabbox}
 
-\section{Planeamento e decisão: da lista de ideias ao plano concreto}
+\section{Da reunião ao registo de decisões}
 
-LLMs são ótimos a gerar listas de ideias, SWOTs, análises de risco. São péssimos, por defeito, a assumir responsabilidade por decisões reais (ainda bem).
+Uma agenda pode começar pelas duas decisões que precisam de ser tomadas, com o tempo e os documentos necessários. Nas notas finais, separa decisões, ações e dúvidas. Guarda o excerto ou momento de origem quando um compromisso for importante. Se a gravação ou a transcrição estiver autorizada, confere os nomes, as negações e os valores que podem alterar uma decisão.
 
-Padrões úteis:
+\begin{center}
+\small
+\begin{tabularx}{\textwidth}{@{}p{.22\textwidth}XX@{}}
+\toprule
+Estado & Nota de origem (fictícia) & Registo utilizável \\
+\midrule
+Decisão & «A Rita confirma a disponibilidade.» & Rita verifica a sala. O prazo fica por indicar. \\
+Proposta & «Talvez quinta-feira.» & Quinta-feira é uma opção. \\
+Dúvida & «Ainda falta saber a lotação.» & Confirmar a lotação antes de convidar. \\
+\bottomrule
+\end{tabularx}
+\end{center}
 
-\subsection*{SWOT crítico}
+Se leres duas atas, usa um identificador por ação e atualiza o estado com a fonte mais recente. Uma decisão revogada precisa de uma marca explícita. Do contrário, o resumo da semana pode trazer de volta um compromisso que a equipa já cancelou. O método de contexto do capítulo~\ref{ch:contexto} ajuda a escolher os trechos a conservar.
 
-\begin{lstlisting}
-Quero uma análise SWOT para [projeto/empresa],
-mas:
+\section{Planeamento com hipóteses à vista}
 
-evita generalidades ("o mercado está em mudança"),
+Uma lista de forças, fraquezas, oportunidades e ameaças (\emph{SWOT}) organiza uma discussão. A sua utilidade depende do que consegues confirmar. Se o rascunho disser «há procura por oficinas à noite», aponta que observação sustentaria essa frase. Pode ser o número de pedidos recebidos num período. «As pessoas gostam» deixa por explicar quem foi ouvido e quem ficou de fora.
 
-para cada ponto, dá um exemplo concreto,
+Escolhe um objetivo e uma forma de o observar antes de pedir um plano longo. Num projeto fictício de marcações, uma opção é medir quantos pedidos ficam sem resposta após dois dias úteis. Define quando começa a contagem, que dias entram e quais os pedidos excluídos. Regista quanto tempo a equipa consegue dedicar à experiência. Se a primeira semana contrariar a hipótese, o plano precisa de um ponto onde seja possível parar ou mudar de direção.
 
-para cada ameaça, sugere pelo menos uma
-possível resposta.
+\begin{promptlabbox}{Auditar um plano com perguntas concretas}
+\textbf{Objetivo e contexto:} Examinar um plano público ou fictício com uma ação, uma alegação e uma métrica proposta.
 
-Formato:
-S: [...]
-W: [...]
-O: [...]
-T: [...]
-\end{lstlisting}
+Pede a um modelo, ou a um colega, que selecione a frase com maior impacto na decisão. Para essa frase, escreve o facto que a sustentaria, o dado disponível e a decisão que mudaria se o dado fosse outro.
 
-\subsection*{Da ideia ao primeiro plano}
+\textbf{Resultado esperado e validação:} A revisão aponta um localizador, um teste ou um responsável que possa resolver a dúvida. Uma alegação por confirmar fica assinalada como tal.
 
-\begin{lstlisting}
-Temos esta ideia de projeto:
-[descrição curta]
-
-Quero que:
-
-listes 5-7 objetivos de negócio claros,
-
-proponhas 3 métricas para cada objetivo,
-
-sugiras um plano de 90 dias com marcos semanais,
-focado em validar a ideia com custo mínimo.
-\end{lstlisting}
-
-\begin{warningboxenv}{A IA não conhece os teus constraints reais}
-Cuidado com planos bonitos que ignoram:
-
-\begin{itemize}[leftmargin=*]
-\item orçamento real,
-\item limitações de equipa,
-\item cultura da organização,
-\item contexto político interno.
-\end{itemize}
-
-Usa a IA para estruturar, não para adivinhar o que é viável no teu contexto específico. Ajusta sempre com conhecimento local.
-\end{warningboxenv}
-
-\section{Reuniões: agenda, notas e follow-up}
-
-A IA pode ajudar a reduzir o desperdício de reuniões com:
-
-\begin{itemize}[leftmargin=*]
-\item agendas claras,
-\item notas estruturadas,
-\item listas de ações e responsáveis.
-\end{itemize}
-
-Padrão pré-reunião:
-
-\begin{lstlisting}
-Vou descrever o tema da reunião, os participantes
-e o tempo disponível.
-
-Tema: [...]
-Participantes: [funções, não nomes]
-Duração: [minutos]
-
-Quero que proponhas uma agenda em bullets,
-com tempos indicativos para cada ponto,
-focada em:
-
-decisões a tomar,
-
-informação a partilhar,
-
-questões em aberto.
-
-Inclui no máximo 5 pontos.
-\end{lstlisting}
-
-Padrão pós-reunião (a partir de notas soltas):
-
-\begin{lstlisting}
-Estas são as minhas notas soltas da reunião:
-
-[texto desorganizado]
-
-Quero que organizes em:
-
-Decisões tomadas
-
-Ações a executar (com responsável e prazo,
-se estiver nas notas)
-
-Questões em aberto
-
-Riscos identificados
-
-Português de Portugal, formato conciso em bullets.
-\end{lstlisting}
-
-\begin{checklistbox}{Reuniões com IA que realmente ajudam}
-Para cada reunião recorrente:
-
-\begin{itemize}[leftmargin=*]
-\item usa IA antes para clarificar objetivos e agenda,
-\item usa IA depois para organizar notas em formato acionável,
-\item guarda templates de prompts que funcionaram bem,
-\item mede se o número de “reuniões sobre a mesma coisa” diminui.
-\end{itemize}
-\end{checklistbox}
-
-\section{Conteúdo para clientes: FAQs, documentos e chatbots}
-
-Na frente externa, LLMs podem acelerar:
-
-\begin{itemize}[leftmargin=*]
-\item criação de FAQs,
-\item redação de documentação de produto,
-\item scripts de atendimento,
-\item protótipos de chatbots.
-\end{itemize}
-
-Mas aqui, mais do que nunca, precisão e alinhamento com políticas importam.
-
-Padrão para FAQs a partir de tickets:
-
-\begin{lstlisting}
-A partir dos e-mails/tickets abaixo, identifica:
-
-Perguntas que se repetem.
-
-Formas naturais como os clientes as colocam.
-
-Respostas claras, em linguagem simples,
-consistentes com a política abaixo:
-
-[cola extrato de política ou documentação]
-
-Devolve uma lista de Q&A em português de Portugal,
-pronta para ser usada numa página de FAQ.
-\end{lstlisting}
-
-Para chatbots, lembra-te:
-
-\begin{itemize}[leftmargin=*]
-\item o \emph{prompt de sistema} do bot é essencial (regras, tom, políticas),
-\item precisas de \emph{guardrails} para temas sensíveis (preços, legal, promessas),
-\item convém ter rotas claras de “escape” para humanos (“não tenho certeza, vou encaminhar”).
-\end{itemize}
-
-\begin{warningboxenv}{Chatbot simpático a prometer o que não existe}
-Sem limites claros, um LLM pode:
-
-\begin{itemize}[leftmargin=*]
-\item inventar funcionalidades que não tens,
-\item prometer prazos e políticas inexistentes,
-\item dar conselhos que entram em choque com jurídico/compliance.
-\end{itemize}
-
-O prompting aqui não é só estilo; é controlo de danos.
-\end{warningboxenv}
-
-\section{Detetor interno de bullshit corporativo}
-
-Um uso subversivo, mas muito útil: transformar a IA em filtro de qualidade para os próprios textos da organização.
-
-Padrões:
-
-\subsection*{Tradução de jargão para linguagem humana}
-
-\begin{lstlisting}
-Traduz o texto abaixo para português simples,
-como se explicasses a um amigo inteligente
-que não trabalha na área:
-
-[texto corporativo]
-\end{lstlisting}
-
-\subsection*{Detetor de promessas vazias}
-
-\begin{lstlisting}
-Lê o texto abaixo e identifica:
-
-Frases vagamente positivas que não dizem nada
-de concreto.
-
-Promessas que não estão ligadas a ações
-específicas.
-
-Jargão que pode ser substituído por algo mais
-claro.
-
-Depois, sugere uma versão mais honesta e concreta.
-\end{lstlisting}
-
-\begin{promptlabbox}{Aplicar o “modo cético informado” a um documento}
-\textbf{Objetivo e contexto:} Auditar um documento público ou fictício com afirmações e objetivos explícitos.
-
-Escolhe um documento de estratégia, visão ou “roadmap” da tua organização (ou um exemplo de internet). Pede ao modelo:
-
-\begin{lstlisting}
-Assume o papel de cético informado.
-Analisa o documento abaixo e responde:
-
-Que afirmações carecem de evidência ou
-são demasiado vagas?
-
-Que métricas específicas poderíamos usar
-para tornar isto verificável?
-
-Onde suspeitas que há mais marketing do que
-substância?
-
-[documento]
-\end{lstlisting}
-
-Usa o resultado como ponto de partida para conversas internas menos “powerpoint” e mais fundamentadas.
-
-\textbf{Resultado esperado e validação:} Para cada crítica, pede a frase visada e a evidência necessária. Se a evidência está ausente, a conclusão é falta de suporte, não falsidade demonstrada.
-
-\textbf{Falhas possíveis:} Confundir ceticismo com hostilidade, carregar documentos internos sem autorização ou aceitar suspeitas como factos.
+\textbf{Falhas possíveis:} Transformar uma hipótese em facto, medir só o que é fácil ou usar informação interna num ambiente sem autorização.
 \end{promptlabbox}
 
-\section{Limites éticos no uso em negócios}
+\section{De perguntas frequentes a respostas autorizadas}
 
-Para terminar o capítulo, o lado menos sexy mas crucial:
+As mensagens de clientes ajudam a encontrar perguntas recorrentes. A resposta deve vir da política em vigor, com as exceções e a origem à vista. Regista a data de revisão de cada resposta e o que fazer se a política não se aplicar. Na Lavandaria fictícia, o assistente pode preparar uma resposta sobre uma reclamação. Uma promessa de reembolso é uma decisão que exige autoridade e informação adicionais.
 
-\begin{itemize}[leftmargin=*]
-\item \textbf{Privacidade}: não podes despejar dados sensíveis de clientes num modelo sem pensar em onde são processados, retidos e com que bases legais.
-\item \textbf{Transparência}: usar IA para comunicar sem dizer que estás a usar pode ser aceitável em alguns contextos, mas noutros é problemático (por exemplo, simular ser uma pessoa específica).
-\item \textbf{Responsabilidade}: decisões de negócio com impacto real (finanças, saúde, emprego) não podem ser delegadas a um modelo probabilístico sem supervisão.
-\end{itemize}
+\begin{lstlisting}
+Agrupa as perguntas por necessidade do cliente.
+Para cada grupo, propõe uma resposta com base
+na política indicada e aponta o excerto usado.
+Se a política não cobrir o caso, indica a dúvida
+a encaminhar e a equipa que a pode esclarecer.
+\end{lstlisting}
 
-Boas práticas mínimas:
-
-\begin{itemize}[leftmargin=*]
-\item define políticas internas de uso de IA (o que é permitido, o que é proibido),
-\item forma as equipas sobre limitações e riscos,
-\item documenta onde e como a IA é usada nos processos,
-\item garante sempre “escape hatch” humano para decisões críticas.
-\end{itemize}
-
-\begin{keyideabox}{IA em negócios: amplificador, não bode expiatório}
-A IA pode amplificar a tua clareza, eficiência e qualidade. Mas se algo corre mal, a responsabilidade continua a ser tua, não do modelo. Desenhar bons prompts é parte dessa responsabilidade.
-\end{keyideabox}
-
-\section{Rascunhar não é assumir um compromisso}
-Separa a proposta de mensagem do seu envio e de alterações a sistemas externos. Uma resposta a clientes pode criar expectativas sobre prazos, preços ou reembolsos. Mostra os factos usados, identifica o responsável e valida o compromisso antes de o executar. No caso da Lavandaria, o assistente prepara um rascunho; não promete que a meia regressa amanhã com juros.
+Para avaliar uma página de ajuda, compara os rascunhos com uma amostra de perguntas que não usaste durante a escrita. Inclui casos em que a resposta precisa de ser encaminhada. Regista a proporção de perguntas cobertas, as correções necessárias e o tempo de revisão. Se automatizares a publicação ou o envio, coloca a aprovação e a verificação de permissões no ponto em que o compromisso se torna efetivo. Consulta a operação no capítulo~\ref{ch:llmops} e as decisões sobre dados no capítulo~\ref{ch:governacao}.

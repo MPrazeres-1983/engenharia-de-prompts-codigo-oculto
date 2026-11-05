@@ -1,383 +1,67 @@
 \chapter{Escrita Criativa, Storytelling e Conteúdo Longo}
 \label{ch:criatividade}
 
-\section{Porque tanta ficção gerada por IA soa igual}
+\ficcao Na abertura de um conto, o leitor vê uma máquina, um cesto e uma meia. Na página seguinte, a protagonista jura que a outra foi roubada. Se o leitor já a viu, o interesse está em saber como a protagonista se enganou. Se ainda não a viu, tem uma pista por descobrir. A mesma meia pode servir duas histórias.
 
-Se já leste meia dúzia de contos gerados por IA, sabes o padrão:
+\section{Escolher o que o leitor sabe}
 
-\begin{itemize}[leftmargin=*]
-\item mundos genéricos de fantasia com reinos em guerra,
-\item protagonistas traumatizados mas fofinhos,
-\item descrições cheias de adjetivos “bonitos” e vazios,
-\item finais “agridoce” com lição moral improvisada.
-\end{itemize}
+Experimenta três arranjos para essa cena. Mostra a pista antes da personagem e deixa o leitor antecipar a descoberta. Esconde-a no enquadramento e revela-a no momento em que muda a interpretação. Ou apresenta dois relatos compatíveis com os indícios e faz a personagem escolher entre eles. Cada arranjo muda o trabalho do leitor. O capítulo~\ref{ch:audiovisual} mostra o que acontece quando mudas o enquadramento sem mudar o cenário.
 
-Isto acontece porque:
+Antes de pedir prosa, escreve quem quer o quê, o que impede a personagem e a alteração que a cena precisa de produzir. Se a protagonista tem dez minutos para encontrar a meia antes de fechar a loja, sabes o que cada gesto custa. Um cronómetro basta para tornar algumas decisões interessantes.
 
-\begin{itemize}[leftmargin=*]
-\item a geração é condicionada por padrões aprendidos, pelo pós-treino e pelo contexto; isso não equivale a calcular uma «média de textos»;
-\item prompts vagos (“escreve uma história épica”) levam-no a puxar dos tropos mais comuns;
-\item raramente lhe dás constraints fortes sobre tom, tema, ritmo, estrutura e \emph{limites}.
-\end{itemize}
+\section{Uma ficha de voz para experimentar}
 
-O objetivo aqui não é “provar” que a IA pode ser Kafka. É:
+Usa exemplos próprios ou autorizados e descreve a voz com escolhas que consegues reconhecer. Uma narradora pode usar humor seco, prestar atenção aos objetos e evitar explicar a piada. A ficha orienta o rascunho. No texto, verifica o efeito de uma frase em vez de contar adjetivos à procura de uma fórmula.
 
-\begin{itemize}[leftmargin=*]
-\item usar o modelo como motor de variação, não fábrica de clichés;
-\item construir estruturas e constraints que te sirvam como autor humano;
-\item manter a tua voz (ou uma voz bem definida), em vez de cair no “texto genérico de fantasia”.
-\end{itemize}
+\begin{promptlabbox}{Definir uma voz para uma cena}
+\textbf{Objetivo e contexto:} Descrever traços de textos que possas utilizar e aplicá-los a uma cena fictícia.
 
-\begin{keyideabox}{Restrições úteis dão direção à surpresa}
-Se dizes “faz qualquer coisa criativa”, o modelo vai ao stock genérico.
-Se defines limites claros (tema, tom, estilo, estrutura, tabus), abres espaço para uma criatividade útil dentro desses limites.
-\end{keyideabox}
+Escreve uma ficha com o ponto de vista, duas escolhas de ritmo e um limite para a informação revelada. Pede uma cena de três parágrafos, ou escreve-a tu. Experimenta uma versão em que o leitor sabe mais do que a protagonista.
 
-\section{Persona de autor e ``vibe'' narrativo}
+\textbf{Resultado esperado e validação:} Identifica o ponto em que o leitor recebe a pista e o que a personagem sabe nesse momento. Lê ambas as versões e localiza o que mudou.
 
-Antes de pedir “escreve uma história”, define:
-
-\begin{itemize}[leftmargin=*]
-\item quem é o \emph{autor} (persona),
-\item que tipo de leitor tens em mente,
-\item que \emph{vibe} queres (leve, negra, absurda, íntima, etc.),
-\item o que a história \emph{não} deve fazer (pior ainda do que o que deve).
-\end{itemize}
-
-Exemplo de persona de autor:
-
-\begin{lstlisting}
-[PERSONA AUTOR]
-
-Identidade:
-
-Escritora portuguesa contemporânea, mistura de
-realismo sujo e humor seco.
-
-Interessada em relações humanas, precariedade,
-tecnologia no quotidiano.
-
-Objetivo:
-
-Contar histórias curtas que deixam o leitor
-desconfortável mas a rir, ligeiramente.
-
-Estilo:
-
-Frases curtas a médias, pouco adjetivo.
-
-Diálogo natural, com pausas e subtexto.
-
-Zero discursos expositivos sobre "o mundo".
-
-Limites:
-
-Não usar clichés de fantasia medieval.
-
-Não usar "era uma vez" nem finais moralistas.
-\end{lstlisting}
-
-Depois, aplicas:
-
-\begin{lstlisting}
-Usa a persona [PERSONA AUTOR] para escrever um conto
-de 1200-1500 palavras para adultos, em português de
-Portugal, com o seguinte ponto de partida:
-
-[seed da história]
-\end{lstlisting}
-
-\begin{promptlabbox}{Definir a tua persona de autor}
-\textbf{Objetivo e contexto:} Descrever características de textos teus ou legitimamente utilizáveis e aplicá-las a uma cena fictícia.
-
-\textbf{Passo 1} — Escolhe 2–3 textos teus ou de autores que admiras.
-
-\textbf{Passo 2} — Pede ao modelo para descrever o estilo em bullets: temas, ritmo, vocabulário, humor, tipo de finais.
-
-\textbf{Passo 3} — A partir disso, cria uma \emph{persona de autor} com:
-\begin{itemize}[leftmargin=*]
-\item Identidade,
-\item Objetivo,
-\item Estilo,
-\item Limites.
-\end{itemize}
-
-\textbf{Passo 4} — Pede uma cena curta com essa persona. Lê em voz alta.
-Se soar “certo”, guarda a persona como bloco reutilizável. Se soar falso, ajusta a persona até bater certo com o teu gosto.
-
-\textbf{Resultado esperado e validação:} Compara ritmo, diálogo e escolhas de vocabulário; confirma originalidade da cena. A persona é uma ferramenta editorial, sem credenciais reais.
-
-\textbf{Falhas possíveis:} Copiar texto dos exemplos ou tomar semelhança estilística como qualidade narrativa suficiente.
+\textbf{Falhas possíveis:} Copiar a redação das amostras, mudar o ponto de vista sem marcar a transição ou confundir uma voz reconhecível com uma boa cena.
 \end{promptlabbox}
 
-\section{Estrutura primeiro, prosa depois}
+\section{Do plano à cena}
 
-Gerar prosa longa sem um plano pode dificultar continuidade e revisão. Problemas a procurar incluem:
-
-\begin{itemize}[leftmargin=*]
-\item começos promissores,
-\item meio confuso,
-\item final apressado.
-\end{itemize}
-
-É o equivalente literário de programar uma aplicação complexa sem desenhar a arquitetura. O padrão mais saudável é:
-
-\begin{enumerate}[leftmargin=*]
-\item Primeiro, outlines (estrutura).
-\item Depois, desenvolvimento incremental de cenas.
-\item Só no fim, polimento de prosa e detalhes.
-\end{enumerate}
-
-Exemplo de prompt para outline:
+Para uma história curta, anota a situação inicial, a escolha e a consequência. Para uma série, acrescenta o que cada episódio resolve e o que transporta para o seguinte. A meio de um rascunho, podes descobrir que a escolha mais interessante está noutra cena. Atualiza o plano para que sirva o texto que estás a construir.
 
 \begin{lstlisting}
-Quero um outline de uma história curta (até 3000 palavras)
-em 5 atos, com a persona [PERSONA AUTOR].
-
-Restrições:
-
-Tema central: [tema]
-
-Protagonista: [perfil]
-
-Conflito: [descrição breve]
-
-Ambiente: [local/tempo]
-
-Formato:
-
-Ato 1: [1-3 bullets]
-
-Ato 2: [1-3 bullets]
-...
-
-Ato 5: [1-3 bullets]
+Propõe três cenas a partir desta premissa.
+Para cada cena, indica o objetivo da personagem,
+a escolha que enfrenta e o que muda depois.
+Mantém o ponto de vista e as regras fornecidas.
 \end{lstlisting}
 
-Depois, desenvolves ato a ato:
+\begin{promptlabbox}{Comparar escrita direta e escrita com plano}
+\textbf{Objetivo e contexto:} Verificar como duas formas de trabalhar resolvem a mesma premissa.
 
-\begin{lstlisting}
-Agora desenvolve o Ato 1 em 600-800 palavras,
-em prosa contínua, mantendo o estilo e as
-restrições definidas. Não escrevas o resto da
-história ainda.
-\end{lstlisting}
+Fixa o público, a extensão aproximada e o acontecimento final. Escreve ou pede uma versão direta e outra com plano seguido de rascunho. Se usares um modelo, usa sessões separadas e regista chamadas e tempo. Faz a leitura sem o rótulo da condição quando for possível.
 
-\begin{promptlabbox}{Comparar ``texto direto'' vs. outline+atos}
-\textbf{Objetivo e contexto:} Comparar escrita direta e planeamento numa mesma premissa, com extensão total semelhante.
+\textbf{Resultado esperado e validação:} Compara ligação entre escolhas e consequências, continuidade de ponto de vista e efeito do final. Regista pelo menos uma passagem que justifique cada observação. Aceita um empate quando os critérios não distinguirem as versões.
 
-Escolhe uma ideia de história. Testa dois fluxos:
-
-\begin{itemize}[leftmargin=*]
-\item A) “Escreve uma história de X palavras sobre Y.”
-\item B) Outline em atos, depois desenvolvimento ato a ato.
-\end{itemize}
-
-Lê os dois resultados com calma.
-Avalia:
-\begin{itemize}[leftmargin=*]
-\item consistência de arco narrativo,
-\item coerência de personagens,
-\item força do final.
-\end{itemize}
-
-Qual versão funciona melhor depende da tarefa e dos critérios editoriais. Este laboratório compara duas estratégias; não demonstra uma superioridade universal do planeamento prévio.
-
-\textbf{Resultado esperado e validação:} Define antes critérios de arco, coerência e final. Faz leitura sem identificar a condição; aceita que uma estratégia possa não ganhar.
-
-\textbf{Falhas possíveis:} Dar mais contexto ou tempo apenas a uma condição e declarar superioridade universal.
+\textbf{Falhas possíveis:} Dar entradas ou tempo diferentes sem o registar, medir apenas comprimento ou generalizar a partir de um conto.
 \end{promptlabbox}
 
-\section{Personagens, diálogos e ponto de vista}
+\section{Personagens e continuidade}
 
-Histórias memoráveis raramente são sobre “acontecimentos”; são sobre pessoas (ou coisas antropomorfizadas) com desejos, medos e conflitos.
+Uma ficha de personagem pode ter desejo, medo, informação conhecida e uma contradição que apareça em ação. A gerente quer fechar a loja a horas, mas recusa deixar uma reclamação por resolver. Numa cena de diálogo, dá a cada pessoa uma razão diferente para ficar. O que alguém deixa por dizer pode ajudar a explicar a escolha que faz a seguir.
 
-Em vez de pedir “história sobre X”, especifica:
+Para um universo maior, conserva uma ficha de regras, uma cronologia e o estado no fim de cada capítulo. Dá ao modelo os excertos que interessam à nova cena. Um erro típico é deixar uma personagem usar uma chave que entregou no capítulo anterior. Assinala a última posse confirmada e a cena em que houve a entrega. Para uma série factual, usa a mesma ideia com fontes, datas, definições e remissões. Uma alteração a uma definição pede revisão dos episódios que ainda a usam.
 
-\begin{itemize}[leftmargin=*]
-\item 2–4 personagens principais,
-\item objetivos explícitos de cada um,
-\item segredos ou tensões,
-\item ponto de vista (primeira pessoa, terceira limitada, múltiplos POVs).
-\end{itemize}
+\begin{promptlabbox}{Auditar a continuidade de uma cena}
+\textbf{Objetivo e contexto:} Confrontar uma cena com regras escritas antes do rascunho.
 
-Exemplo de ficha de personagem:
+Escreve uma regra sobre a chave, uma sobre o horário e uma sobre o que a protagonista sabe. Cria duas cenas curtas, uma compatível e outra com uma violação deliberada. Pede que cada objeção indique a regra e o trecho. Podes fazer a auditoria à mão e usar o resultado como referência.
 
-\begin{lstlisting}
-[PERSONAGEM: INÊS]
-Idade: 32
-Profissão: técnica de helpdesk numa fintech.
-Desejo: sair do trabalho precário e ter
-tempo para escrever.
-Medo: ficar irrelevante e presa em empregos
-que odeia.
-Contradição: ajuda clientes todos os dias
-mas evita resolver problemas
-da própria vida.
-\end{lstlisting}
+\textbf{Resultado esperado e validação:} A violação é localizada e a cena compatível fica sem contradições atribuídas. Regista críticas de estilo à parte.
 
-Prompt para diálogos:
-
-\begin{lstlisting}
-Escreve uma cena de 800 palavras focada em diálogo
-entre [PERSONAGEM 1] e [PERSONAGEM 2].
-
-Objetivo da cena:
-
-[ex: Inês tenta convencer Rui a aceitar um plano arriscado]
-
-Regras:
-
-Nada de discursos expositivos sobre o passado.
-
-Usa subtexto: o que eles não dizem é tão importante
-como o que dizem.
-
-Usa detalhes mínimos de ação para marcar ritmo,
-mas sem parágrafos descritivos longos.
-\end{lstlisting}
-
-\begin{keyideabox}{Personagens primeiro, enredo depois}
-Personagens com objetivos e conflitos claros dão critérios para escolher ações e diálogos. É uma recomendação editorial, que deve servir a história e não substituir a sua leitura crítica.
-\end{keyideabox}
-
-\section{Worldbuilding e consistência de universo}
-
-Para mundos mais complexos (fantasia, sci-fi, universos partilhados), o risco é:
-
-\begin{itemize}[leftmargin=*]
-\item inconsistências de lógica interna,
-\item detalhes esquecidos em capítulos seguintes,
-\item “copiar” demasiado universos já existentes.
-\end{itemize}
-
-Técnicas práticas:
-
-\begin{itemize}[leftmargin=*]
-\item Criar um \emph{bible} de universo: documento com:
-\begin{itemize}[leftmargin=*]
-\item geografia,
-\item sistemas políticos,
-\item tecnologia/magia,
-\item regras invioláveis (e.g., quem pode usar quê),
-\item timeline de eventos importantes.
-\end{itemize}
-\item Alimentar o modelo com excertos relevantes desse bible antes de escrever cenas novas.
-\item Pedir explicitamente cheques de consistência:
-\begin{lstlisting}
-Revê esta cena e aponta inconsistências com as
-regras de universo abaixo.
-
-[regras]
-[cena]
-\end{lstlisting}
-\end{itemize}
-
-\begin{promptlabbox}{Usar IA como guardiã de consistência}
-\textbf{Objetivo e contexto:} Verificar uma cena face a regras de universo escritas antes da geração.
-
-\textbf{Passo 1} — Escreve (tu) uma página de “regra de universo”.
-
-\textbf{Passo 2} — Gera, com a IA, uma cena nesse universo.
-
-\textbf{Passo 3} — Pede à IA para fazer de auditor:
-
-\begin{lstlisting}
-Aponta todos os pontos em que a cena parece
-não respeitar as regras do universo abaixo,
-ou onde faltam detalhes importantes.
-
-[regras]
-[cena]
-\end{lstlisting}
-
-Depois decide tu o que aceitas e o que rejeitas.
-
-\textbf{Resultado esperado e validação:} Associa cada inconsistência a uma regra e a um trecho. Acrescenta uma cena sem violações para medir falsos alarmes.
-
-\textbf{Falhas possíveis:} Aceitar críticas que inventam regras novas ou confundir preferência narrativa com contradição.
+\textbf{Falhas possíveis:} Inventar uma regra, ignorar uma mudança já mostrada ou tomar um flashback assinalado por erro de cronologia.
 \end{promptlabbox}
 
-\section{Conteúdo longo seriado: blogs, newsletters e sagas}
+\section{Uma história melhor e uma coleção mais parecida}
 
-Nem tudo é ficção pura. Há também:
+Doshi e Hauser atribuíram 293 participantes a condições diferentes ao escrever histórias de oito frases. Uns escreveram sem assistência. Outros podiam pedir uma ideia ou até cinco. As histórias das condições com acesso a ideias tiveram avaliações mais altas de novidade. Na comparação por \emph{embeddings}, também ficaram mais próximas do perfil médio das outras histórias da mesma condição~\citep{doshi2024}. Uma avaliação do conto e uma medida da variedade da coleção respondem a perguntas diferentes. O desenho do estudo incide em histórias curtas com ajuda na fase de ideação.
 
-\begin{itemize}[leftmargin=*]
-\item blogs temáticos,
-\item newsletters regulares,
-\item séries de artigos,
-\item cursos em capítulos.
-\end{itemize}
-
-Aqui, a IA é ótima a:
-
-\begin{itemize}[leftmargin=*]
-\item ajudar-te a desenhar a série (mapa dos capítulos),
-\item manter consistência de tom entre episódios,
-\item reaproveitar material antigo sem copy-paste direto.
-\end{itemize}
-
-Padrão:
-
-\begin{lstlisting}
-Quero uma série de 10 posts de blog sobre [tema],
-para um público [perfil].
-
-Objetivos:
-
-cada post deve ser auto-contido,
-
-mas, no conjunto, cobrem os fundamentos do tema,
-
-tom direto, humor discreto, português de Portugal.
-
-Formato:
-
-Lista numerada dos 10 posts,
-
-para cada um: título provisório + 3 bullets
-sobre o conteúdo.
-\end{lstlisting}
-
-Depois, para cada post:
-
-\begin{lstlisting}
-Escreve o Post 3 da série abaixo, mantendo tom e estilo.
-
-[Série: lista de posts]
-
-Requisitos específicos para este post:
-
-1500-2000 palavras,
-
-exemplos concretos,
-
-secção final com 3 exercícios práticos.
-\end{lstlisting}
-
-\section{Anti-padrões na escrita criativa com IA}
-
-Alguns sinais de que estás a usar mal o modelo:
-
-\begin{itemize}[leftmargin=*]
-\item \textbf{Um prompt, livro inteiro}: pedes um romance de 80k palavras num único prompt. Vais receber um resumo grande, não um livro.
-\item \textbf{Zero reescrita humana}: publicas texto de IA quase cru. O leitor sente que aquilo “não tem ninguém lá dentro”.
-\item \textbf{Dependência de fórmulas}: usas sempre a mesma estrutura de “três atos motivacionais” para tudo.
-\item \textbf{Confundir volume com qualidade}: achas que quantos mais capítulos a IA despejar, melhor é o projeto.
-\end{itemize}
-
-\begin{checklistbox}{Uso saudável de IA na escrita criativa}
-Antes de dizeres que a IA “escreveu o teu livro”:
-
-\begin{itemize}[leftmargin=*]
-\item Foste tu quem definiu personagens, conflitos e limites?
-\item Estruturaste a obra por etapas (outline, atos, cenas)?
-\item Reescreveste manualmente partes importantes (começo, clímax, final)?
-\item Fizeste uma ronda de edição em que cada corte tem uma razão: repetição, falta de função, quebra de ritmo ou incoerência?
-\end{itemize}
-\end{checklistbox}
-
-\begin{keyideabox}{IA como sala de escritores, não ghostwriter total}
-Pensa no modelo como uma “sala de guionistas” infinitamente paciente que cospe ideias, variantes e rascunhos.
-Mas a responsabilidade pela obra final — voz, escolha temática, corte — continua tua.
-\end{keyideabox}
+Se preparas uma coleção, revê as premissas, os conflitos e os finais lado a lado. Três cenas podem funcionar bem em separado e gastar a mesma surpresa quando lidas juntas. Experimenta conceber uma ideia antes de consultar o modelo. Depois escolhe que contribuição vale a pena conservar e regista porquê.

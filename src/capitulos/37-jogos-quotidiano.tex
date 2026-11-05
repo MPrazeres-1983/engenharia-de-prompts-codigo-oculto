@@ -10,14 +10,30 @@ Define explicitamente o que conta como vitória, que ações são possíveis e o
 
 \begin{lstlisting}
 Jogo: tres decisoes para recuperar a meia.
-Estado inicial: local=corredor; chave=na_gaveta; porta=fechada.
-Regras fixas: a porta abre apenas com a chave.
-Liberdade criativa: dialogos, ambiente e pistas coerentes.
-Depois de cada escolha, mostra a alteracao de estado.
-Se uma acao for impossivel, explica e oferece duas opcoes.
-Nao mudes as regras para forcar a vitoria.
+Local inicial: corredor. A chave esta na gaveta.
+A porta esta fechada e a meia esta atras da porta.
+Acoes: tirar a chave, abrir a porta, recolher a meia.
+A porta abre com a chave. A meia exige a porta aberta.
+Regista cada acao valida. Uma recusa conserva a ficha.
+A vitoria ocorre ao recolher a meia em tres acoes validas.
+Inventa dialogos e pistas coerentes com a ficha.
 \end{lstlisting}
-O pedido especifica um contrato narrativo. Não o impõe como código. Verifica o estado a cada turno, sobretudo quando o jogador propõe algo fora das opções.
+Faz primeiro uma jogada em papel. «Abrir a porta» antes de tirar a chave deve conservar tudo como estava. Depois segue as ações válidas e compara a ficha com o registo abaixo.
+
+\begin{center}
+\small
+\begin{tabularx}{\textwidth}{@{}p{.12\textwidth}XX@{}}
+\toprule
+Ação & Escolha & Estado depois da escolha \\
+\midrule
+1 & Tirar a chave & Chave na mão, porta fechada. \\
+2 & Abrir a porta & Porta aberta, meia por recolher. \\
+3 & Recolher a meia & Meia na mão, condição de vitória satisfeita. \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+A ficha permite continuar o jogo se o narrador se esquecer de um detalhe. Se a resposta disser que a porta abriu na tentativa inicial, corrige o estado e só depois continua a cena. O capítulo~\ref{ch:agentes} usa a mesma distinção entre uma proposta e a operação que pode mudar o estado.
 
 \section{Personagens com memória limitada e identidade explícita}
 Um personagem interativo pode ter objetivo, informação conhecida e limites de conhecimento. Um guarda não precisa de saber tudo o que o autor escreveu sobre a estação. Separar conhecimento do personagem e verdade do mundo evita diálogos que revelam pistas antes de serem descobertas.

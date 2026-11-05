@@ -1,280 +1,66 @@
-\chapter{Aprender com IA Sem Atrofiar o Cérebro}
+\chapter{Aprender com IA e Testar o que Ficou}
 \label{ch:aprender}
 
-\section{IA tutor, IA explicador, IA professor chato}
+Uma camisola custa 100 euros. Baixa 10\% e, no dia seguinte, sobe 10\%. Depois de veres a resolução, parece fácil. Consegues explicar o preço final sem olhar para a resposta? A diferença interessa sempre que usas uma ferramenta para estudar.
 
-Usar LLM para estudar pode ser o melhor e o pior que já te aconteceu. Melhor, porque:
+\section{Pedir uma pista e tentar outra vez}
 
-\begin{itemize}[leftmargin=*]
-\item tens um explicador 24/7 que não se cansa,
-\item podes perguntar “porquê?” quantas vezes quiseres sem levar olhos em branco,
-\item podes adaptar o nível de explicação ao que realmente sabes (ou achas que sabes).
-\end{itemize}
-
-Pior, porque:
-
-\begin{itemize}[leftmargin=*]
-\item é tentador pedir “faz o trabalho por mim”,
-\item é fácil confundires “ler uma explicação” com “saber fazer”,
-\item se o modelo alucinar com confiança e tu não fores capaz de detetar, estás a aprender coisas erradas com entusiasmo.
-\end{itemize}
-
-Por isso convém distinguir três modos de uso:
-
-\begin{itemize}[leftmargin=*]
-\item \textbf{Tutor}: ajuda-te a planear o estudo, escolher prioridades, construir currículos.
-\item \textbf{Explicador}: clarifica conceitos específicos, dá exemplos, cria analogias.
-\item \textbf{Professor chato}: faz perguntas, corrige-te, aponta falhas e obriga-te a pensar.
-\end{itemize}
-
-Experimenta os três modos e verifica quais ajudam a tua tarefa; não há uma proporção universal de valor.
-
-\begin{keyideabox}{Perceber a explicação não é conseguir aplicar}
-Tenta resolver um problema novo sem consultar a resposta. O resultado dá-te informação mais útil do que a sensação de familiaridade ao ler. Desconforto não é uma condição necessária de aprendizagem.
-\end{keyideabox}
-
-\section{Níveis de explicação: júnior, sénior e especialista}
-
-Uma das grandes vantagens de LLMs é a capacidade de adaptar o nível de explicação. O mesmo conceito pode ser:
-
-\begin{itemize}[leftmargin=*]
-\item explicado a um aluno do secundário,
-\item aprofundado para um estudante universitário,
-\item discutido em modo “entre dois profissionais”.
-\end{itemize}
-
-Se não especificas o nível, o modelo escolhe um meio-termo genérico. Resultado: explicações que nem são suficientemente básicas para iniciantes, nem suficientemente profundas para avançados.
-
-Padrão simples:
+O preço passa para 90 euros. A segunda percentagem aplica-se a 90, por isso o aumento é de 9 euros e o preço final é de 99. A pergunta que desbloqueia a conta é «10\% de quê?». Num chat, pede uma pista desse tamanho. Depois refaz a conta antes de veres a solução. Podes fazer o mesmo com um colega ou com um cartão de estudo.
 
 \begin{lstlisting}
-Explica-me [conceito] em 3 níveis:
-
-Nível 1: Explicação para alguém de 15 anos.
-Nível 2: Explicação para um estudante universitário
-da área.
-Nível 3: Explicação para um profissional que já
-conhece o básico, com foco em nuances.
+Dá-me um problema de percentagens.
+Espera pela minha tentativa.
+Se eu errar, pergunta que valor usei como base.
+Mostra a resolução depois de eu tentar outra vez.
+No fim, dá-me um problema com outros dados.
 \end{lstlisting}
 
-Depois, podes pedir para expandir apenas o nível que te interessa.
+Em cada tarefa, escolhe o papel que te faz falta. Um explicador mostra a ligação entre os passos. Um interlocutor faz perguntas e espera pela resposta. Um tutor ajuda a escolher o que praticar a seguir, usando o programa e os erros que já encontraste. Em qualquer dos papéis, verifica as respostas com o material do curso ou com um cálculo que possas refazer.
 
-\begin{promptlabbox}{Criar um “menu de níveis” para um tema teu}
-\textbf{Objetivo e contexto:} Definir pré-requisitos e progressão de um tema que possas confrontar com materiais de referência.
+\section{Descrever o que já sabes}
 
-Escolhe um tema em que te sintas mais ou menos confortável (por exemplo, derivadas, SQL joins, redes TCP/IP).
+Pedir uma explicação «para um iniciante» deixa em aberto por onde começar. Diz antes que sabes calcular 10\% de um valor, mas ainda trocas a base quando há duas variações sucessivas. Pede uma explicação visual, uma conta comentada e um exercício curto. Se já conheces a regra, podes investigar o caso geral.
 
-\medskip
+Com taxa $0<r<1$ em forma decimal e valor inicial $P$, baixar $r$ e depois subir $r$ produz $P(1-r)(1+r)=P(1-r^2)$. Para $r=0{,}1$, o fator é $0{,}99$. A expressão revela por que motivo a mesma taxa, aplicada a duas bases, não desfaz a alteração. Para testar a ideia, usa um valor inicial diferente ou tenta calcular que subida recuperaria uma descida de 20\%.
 
-Pede ao modelo:
+\begin{promptlabbox}{Criar um menu de níveis para um tema teu}
+\textbf{Objetivo e contexto:} Construir um percurso a partir do que já sabes e do que queres conseguir fazer.
 
-\begin{lstlisting}
-Quero que cries um "menu de explicações" para o tema
-[tema]. Para cada nível, define:
+Escolhe um conceito e anota um pré-requisito que dominas e uma dúvida concreta. Pede três entradas: um caso que possas resolver sem notação, um exemplo técnico comentado e um problema de aplicação. Testa o primeiro e escolhe o passo seguinte pelo erro que fizeste.
 
-a quem se destina,
+\textbf{Resultado esperado e validação:} As versões diferem no trabalho que pedem ao leitor. Confirma que as explicações conservam a mesma regra e resolve o último problema antes de comparar com a solução de referência.
 
-que pré-requisitos assume,
-
-que tipo de exemplos vai usar.
-
-Depois, dá-me a explicação de Nível 1.
-\end{lstlisting}
-
-Se o menu fizer sentido, podes ir desbloqueando os níveis à medida que te sentes pronto. É uma forma simples de estruturar a progressão sem depender do humor do modelo.
-
-\textbf{Resultado esperado e validação:} Verifica correção de cada nível e resolve um exercício sem ajuda antes de avançar. O nível é uma decisão pedagógica, não um diagnóstico automático da tua capacidade.
-
-\textbf{Falhas possíveis:} Usar apenas idade como medida de conhecimento ou avançar por teres reconhecido uma explicação.
+\textbf{Falhas possíveis:} Usar só a idade para escolher o nível, trocar a regra na simplificação ou avançar por reconhecer a explicação.
 \end{promptlabbox}
 
-\section{Construir um plano de estudo 80/20 com IA}
+\section{Planear com o calendário à frente}
 
-Planeamentos de estudo feitos à mão podem ser ótimos, mas também consomem tempo e energia. A IA pode ajudar a:
-
-\begin{itemize}[leftmargin=*]
-\item identificar tópicos prioritários a partir do programa e das dificuldades observadas; «80/20» é uma heurística, não uma proporção demonstrada nesta disciplina,
-\item distribuir esses tópicos ao longo de semanas,
-\item propor ciclos de revisão e exercícios.
-\end{itemize}
-
-Padrão de prompt:
+Se tens duas horas esta semana, escreve o que cabe em cada sessão. Dá prioridade aos pré-requisitos do programa e aos erros que observaste. Por exemplo, dedica 25 minutos a rever bases, 45 a resolver problemas, 30 a corrigir e 20 a tentar exercícios que tinhas guardado. Na semana seguinte, ajusta o plano pelo que conseguiste resolver. Se desconheces a frequência dos temas no exame, trata-a como uma pergunta em aberto.
 
 \begin{lstlisting}
-Quero um plano de estudo de 6 semanas para a disciplina
-de [nome], com foco no exame final.
-
-Dados:
-
-Já sei [lista resumida do que dominas].
-
-Tenho mais dificuldade em [lista].
-
-Posso estudar [n] horas por semana.
-
-Objetivo:
-
-Preparar para uma nota-alvo de [objetivo], sem prometer resultados.
-
-Priorizar o programa e os enunciados que forneco;
-nao presumir frequencias de exame desconhecidas.
-
-Formato:
-
-Para cada semana: tópicos, objetivos, atividades
-(ler, ver vídeos, fazer exercícios, rever).
-
-Indica, claramente, o que é "núcleo 80/20" e o que
-é "extra para nota máxima".
+Tenho 120 minutos e os seguintes tópicos do programa.
+Já consigo [tarefa]. Ainda falho [exemplo].
+Propõe sessões que caibam nesse tempo.
+Inclui um problema novo para confirmar cada objetivo.
+Indica que parte do plano depende de dados em falta.
 \end{lstlisting}
 
-Depois disso, ajustas:
+\section{Lembrar, explicar e aplicar}
 
-\begin{itemize}[leftmargin=*]
-\item cortas exageros,
-\item adaptas ao calendário real (feriados, semanas mais complicadas),
-\item acrescentas fontes específicas (livros, apontamentos, enunciados).
-\end{itemize}
+Tentar recuperar informação sem olhar para a resposta chama-se \emph{prática de recuperação}. Roediger e Karpicke compararam testes de evocação com releitura de textos. Naquelas experiências, a releitura repetida favoreceu a evocação ao fim de cinco minutos, enquanto a prática de recuperação favoreceu a retenção nos testes mais tardios~\citep{roedigerkarpicke2006}. O intervalo de avaliação mudou o resultado observado. Usa perguntas de memória para praticar, e problemas novos quando queres verificar aplicação.
 
-\begin{checklistbox}{Plano de estudo assistido por IA que não é fantasia}
-Antes de aceitares o plano:
+\begin{promptlabbox}{Treino por camadas}
+\textbf{Objetivo e contexto:} Usar apontamentos autorizados para praticar recuperação, explicação e aplicação. Separa os problemas usados durante o estudo dos que guardas para a verificação.
 
-\begin{itemize}[leftmargin=*]
-\item \textbf{Realismo temporal}: as horas propostas por semana cabem mesmo na tua vida?
-\item \textbf{Cobertura de exame}: cruzaste os tópicos com enunciados reais de anos anteriores?
-\item \textbf{Margem para revisão}: há tempo reservado para rever, ou é só “stuff novo” até à véspera?
-\item \textbf{Prioridades claras}: consegues ver quais são os tópicos críticos vs. “nice to have”?
-\end{itemize}
-\end{checklistbox}
+Cria cartões de resposta curta, uma pergunta em que tenhas de explicar uma regra e dois problemas que usem a regra com dados diferentes. Tenta cada tarefa antes de ver a solução. Repete mais tarde com pelo menos um problema reservado.
 
-\section{Quizzes, flashcards e active recall}
+\textbf{Resultado esperado e validação:} Regista o que resolveste sozinho, o que exigiu uma pista e o que ficou errado. Confirma as respostas com a fonte do curso. Se receberes uma nota de um modelo, pede que identifique o critério e o trecho em causa.
 
-Ler explicações é modo passivo. Para aprender a sério, precisas de \emph{active recall}: tentar lembrar e reconstruir ideias sem olhar para a solução.
-
-LLMs são excelentes a gerar:
-
-\begin{itemize}[leftmargin=*]
-\item questões de escolha múltipla,
-\item perguntas abertas,
-\item flashcards (frente/verso),
-\item variações de perguntas sobre o mesmo conceito.
-\end{itemize}
-
-Padrão prático:
-
-\begin{lstlisting}
-A partir dos apontamentos abaixo, cria:
-
-10 flashcards (frente = pergunta curta, verso = resposta
-curta, em formato tipo "Q: ... / A: ...").
-
-5 perguntas de desenvolvimento que um professor chato
-poderia fazer no exame, com enunciados completos.
-
-[cola apontamentos ou resumo]
-\end{lstlisting}
-
-Idealmente, combinas isto com uma rotina:
-
-\begin{itemize}[leftmargin=*]
-\item usas uma app de flashcards (Anki, etc.) para repetição espaçada,
-\item usas as perguntas de desenvolvimento para simular exame em tempo limitado,
-\item só depois lês as soluções da IA.
-\end{itemize}
-
-\begin{promptlabbox}{Treino por camadas: lembrar \texorpdfstring{$\to$}{->} explicar \texorpdfstring{$\to$}{->} aplicar}
-\textbf{Objetivo e contexto:} Praticar recuperação, explicação e aplicação sobre material de estudo autorizado.
-
-Escolhe um tema concreto. Pede ao modelo:
-
-\begin{enumerate}[leftmargin=*]
-\item Uma lista de 10 perguntas rápidas para testar memória (definições, fórmulas, conceitos).
-\item 5 perguntas para testar compreensão (explicar com as tuas palavras).
-\item 3 problemas para aplicar em situações novas.
-\end{enumerate}
-
-Depois, faz o seguinte:
-
-\begin{itemize}[leftmargin=*]
-\item responde primeiro sem ajuda,
-\item só no fim compara com as respostas do modelo,
-\item pede ao modelo para se focar em corrigir apenas onde estiveste mais fraco.
-\end{itemize}
-
-\textbf{Resultado esperado e validação:} Responde sem ver as soluções e confirma a chave com o material do curso. Regista erros por conceito para repetir mais tarde.
-
-\textbf{Falhas possíveis:} Ler a solução antes de tentar ou memorizar respostas geradas sem confirmar a sua correção.
+\textbf{Falhas possíveis:} Reutilizar o problema de treino na verificação, tomar uma nota simulada por classificação oficial ou memorizar uma resposta que a fonte contradiz.
 \end{promptlabbox}
 
-\section{Simular o professor e o corretor de exames}
+\section{Medir com a ajuda ligada e desligada}
 
-Outra aplicação poderosa: usar a IA para simular:
+Num ensaio em matemática do ensino secundário, Bastani e colegas compararam prática sem assistência, prática com um chat GPT-4 e prática com um tutor que procurava oferecer pistas~\citep{bastani2025}. As duas condições com assistência melhoraram o desempenho durante a prática. Na avaliação posterior sem ferramenta, a condição de chat livre ficou cerca de 17\% abaixo da condição de controlo, em termos relativos. O desenho do tutor mitigou essa diferença, sem ganho demonstrado nessa avaliação. O capítulo~\ref{ch:relacoes} situa o resultado ao lado de outros desenhos pedagógicos.
 
-\begin{itemize}[leftmargin=*]
-\item um professor que faz perguntas orais difíceis,
-\item um corretor a aplicar critérios de avaliação a uma resposta tua.
-\end{itemize}
-
-Padrão de “professor oral”:
-
-\begin{lstlisting}
-Quero que assumes o papel de professor exigente
-na disciplina de [nome].
-
-Vais fazer-me perguntas orais, uma de cada vez.
-
-Começa por perguntas de dificuldade média.
-
-Se eu responder bem, sobe a dificuldade;
-se eu responder mal, desce um pouco.
-
-Dá sempre feedback rápido e uma resposta modelo
-após cada pergunta.
-
-Começa pela primeira pergunta.
-\end{lstlisting}
-
-Padrão de “corretor de exame”:
-
-\begin{lstlisting}
-Vou colar uma pergunta de exame e a minha resposta.
-
-Quero que:
-
-expliques como interpretas o enunciado,
-
-dês uma grelha de correção em tópicos,
-
-atribuas uma nota de 0 a 20, justificando,
-
-digas o que eu teria de melhorar para chegar ao 18+.
-
-[pergunta]
-[resposta tua]
-\end{lstlisting}
-
-\begin{warningboxenv}{O modelo não conhece o professor real}
-A IA não sabe exatamente como o teu professor corrige. Mas pode aproximar-se de uma correção “razoável” baseada em critérios gerais. Não uses a nota que a IA te dá como previsão exata; usa como indicador de pontos fracos.
-\end{warningboxenv}
-
-\section{Limites e riscos de estudar com IA}
-
-O estudo de Bastani e colaboradores distingue prática assistida e avaliação posterior sem ferramenta, com resultados dependentes do desenho do tutor~\citep{bastani2025}. Não mede uma perda cognitiva universal. Há riscos que o desenho pode procurar reduzir:
-
-\begin{itemize}[leftmargin=*]
-\item \textbf{Risco de atalhos}: se usas IA para gerar trabalhos inteiros, estás a sabotar a tua própria aprendizagem. E, em muitos contextos, a violar regras académicas.
-\item \textbf{Risco de dependência}: delegar sempre a resolução pode prejudicar a prática das competências que precisas de adquirir; o efeito depende do desenho e do contexto.
-\item \textbf{Risco de erro confiante}: a IA pode inventar, e se não tens base para verificar, ficas a memorizar coisas erradas.
-\end{itemize}
-
-Contramedidas:
-
-\begin{itemize}[leftmargin=*]
-\item estabelece regras pessoais (“só peço solução depois de tentar X minutos sozinho”),
-\item usa a IA principalmente como explicador, crítico e criador de exercícios,
-\item valida as partes críticas com materiais oficiais e professores.
-\end{itemize}
-
-\begin{keyideabox}{IA como ginásio, não como doping}
-Usa a IA para treinares melhor: mais variação de exercícios, feedback mais rápido, explicações mais ajustadas. Não a uses para “parecer” em forma sem teres feito o treino.
-\end{keyideabox}
+Num curso, decide antes o que queres medir. A prática assistida pode mostrar se o estudante completa uma tarefa com apoio. Uma avaliação posterior com itens reservados mostra quanto consegue resolver sozinho. Para comparar dois métodos, regista dificuldade, tempo, pistas usadas e critério de correção. Um exercício pessoal com dois itens pode indicar o que deves rever. Uma afirmação sobre toda uma turma exige um desenho e dados adequados a essa conclusão.

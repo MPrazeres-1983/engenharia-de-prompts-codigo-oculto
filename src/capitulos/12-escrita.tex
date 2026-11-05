@@ -1,181 +1,74 @@
-\chapter{Escrever Como um Humano (Ou Melhor)}
+\chapter{Escrever com IA sem Perder a Tua Voz}
 \label{ch:escrita}
 
-\section{Ritmo e precisão, sem um detetor imaginário}
-Um texto pode parecer genérico porque repete estruturas, evita exemplos e usa adjetivos em vez de informação. São problemas editoriais observáveis. Não precisamos de os explicar com um «cheiro estatístico» infalível de IA.
+\ficcao A biblioteca do bairro mudou a hora de uma oficina. O primeiro rascunho anunciou uma «experiência imperdível». O segundo garantiu lugar a toda a gente. A nota da organização dizia apenas que a oficina começava às dez e que as inscrições dependiam das vagas. Qual dos avisos deixarias na porta?
 
-\emph{Perplexidade} mede quão improvável é uma sequência segundo um modelo avaliador; depende desse modelo e da tokenização. Um texto humano muito convencional pode ser previsível; um texto gerado com ruído pode ser imprevisível. A expressão \emph{burstiness} é usada informalmente para variação de ritmo, mas não certifica autoria. Estudos mostram dificuldades e compromissos na deteção de texto gerado~\citep{sadasivan2023}; não uses um score como prova isolada de fraude.
+\section{Uma revisão que conserva os factos}
 
-O «muro bege» resolve-se com edição: substitui «otimizar sinergias» por uma ação, identifica quem a executa e mostra um caso. Misturar frases curtas e longas pode ajudar o ritmo; fazê-lo mecanicamente só produz outro tique.
-
-\subsection*{Variar ritmo e densidade}
-Pede frases de comprimento variável quando isso servir a leitura. Dá ao modelo um exemplo do tom desejado e critérios concretos: público, objetivo, detalhe que precisa de aparecer e afirmações que não têm suporte.
-
-\begin{promptlabbox}{Romper o ``muro bege''}
-\textbf{Objetivo e contexto:} Rever um parágrafo sem alterar os factos. Guarda o original e a regra editorial.
-
-Escolhe um parágrafo genérico sobre estudar com IA. Pede uma segunda versão com um exemplo concreto, verbos precisos e sem frases feitas. Mantém os mesmos factos e tamanho aproximado. Lê as duas versões sem os rótulos de origem e assinala qual te ajuda a perceber o que fazer a seguir. Não avalies se «passa num detetor».
-
-\textbf{Resultado esperado e validação:} Avalia clareza, exemplo concreto, precisão e ritmo, idealmente ocultando o rótulo da versão. Não há objetivo de enganar detetores de autoria.
-
-\textbf{Falhas possíveis:} Trocar o conteúdo em vez da redação ou acrescentar erros para simular espontaneidade.
-\end{promptlabbox}
-
-
-\section{Muletas de linguagem que enfraquecem o texto}
-
-Algumas palavras e expressões aparecem em tantos textos gerados por IA que se tornaram bandeiras vermelhas. Exemplos típicos:
-
-\begin{itemize}[leftmargin=*]
-\item “No mundo atual em rápida mudança...”
-\item “No cenário atual...”
-\item “É importante notar que...”
-\item “De forma geral...”
-\item “Por outro lado...”
-\item “Em conclusão...”
-\end{itemize}
-
-Não são proibidas por lei, mas se aparecem em cada parágrafo, o texto ganha aquele odor sintético.
-
-Podes atacar isto de duas formas:
-
-\begin{itemize}[leftmargin=*]
-\item \textbf{Instruções negativas:} “Evita expressões genéricas como...”.
-\item \textbf{Substituições concretas:} pedir explicitamente linguagem mais direta.
-\end{itemize}
-
-Exemplo de ajuste no prompt:
-
-\begin{lstlisting}
-Escreve em português de Portugal.
-Usa um tom direto, como se estivesses a falar com um colega.
-Evita frases feitas como "no cenário atual",
-"num mundo em rápida mudança" e semelhantes.
-\end{lstlisting}
-
-\begin{warningboxenv}{Não tentes esconder IA com floreados}
-Adicionar palavrões, emojis ou gírias só para “parecer humano” é uma má estratégia. O objetivo não é enganar detetores; é produzir texto útil, claro e honesto, mesmo que admitas que usaste IA.
-\end{warningboxenv}
-
-\section{Style transfer e clonagem de voz}
-
-Uma das superpotências dos LLMs é a capacidade de imitar estilos. Para este exercício, usamos textos próprios ou autorizados. Direitos de reprodução, adaptação e uso de materiais dependem da obra e do caso; não se deduzem apenas de o autor estar vivo ou morto. Podemos trabalhar em:
-
-\begin{itemize}[leftmargin=*]
-\item replicar o teu próprio estilo,
-\item adaptar o tom a diferentes públicos,
-\item alinhar com a “voz” da tua organização.
-\end{itemize}
-
-Padrão básico de \emph{style transfer}:
-
-\begin{enumerate}[leftmargin=*]
-\item Forneces um ou mais exemplos do estilo desejado.
-\item Pede ao modelo para os analisar: vocabulário, ritmo, tom, estrutura.
-\item Depois, aplicas esse estilo a novos conteúdos.
-\end{enumerate}
-
-\begin{promptlabbox}{Clonar o teu próprio estilo}
-\textbf{Objetivo e contexto:} Extrair traços de textos teus que possas partilhar, sem dados confidenciais.
-
-\textbf{Passo 1} — Escolhe 2–3 textos teus de que gostes (e-mails, posts, relatórios).
-
-\textbf{Passo 2} — Pede ao modelo:
-
-\begin{lstlisting}
-Analisa o meu estilo nos textos abaixo.
-Quero que descrevas:
-
-tom (formal/informal, direto/indireto)
-
-ritmo (frases curtas/longas, uso de exemplos)
-
-vocabulário (mais técnico, mais coloquial)
-
-estrutura típica (como começas, desenvolves, fechas)
-
-[TEXTO 1]
-[TEXTO 2]
-[...]
-\end{lstlisting}
-
-\textbf{Passo 3} — Depois pede:
-
-\begin{lstlisting}
-Agora escreve um texto curto sobre
-[tema] replicando o estilo descrito acima.
-\end{lstlisting}
-
-Verifica se “soa a ti”. Se não, ajusta o diagnóstico: “usa menos adjetivos”, “não uses metáforas”, etc.
-
-\textbf{Resultado esperado e validação:} Compara o novo texto com critérios de voz e verifica que não copiou factos ou frases inadequadas dos exemplos. Aprova apenas o que reconheces como teu.
-
-\textbf{Falhas possíveis:} Confundir imitação de estilo com autorização para falar em nome de outra pessoa ou copiar dados dos exemplos.
-\end{promptlabbox}
-
-\section{Show, don't tell (também para modelos)}
-
-“Show, don't tell” é conselho clássico de escrita. Em vez de dizer “o produto é inovador”, mostras como é diferente na prática.
-
-Com IA, aplica-se em dois níveis:
-
-\begin{itemize}[leftmargin=*]
-\item \textbf{No conteúdo}: pede exemplos, casos, pequenas histórias.
-\item \textbf{No próprio prompt}: mostra ao modelo exemplos de “mostrar” em vez de “dizer”.
-\end{itemize}
-
-Compare:
+Começa por separar o que o leitor precisa de fazer daquilo que o texto precisa de dizer. No aviso da biblioteca, a pessoa quer saber se ainda pode inscrever-se e a que horas deve chegar. A voz pode ser informal ou institucional. A hora e a condição de acesso continuam a ser as mesmas.
 
 \begin{quote}
 \small
-“Explica a vantagem de usar RAG de forma genérica.”
+\textbf{Nota original do exercício.} Oficina no sábado, às 10h, na biblioteca. Inscrições até quinta-feira, sujeitas a vagas.
+
+\textbf{Aviso possível.} A oficina começa às 10h de sábado, na biblioteca. Podes inscrever-te até quinta-feira, enquanto houver vagas.
 \end{quote}
 
-vs.
+A comparação tem duas passagens. Primeiro confronta dia e hora, local, prazo e condição com a nota. Depois lê o aviso em voz alta e verifica se o pedido fica claro na primeira leitura. Trocar «enquanto houver vagas» por «garante o teu lugar» mudaria o compromisso, mesmo que a frase ficasse mais fluida.
 
-\begin{quote}
-\small
-“Explica a vantagem de usar RAG contando a história de uma empresa que tinha FAQs desatualizadas e passou a usar documentos internos em tempo real. Mostra o antes e o depois.”
-\end{quote}
+\begin{promptlabbox}{Romper o «muro bege»}
+\textbf{Objetivo e contexto:} Rever um parágrafo com os mesmos factos. Usa a nota da oficina acima ou um texto fictício com condições explícitas.
 
-O segundo prompt força o modelo a sair do abstrato e a produzir algo que um humano consegue imaginar.
+Escreve uma versão para um aviso afixado na porta e outra para uma mensagem a quem se quer inscrever. Indica o público e o espaço disponível. Podes fazer as duas versões à mão ou pedir rascunhos a um modelo.
 
-\begin{promptlabbox}{Forçar exemplos concretos}
-\textbf{Objetivo e contexto:} Tornar uma explicação aplicável num domínio conhecido, usando exemplos identificados como fictícios quando inventados.
+\textbf{Resultado esperado e validação:} Sublinha dia e hora, local, prazo e condição na nota. Confere se são recuperáveis em ambas as versões e se cada leitor percebe o próximo passo. Se comparares a legibilidade, oculta qual das versões veio do modelo.
 
-Sempre que pedires recomendações ou explicações, acrescenta:
-
-\medskip
-
-\begin{lstlisting}
-Para cada ideia, dá um exemplo concreto
-em que alguém a aplica no dia a dia.
-\end{lstlisting}
-
-Experimenta numa área tua (por exemplo, estudo, trabalho, gestão de tempo) e compara a utilidade com e sem esse pedido, usando os mesmos factos.
-
-\textbf{Resultado esperado e validação:} Verifica se cada exemplo ilustra realmente a ideia e se permite saber o que fazer. Confirma factos quando forem apresentados como reais.
-
-\textbf{Falhas possíveis:} Inventar estudos de caso, acrescentar números sem base ou aceitar uma história que não demonstra a recomendação.
+\textbf{Falhas possíveis:} Prometer lugar, omitir a condição de disponibilidade ou acrescentar um contacto inexistente.
 \end{promptlabbox}
 
-\section{Checklists e Prompt Labs para escrita natural}
+\section{Passar de frases vagas a ações}
 
-Vamos juntar tudo numa checklist orientada para “texto que podias realmente enviar a alguém”.
+«Vamos potenciar a comunicação» pede ao leitor que adivinhe o que muda. «À segunda-feira, publicamos as datas da semana no quadro da entrada» indica uma ação, um momento e um lugar. Se esses detalhes ainda estiverem por decidir, assinala-os no rascunho e pede confirmação. A revisão que inventa um responsável resolve a frase e cria um problema novo.
 
-\begin{checklistbox}{Escrita assistida por IA que não cheira a IA barata}
-Quando usares IA para escrever algo que assinas tu:
+\begin{lstlisting}
+Revê o texto para o público indicado.
+Mantém datas, valores e condições das notas.
+Assinala cada promessa nova como ponto a confirmar.
+Por fim, indica o que o leitor deve conseguir fazer.
+\end{lstlisting}
 
-\begin{itemize}[leftmargin=*]
-\item \textbf{Clareza de objetivo:} escreveste no prompt para quem é o texto e o que precisa de acontecer depois de o ler?
-\item \textbf{Tom adequado:} definiste se é informal, semi-formal ou formal? Em que contexto (e-mail, relatório, blog)?
-\item \textbf{Estilo desejado:} deste pelo menos um exemplo de texto no estilo certo, ou descreveste o estilo em 3–4 bullets?
-\item \textbf{Anti-jargão:} proibiste clichés e jargão corporativo desnecessário, se o público não for técnico?
-\item \textbf{Exemplos concretos:} pediste explicitamente, no prompt, exemplos práticos ou casos?
-\item \textbf{Revisão humana:} leste o texto em voz alta e ajustaste para soar “teu”?
-\end{itemize}
-\end{checklistbox}
+Podes dar um exemplo do tom que procuras. Descreve o que o torna adequado, como frases de extensão variada, tratamento na segunda pessoa ou explicação de siglas à primeira ocorrência. A escolha de ritmo depende da tarefa. Um aviso de alteração de horário pode terminar quando a hora estiver clara. Um relato pode precisar de uma pausa antes de chegar à resposta.
 
-\begin{keyideabox}{IA escreve o rascunho, tu escreves a versão final}
-O uso mais saudável de IA em escrita não é “clicar e enviar”. É: deixas a IA fazer o rascunho, depois revês factos, estrutura e voz até o texto cumprir o objetivo. Não existe uma percentagem universal de reescrita que transforme um rascunho em boa prosa.
-\end{keyideabox}
+\section{Descrever uma voz com exemplos próprios}
+
+Para adaptar o texto a públicos diferentes, usa amostras tuas ou materiais que possas utilizar. Pede uma descrição de traços concretos e testa-os num assunto novo. Na versão final, verifica se os exemplos deixaram marcas que pertenciam à situação anterior, como uma morada, um nome ou uma piada que só fazia sentido naquela conversa.
+
+\begin{promptlabbox}{Descrever e testar a tua voz}
+\textbf{Objetivo e contexto:} Extrair traços de dois textos teus que possas partilhar e aplicá-los a um terceiro assunto.
+
+Pede uma ficha com tom, ritmo, vocabulário e estrutura. Escolhe três traços que reconheças e dá ao modelo uma nota factual diferente das amostras. Pede um rascunho e lê-o em voz alta. Se preferires trabalhar sem modelo, usa a ficha como guião para a tua própria revisão.
+
+\textbf{Resultado esperado e validação:} O novo texto cumpre o objetivo e conserva os factos da nota. Localiza um exemplo de cada traço que escolheste e verifica se as amostras não lhe emprestaram factos ou frases inadequadas.
+
+\textbf{Falhas possíveis:} Descrever a voz só com adjetivos genéricos, copiar dados de uma amostra ou interpretar semelhança como autorização para falar por outra pessoa.
+\end{promptlabbox}
+
+\section{Exemplos que deixam ver o mecanismo}
+
+A expressão inglesa \emph{show, don't tell} recomenda mostrar uma consequência concreta. Para explicar pesquisa documental, podes acompanhar uma pessoa que encontra duas instruções contraditórias e precisa de verificar qual está em vigor. Identifica a cena como fictícia. Para descrever um caso real, localiza os documentos, a data e o resultado observado. Os dois textos podem ter a mesma estrutura narrativa e exigir tipos diferentes de verificação.
+
+\begin{promptlabbox}{Testar se um exemplo ajuda a agir}
+\textbf{Objetivo e contexto:} Comparar duas explicações do mesmo conceito, com factos e extensão semelhantes.
+
+Escolhe um procedimento que conheças. Numa versão, explica-o sem exemplo. Na outra, acompanha uma pessoa numa situação fictícia em que tenha de aplicar a regra. Dá a um leitor uma situação diferente e pergunta que passo faria primeiro.
+
+\textbf{Resultado esperado e validação:} A resposta do leitor indica se conseguiu aplicar a explicação ao caso novo. Regista também o que o confundiu. Uma avaliação informal informa esta revisão, com alcance limitado à tarefa e aos leitores envolvidos.
+
+\textbf{Falhas possíveis:} Acrescentar números sem fonte, transformar o exemplo num testemunho real ou escolher só situações que favorecem uma das versões.
+\end{promptlabbox}
+
+\section{Estilo, proveniência e decisões editoriais}
+
+A \emph{perplexidade} exprime quão previsível é um texto segundo um modelo avaliador e a sua tokenização. O termo \emph{burstiness} é usado informalmente para descrever variação de ritmo. Um texto convencional de uma pessoa pode ser previsível. Sadasivan e colegas observaram quedas na deteção para vários detetores quando aplicaram paráfrases aos textos do estudo~\citep{sadasivan2023}. Se estiver em causa a autoria, considera o histórico de trabalho, as fontes e as regras do contexto. Um valor calculado sobre o texto é uma evidência parcial.
+
+Para aprovar uma peça, regista a fonte dos factos, a condição que precisa de sobreviver à revisão e quem pode assumir o compromisso. Na comunicação profissional, a mesma revisão estende-se a decisões, responsáveis e prazos. O capítulo~\ref{ch:negocios} mostra onde cada um deve aparecer.
