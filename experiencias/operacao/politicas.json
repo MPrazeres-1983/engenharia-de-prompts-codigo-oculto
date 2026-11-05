@@ -1,0 +1,4 @@
+{
+  "anterior": {"documento": "devolucoes", "versao": "v1", "dias_uteis": 10},
+  "vigente": {"documento": "devolucoes", "versao": "v2", "dias_uteis": 5}
+}

@@ -1,38 +1,11 @@
 \chapter{LLMOps para Prompts e Sistemas de Produção}
 \label{ch:llmops}
 
-\section{De “brincar no chat” a operar em produção}
+\ficcao A Lavandaria encurtou o prazo de devolução de dez para cinco dias úteis. A política foi publicada. O sistema continuou a responder «dez». Tinha cumprido todos os testes de formato, incluindo aquele que verificava se o prazo era um número. Era, de facto, um número.
 
-Há uma diferença grande entre:
+Se a resposta saiu num chat de experiências, podemos corrigir o pedido e repetir. Num serviço em produção, precisamos de saber quem recebeu a resposta, que fonte a sustentou e como parar a divulgação do prazo antigo. Chamamos \textbf{LLMOps} ao trabalho de testar, lançar, observar e recuperar sistemas que integram modelos de linguagem. Inclui o prompt, a aplicação, os dados e as pessoas com autoridade para intervir.
 
-\begin{itemize}[leftmargin=*]
-\item tu, ao fim do dia, a experimentar prompts num chat;
-\item uma aplicação de produção que atende milhares de utilizadores com um SLA.
-\end{itemize}
-
-No primeiro caso, quando algo corre mal:
-
-\begin{itemize}[leftmargin=*]
-\item dás um suspiro,
-\item corriges o prompt,
-\item segues a tua vida.
-\end{itemize}
-
-No segundo, quando algo corre mal:
-
-\begin{itemize}[leftmargin=*]
-\item há clientes zangados,
-\item métricas de negócio a descer,
-\item equipas de suporte sobrecarregadas,
-\item possivelmente riscos legais.
-\end{itemize}
-
-Aí entra \textbf{LLMOps} para prompts: aplicar disciplinas de DevOps/MLOps à vida inteira dos prompts e das integrações com LLMs.
-
-\begin{keyideabox}{Prompts de produção são “infraestrutura lógica”}
-Não são posts-it colados numa UI de fornecedor.
-São parte da infraestrutura: precisam de controlo de versões, testes, monitorização, owners, processos de mudança.
-\end{keyideabox}
+Começa por guardar as versões que permitem reconstruir uma resposta. Um prompt num ficheiro versionado ajuda. Neste incidente, precisaremos também de saber qual era a política em vigor e qual foi usada pela aplicação.
 
 \section{Ciclo de vida de um prompt em produção}
 
@@ -361,3 +334,35 @@ Calcula custo de chamadas, ferramentas, infraestrutura e revisão humana por tar
 Uma cache de respostas ou documentos deve incluir o âmbito de autorização, versão da fonte e prazo de validade. Se um cliente deixa de ter acesso a um documento, uma resposta antiga em cache não pode contornar essa revogação. Nunca uses uma cache partilhada como memória informal entre clientes.
 
 Pseudonimizar reduz associação direta, mas os dados continuam pessoais quando podem ser reatribuídos. Regista por defeito identificadores técnicos e métricas; conserva texto bruto apenas quando necessário, com acesso, fundamento e retenção definidos. Para reproduzir incidentes, guarda uma amostra controlada, não um arquivo ilimitado de conversas~\citep{rgpd2016}.
+
+\section{O incidente dos cinco dias}
+\textbf{Ensaio executado.} O simulador local começa com a política fictícia \texttt{v1}, de dez dias úteis. A aplicação guarda-a na cache com a chave \texttt{devolucoes}. Quando entra em vigor a \texttt{v2}, de cinco dias, o nome do documento continua igual. A cache encontra a entrada antiga. A proposta contém todos os campos e o prazo continua a ser um inteiro positivo.
+
+A sonda de teste representa um \emph{canário}, um pedido controlado que permite detetar a regressão antes de expor a resposta. Compara documento, versão e SHA-256 com a política vigente, obtida fora da cache. Confere também o prazo. Com a \texttt{v2} ativa, a sonda encontra uma proposta \texttt{v1} de dez dias. O simulador devolve o estado de encaminhamento sem enviar o prazo ao utilizador.
+
+\begin{table}[htbp]
+\small
+\begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}p{.19\textwidth}>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}X@{}}
+\toprule
+Etapa & Versão vigente & Proposta & Decisão \\
+\midrule
+Base & v1, 10 dias úteis & v1, 10 dias úteis & Validada \\
+Falha injetada & v2, 5 dias úteis & v1, 10 dias úteis & Encaminhada, sem prazo \\
+Recuperação & v2, 5 dias úteis & v2, 5 dias úteis & Validada \\
+\bottomrule
+\end{tabularx}
+\caption{Três etapas do ensaio sintético de cache. A proposta antiga está visível apenas no registo da sonda.}
+\label{tab:incidente-cache}
+\end{table}
+
+A recuperação usa uma chave composta pelo documento e pela versão. A entrada anterior pode continuar na cache durante o ensaio. A consulta da \texttt{v2} vai buscar o prazo certo e o canário volta a aprová-lo. Num serviço, o responsável pode suspender o fluxo ou reverter o código defeituoso enquanto mantém em vigor a política decidida pelo negócio. O registo da simulação inclui os hashes e os estados para que possamos verificar qual das duas versões foi aplicada.
+
+\begin{promptlabbox}{Reproduzir, conter e recuperar um incidente de cache}
+\textbf{Objetivo e contexto:} reproduzir os três estados da tabela~\ref{tab:incidente-cache}. Requisitos: Python 3.10+ e biblioteca padrão. Os dados são sintéticos e a execução tem zero chamadas a modelos.
+
+\textbf{Procedimento:} na raiz do projeto, executa \nolinkurl{python3 -m exemplos.laboratorio.operacao}. Compara a saída com \nolinkurl{experiencias/operacao/resultado.json}. Segue no código as chaves da cache e a comparação com a política vigente.
+
+\textbf{Resultado esperado e validação:} a proposta antiga passa a verificação estrutural e é encaminhada sem prazo. Depois da correção, o teste confirma versão \texttt{v2}, hash correspondente e cinco dias úteis. Experimenta propor dez dias com os identificadores da versão certa. A verificação do prazo deve travar também essa proposta.
+
+\textbf{Falhas possíveis:} validar só o JSON, ler a versão de referência a partir da mesma cache ou restaurar o prazo antigo quando se reverte uma mudança de software.
+\end{promptlabbox}

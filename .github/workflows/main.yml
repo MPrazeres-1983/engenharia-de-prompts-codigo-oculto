@@ -47,6 +47,7 @@ jobs:
           python3 -m exemplos.laboratorio.adaptacao | tee build/adaptacao.json
           python3 -m exemplos.laboratorio.skills | tee build/skill.json
           python3 -m exemplos.laboratorio.equipas | tee build/controlador.json
+          python3 -m exemplos.laboratorio.operacao | tee build/incidente-cache.json
           python3 experiencias/equipas/offline.py --verificar | tee build/equipas-offline.json
           python3 -m compileall -q exemplos scripts tests experiencias
 
