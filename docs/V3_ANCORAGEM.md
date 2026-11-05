@@ -36,8 +36,8 @@ Os números são prefixos dos ficheiros, de acordo com `V3_ESTRUTURA.json`. A re
 
 | Lote | Ficheiros | Foco |
 |---|---|---|
-| A | 02, 03, 04, 05, 10, 11, 17, 34 | Conversa, especificação, contexto e revisão |
-| B | 12, 13, 14, 15, 16, 18, 19, 35, 36, 37 | Escrita, aprendizagem, criação e prática. Integra H1 |
+| A | 02, 03, 04, 05, 10, 11, 17, 34 | Revisto. Entrada com um pedido, comparação com as mesmas fontes, casos reservados, autoridade, cálculo verificável e descodificação JSON |
+| B | 12, 13, 14, 15, 16, 18, 19, 35, 36, 37 | 35 e 36 revistos em H1. Faltam os oito restantes, de escrita, aprendizagem, criação e prática |
 | C | 06, 08, 09 | Mecanismo, unidades e modalidades |
 | D | 20, 21, 22, 23, 24, 40 | Construção, fontes, autoridade e interoperabilidade |
 | E | 25, 26, 27, 28 | Avaliação, segurança e operação. Integra H3 |
@@ -58,6 +58,8 @@ Os números são prefixos dos ficheiros, de acordo com `V3_ESTRUTURA.json`. A re
 | H1 | Entregue em `exemplos/atelier` e integrado nos capítulos 35, 36 e 49. Cartaz e guião A4, curta muda H.264 de 15 s com 360 fotogramas. Três amostras e seis fotogramas de fronteira revistos. Espaçamento do guião corrigido com fontes incorporadas. A montagem usa FFmpeg e uma ilustração original gerada | Integrar no PDF final em H5. A comparação com espectadores é uma extensão |
 | H2 | Caso SyRI escrito no capítulo 45. Decisão de 05-02-2020, parágrafos verificados, referência `syri2020` e comunicado identificados no registo de fontes | Conferir citações em H5. O texto distingue sinalização de sanção e aplica perguntas de desenho a um cenário próprio |
 | H3 | Ensaio executado em `experiencias/operacao` e laboratório no capítulo 27. Com v2 vigente, v1 passa a forma, é encaminhada sem prazo e a cache por versão recupera v2. Seis testes específicos aprovados | Confirmar a suíte completa e o novo laboratório no PDF em H5 |
+
+| H4-A | Oito capítulos revistos, de 02 a 34 pelos prefixos do lote A. Retomada a reclamação dos seis pares para ligar instrução, testes, evidência e estrutura. Corrigidos os exemplos de avaliação e de JSON | Rever lote E e registar os restantes capítulos para retoma |
 
 ## Dependências pendentes de outros ensaios
 

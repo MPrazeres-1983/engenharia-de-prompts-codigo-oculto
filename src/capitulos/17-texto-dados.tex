@@ -1,46 +1,12 @@
 \chapter{Texto \texorpdfstring{$\to$}{->} Dados: JSON, Esquemas e ETL Orientado a Prompts}
 \label{ch:texto-dados}
 
-\section{Porquê transformar texto em dados antes de fazer ``magia''}
+O apoio ao cliente da Lavandaria recebe «A máquina ficou com a minha meia. E a fatura ainda não chegou.» Para responder, podes ler a mensagem inteira. Para contar os assuntos do mês, precisas de identificar os dois pedidos e guardar os campos que permitem somá-los.
 
-Muita gente usa LLM para escrever textos bonitos sobre dados. O caminho mais poderoso é o inverso:
+\section{Escolher os campos antes de pedir a extração}
+Começa por escrever à mão a saída de dois ou três casos. Que campo pode ficar vazio? A categoria é escolhida de uma lista ou pode ser texto livre? Um esquema descreve a estrutura que aceitamos, incluindo os tipos e os valores admitidos.
 
-\begin{enumerate}[leftmargin=*]
-\item pegar em texto ruidoso (e-mails, relatórios, logs, contratos),
-\item extrair dados estruturados (campos, etiquetas, relações),
-\item só depois fazer análise, dashboards, automação.
-\end{enumerate}
-
-Ou seja: primeiro \emph{ETL com LLM}, depois o resto.
-
-Porquê?
-
-\begin{itemize}[leftmargin=*]
-\item Dados estruturados são fáceis de validar, armazenar, consultar.
-\item Conseguem ser combinados com ferramentas clássicas (SQL, pandas, BI).
-\item Torna-se possível monitorizar qualidade, fazer estatísticas, testar regressões.
-\end{itemize}
-
-Enquanto o texto estiver em modo “muro”, tudo é improviso. A partir do momento em que tens colunas, tipos e constraints, entra em jogo a engenharia de dados.
-
-\begin{keyideabox}{Primeiro estrutura, depois encanta}
-Se tens uma tarefa recorrente com textos, o fluxo saudável é:
-texto bruto  \(\to\) extração estruturada \(\to\) análise / decisão.
-Saltar o passo intermédio é pedir à IA que faça de tudo ao mesmo tempo.
-\end{keyideabox}
-
-\section{Schema-first: começar pelo modelo de dados, não pelo prompt bonito}
-
-O erro clássico é começar com:
-
-\begin{quote}
-\small
-“Lê este e-mail e diz-me o que é importante.”
-\end{quote}
-
-Isto é simpático, mas impossível de automatizar. Não há colunas, não há tipos, não há nada.
-
-Em vez disso, pensa em \emph{schema-first}: decides primeiro que dados queres, em formato quase de tabela ou JSON, e \emph{só depois} escreves o prompt.
+ETL significa extrair, transformar e carregar dados. Num processo de apoio, podes ler a mensagem, convertê-la num objeto com campos e carregar os registos validados num sistema de trabalho. Um modelo pode ajudar na extração quando a informação está em linguagem livre. Para converter uma data já estruturada ou somar casos, usa a regra ou a consulta que consegues testar.
 
 Exemplo: gerir pedidos de suporte por e-mail. Em vez de “resumir”, defines:
 
@@ -53,7 +19,7 @@ Exemplo: gerir pedidos de suporte por e-mail. Em vez de “resumir”, defines:
 \item \texttt{sentimento} (enum: “negativo”, “neutro”, “positivo”).
 \end{itemize}
 
-Depois escreves o prompt para extrair \emph{apenas} isto.
+Pede apenas os campos necessários à decisão. Se extraíres um identificador de cliente da mensagem, confirma-o com os registos autorizados antes de o usar para ligar uma reclamação a uma conta.
 
 \begin{promptlabbox}{Definir schema antes de pedir extração}
 \textbf{Objetivo e contexto:} Escolher campos de extração para três a cinco textos fictícios e criar referências manuais.
@@ -93,28 +59,9 @@ Aplica aos mesmos três a cinco textos fictícios ou autorizados e verifica se o
 
 \section{JSON como contrato de saída}
 
-JSON tornou-se a língua franca para integração com LLMs. Tem algumas vantagens óbvias:
+JSON representa dados como texto. Um objeto junta pares de nome e valor entre chavetas. Uma lista agrupa valores entre parênteses retos. O texto fica entre aspas duplas. Valores como \texttt{true}, \texttt{false} e \texttt{null} têm significado próprio no formato~\citep{rfc8259}.
 
-\begin{itemize}[leftmargin=*]
-\item é legível por humanos,
-\item é fácil de parsear em praticamente qualquer linguagem,
-\item é flexível o suficiente para listas, objetos aninhados, etc.
-\end{itemize}
-
-Mas há dois problemas comuns:
-
-\begin{itemize}[leftmargin=*]
-\item o modelo mistura explicações com o JSON,
-\item o JSON vem mal-formado (vírgulas a mais, aspas em falta, etc.).
-\end{itemize}
-
-Para minimizar isto, convém:
-
-\begin{itemize}[leftmargin=*]
-\item especificar claramente “devolve APENAS JSON”,
-\item mostrar um exemplo concreto de JSON válido,
-\item evitar comentários dentro do próprio JSON (o modelo adora inventá-los).
-\end{itemize}
+Um exemplo de saída ajuda a mostrar a forma. Ao receber o resultado, o programa tenta lê-lo, verifica os campos e aplica as regras do domínio. Se o modelo escrever «Aqui está» antes do objeto, o ficheiro completo pode falhar no primeiro passo.
 
 \begin{promptlabbox}{Forçar JSON limpo}
 \textbf{Objetivo e contexto:} Separar pedido de JSON e validação. Usa as mesmas mensagens fictícias e um esquema explícito.
@@ -151,12 +98,12 @@ O bloco é uma instância concreta; as opções admitidas devem ser definidas nu
 
 \textbf{Resultado esperado e validação:} Executa parsing local e valida o esquema, incluindo campos extra e ausência de obrigatórios. Regista respostas vazias, recusas e interrupções.
 
-\textbf{Falhas possíveis:} Usar true/false como valor JSON, enviar dados privados para validadores públicos ou ignorar validade semântica.
+\textbf{Falhas possíveis:} Usar \texttt{True} ou \texttt{False}, com maiúscula, em JSON, enviar dados privados para validadores públicos ou ignorar validade semântica.
 \end{promptlabbox}
 
 \section{Lidar com incerteza e campos em falta}
 
-Texto pode ser irregular e ambíguo. Nem sempre o e-mail vai dizer claramente a urgência ou o tipo de problema. Se obrigares o modelo a escolher sempre algum valor, ele vai inventar.
+Texto pode ser irregular e ambíguo. Nem sempre o e-mail vai dizer claramente a urgência ou o tipo de problema. Se o esquema exigir uma categoria mesmo quando falta informação, uma saída pode cumprir a forma com um palpite.
 
 Em vez disso, podes:
 
@@ -166,7 +113,7 @@ Em vez disso, podes:
 \item pedir um excerto de evidência e permitir encaminhamento humano.
 \end{itemize}
 
-Exemplo de instância com informação ausente, a validar por um esquema que admita estes valores:
+Um esquema pode exigir o campo \texttt{evidencia} e admitir \texttt{null} para indicar que falta suporte. Se o campo estiver ausente, temos outro estado. Combina esses significados antes de automatizar a decisão. O objeto seguinte mostra uma instância que o esquema teria de admitir.
 
 \begin{lstlisting}
 {
@@ -264,8 +211,16 @@ Quanto mais preguiça tiveres a escrever critérios no prompt, mais trabalho vai
 
 \section{Validade sintática, estrutural e semântica}
 \label{sec:validacao-json}
-\texttt{json.loads} verifica a sintaxe. JSON Schema verifica estrutura e restrições declaradas~\citep{jsonschema2020}. Nenhum deles confirma que a reclamação pertence ao cliente, que uma data é verdadeira ou que o excerto sustenta a categoria. Essas verificações pertencem ao domínio e à autorização.
+O primeiro passo é descodificar o texto. O RFC~8259 exclui \texttt{NaN} e recomenda nomes únicos em cada objeto. Por omissão, o módulo \texttt{json} do Python aceita \texttt{NaN} e conserva o último valor de um nome repetido~\citep{rfc8259,pythonjson312}. Verificámos este exemplo em Python 3.12.14.
+
+\begin{lstlisting}
+>>> import json
+>>> json.loads('{"prazo": 10, "prazo": 5}')
+{'prazo': 5}
+\end{lstlisting}
+
+Se a regra exigir rejeitar duplicados, verifica-os no descodificador com \nolinkurl{object_pairs_hook}, quando os dois pares ainda existem. Para constantes numéricas fora do RFC, podes rejeitá-las com \texttt{parse\_constant}. Depois de o texto passar esse ponto, JSON Schema verifica os tipos e as restrições declaradas~\citep{jsonschema2020}. A aplicação ainda tem de verificar se o prazo corresponde à política e se a reclamação pertence ao cliente autorizado.
 
 Algumas APIs oferecem saídas condicionadas por esquema~\citep{structured2026}. É uma capacidade útil, com subconjuntos de esquema e condições próprias do serviço. Não confundas «JSON mode», conformidade com esquema e correção factual. Trata recusas e gerações incompletas como estados explícitos.
 
-Na Lavandaria, uma reclamação passa por três portas: objeto bem formado; campos admitidos; evidência e regras do caso. Só depois pode alimentar uma ação. O contrato executável do capítulo~\ref{ch:lavandaria} permite testar essas portas sem chamar um modelo.
+No incidente do capítulo~\ref{ch:llmops}, o prazo antigo passa a verificação de forma. É a comparação com a política em vigor que impede a resposta. A seguir vamos trabalhar com textos que pedem ainda outra revisão, a da voz e da intenção de quem os escreve.

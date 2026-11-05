@@ -3,7 +3,7 @@
 
 «Pensa passo a passo» tornou-se uma espécie de chave de fendas universal. O problema é que nem todas as tarefas têm parafusos. E escrever uma explicação longa não garante que a resposta esteja certa.
 
-Precisamos de separar três coisas: técnicas de prompting que pedem passos intermédios; modelos treinados para tarefas de raciocínio; e sistemas que usam procura, verificadores ou ferramentas durante a inferência. Podem combinar-se, mas não são sinónimos.
+Há três formas de pedir ou obter mais trabalho. Podemos alterar o pedido para obter um cálculo verificável, escolher um modelo treinado para resolver certas tarefas ou ligar o modelo a um programa que procura e verifica soluções. Convém saber qual mudou quando comparamos resultados.
 
 \section{O que os estudos de CoT mostraram}
 Wei e colaboradores estudaram \emph{chain-of-thought} (CoT) com exemplos que incluíam passos de resolução antes da resposta~\citep{wei2022}. Observaram ganhos em certas tarefas e modelos de escala suficiente. Kojima e colaboradores estudaram instruções do tipo «let's think step by step» sem demonstrações de resolução~\citep{kojima2022}. São resultados experimentais, não um certificado de melhoria em todas as perguntas.
@@ -34,7 +34,9 @@ Resolve o problema e apresenta:
 Se faltar informacao, identifica-a sem a inventar.
 \end{lstlisting}
 
-Para aritmética, confirma com código ou cálculo independente. Para programação, executa testes. Para decisões documentais, confronta as fontes. Pedir «verifica» sem lhe dar um sinal novo é mais uma geração, não um verificador independente.
+\ficcao A reclamação dos seis pares permite um cálculo condicional. Se as duas contagens estiverem certas e forem pares completos, entraram $6 \times 2 = 12$ peças e saíram $5 \times 2 = 10$. A diferença é de duas peças. Para concluir o que aconteceu, falta confirmar as contagens e consultar o registo. O cálculo resolve uma parte do problema e indica precisamente onde procurar a próxima pista.
+
+Para aritmética, confirma com código ou uma conta independente. Para programação, executa testes. Para decisões documentais, confronta as fontes. Se pedires uma revisão sem dar informação nova, o modelo pode repetir o mesmo erro.
 
 \begin{promptlabbox}{Adicionar CoT a um problema de palavras}
 \textbf{Objetivo e contexto:} medir se uma instrução de resolução altera acerto numa pequena tarefa. Usa problemas com resposta calculável: uma viagem das 10h às 13h dura três horas; uma das 23h às 01h do dia seguinte dura duas.
@@ -59,8 +61,8 @@ Exemplos podem ensinar a distinguir uma exceção de um caso normal. Na Lavandar
 \textbf{Falhas possíveis:} exemplos contraditórios, usar todos os casos no prompt, ou acreditar que explicar uma política a faz cumprir no servidor.
 \end{promptlabbox}
 
-\section{Tree of Thoughts é procura, não três parágrafos}
-ToT, de Yao e colaboradores, explora estados intermédios, avalia candidatos e escolhe caminhos com procura e possibilidade de regressar a alternativas~\citep{yao2023tot}. Um pedido para «dar três abordagens» é comparação estruturada; não implementa sozinho o algoritmo estudado.
+\section{Tree of Thoughts e a procura de caminhos}
+ToT, de Yao e colaboradores, explora estados intermédios, avalia candidatos e escolhe caminhos com procura e possibilidade de regressar a alternativas~\citep{yao2023tot}. Pedir três abordagens dá três candidatas para comparar. Para obter a procura estudada, é preciso representar estados, escolher os que se expandem e poder regressar a outra alternativa.
 
 Numa implementação externa, podes representar um estado, gerar sucessores, pontuá-los, limitar a largura e a profundidade e testar uma condição final. A pontuação pode usar o modelo, regras ou verificadores. Os erros da avaliação de estados também podem eliminar um caminho correto.
 
@@ -84,4 +86,4 @@ O protocolo experimental mínimo compara uma chamada com várias chamadas no mes
 \section{Escolher o mecanismo pelo sinal de erro}
 Se a dificuldade é falta de informação, procura a fonte. Se é cálculo, chama uma ferramenta. Se há vários caminhos com estados verificáveis, considera procura. Se o resultado varia entre amostras, uma agregação pode merecer teste. Se o problema é uma regra não autorizada, resolve-o na aplicação.
 
-Não há medalha para o pipeline com mais passos. Há um trabalho a concluir com correção suficiente, custo aceitável e limites que alguém consegue explicar. O próximo capítulo trata precisamente da diferença entre rever uma resposta e verificar um resultado.
+Se a dúvida é sobre a conta, usa o cálculo. Se é sobre o que entrou, pede o talão. O capítulo seguinte acompanha um rascunho que já passou por uma revisão e ainda tem um número por confirmar.

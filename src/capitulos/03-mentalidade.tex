@@ -1,27 +1,13 @@
 \chapter{Mentalidade de Engenheiro de Prompts}
 \label{ch:mentalidade}
-Uma API (\emph{application programming interface}) é uma interface que permite a programas comunicar com outros componentes. Podes fazer os primeiros exercícios num chat; os exemplos de API são a versão programática da mesma ideia. Quando falarmos em JSON, referimo-nos a um formato de dados com campos e valores, explicado em detalhe no capítulo~\ref{ch:texto-dados}.
+Um colega pede-te o prompt que usaste ontem. Tens o texto, mas já não tens a mensagem original nem sabes qual das quatro respostas foi enviada. Conseguirias repetir o teste? Guardar só a frase que escrevemos é como anotar a receita e deitar fora a lista de ingredientes.
 
-As designações \emph{system prompt} e \emph{user prompt} distinguem, de forma simplificada, regras da aplicação e pedido do utilizador. Nem todas as interfaces permitem editar ambos. O capítulo~\ref{ch:personas} explica os papéis e a sua hierarquia; aqui basta separar a regra reutilizável dos dados de cada tarefa.
+\section{Tratar o pedido como uma especificação}
+Para uma tarefa que se repete, identifica a entrada, a saída e os critérios de aceitação. Numa resposta da Lavandaria, a entrada contém a reclamação e a política. A saída é um rascunho que alguém pode rever. Pedir o talão e preservar a dúvida sobre a causa são critérios que outra pessoa consegue verificar.
 
-\section{Prompt como código, não como pedido de favor}
+A comparação com código ajuda na disciplina. Guarda versões e casos de teste, anota erros que consegues reproduzir e regista por que mudaste o pedido. Ao executar código, a linguagem define operações precisas. Num modelo de linguagem, a resposta depende do modelo, do contexto e da configuração. A especificação diz o que aceitamos da saída. Os testes mostram como se comportou nos exemplos avaliados.
 
-Muita gente usa LLMs como se estivesse a pedir um favor a um amigo culto:
-
-\begin{quote}
-\small
-“Olha, se não for muito incómodo, podias escrever-me um relatóriozito sobre…”
-\end{quote}
-
-Isso pode funcionar para uma vez ou outra. Mas se queres algo repetível, controlável e integrável em sistemas, tens de começar a pensar no prompt como \emph{código}:
-
-\begin{itemize}[leftmargin=*]
-\item Tem \emph{especificações}: o que entra, o que sai, que opções existem.
-\item Tem \emph{versões}: v1, v1.1, v2.0, com mudanças registadas.
-\item Pode ter \emph{bugs}: comportamentos inesperados que tens de reproduzir e corrigir.
-\end{itemize}
-
-A analogia com código ajuda a organizar versões e testes. Tem um limite: a linguagem natural não define uma semântica de execução rigorosa. Um prompt bem especificado continua a precisar de validação externa.
+Podes fazer este percurso num chat. Uma API, ou interface de programação, permite que um programa envie pedidos e leia respostas. Quando a aplicação distingue regras reutilizáveis de pedidos individuais, podes guardar cada parte separadamente. O capítulo~\ref{ch:personas} explica como esses papéis variam entre serviços.
 
 \begin{promptlabbox}{Reescrever um pedido solto como “função”}
 \textbf{Objetivo e contexto:} Tornar verificável um pedido de resumo. Usa um texto fictício ou autorizado e define os factos essenciais.
@@ -60,9 +46,7 @@ Depois, transforma isto em system prompt + user prompt e compara o resultado com
 \textbf{Falhas possíveis:} Não fornecer o texto, alterar o público entre condições ou presumir que um formato de função cria execução determinística.
 \end{promptlabbox}
 
-\section{Erros típicos do utilizador comum}
-
-Antes de construirmos coisas avançadas, vale a pena listar os pecados básicos que vemos todos os dias.
+\section{Quatro maneiras de perder o controlo da tarefa}
 
 \subsection*{1. Prompt Google}
 
@@ -73,7 +57,7 @@ Escrever perguntas como se o modelo fosse um motor de pesquisa:
 “melhor framework frontend 2025”
 \end{quote}
 
-Sem contexto, sem finalidade, sem critérios. O resultado é uma resposta genérica tipo blog de tecnologia.
+A pergunta omite o tipo de aplicação, a equipa e os critérios de escolha. Antes de procurar nomes, decide que informação te permitiria compará-los.
 
 \subsection*{2. Pedido multi-tudo sem estrutura}
 
@@ -84,7 +68,7 @@ Misturar tarefas diferentes numa sopa única:
 “Explica-me o que é RAG, compara com fine-tuning, dá exemplos em Python e depois faz um plano de implementação para a minha empresa (somos uma PME de logística) e já agora sugere KPIs.”
 \end{quote}
 
-O modelo até pode tentar, mas tu abdicaste de qualquer controlo de prioridades, formato e profundidade.
+Começa por perceber a arquitetura do teu caso. Só depois passa ao exemplo de código e ao plano. Assim podes corrigir um pressuposto antes de ele se espalhar pelas cinco tarefas.
 
 \subsection*{3. Falta de exemplos quando o formato importa}
 
@@ -92,25 +76,14 @@ Pedir algo complexo sem mostrar um exemplo:
 
 \begin{quote}
 \small
-“Transforma estes e-mails em uma tabela com colunas úteis.”
+“Organiza estes e-mails numa tabela com colunas úteis.”
 \end{quote}
 
 Colunas “úteis” para quem? Com que nomes? Com que tipos de dados? Um exemplo de input-output aqui vale ouro.
 
 \subsection*{4. Confiança cega}
 
-Aceitar a primeira resposta como verdade absoluta, sem:
-
-\begin{itemize}[leftmargin=*]
-\item pedir justificação,
-\item pedir fontes,
-\item testar com exemplos adicionais,
-\item comparar com outros modelos ou ferramentas.
-\end{itemize}
-
-\begin{warningboxenv}{O LLM não é o teu “eu ideal”}
-O modelo não é uma versão mais inteligente de ti. É outro sistema, com outros erros, enviesamentos e limitações. Se o tratares como “voz interior infalível”, estás a juntar os teus erros aos dele.
-\end{warningboxenv}
+Se a resposta contém um valor, localiza o registo que o sustenta. Se apresenta uma referência, abre a fonte e verifica se ela diz aquilo que a frase afirma. Outra resposta parecida do mesmo modelo pode repetir o erro inicial.
 
 \section{Ciclo básico: protótipo \texorpdfstring{$\to$}{->} teste \texorpdfstring{$\to$}{->} refinamento \texorpdfstring{$\to$}{->} versão estável}
 
@@ -126,9 +99,9 @@ Escreve a tua melhor tentativa inicial. Não te preocupes com perfeição; preoc
 \item Indica restrições básicas (comprimento, tom, formato).
 \end{itemize}
 
-\subsection*{2. Teste com casos reais}
+\subsection*{2. Teste com casos representativos}
 
-Aplica o prompt a exemplos de verdade, não só ao que tinhas na cabeça. Inclui:
+Aplica o pedido a casos fictícios realistas ou a dados cuja utilização esteja autorizada. Inclui:
 
 \begin{itemize}[leftmargin=*]
 \item casos fáceis,
@@ -150,7 +123,7 @@ Depois, ajusta o prompt como ajustarias código após um bug report.
 
 \subsection*{4. Normalização}
 
-Quando tiveres um prompt que funciona consistentemente bem:
+Quando a versão cumprir os critérios dos testes definidos, guarda uma referência para voltar a ela.
 
 \begin{itemize}[leftmargin=*]
 \item Dá-lhe um nome (“Resumo-Executivo-v1.2”).
@@ -171,8 +144,8 @@ Passos:
 
 \begin{enumerate}[leftmargin=*]
 \item Escreve um prompt protótipo com papel, input e output.
-\item Recolhe 5 exemplos reais e testa.
-\item Para cada falha, ajusta o prompt e anota o motivo; reserva outros exemplos para avaliar a nova versão.
+\item Testa com cinco casos fictícios representativos ou autorizados.
+\item Para cada falha, guarda a entrada e a razão da alteração. Avalia a nova versão em casos reservados antes de começar.
 \item Quando estiveres satisfeito, dá um nome de versão e guarda.
 \end{enumerate}
 
@@ -201,29 +174,9 @@ Antes de usar um prompt de forma recorrente, verifica:
 \end{itemize}
 \end{checklistbox}
 
-Não precisas de escrever ensaios. Mas se três ou quatro destes pontos estão em falta, não tens um prompt; tens um desejo.
+Escolhe os critérios que alteram a aceitação da resposta. Para um título, o tom pode ser decisivo. Para extrair uma data, interessa poder encontrá-la no documento.
 
-\section{Como ler este livro em modo “laboratório”}
+\section{O caso que fica para o teste}
+Reserva alguns exemplos antes de começares a afinar o pedido. Se uma falha num caso reservado te levar a mudar o prompt, esse caso passa a fazer parte do desenvolvimento. Usa casos novos para voltar a avaliar. Cinco mensagens da mesma pessoa com a mesma dúvida dizem pouco sobre situações diferentes.
 
-Podes ler este livro de seguida ou usá-lo na secretária, um problema de cada vez. Para aprender a aplicar, experimenta os laboratórios e compara resultados. A forma mais produtiva de o usar é:
-
-\begin{enumerate}[leftmargin=*]
-\item Ter um LLM aberto ao lado (ou uma API pronta a ser usada).
-\item Copiar e adaptar os Prompt Labs, em vez de só os ler.
-\item Guardar os prompts que funcionam bem num repositório teu.
-\item Anotar o que correu mal, para discutir mais tarde com colegas (ou com o próprio modelo).
-\end{enumerate}
-
-Podes, claro, ler na diagonal para ter uma visão geral. Mas sempre que vires uma caixa de \emph{Prompt Lab}, encara-a como:
-
-\begin{quote}
-\small
-“Exercício prático para transformar leitura em habilidade real.”
-\end{quote}
-
-\begin{keyideabox}{Livro como toolchain, não como souvenir}
-Esta obra foi organizada para leitura progressiva e consulta. Regressa aos exemplos com outras entradas: é aí que descobres quais as ideias que consegues usar sem depender da formulação exata do livro.
-\end{keyideabox}
-
-\section{Um pedido de trabalho da Lavandaria}
-No caso fictício que acompanha esta edição, a primeira versão pede «resolve as meias desaparecidas». A segunda define entrada (reclamação), tarefa (classificar), limites (não inventar causas), saída (categoria e evidência) e teste (casos revistos). A melhoria torna-se verificável: deixamos de avaliar se a resposta parece esperta e passamos a verificar se classifica sem fabricar factos.
+Na Lavandaria, um pedido para classificar reclamações pode guardar a categoria e o excerto que a sustenta. Quando chegam duas intenções na mesma mensagem, o classificador precisa de uma regra para as tratar. No próximo capítulo, vamos mostrar essa regra com exemplos e ver o que muda quando os exemplos passam a fazer parte da conversa.

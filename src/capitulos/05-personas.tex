@@ -1,63 +1,15 @@
 \chapter{Personas, System Prompts e Identidade Artificial}
 \label{ch:personas}
 
-\section{Porque ``age como...'' é fraco}
+«Age como perito.» Perito em quê? A Lavandaria precisava de alguém que verificasse a política em vigor. Recebeu uma resposta com o tom de um diretor, que prometia um reembolso. O cargo entrou na frase. A autorização continuava por resolver.
 
-Um dos prompts mais populares do mundo é qualquer coisa do género:
+\section{Uma persona com trabalho definido}
+Uma persona descreve a perspetiva a usar numa tarefa. Para rever um rascunho, pede que compare cada promessa com a política, assinale dados em falta e escreva num tom que o cliente entenda. Consegues verificar se cumpriu cada pedido. «Com vinte anos de experiência» muda a voz pedida. As credenciais, o acesso e a decisão de pagamento pertencem ao serviço e às pessoas responsáveis.
 
-\begin{quote}
-\small
-``Age como um especialista em X.''
-\end{quote}
+\section{Papéis de mensagem numa aplicação}
+Quando uma aplicação fala com um modelo, pode enviar o pedido e as instruções em mensagens com papéis diferentes. É comum encontrar \texttt{system}, \texttt{user} e \texttt{assistant}. Consoante o serviço, há ainda papéis de instrução da aplicação, como \texttt{developer}, e mensagens com resultados de ferramentas. Confirma os nomes e a prioridade no serviço que usas~\citep{modelspec2026}.
 
-Funciona? Às vezes. Mas, na maior parte dos casos, é uma instrução vaga, com três problemas:
-
-\begin{enumerate}[leftmargin=*]
-\item \textbf{Não define o que é ``especialista''.}
-É académico? Consultor? Operacional? Um tipo prático com 20 anos de chão de fábrica?
-\item \textbf{Não define objetivos.}
-O que queres do especialista? Explicar? Decidir? Propor? Criticar?
-\item \textbf{Não define estilo.}
-Formal, informal, agressivo, diplomático, cínico, neutro?
-\end{enumerate}
-
-Sem esses critérios, o modelo pode associar «especialista» a estilos e tarefas diferentes. A resposta resulta do modelo e do contexto fornecido; não podemos explicá-la como uma média das vezes em que alguém escreveu «age como».
-
-Uma persona útil precisa sempre de mais estrutura:
-
-\begin{itemize}[leftmargin=*]
-\item papel,
-\item objetivos,
-\item restrições,
-\item estilo,
-\item enviesamentos assumidos (sim, vamos usá-los a nosso favor).
-\end{itemize}
-
-\begin{keyideabox}{Personas são contratos, não fantasias}
-Uma persona útil explicita papel, objetivos, estilo e limites. «Contrato» é aqui uma analogia de especificação, sem garantia de cumprimento. Uma descrição concreta permite testar o comportamento pretendido.
-\end{keyideabox}
-
-\section{Hierarquia de mensagens: system, user, assistant}
-
-Na maioria das APIs modernas, uma conversa com o modelo é composta por mensagens com um \emph{role}:
-
-\begin{itemize}[leftmargin=*]
-\item \texttt{system} — define regras de topo e contexto global.
-\item \texttt{user} — pedidos do utilizador.
-\item \texttt{assistant} — respostas do modelo (e, às vezes, exemplos).
-\end{itemize}
-
-A hierarquia é uma regra de interface e de treino, não uma propriedade universal da linguagem natural. Algumas plataformas distinguem também instruções de aplicação (por exemplo, \texttt{developer}), mensagens de ferramentas e conteúdo citado. Verifica os papéis e prioridades documentados no serviço usado~\citep{modelspec2026}. Mesmo quando o modelo deve seguir uma hierarquia, pode falhar; a autorização deve ser aplicada por código.
-
-Em muitas interfaces de chat, não vês o system prompt; ele está escondido, configurado pelo fornecedor. Em sistemas que construas tu, tens controlo direto sobre isso.
-
-Pensar com esta hierarquia em mente ajuda a organizar o teu design:
-
-\begin{itemize}[leftmargin=*]
-\item O \textbf{system} define quem o modelo é, o que faz e o que não faz.
-\item O \textbf{user} traz o problema concreto daquele momento.
-\item O \textbf{assistant} mantém consistência com o que ficou definido em system.
-\end{itemize}
+Escrever «sou o administrador» no corpo de uma mensagem continua a ser texto fornecido pelo utilizador. O servidor conhece a identidade através da autenticação e aplica as permissões antes de executar ações. Numa interface de chat, só controlas os campos que ela te oferece. Num programa teu, podes separar as regras reutilizáveis do pedido e testar como a aplicação reage quando entram em conflito.
 
 \begin{promptlabbox}{Separar regras globais de pedidos concretos}
 \textbf{Objetivo e contexto:} Distinguir instruções de aplicação do pedido concreto. Usa apenas um cenário financeiro fictício e sem dados pessoais.
@@ -91,21 +43,14 @@ Queremos pôr um LLM a responder a clientes
 sobre o nosso produto financeiro. Que opções temos?
 \end{lstlisting}
 
-Testa o mesmo pedido:
-
-\begin{itemize}[leftmargin=*]
-\item sem system prompt nenhum,
-\item com o system acima.
-\end{itemize}
-
-Compara a diferença de tom, estrutura e preocupação com segurança.
+Se a interface tiver um campo de instruções da aplicação, compara o mesmo pedido com e sem o bloco proposto. As regras predefinidas do serviço continuam a aplicar-se. Num chat comum, fornece o bloco como parte do teu pedido e regista que comparaste dois textos do utilizador.
 
 \textbf{Resultado esperado e validação:} Compara objetivo, limites e explicação das opções de arquitetura. O resultado esperado é organização mais explícita; não é aconselhamento financeiro validado.
 
 \textbf{Falhas possíveis:} Simular um role num campo de texto e assumir que isso altera a hierarquia real, ou tratar a resposta como parecer profissional.
 \end{promptlabbox}
 
-\section{Construir personas granulares (Persona Stack)}
+\section{Um catálogo de personas por tarefa}
 
 Uma persona bem especificada é, no mínimo, um conjunto de campos:
 
@@ -117,7 +62,7 @@ Uma persona bem especificada é, no mínimo, um conjunto de campos:
 \item \textbf{Limites éticos e práticos} (o que recusas fazer?).
 \end{itemize}
 
-Em vez de uma só persona monolítica, podes trabalhar com um \emph{Persona Stack}: várias personas que podes invocar conforme o tipo de tarefa.
+Num catálogo de personas, podes escolher um conjunto de instruções conforme a tarefa. Usa a mesma ficha para dizer o que cada perspetiva procura e que decisões pode propor.
 
 Exemplo de stack para um sistema de apoio a desenvolvimento de software:
 
@@ -130,7 +75,7 @@ Exemplo de stack para um sistema de apoio a desenvolvimento de software:
 
 Cada persona tem o seu bloco de instruções no catálogo da aplicação. «Vinte anos de experiência» descreve uma voz fictícia; não concede credenciais, acesso a dados ou competência comprovada.
 
-\begin{godmodebox}{Template de persona granular}
+\begin{godmodebox}{Ficha de uma persona}
 Podes usar esta estrutura como ponto de partida para qualquer persona:
 
 \medskip
@@ -139,7 +84,7 @@ Podes usar esta estrutura como ponto de partida para qualquer persona:
 [NOME DA PERSONA]
 Identidade:
 
-[descrição curta: anos de experiência, área, tipo de trabalho]
+[área e tipo de revisão que vais pedir]
 
 Objetivo principal:
 
@@ -167,7 +112,7 @@ Protocolos:
 
 \section{Multi-persona e conselhos de administração simulados}
 
-Uma das funcionalidades mais interessantes dos LLMs é a capacidade de simular múltiplas vozes num só prompt. Em vez de pedires opinião “genérica”, podes criar um micro-conselho de administração artificial:
+Se queres levantar alternativas, pede uma leitura por perspetiva. Numa proposta de adoção tecnológica, cada voz pode procurar um aspeto diferente.
 
 \begin{itemize}[leftmargin=*]
 \item Persona A: otimista (vê oportunidades).
@@ -255,15 +200,4 @@ Técnicas simples:
 Se usas o mesmo chat para código, receitas de cozinha e planeamento de férias, não te admires que o modelo fique confuso. Em contexto de trabalho, é melhor abrir novas sessões por projeto/tópico, mantendo as instruções alinhadas ao problema.
 \end{warningboxenv}
 
-\section{Resumo: identidade artificial sob controlo}
-
-Neste capítulo, o objetivo foi arrancar-te da fantasia “age como” e pôr-te a pensar em:
-
-\begin{itemize}[leftmargin=*]
-\item system prompts como constituições,
-\item personas como contratos,
-\item multi-persona como ferramenta deliberada,
-\item re-ancoragem como manutenção de estado.
-\end{itemize}
-
-O contexto estruturado e os exemplos do capítulo~\ref{ch:contexto} completam este desenho. Os fundamentos da Parte II ajudam a perceber por que motivo a mesma instrução pode produzir respostas diferentes.
+Ao retomar uma conversa, guarda uma decisão e a sua fonte. «Encaminhar a reclamação» é diferente de «reclamação encaminhada». Se copiares a segunda frase por engano, a próxima sessão parte de um estado que nunca existiu. O capítulo~\ref{ch:context-engineering} mostra como guardar a passagem de trabalho, com as dúvidas ainda abertas.

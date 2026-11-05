@@ -6,12 +6,12 @@ O pedido tem duas linhas. O contexto tem mensagens antigas, ficheiros, resultado
 \section{O contexto como uma construção da aplicação}
 Usamos \emph{engenharia de contexto} para o desenho do material disponibilizado em cada chamada: instruções, pedido, demonstrações, documentos, estado e resultados de ferramentas. É uma prática de sistemas, sem formato único nem garantia universal de desempenho. Os exemplos do capítulo~\ref{ch:contexto} tratam uma parte deste trabalho; RAG, no capítulo~\ref{ch:rag}, trata a seleção de evidência externa.
 
-Uma boa seleção responde a quatro perguntas: para que decisão precisamos deste dado; qual a origem; quem o pode usar; e até quando é válido? Um número certo da conta errada continua a ser um dado errado para a tarefa. Uma instrução muito relevante contida num documento externo continua a não ganhar autoridade de aplicação.
+Uma boa seleção responde a quatro perguntas: para que decisão precisamos deste dado; qual a origem; quem o pode usar; e até quando é válido? Um prazo de dez dias pode ter sido correto ontem. Se a versão vigente diz cinco, o sistema precisa de identificar a diferença antes de responder. No ensaio do capítulo~\ref{ch:llmops}, uma cache conservou a primeira versão e a sonda encontrou-a.
 
 Convém separar classes de conteúdo por estrutura e metadados. Isso facilita validação e leitura, embora delimitadores não criem uma barreira de segurança infalível. As permissões têm de ser aplicadas antes de recuperar ou executar; não dependem de o modelo reconhecer corretamente a etiqueta.
 
 \section{Quatro sentidos diferentes de memória}
-Os pesos contêm regularidades aprendidas. A janela contém os elementos usados nesta inferência. A cache de atenção reutiliza cálculos durante a execução. A memória persistente da aplicação guarda informação para uso posterior. Dizer apenas «o modelo lembra-se» não distingue nenhum destes mecanismos.
+Os pesos contêm regularidades aprendidas. A janela contém os elementos usados nesta inferência. A cache de atenção reutiliza chaves e valores durante a geração, como mostra o capítulo~\ref{ch:tokens}. A memória persistente da aplicação guarda dados para chamadas futuras. Uma cache de documentos, como a do ensaio, pertence à aplicação. Para a corrigir, verifica a chave, a versão e a origem do documento.
 
 Uma memória útil pode ser uma decisão aprovada com data e origem: «a política ativa é POL-02, versão 3». Uma memória perigosa é uma síntese sem origem: «este cliente costuma ter prioridade», extraída de uma conversa ambígua e reutilizada indefinidamente. A persistência aumenta o alcance de um erro se não houver correção, expiração e controlo de acesso.
 
@@ -25,7 +25,7 @@ Há três decisões distintas: excluir material irrelevante, recuperar material 
 Um exemplo: o documento diz «prazo habitual de dois dias, exceto peças delicadas, que exigem avaliação». Um resumo que guarda apenas «prazo: dois dias» é curto e errado para a exceção. Comprimir é transformar dados; exige critérios como qualquer outra transformação.
 
 \section{Uma passagem de trabalho que não apaga as dúvidas}
-Quando uma conversa é resumida para continuar noutra chamada, conserva objetivo, decisões aprovadas, factos com origem, dúvidas, ações executadas, resultados e próximo passo. Guarda identificadores que permitam regressar ao original. Não resumas uma ação proposta como ação concluída.
+Quando uma conversa é resumida para continuar noutra chamada, conserva objetivo, decisões aprovadas, factos com origem, dúvidas, ações executadas, resultados e próximo passo. Guarda identificadores que permitam regressar ao original. Distingue o passo autorizado, o que foi executado e o que ficou à espera de evidência.
 
 \begin{lstlisting}
 Objetivo: preparar resposta, sem enviar.
@@ -37,7 +37,7 @@ Executado: consulta documental, sem alteracao de registos.
 Proximo passo: rever rascunho com estes limites.
 \end{lstlisting}
 
-Esta ficha tem mais utilidade operacional do que «discutimos uma reclamação e está quase tudo resolvido». A segunda frase é confortável; não diz o que uma nova execução pode fazer.
+Ao retomar, abre a versão indicada e verifica se ainda está em vigor. Neste exemplo, podes rever um rascunho. Para informar o cliente de uma decisão, ainda precisas da resposta da equipa. Se houver uma política posterior, regista a nova fonte e volta a verificar a exceção.
 
 \section{Escrita na memória é uma operação com efeitos}
 Consultar uma nota e alterar uma preferência persistente não são equivalentes. Uma atualização precisa de uma fonte autorizada e de uma regra para resolver conflitos. Se dois componentes escrevem valores incompatíveis, a última mensagem não se torna verdadeira por chegar mais tarde.

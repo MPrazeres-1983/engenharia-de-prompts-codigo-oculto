@@ -1,19 +1,10 @@
-\chapter{Auto-Correção, Metacognição e Ferramentas Externas}
+\chapter{Rever Respostas e Verificar Resultados}
 \label{ch:autocorrecao}
 
-\section{O modelo como próprio crítico}
+O rascunho diz «faltou uma meia». O revisor troca a frase por «uma meia ficou por localizar». A segunda versão está mais cautelosa, mas ambos assumiram o mesmo número. Se o cliente falou de um par, precisamos de reler a mensagem.
 
-Além de pedir ao modelo para explicar o que faz, podes pedir-lhe para \emph{avaliar} a própria resposta. É uma espécie de metacognição artificial: “pensa sobre o que acabaste de dizer”.
-
-Padrão básico:
-
-\begin{enumerate}[leftmargin=*]
-\item Primeiro, o modelo produz uma resposta qualquer.
-\item Depois, pedes-lhe explicitamente para a criticar.
-\item Só então pedes uma versão revista.
-\end{enumerate}
-
-Em termos de prompts, pode ser algo como:
+\section{Pedir uma revisão com critério}
+Podes pedir ao modelo que critique o seu rascunho e escreva uma nova versão. Define primeiro o que a revisão procura. Por exemplo, verifica a atribuição dos factos e corta duas frases repetidas. Numa tarefa de escrita, a segunda leitura dá outra oportunidade de encontrar um defeito.
 
 \begin{lstlisting}
 [FASE 1]
@@ -36,12 +27,7 @@ Escreve uma nova versão da resposta incorporando
 as correções que identificaste.
 \end{lstlisting}
 
-A revisão pode melhorar clareza, mas a autocorreção de raciocínio sem feedback externo pode falhar ou piorar a resposta nos cenários estudados~\citep{huang2024}. Não generalizes esse resultado a todos os modelos nem suponhas o contrário. Usa dados, testes e verificadores quando a correção importa. O protocolo:
-
-\begin{itemize}[leftmargin=*]
-\item força o modelo a olhar para a própria saída com outros “óculos”,
-\item cria duas vistas diferentes sobre o mesmo problema (bom para detetar incoerências).
-\end{itemize}
+A revisão pode melhorar clareza. Huang e colaboradores encontraram casos de raciocínio em que a autocorreção sem feedback externo falhou ou piorou a resposta~\citep{huang2024}. Para verificar o número de peças, entrega ao revisor a passagem da reclamação e o cálculo de referência. O critério vem da tarefa. A apreciação do modelo é mais uma proposta a conferir.
 
 \begin{promptlabbox}{Transformar o modelo em revisor de si próprio}
 \textbf{Objetivo e contexto:} Rever uma resposta identificando primeiro defeitos concretos de clareza e suporte factual.
@@ -52,9 +38,9 @@ Escolhe uma resposta que o modelo te tenha dado recentemente e de que não tenha
 
 \textbf{Passo 1} — Cola a resposta no chat e pede uma crítica detalhada.
 
-\textbf{Passo 2} — Pede uma nova versão, “ótima”, que resolva os problemas apontados.
+\textbf{Passo 2} — Pede uma versão que corrija os defeitos identificados com apoio no texto de origem.
 
-Compara a nova versão com a antiga. O objetivo não é confiar cegamente na revisão, mas perceber se a estrutura metacognitiva te aproxima de algo utilizável.
+Compara a nova versão com a antiga. Assinala o que mudou na clareza e o que mudou nos factos, com a mesma grelha para ambas.
 
 \textbf{Resultado esperado e validação:} Compara versões com a mesma grelha e confirma os factos numa fonte externa. A revisão pode melhorar a forma e piorar o conteúdo: regista ambos.
 
@@ -83,7 +69,8 @@ Escreves uma crítica ao rascunho, em 5 pontos.
 
 Escreves uma nova versão melhorada.
 
-Pára depois da segunda versão melhorada.
+Faz no máximo uma revisão. Se a fonte não sustentar
+uma frase, assinala-a como pendente.
 
 Começa pelo rascunho.
 \end{lstlisting}
@@ -149,7 +136,7 @@ Assim aproveitas o modelo como tutor/codificador, mas confias a execução à fe
 
 \section{Prompting com ferramentas e \emph{function calling}}
 
-Muitas aplicações ligam modelos a \emph{ferramentas} (APIs, bases de dados e calculadoras). Em function calling, o modelo propõe uma chamada estruturada; a aplicação valida argumentos, identidade e autorização antes de executar~\citep{functioncalling2026}. O modelo não ganha acesso a uma base de dados por a mencionares num prompt. Em vez de só gerar texto, o modelo pode:
+Muitas aplicações ligam modelos a \emph{ferramentas} (APIs, bases de dados e calculadoras). Em function calling, o modelo propõe uma chamada estruturada; a aplicação valida argumentos, identidade e autorização antes de executar~\citep{functioncalling2026}. O serviço precisa de expor e autorizar a ferramenta. Com essa ligação, o modelo pode propor os passos seguintes.
 
 \begin{itemize}[leftmargin=*]
 \item interpretar o pedido,
@@ -189,8 +176,8 @@ Quando a ferramenta devolver um resultado, explica
 ao utilizador, em português simples, o que significa.
 \end{lstlisting}
 
-\begin{warningboxenv}{Ferramentas não são brinquedos, são responsabilidades}
-Se dás ao modelo acesso a ferramentas que mexem em sistemas reais (encomendas, pagamentos, utilizadores), estás a pôr um modelo estocástico a interagir com o mundo. Guardrails, autenticação e limites de ação deixam de ser opcionais.
+\begin{warningboxenv}{Valida no ponto em que a ação acontece}
+Antes de consultar uma encomenda, verifica se o utilizador pode vê-la. Para alterar ou pagar, usa a autorização e os limites dessa operação. Um identificador bem formado é só um dos critérios. No próximo capítulo, vamos separar o formato dos dados da verificação do que afirmam.
 \end{warningboxenv}
 
 \section{Evitar loops infinitos e verificação inútil}

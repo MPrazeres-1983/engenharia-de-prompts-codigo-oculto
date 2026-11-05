@@ -1,59 +1,18 @@
 \chapter{Contexto, Exemplos e Aprendizagem In-Context}
 \label{ch:contexto}
 
-\section{Zero-shot, one-shot e few-shot}
+Chega uma mensagem à Lavandaria. «Ainda não sei quando posso levantar a roupa e continua a faltar uma peça.» Se as opções são emph{horário}, emph{peça em falta} e emph{outro}, esta mensagem revela um detalhe que a lista não resolve. Podemos assinalar duas categorias? Ou uma tem prioridade?
 
-Quando dás um prompt ao modelo, podes ou não incluir exemplos. Três modos clássicos:
-
-\begin{itemize}[leftmargin=*]
-\item \textbf{Zero-shot}: não dás exemplo nenhum, apenas instruções.
-\item \textbf{One-shot}: dás um exemplo.
-\item \textbf{Few-shot}: dás alguns exemplos; o número adequado depende da tarefa, do modelo e do orçamento.
-\end{itemize}
-
-\subsection*{Zero-shot}
-
-Vantagens:
+\section{O que muda quando mostramos um exemplo}
+Imagina que decidimos marcar uma só categoria e dar prioridade à peça em falta. Podemos escrever a regra, mostrar um exemplo em que ela se aplica ou mostrar vários. A diferença está no número de demonstrações incluídas no pedido.
 
 \begin{itemize}[leftmargin=*]
-\item Mais simples de escrever.
-\item Ocupa menos tokens.
-\item Fácil de reutilizar em muitos contextos diferentes.
+\item \textbf{Zero-shot.} Instrução e categorias, com zero demonstrações da tarefa.
+\item \textbf{One-shot.} A mesma instrução mais uma mensagem já classificada.
+\item \textbf{Few-shot.} A instrução e algumas mensagens classificadas, com casos variados.
 \end{itemize}
 
-Desvantagens:
-
-\begin{itemize}[leftmargin=*]
-\item O modelo pode interpretar o pedido de forma inesperada.
-\item Sem exemplos, pode ser mais difícil comunicar critérios específicos; o efeito no acerto precisa de comparação.
-\end{itemize}
-
-\subsection*{One-shot}
-
-Um exemplo pode tornar mais claro o formato e o estilo pretendidos. Podes usar:
-
-\begin{itemize}[leftmargin=*]
-\item Um exemplo típico e “limpo”.
-\item Um exemplo que ilustre um caso limite importante.
-\end{itemize}
-
-\subsection*{Few-shot}
-
-Aqui começas a aproveitar a tal \emph{aprendizagem in-context}: o modelo infere padrões a partir dos exemplos no próprio prompt, sem alterar os pesos do modelo.
-
-Vantagens:
-
-\begin{itemize}[leftmargin=*]
-\item Muito poder para tarefas estruturadas (classificação, extração, reformulação).
-\item Permite ensinar “dialetos” muito específicos sem fine-tuning formal.
-\end{itemize}
-
-Desvantagens:
-
-\begin{itemize}[leftmargin=*]
-\item Consome tokens rapidamente.
-\item Se os exemplos forem inconsistentes, o modelo aprende a inconsistência.
-\end{itemize}
+Começa por uma instrução clara. Se as saídas divergirem no caso ambíguo, experimenta um exemplo que o resolva. Cada demonstração ocupa espaço na entrada. Mais exemplos dão espaço para mostrar exceções e também para introduzir contradições. A comparação com entradas reservadas mostra o efeito neste caso.
 
 \begin{promptlabbox}{Comparar zero-shot, one-shot e few-shot}
 \textbf{Objetivo e contexto:} Comparar demonstrações na classificação dos mesmos cinco emails fictícios. Os exemplos fornecidos devem ser outros emails.
@@ -81,7 +40,7 @@ Compara a consistência das classificações nos três cenários.
 \textbf{Falhas possíveis:} Usar emails do teste como exemplos, mudar etiquetas entre condições ou escolher apenas casos fáceis.
 \end{promptlabbox}
 
-\section{Ensinar formato vs. ensinar lógica}
+\section{Demonstrar o formato e a regra}
 
 Quando incluis exemplos no prompt, podes estar a ensinar:
 
@@ -126,20 +85,13 @@ Raciocínio: "Começo com 3, retiro 1, fico com 2."
 Resposta: "Sobram 2 maçãs."
 \end{lstlisting}
 
-O modelo infere que:
+O exemplo mostra uma operação e a forma de a apresentar. Se a tarefa tiver uma exceção, dá-lhe um exemplo próprio ou enuncia-a na regra. A resposta tem de ser avaliada em problemas novos.
 
-\begin{itemize}[leftmargin=*]
-\item deve explicar o raciocínio passo a passo,
-\item deve terminar com uma resposta clara.
-\end{itemize}
-
-Idealmente, combinas os dois: formato e lógica.
-
-\begin{keyideabox}{Exemplos são mini-datasets de treino em contexto}
-Os exemplos fazem parte da entrada; não alteram os pesos durante a inferência habitual~\citep{brown2020}. Podem demonstrar regras, formatos e casos limite. Chamar-lhes «fine-tuning temporário» confunde duas operações diferentes.
+\begin{keyideabox}{Aprendizagem em contexto}
+Os exemplos fazem parte da entrada usada nessa inferência~\citep{brown2020}. Os pesos permanecem fixos. No ajuste de um modelo, o treino atualiza parâmetros. Podes observar uma mudança na resposta com qualquer dos métodos, mas cada mudança tem uma origem diferente.
 \end{keyideabox}
 
-\section{Exemplos bons, exemplos tóxicos}
+\section{Escolher exemplos que ensinam a mesma regra}
 
 Nem todos os exemplos são iguais. Alguns ajudam, outros só acrescentam ruído.
 
@@ -152,7 +104,7 @@ Nem todos os exemplos são iguais. Alguns ajudam, outros só acrescentam ruído.
 \item \textbf{Consistentes}: seguem sempre o mesmo formato e critérios.
 \end{itemize}
 
-\subsection*{Exemplos tóxicos}
+\subsection*{Exemplos que pedem revisão}
 
 \begin{itemize}[leftmargin=*]
 \item \textbf{Ambíguos} sem explicitamente dizer que são ambíguos.
@@ -191,7 +143,7 @@ Estratégias práticas:
 \begin{promptlabbox}{Comparar parede de texto vs. contexto estruturado}
 \textbf{Objetivo e contexto:} Medir estrutura do contexto com o mesmo documento autorizado e a mesma pergunta.
 
-Pega num documento de 10 páginas (relatório, artigo, documentação). Testa duas abordagens:
+Pega num documento de 10 páginas (relatório, artigo, documentação). Usa o mesmo conteúdo e o mesmo modelo nas duas condições, em sessões separadas.
 
 \medskip
 
@@ -203,7 +155,7 @@ Copia tudo para o prompt e pergunta algo específico (por exemplo, “qual é o 
 
 \textbf{B) Contexto estruturado}
 
-Divide o documento em secções com títulos, faz um mini-índice e indica explicitamente:
+Divide o mesmo texto em secções e acrescenta um índice curto, por exemplo:
 
 \begin{lstlisting}
 Secção 1: Introdução
@@ -212,7 +164,7 @@ Secção 3: Resultados
 Secção 4: Riscos e limitações
 \end{lstlisting}
 
-Depois, faz a mesma pergunta sem indicar a secção da resposta. Mantém o conteúdo idêntico e altera apenas a organização; indicar a localização acrescentaria uma segunda variável.
+Depois, faz a mesma pergunta sem indicar a secção da resposta. Mantém as frases do documento e testa a intervenção conjunta de títulos e índice. Para saber qual deles ajudou, precisarias de uma condição adicional. Indicar a secção certa daria uma pista extra.
 
 Compara a presença dos pontos corretos e a referência ao excerto que os sustenta. Não uses a confiança verbal como medida de acerto.
 
@@ -228,14 +180,14 @@ Uma técnica poderosa (e fácil de abusar) é usar o próprio LLM para gerar exe
 \begin{itemize}[leftmargin=*]
 \item dás 3 exemplos curados por ti,
 \item pedes ao modelo para gerar mais 20 no mesmo formato,
-\item usas esses 20 como \emph{few-shot} em prompts futuros.
+\item revês as categorias e escolhes alguns desses rascunhos para demonstrar a regra.
 \end{itemize}
 
 Isto pode acelerar muito o processo, mas vem com riscos:
 
 \begin{itemize}[leftmargin=*]
 \item O modelo pode introduzir enviesamentos ou erros subtilmente.
-\item Se não validares os exemplos gerados, estás a treinar-te em cima de dados sintéticos não verificados.
+\item Se os exemplos gerados conservarem o mesmo erro, podem demonstrar uma regra que nunca quiseste aplicar.
 \end{itemize}
 
 Uso responsável:
@@ -251,4 +203,4 @@ Pedir à IA para inventar exemplos é legítimo. Pedir para verificar se os pró
 \end{keyideabox}
 
 \section{Exemplos da Lavandaria que não contam o fim da história}
-Mostra uma reclamação de desaparecimento, uma pergunta sobre prazo e uma mensagem ambígua. Reserva outras mensagens para testar. Se os mesmos exemplos servirem para ensinar e medir, o resultado sobrestima o que o sistema consegue fazer com reclamações novas. Numa tarefa de classificação, inclui a opção «outro» e define o que fazer quando há duas intenções.
+Mostra uma reclamação de desaparecimento, uma pergunta sobre prazo e uma mensagem ambígua. Reserva outras mensagens para testar. Um acerto numa mensagem já mostrada mede o desempenho num exemplo conhecido. Para estudar reclamações novas, usa exemplos que o modelo não recebeu naquele pedido. Numa tarefa de classificação, inclui a opção «outro» e define o que fazer quando há duas intenções.
