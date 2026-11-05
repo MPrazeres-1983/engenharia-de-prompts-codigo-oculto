@@ -44,12 +44,34 @@ Executar o mesmo raciocínio determinístico em vários papéis não cria inform
 
 Se os três modos falham a mesma paráfrase, a síntese não teve acesso a uma capacidade diferente que resolvesse a falha. Isso é um contraexemplo de software construído, não um estudo que prove inutilidade de todas as equipas. A sua utilidade é tornar visível a diferença entre multiplicar chamadas e acrescentar um mecanismo de correção.
 
-O ensaio offline foi executado em 04-11-2026 e guardado em \nolinkurl{experiencias/equipas/resultados}. Os três modos acertaram categoria e fonte em dois dos quatro casos. Fluxo e único fizeram quatro chamadas de componente cada; equipa fez doze. Todos fizeram zero chamadas de LLM. O comando \texttt{python3 experiencias/equipas/offline.py --verificar} reproduz o registo sem medir tempo. Os mesmos erros repetidos são o resultado observado deste stub, não um desempenho atribuído a modelos reais.
+O ensaio offline foi executado em 04-11-2026. A verificação repete o registo guardado em \nolinkurl{experiencias/equipas/resultados}. Nesta simulação, a linha «fluxo» usa o mesmo ramo determinístico da chamada única. A linha «equipa» acrescenta duas etapas no controlador. Assim, esta comparação observa chamadas de componentes e acerto do stub nas condições dadas.
+
+\begin{lstlisting}
+python3 experiencias/equipas/offline.py --verificar
+\end{lstlisting}
+
+\begin{table}[htbp]
+\small
+\centering
+\begin{tabular}{@{}lccc@{}}
+\toprule
+Modo & Casos corretos & Chamadas de componentes & Chamadas por acerto \\
+\midrule
+Fluxo & 2 em 4 & 4 & 2 \\
+Único & 2 em 4 & 4 & 2 \\
+Equipa & 2 em 4 & 12 & 6 \\
+\bottomrule
+\end{tabular}
+\caption{Resultados offline. Cada modo fez zero chamadas a modelos.}
+\label{tab:comparacao-offline}
+\end{table}
+
+Confere também os mesmos casos lado a lado. Os três modos falharam E1 e E2 e acertaram E3 e E4. A diferença emparelhada de acerto entre equipa e único é zero nestes quatro pedidos. A razão de chamadas por acerto é $12/2=6$ na equipa e $4/2=2$ no único. Se não houver acertos, deixa a razão indefinida e apresenta as contagens. A conclusão fica circunscrita a estes pedidos e a este adaptador.
 
 \section{Custos, erros graves e distribuição dos resultados}
 Mostra tarefas aceites, encaminhamentos, erros críticos, chamadas, tokens quando existentes e tempo observado. Para tarefas abertas, uma nota de clareza não deve compensar uma violação de autorização. Podes usar critérios de exclusão e depois comparar qualidade entre as saídas admissíveis.
 
-Apresenta denominadores e dependências. Duas seeds nos mesmos quatro pedidos são oito execuções, não oito situações independentes. Se selecionares a melhor tentativa, descreve o procedimento de seleção e conta todas as chamadas gastas. Não deites fora a experiência que não ficou bonita no gráfico.
+Apresenta denominadores e dependências. Com duas sementes nos mesmos quatro pedidos, agrupa as repetições por pedido. Se selecionares a melhor tentativa, explica a seleção e contabiliza todas as chamadas. Para custo, regista também as tarefas interrompidas. Para tempo, mede a duração até ao resultado aceite, incluindo revisão e fila se fizerem parte da utilização.
 
 \begin{promptlabbox}{Um relatório que deixa linhas honestamente vazias}
 \textbf{Objetivo e contexto:} preparar a comparação completa e executar a parte offline. Requisitos: Python 3.10+ para o controlador; participantes e modelo íntegro apenas para extensões futuras.
@@ -61,4 +83,4 @@ Apresenta denominadores e dependências. Duas seeds nos mesmos quatro pedidos s�
 \textbf{Falhas possíveis:} simular participantes e chamá-los humanos, misturar ensaios, omitir revisão ou anunciar superioridade global com base num teste de quatro casos.
 \end{promptlabbox}
 
-Uma obra de referência deve também mostrar o que acontece quando o plano experimental pára antes da medição. Não é uma derrota da ciência. É o ponto em que o caderno impede que a narrativa ocupe o lugar dos dados.
+Se voltares a correr o piloto com um modelo íntegro, guarda o novo registo ao lado do ensaio offline. Mantém em separado as condições com pessoas, os resultados do modelo e as verificações do controlador. Cada uma responde a uma pergunta diferente.

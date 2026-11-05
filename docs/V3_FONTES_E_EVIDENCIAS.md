@@ -130,6 +130,12 @@ O exemplo da média do capítulo de programação executou as quatro verificaç�
 - [ReAct, resumo do preprint dos autores](https://arxiv.org/abs/2210.03629). Intercalação de passos de raciocínio textual e ações. O capítulo apresenta a escolha de arquitetura como hipótese de projeto.
 - Executadas quatro consultas locais da Lavandaria e os 30 testes desse módulo. Verificados os resultados de A e B, a equivalência das duas recusas e as contas didáticas de RRF e recall@2. Os resultados são do núcleo offline. Conformidade MCP e A2A pede uma integração própria.
 
+### Futuros e comparação
+
+- [Ha e Schmidhuber, World Models v4](https://arxiv.org/abs/1803.10122v4) e [Hafner et al., Dreamer](https://www.nature.com/articles/s41586-025-08744-2), resumo e figura 1. Confirmadas representações aprendidas e, em Dreamer, trajetórias previstas pelo modelo para aprendizagem do agente. As dez tentativas do robô são um exemplo sintético de denominadores, não medições dos artigos.
+- [Butlin et al., v3](https://arxiv.org/abs/2308.08708v3), resumo e âmbito. Indicadores computacionais derivados das teorias discutidas. A conclusão não foi estendida a sistemas posteriores.
+- Registo offline de 04-11-2026 repetido com o comando do livro. Os três modos falharam E1 e E2 e acertaram E3 e E4. A métrica derivada de chamadas de componentes por acerto deu 2, 2 e 6. O ramo de fluxo offline usa o mesmo stub e ramo de chamada única. O piloto com LLM mantém zero inferências novas.
+
 ## Recursos e licenças
 
 Texto novo, diagrama de equipa, tabelas, dados sintéticos e scripts foram produzidos para esta revisão sob as condições da obra. Capa original preservada byte a byte. Não se copiaram figuras dos estudos ou modelos; os artigos são citados e resumidos com alcance limitado. Os laboratórios de software usam a biblioteca padrão de Python. A montagem do ateliê usa também Pillow, ReportLab, Inkscape e FFmpeg. A origem da ilustração, o pedido utilizado e as licenças tipográficas estão em `exemplos/atelier`. Modelos e runtime mantêm as licenças indicadas no registo histórico; os pesos não são redistribuídos. O pacote SKILL.md não recebe uma licença comercial diferente da obra.

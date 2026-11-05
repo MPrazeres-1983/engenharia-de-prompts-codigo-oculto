@@ -4,7 +4,7 @@
 Uma previsão sobre IA costuma juntar três afirmações: uma capacidade técnica vai melhorar, alguém vai conseguir operá-la e a sociedade vai adotá-la de determinada maneira. Cada ligação pode falhar. Separar estas etapas permite pensar no futuro sem fingir que temos acesso antecipado às notícias.
 
 \section{Modelos do mundo: prever consequências para escolher ações}
-Um modelo do mundo representa regularidades de um ambiente que podem apoiar previsão e planeamento. Ha e Schmidhuber estudaram representações comprimidas e políticas em ambientes de aprendizagem por reforço~\citep{ha2018}. Dreamer, no trabalho de Hafner e colaboradores, mostra outra linha de investigação baseada em modelos aprendidos para tarefas de controlo~\citep{hafner2025}. Os resultados pertencem aos ambientes e avaliações estudados.
+Um modelo do mundo representa regularidades de um ambiente que podem apoiar previsão e planeamento. Ha e Schmidhuber estudaram representações comprimidas e políticas em ambientes de aprendizagem por reforço~\citep{ha2018}. No trabalho de Hafner e colaboradores sobre Dreamer, o agente aprende com trajetórias de representações e recompensas previstas pelo modelo do mundo~\citep{hafner2025}. Os resultados pertencem aos ambientes e avaliações estudados.
 
 O nome não implica uma simulação completa da realidade. Um modelo pode ser útil para certas consequências e falhar fora delas. Planear dentro de uma representação errada pode explorar precisamente os seus erros. Uma trajetória imaginada sem colisão não demonstra que o robô passaria pela mesma porta.
 
@@ -15,7 +15,9 @@ Perceção, linguagem, memória, planeamento e controlo podem contribuir para ro
 
 Uma avaliação de generalidade deve variar objetos, locais, instruções e condições, incluindo recuperação após erro. Guarda intervenções humanas e tentativas falhadas. Se o sistema resolve a tarefa depois de uma pessoa reposicionar o objeto, essa intervenção faz parte da evidência.
 
-O progresso pode surgir tanto de modelos mais capazes como de ambientes melhor preparados e ferramentas mais fiáveis. Uma casa desenhada para um robô e uma casa arbitrária são problemas diferentes. Saber qual foi testada evita discutir resultados incompatíveis como se fossem rivais diretos.
+Imagina dez tentativas num ensaio fictício. O robô chega à porta em nove. Destas nove, abre-a em oito sem intervenção. Podes reportar $8/9$ entre as tentativas que chegaram à porta. Para a tarefa completa, o resultado é $8/10$. Se houver um segundo ensaio com maçanetas e iluminação diferentes, guarda os resultados à parte. O denominador permite ver onde a capacidade se perdeu.
+
+Prepara um grupo com condições conhecidas e outro com variações reservadas. Regista a intervenção de uma pessoa, mesmo que tenha sido apenas reposicionar um objeto. Melhorar o ambiente também pode melhorar o resultado. Para atribuir a mudança ao modelo, especifica que elementos do ambiente ficaram fixos.
 
 \section{Mais computação e outras arquiteturas}
 Escala de treino, eficiência de inferência e computação durante a resolução são eixos distintos. Um sistema pode gastar mais tempo a procurar e verificar sem ter aumentado os parâmetros. Outro pode melhorar memória ou representação. Não há razão para assumir que todas as capacidades evoluem à mesma velocidade.
@@ -53,7 +55,7 @@ Transformação radical & Transferência ampla e difusão rápida & Avaliação 
 \caption{Cenários de análise. Não são previsões com probabilidades atribuídas ou datas prometidas.}
 \end{table}
 
-O terceiro cenário admite possibilidades mais especulativas; não ganha probabilidade por ser mais dramático. Para cada cenário, pergunta que decisão de hoje mudaria e se existe uma escolha robusta a vários futuros. Manter dados exportáveis, capacidade de verificar e alternativas operacionais pode ser útil em mais de um deles.
+Se vais decidir se podes reduzir supervisão, define a tarefa e o número de intervenções admissíveis antes de olhar para os resultados. Se vais decidir se uma ferramenta merece ficar, mede também custo total, tempo de revisão e disponibilidade. Podes avançar com uma decisão reversível, por exemplo preparar dados exportáveis, enquanto a evidência sobre autonomia amadurece.
 
 \begin{promptlabbox}{Uma previsão que aceita perder}
 \textbf{Objetivo e contexto:} transformar uma previsão vaga sobre IA numa hipótese acompanhável. Não precisas de programar nem de atribuir datas a AGI.
