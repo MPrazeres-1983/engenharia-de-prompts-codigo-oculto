@@ -104,6 +104,8 @@ Em 05-11-2026, o caso SyRI foi verificado no texto da decisão de 5 de fevereiro
 | `rfc8259` | [IETF RFC 8259](https://www.rfc-editor.org/rfc/rfc8259.html), §§ 3, 4 e 6 | Literais JSON, recomendação de nomes únicos e exclusão de NaN e infinitos. |
 | `pythonjson312` | [Documentação Python 3.12](https://docs.python.org/3.12/library/json.html#standard-compliance-and-interoperability), conformidade e opções de descodificação | Comportamento por omissão de NaN e repetição de nomes. Verificado localmente em Python 3.12.14 que a chave repetida conserva o último valor e que `json.loads('NaN')` devolve NaN. |
 
+O terceiro ciclo reconfirmou em 05-11-2026 o [Regulamento (UE) 2026/1744](https://eur-lex.europa.eu/eli/reg/2026/1744/oj), considerando 40, alteração do artigo 113 e artigo 4. Os marcos de dezembro de 2027 e agosto de 2028 mantêm o âmbito descrito no capítulo de governação. A revisão de segurança consultou [OWASP LLM01](https://genai.owasp.org/llmrisk/llm01-prompt-injection/) e [LLM07](https://genai.owasp.org/llmrisk/llm072025-system-prompt-leakage/) para origem das instruções, credenciais e autorização no executor.
+
 ## Recursos e licenças
 
 Texto novo, diagrama de equipa, tabelas, dados sintéticos e scripts foram produzidos para esta revisão sob as condições da obra. Capa original preservada byte a byte. Não se copiaram figuras dos estudos ou modelos; os artigos são citados e resumidos com alcance limitado. Python usa biblioteca padrão. Modelos e runtime mantêm as licenças indicadas no registo histórico; os pesos não são redistribuídos. O pacote SKILL.md não recebe uma licença comercial diferente da obra.

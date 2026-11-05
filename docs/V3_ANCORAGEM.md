@@ -40,7 +40,7 @@ Os números são prefixos dos ficheiros, de acordo com `V3_ESTRUTURA.json`. A re
 | B | 12, 13, 14, 15, 16, 18, 19, 35, 36, 37 | 35 e 36 revistos em H1. Faltam os oito restantes, de escrita, aprendizagem, criação e prática |
 | C | 06, 08, 09 | Mecanismo, unidades e modalidades |
 | D | 20, 21, 22, 23, 24, 40 | Construção, fontes, autoridade e interoperabilidade |
-| E | 25, 26, 27, 28 | Avaliação, segurança e operação. Integra H3 |
+| E | 25, 26, 27, 28 | Revisto. Métricas por decisão, autorização no executor, operação e supervisão. Integra H3 |
 | F | 29, 48, 50 | Futuros e comparação, com medidas e limites explícitos |
 
 ## Regras de registo
@@ -59,7 +59,8 @@ Os números são prefixos dos ficheiros, de acordo com `V3_ESTRUTURA.json`. A re
 | H2 | Caso SyRI escrito no capítulo 45. Decisão de 05-02-2020, parágrafos verificados, referência `syri2020` e comunicado identificados no registo de fontes | Conferir citações em H5. O texto distingue sinalização de sanção e aplica perguntas de desenho a um cenário próprio |
 | H3 | Ensaio executado em `experiencias/operacao` e laboratório no capítulo 27. Com v2 vigente, v1 passa a forma, é encaminhada sem prazo e a cache por versão recupera v2. Seis testes específicos aprovados | Confirmar a suíte completa e o novo laboratório no PDF em H5 |
 
-| H4-A | Oito capítulos revistos, de 02 a 34 pelos prefixos do lote A. Retomada a reclamação dos seis pares para ligar instrução, testes, evidência e estrutura. Corrigidos os exemplos de avaliação e de JSON | Rever lote E e registar os restantes capítulos para retoma |
+| H4-A | Oito capítulos revistos, de 02 a 34 pelos prefixos do lote A. Retomada a reclamação dos seis pares para ligar instrução, testes, evidência e estrutura. Corrigidos os exemplos de avaliação e de JSON | Continuar a partir do primeiro lote ainda aberto |
+| H4-E | Quatro capítulos revistos. Distinção entre lançamento canário, sonda e avaliação A/B, custos de encaminhar, segurança na ferramenta e responsáveis pela contenção e revisão. Datas do artigo 113 reconfirmadas | Consolidar e validar a composição em H5 |
 
 ## Dependências pendentes de outros ensaios
 

@@ -1,25 +1,9 @@
 \chapter{Avaliação e Debugging de Prompts}
 \label{ch:avaliacao}
 
-\section{Porque é que prompts precisam de testes}
+Imagina duas respostas a um pedido de reembolso. Um cita a política e promete 48 horas. O outro cita a mesma política e encaminha a reclamação. Se a política não fixa um prazo, a primeira resposta falha mesmo que seja mais rápida, simpática e bem formatada. Mais adiante, veremos este erro num ensaio real, com a resposta guardada.
 
-Há uma ilusão comum: “se o prompt está bem escrito, a resposta será boa”. A realidade:
-
-\begin{itemize}[leftmargin=*]
-\item Prompts comportam-se como \emph{código frágil}: pequenas mudanças podem ter efeitos grandes.
-\item Modelos são atualizados, versões mudam, outputs também.
-\item Contextos de entrada reais são mais variados e caóticos que os teus exemplos de protótipo.
-\end{itemize}
-
-Logo, se não testas:
-
-\begin{itemize}[leftmargin=*]
-\item não sabes se um “refinamento” realmente melhorou a performance,
-\item não consegues comparar prompts entre si,
-\item ficas sempre em modo “feeling”, não em modo engenharia.
-\end{itemize}
-
-Avaliar prompts não é opcional em produção. É parte básica de LLMOps.
+Para avaliar, começa pela decisão que a resposta pode afetar. Define o que seria uma saída aceitável e como descobririas uma falha. Depois fixa as entradas e compara versões. Uma troca de prompt, de modelo ou de fonte pode mudar a resposta. O teste precisa de saber que peça mudou.
 
 \section{O que estás a tentar otimizar, exatamente?}
 
@@ -60,7 +44,7 @@ Só depois disso pensa em métricas numéricas. Sem critérios de qualidade expl
 
 Em vez de discutir em abstrato se um prompt é “melhor”, cria um \emph{golden set}: um conjunto de inputs representativos com outputs de referência que consideras bons.
 
-\subsection*{Como construir um golden set decente}
+\subsection*{Construir um conjunto de referência}
 
 \begin{itemize}[leftmargin=*]
 \item \textbf{Diversidade}: inclui casos fáceis, médios e difíceis.
@@ -137,7 +121,7 @@ Exemplos:
 
 \begin{itemize}[leftmargin=*]
 \item Accuracy (percentagem de acertos),
-\item F1-score (quando há classes desequilibradas),
+\item F1 por classe ou por agregação, com precisão e sensibilidade definidas,
 \item Taxa de outputs inválidos (por exemplo, JSON mal-formado).
 \end{itemize}
 
@@ -233,30 +217,10 @@ Isto permite:
 \item discussões mais racionais do que “parece melhor”.
 \end{itemize}
 
-\subsection*{A/B testing com utilizadores reais}
+\subsection*{Comparação A/B com tráfego real}
+Se a pergunta for causal, define a unidade de atribuição aleatória e a métrica antes de começar. Um utilizador que recebe respostas de ambos os sistemas pode transportar informação de um para o outro. Atribuir por utilizador ou por conta pode ajudar nesse caso. Regista falhas, escaladas e o tempo até resolução, além da medida principal. Compara versões durante o mesmo período.
 
-Quando tens tráfego suficiente, podes:
-
-\begin{itemize}[leftmargin=*]
-\item enviar uma percentagem de pedidos para o sistema A (prompt/modelo antigo),
-\item outra percentagem para o sistema B (novo),
-\item medir métricas de negócio:
-\begin{itemize}[leftmargin=*]
-\item taxa de resolução sem intervenção humana,
-\item satisfação (NPS, thumbs up/down),
-\item tempo até resolução,
-\item escaladas para humanos.
-\end{itemize}
-\end{itemize}
-
-\begin{keyideabox}{Não faças grandes mudanças sem “rede de segurança”}
-Sempre que mudares de prompt/modelo num sistema crítico:
-\begin{itemize}[leftmargin=*]
-\item testa em ambiente de staging com golden set,
-\item faz rollout gradual (canary release),
-\item monitoriza métricas de erro e feedback.
-\end{itemize}
-\end{keyideabox}
+Um lançamento canário testa se uma versão pode avançar com exposição limitada. Serve para parar se aparecer um sinal de risco. O capítulo~\ref{ch:llmops} mostra ainda uma sonda canário com um pedido controlado. Para estimar o efeito de uma mudança no tráfego, é preciso um desenho de comparação adequado.
 
 \section{Debugging de prompts: da falha ao ajuste}
 
@@ -381,7 +345,7 @@ Sem este ciclo, estás só a colecionar dashboards bonitos.
 \label{sec:metricas}
 Para uma classe de interesse, precisão é $TP/(TP+FP)$ e sensibilidade é $TP/(TP+FN)$. A primeira pergunta «das deteções, quantas estavam certas?»; a segunda pergunta «dos casos positivos, quantos detetámos?». Define o comportamento quando o denominador é zero. F1 é a média harmónica das duas quando ambas estão definidas. Não resolves desequilíbrio apenas escrevendo «F1»: explicita a classe e a agregação macro ou micro.
 
-Na Lavandaria, encaminhar todos os pedidos para uma pessoa evita algumas decisões automáticas erradas, mas não significa resolver a tarefa. Mede cobertura automática (respostas emitidas/pedidos), acerto entre respostas emitidas e erros graves por pedido. Define antecipadamente se uma abstinência correta conta como sucesso operacional e apresenta-a separadamente.
+Na Lavandaria, encaminhar todos os pedidos para uma pessoa evita algumas decisões automáticas erradas, mas não significa resolver a tarefa. Mede cobertura automática (respostas emitidas/pedidos), acerto entre respostas emitidas e erros graves por pedido. Define antecipadamente se uma abstinência correta conta como sucesso operacional e apresenta-a separadamente. Num exemplo sintético de dez pedidos, A responde a todos e acerta oito. B responde a cinco e acerta os cinco. B tem maior acerto entre respostas, 100\% contra 80\%, e menor cobertura, 50\% contra 100\%. Para escolher, falta saber o custo dos erros e dos cinco encaminhamentos.
 
 Dez respostas, oito certas, dão uma proporção observada de $0.8$. Não dão «80\% de fiabilidade» para todos os clientes. Pelo intervalo de Wilson a 95\%, sob um modelo binomial com casos independentes e representativos, o intervalo é aproximadamente $[0.490,0.943]$~\citep{wilson1927}. Dez variações quase iguais não justificam a mesma generalização. A demonstração reproduz o cálculo em Python.
 

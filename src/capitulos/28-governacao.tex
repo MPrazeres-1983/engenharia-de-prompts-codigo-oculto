@@ -3,12 +3,12 @@
 
 Uma equipa pode ter bons testes e continuar sem saber se pode usar os dados, quem responde pelo sistema ou como um cliente contesta uma decisão. São perguntas diferentes da taxa de acerto. Chegam frequentemente tarde porque não parecem problemas de programação. Continuam a ser problemas do projeto.
 
-Este capítulo distingue enquadramento legal, orientação voluntária e escolhas de engenharia. A verificação documental termina em \textbf{3 de novembro de 2026}. Um caso concreto depende da finalidade, dos dados, do papel da organização e das regras setoriais e nacionais aplicáveis.
+Este capítulo distingue enquadramento legal, orientação voluntária e escolhas de engenharia. O enquadramento foi verificado em 3 de novembro de 2026. O calendário do artigo 113 foi conferido de novo em \textbf{5 de novembro de 2026}. Um caso concreto depende da finalidade, dos dados, do papel da organização e das regras setoriais e nacionais aplicáveis.
 
 \section{Um inventário antes dos princípios}
 Para cada sistema, regista finalidade, utilizadores, dados, fornecedores, ferramentas, decisões afetadas e responsável. Acrescenta onde corre, quem pode alterar o modelo e o que acontece quando falha. Um inventário pequeno pode ser mais útil do que cinquenta páginas a afirmar que a empresa valoriza a ética.
 
-Na Lavandaria, «preparar um rascunho» e «aprovar uma compensação» têm efeitos diferentes. A mudança exige rever dados, autorização, critérios e responsabilidade. Não é apenas acrescentar uma ferramenta.
+Na Lavandaria, uma pessoa pode rever um rascunho antes do envio. Aprovar uma compensação inicia um pagamento no cenário. Identifica quem pode tomar essa decisão, o que precisa de saber e como o cliente pede a sua revisão.
 
 \section{RGPD: o tratamento precisa de fundamento}
 O artigo 5 do RGPD estabelece princípios como finalidade, minimização, exatidão, limitação da conservação e segurança. O consentimento é um dos fundamentos de licitude do artigo 6, não uma solução universal; categorias especiais e transferências exigem análise adicional. Dados pseudonimizados que possam ser associados a uma pessoa continuam a ser dados pessoais. O artigo 35 exige avaliação de impacto antes de um tratamento suscetível de implicar elevado risco, nas condições aí previstas~\citep{rgpd2016}.
@@ -24,13 +24,13 @@ A regra geral de aplicação do artigo 113 aponta para 2 de agosto de 2026, com 
 
 Estas datas não significam que todas as obrigações de um sistema comecem no mesmo dia. Há exceções, regras transitórias e deveres com outros marcos, incluindo literacia e transparência. Consulta o artigo aplicável à finalidade e ao papel da organização. A verificação documental deste capítulo não determina a conformidade de um produto concreto.
 
-\section{Uma checklist não é uma certificação}
+\section{O que a equipa consegue verificar}
 O NIST AI RMF e o perfil de IA generativa oferecem um quadro voluntário de gestão de riscos~\citep{nist2024}. OWASP ajuda a identificar falhas. Estas referências têm funções próprias; segui-las não prova conformidade legal.
 
-Em engenharia, ajudam a perguntar que danos são plausíveis, que evidência existe, como se controla acesso e que risco residual é aceite. A resposta deve ficar ligada a quem decide e à versão do sistema, não a uma declaração abstrata.
+Um registo de risco útil liga cada problema a um responsável, a uma versão e a uma evidência. No caso da cache do capítulo~\ref{ch:llmops}, a equipa técnica consegue mostrar que bloqueou o prazo antigo e recuperou a versão vigente. A área responsável decide o que fazer com pedidos que já receberam uma resposta errada. São decisões diferentes, com registos próprios.
 
 \section{Supervisão que possa alterar o resultado}
-O revisor precisa de informação, tempo, competência e poder para rejeitar a proposta. Se recebe cem decisões por minuto e só pode carregar em «aceitar», a presença humana pouco acrescenta. Mede carga, divergências, erros apanhados e tempo de resposta.
+O revisor precisa de informação, tempo, competência e poder para rejeitar a proposta. Se recebe cem decisões por minuto e só pode carregar em «aceitar», a presença humana pouco acrescenta. Mede carga, divergências, erros apanhados e tempo de resposta. Verifica também se a pessoa afetada consegue chegar a esse revisor. O caso SyRI, no capítulo~\ref{ch:poder}, mostra que até a fase de sinalização pode ter efeitos que merecem exame.
 
 Um modelo não é uma pessoa a quem a organização possa atribuir a culpa. O responsável pelo processo tem de conhecer limites, aprovar o uso e manter alternativa quando o sistema fica indisponível.
 
