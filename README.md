@@ -4,7 +4,9 @@
 
 Esta branch amplia *Engenharia de Prompts: O Código Oculto* para fundamentos, utilização criativa, sistemas, operação e impacto social da IA. O título é provisório. **O manuscrito ainda não satisfaz a ambição editorial final e não está aprovado para publicação ou merge.**
 
-A estrutura de trabalho tem dez partes, 50 capítulos, três apêndices, 74 laboratórios, 90 referências e 58 entradas de glossário. A retoma de 5 de novembro inclui a revisão de 17 dos 34 capítulos pendentes, o projeto criativo [A Meia Testemunha](exemplos/atelier/README.md), o caso SyRI e o [ensaio de cache](experiencias/operacao/README.md). Os resultados e a ordem de retoma estão na [ancoragem](docs/V3_ANCORAGEM.md).
+A estrutura de trabalho tem dez partes, 50 capítulos, três apêndices, 74 laboratórios, 93 referências e 58 entradas de glossário. O guia de consulta liga pontos de entrada para tarefas concretas aos capítulos de aprofundamento. Os 17 capítulos revistos no checkpoint I completam a passagem editorial por todos os capítulos. Os resultados e a ordem de retoma estão na [ancoragem](docs/V3_ANCORAGEM.md).
+
+O [projeto criativo A Meia Testemunha](exemplos/atelier/README.md), o caso SyRI e o [ensaio de cache](experiencias/operacao/README.md) integram a edição. A leitura independente e os ensaios pendentes têm critérios de fecho próprios.
 
 A segunda edição permanece em `main@975ade89632700918786603dc23722e74f8610f7`, integrada pelo [PR #1](https://github.com/MPrazeres-1983/engenharia-de-prompts-codigo-oculto/pull/1). Esta revisão usa `terceira-edicao-ia-referencia-2026` e o [PR #2, Draft](https://github.com/MPrazeres-1983/engenharia-de-prompts-codigo-oculto/pull/2). Não cria tags ou releases nem altera diretamente `main`.
 

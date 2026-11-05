@@ -17,7 +17,7 @@
 \addcontentsline{toc}{chapter}{Nota da terceira edição em desenvolvimento}
 Esta revisão amplia \emph{Engenharia de Prompts: O Código Oculto}, de Mário Prazeres, para compreender a IA, utilizá-la, criar com ela e construir sistemas verificáveis. O título da folha de rosto é provisório e fica sujeito à decisão do autor. A imagem da capa original é preservada como parte da proveniência; a capa comercial da nova obra continua por decidir.
 
-A estrutura tem dez partes. O leitor pode seguir a progressão dos conceitos até à prática ou começar por uma tarefa. Para experimentar já, lê o capítulo~\ref{ch:primeira-conversa}. Para criar sem programar, segue os capítulos~\ref{ch:imagem-design}, \ref{ch:audiovisual} e~\ref{ch:brincar}. Para construir, começa por Spec-First, no capítulo~\ref{ch:spec-first}. A matemática é comentada e pode ser retomada depois da primeira experiência.
+A estrutura tem dez partes. O guia de consulta indica onde começar por uma tarefa, onde encontrar o mecanismo e onde aprofundar. A matemática é comentada e pode ser retomada depois da primeira experiência.
 
 A progressão vai de situações correntes ao mecanismo e, daí, à especialização. Podes acompanhar a explicação principal sem executar os aprofundamentos de cálculo na primeira leitura. Os casos colocam uma pergunta, as fontes ou experiências permitem investigá-la e a conclusão conserva os limites da evidência. O humor pertence à maneira de contar; não altera o estatuto dos factos. Os diálogos da Lavandaria são ficção declarada, não transcrições de estudos.
 
@@ -30,6 +30,29 @@ A segunda edição conserva um ensaio real de 52 inferências, incluindo falhas.
 Este manuscrito está em desenvolvimento. O aprofundamento setorial e a leitura independente continuam por completar. A ordem de retoma consta de \texttt{docs/V3\_PROGRESSO.md}.
 
 A preparação teve assistência de IA na auditoria, escrita, revisão e exemplos. Mário Prazeres é o autor. A obra mantém a licença CC BY-NC-SA 4.0. Os materiais de terceiros conservam as suas licenças.
+\chapter*{Guia de consulta}
+\addcontentsline{toc}{chapter}{Guia de consulta}
+
+Escolhe a linha que corresponde à pergunta que trazes. Podes começar por uma tarefa e voltar à explicação do mecanismo quando precisares dela.
+
+\begin{center}
+\small
+\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}p{.19\textwidth}*{2}{>{\raggedright\arraybackslash}X}@{}}
+\toprule
+Quero & Começar por aqui & Aprofundar quando precisar \\
+\midrule
+Usar e aprender & Primeira conversa (cap.~\ref{ch:primeira-conversa}) e aprendizagem com pistas (cap.~\ref{ch:aprender}). & Escrita com factos conferidos (cap.~\ref{ch:escrita}) e investigação (cap.~\ref{ch:investigacao}). \\
+Compreender o modelo & O que é IA (cap.~\ref{ch:ia}) e como aprende (cap.~\ref{ch:ml}). & Atenção e Transformer (cap.~\ref{ch:transformer}) e execução local (cap.~\ref{ch:local}). \\
+Criar sem código & Jogos em papel (cap.~\ref{ch:brincar}) e cartaz (cap.~\ref{ch:imagem-design}). & Voz e continuidade (cap.~\ref{ch:criatividade}) e montagem da curta (cap.~\ref{ch:audiovisual}). \\
+Construir um sistema & Especificação (cap.~\ref{ch:spec-first}) e exemplo executável da Lavandaria (cap.~\ref{ch:lavandaria}). & Pesquisa com fontes (cap.~\ref{ch:rag}), ferramentas (cap.~\ref{ch:mcp}) e interoperabilidade (cap.~\ref{ch:interop}). \\
+Avaliar ou operar & Critérios e casos de teste (cap.~\ref{ch:avaliacao}) e laboratório comparativo (cap.~\ref{ch:comparar}). & Segurança (cap.~\ref{ch:seguranca}) e recuperação de incidentes (cap.~\ref{ch:llmops}). \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+Os exemplos de escrita, estudo e jogo podem ser feitos à mão. Os laboratórios executáveis indicam os requisitos e o que podes verificar localmente. Para sustentar uma afirmação ou conferir a origem de um resultado, consulta também o apêndice~\ref{ap:fontes}.
+
 \tableofcontents
 \mainmatter
 \pagestyle{plain}

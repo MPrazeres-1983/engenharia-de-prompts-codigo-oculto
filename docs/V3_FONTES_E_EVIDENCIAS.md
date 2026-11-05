@@ -49,7 +49,7 @@ As 41 entradas históricas mantêm o registo anterior. As 32 novas perfazem 73. 
 | `unesco2023` | [UNESCO](https://doi.org/10.54675/EWZM9535), 2023 | Metadados e orientação institucional sobre educação; não lei universal nem estudo causal. |
 | `agentskills2026` | [Agent Skills Specification](https://agentskills.io/specification), consulta 04-11-2026 | Formato, frontmatter, limites e divulgação progressiva. Não há instalação universal nem ativação garantida. |
 | `autogen2023` | [AutoGen v2](https://arxiv.org/abs/2308.08155v2), DOI 10.48550/arXiv.2308.08155 | Metadados e resumo; padrão de arquitetura, não superioridade geral de equipas. |
-| `a2a2026` | [A2A 1.0.0](https://a2a-protocol.org/v1.0.0/specification/) | Visão geral; secções 4.4.5 e 8.2, tarefas e estados. Confirmado `/.well-known/agent-card.json`; não usar caminho de rascunho antigo. |
+| `a2a2026` | [A2A 1.0.0](https://a2a-protocol.org/v1.0.0/specification/) | Visão geral, estado de tarefa, `AgentSkill` e descoberta. Confirmado `/.well-known/agent-card.json`. |
 | `hu2022lora` | [LoRA v2](https://arxiv.org/abs/2106.09685v2), preprint 2021 / ICLR 2022 | Metadados e resumo; fórmula/contagens didáticas independentes, sem atribuir redução de parâmetros a memória total. |
 | `dettmers2023` | [QLoRA, NeurIPS 2023](https://arxiv.org/abs/2305.14314) | Metadados e resumo com base congelada e adaptadores; não se importam percentagens comerciais de benchmark. |
 | `hinton2015` | [Distilling the Knowledge](https://arxiv.org/abs/1503.02531), 2015 | Metadados e resumo; mecanismo de distilação, sem ganhos garantidos. |

@@ -2,6 +2,16 @@
 
 Atualização de 05-11-2026. Branch `terceira-edicao-ia-referencia-2026`, [PR #2 em Draft](https://github.com/MPrazeres-1983/engenharia-de-prompts-codigo-oculto/pull/2).
 
+## Checkpoint I — fecho editorial e consulta
+
+Os 17 capítulos em falta foram revistos em três lotes. O [registo de retoma](V3_ANCORAGEM.md) identifica os ficheiros e a [validação](V3_VALIDACAO.md) descreve os resultados. A passagem editorial abrange agora os 50 capítulos. A edição conserva 74 laboratórios, tem 93 referências compostas e ganhou um guia de consulta de uma página.
+
+- **Entrada.** O leitor pode escolher uma tarefa, começar por um exercício acessível e seguir as remissões quando precisar do mecanismo. Há caminhos para escrever e aprender, criar sem código, compreender modelos, construir e operar.
+- **Verificação.** As consultas SQL e a função Python foram executadas. A Lavandaria demonstrou a diferença entre conhecer um identificador e ter autorização. As três abordagens do laboratório comparativo tiveram 2 acertos em 4, com diferentes chamadas de componentes e zero chamadas a um LLM.
+- **Fontes.** Foram acrescentadas três referências e conferidas as afirmações revistas nos trechos indicados no [registo](V3_FONTES_E_EVIDENCIAS.md). A revisão delimita o alcance dos estudos e identifica os exemplos de ficção e os cálculos construídos.
+
+O próximo bloco trata de ensaios e fontes. A [matriz](V3_MATRIZ_COBERTURA.md) separa as prioridades de validação e aprofundamento. A estimativa é de duas iterações planeadas até uma candidata e uma adicional se houver correções da leitura independente ou um ensaio tardio. O piloto de equipa continua dependente de um GGUF íntegro.
+
 ## Checkpoint H — projeto criativo, caso público e operação
 
 O manuscrito está em desenvolvimento. Tem 50 capítulos em dez partes, três apêndices, 74 laboratórios, 90 referências e 58 termos. Os 76 testes passaram. A prova e o âmbito da inspeção estão em [V3_VALIDACAO.md](V3_VALIDACAO.md).
@@ -11,7 +21,7 @@ O manuscrito está em desenvolvimento. Tem 50 capítulos em dez partes, três ap
 - **Operação.** Executado o [incidente da cache](../experiencias/operacao/README.md). A resposta desatualizada passa a forma, é encaminhada sem prazo e a versão vigente é recuperada. Seis testes acrescentados.
 - **Progressão.** Revistos A, C, E e dois capítulos de B, 17 dos 34 que estavam por rever. Foram reduzidas repetições e acrescentados exemplos que se podem verificar. Faltam 17 capítulos em B, D e F.
 
-A [ancoragem](V3_ANCORAGEM.md) identifica os commits, os ficheiros e as dependências. O próximo passo é `src/capitulos/12-escrita.tex`. A estimativa atual é de três a quatro iterações para uma candidata à aprovação do autor. O piloto com LLM aguarda um GGUF íntegro.
+A [ancoragem](V3_ANCORAGEM.md) identifica os commits, os ficheiros e as dependências. O checkpoint I retomou em `src/capitulos/12-escrita.tex` e fechou os três lotes pendentes.
 
 ## Checkpoint G — progressão, narrativa e aprofundamento
 

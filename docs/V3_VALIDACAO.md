@@ -2,6 +2,19 @@
 
 Atualização de 05-11-2026. O [registo de retoma](V3_ANCORAGEM.md) liga as verificações aos blocos e aos commits.
 
+## Checkpoint I — fecho editorial e guia de consulta
+
+| Verificação | Resultado observado |
+|---|---|
+| Compilação e estrutura | 264 páginas físicas A4 na prova local. Dez partes, 50 capítulos, três apêndices, 74 laboratórios, 93 entradas bibliográficas compostas e 58 termos. Quatro exemplos JSON e zero erros do verificador de estrutura e log |
+| Navegação | 22 remissões clicáveis do guia conferidas no PDF. Cada uma abre o capítulo ou apêndice indicado |
+| Regressão | 76 testes Python passaram, 12 de 12 regressões offline da Lavandaria passaram, `compileall` passou. Integridade e métricas dos 52 registos históricos reconferidas |
+| Exemplos novos | SQLite 3.53.1 devolveu `(3,90,30)` com a junção e `(2,60)` com `EXISTS`. O caso adicional sem artigos e as quatro verificações da média em Python passaram |
+| Comparação offline | Os três modos repetiram os mesmos dois acertos em quatro casos, com 4, 4 e 12 chamadas de componentes. Zero chamadas ao modelo |
+| Inspeção tipográfica | Geometria conferida nas 264 páginas. Amostra do guia, dos três lotes, das tabelas e do código. Corrigidas duas páginas com linhas de fim de capítulo isoladas e reunidas as linhas de cada consulta SQL e do JSON do capítulo de dados |
+
+O [registo de fontes](V3_FONTES_E_EVIDENCIAS.md) indica as passagens verificadas e o alcance da consulta. A validação dos capítulos de protocolos verificou a documentação e os exemplos offline. A interoperabilidade ponta a ponta, a adaptação de um LLM, o piloto de equipa com modelo e a leitura independente têm validações próprias pendentes. O [PR #2](https://github.com/MPrazeres-1983/engenharia-de-prompts-codigo-oculto/pull/2) liga a revisão exata e as verificações da CI.
+
 ## Checkpoint H — terceira retoma
 
 | Verificação | Resultado observado |

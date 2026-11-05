@@ -11,7 +11,7 @@ Podes fazer a conta sem computador. Depois da junção, vês 30, 30 e 30. A soma
 
 \section{Executar a consulta num conjunto pequeno}
 
-O exemplo pode ser repetido numa base SQLite de teste. Cria as duas tabelas e executa as consultas pela ordem abaixo. Na primeira, o operador \texttt{DISTINCT} do agregado elimina valores iguais. Na segunda, \texttt{EXISTS} verifica se existe pelo menos uma linha do pedido, mantendo a unidade de análise~\citep{sqliteagregados2026}.
+O exemplo pode ser repetido numa base SQLite de teste. Cria as tabelas e começa pela consulta com a junção. O operador \texttt{DISTINCT} do agregado elimina valores iguais~\citep{sqliteagregados2026}.
 
 \begin{lstlisting}
 CREATE TABLE pedidos (id INTEGER PRIMARY KEY, total INTEGER);
@@ -24,15 +24,20 @@ SELECT COUNT(*) AS linhas, SUM(p.total) AS soma,
        SUM(DISTINCT p.total) AS soma_distinta
 FROM pedidos AS p
 JOIN artigos AS a ON a.pedido_id = p.id;
+\end{lstlisting}
 
+\noindent\begin{minipage}{\linewidth}
+A segunda consulta usa \texttt{EXISTS} para verificar se o pedido tem pelo menos um artigo. A soma continua a usar uma linha por pedido.
+\begin{lstlisting}
 SELECT COUNT(*) AS pedidos, SUM(p.total) AS soma
 FROM pedidos AS p
 WHERE EXISTS (
     SELECT 1 FROM artigos AS a WHERE a.pedido_id = p.id
 );
 \end{lstlisting}
+\end{minipage}
 
-Na execução local, a primeira consulta devolveu $(3,90,30)$ e a segunda $(2,60)$. São dados fictícios e o resultado é conferível à mão. Aqui só queremos somar pedidos que tenham pelo menos um artigo. Para somar todos os pedidos, basta usar a tabela de pedidos. Se precisares de juntar uma estatística de artigos, podes primeiro agregá-los por pedido e verificar a cardinalidade da junção.
+Na execução local, a primeira consulta devolveu $(3,90,30)$ e a segunda $(2,60)$. Para incluir pedidos sem artigos, consulta só a tabela de pedidos. Se também precisares de estatísticas de artigos, agrega primeiro por pedido e verifica a cardinalidade antes de juntar.
 
 \begin{promptlabbox}{Rever uma consulta com um resultado conhecido}
 \textbf{Objetivo e contexto:} Verificar linhas e totais antes de aplicar uma consulta a dados maiores. Usa o esquema fictício acima ou uma base de teste autorizada.

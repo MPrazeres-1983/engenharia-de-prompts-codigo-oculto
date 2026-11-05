@@ -139,3 +139,14 @@ Retoma de `e990b891`, em 04-11-2026. A extensão passa a 299 páginas, mantendo 
 | Laboratório e progressão | Projeto 5 integra aprendizagem, adaptação e erro de representação; percurso da intuição à especialização explícito | Produção criativa, experiência com participantes e validação da leitura continuam pendentes |
 
 Os capítulos revistos são os ficheiros 01, 07, 30–33, 38–39, 41–47 e 49. Não se declara uma reescrita narrativa completa dos restantes 34 capítulos. A apreciação de prazer de leitura e suficiência editorial requer leitura humana; não é inferida a partir do build ou da contagem de páginas.
+
+## Reavaliação após o fecho editorial — 05-11-2026
+
+H integrou um projeto audiovisual completo, um caso em serviço público e um incidente offline. I concluiu a passagem editorial pelos 50 capítulos e reuniu os pontos de entrada no guia de consulta. As prioridades seguintes são para a iteração de ensaios e fontes.
+
+| Prioridade | Evidência existente | Lacuna a tratar |
+|---|---|---|
+| Afirmações sensíveis e setoriais | Estudos identificados em aprendizagem, saúde, agricultura e indústria, decisão primária no caso SyRI e localizadores no registo | Rever população, desfecho e alcance em cada afirmação que oriente uma decisão. Assinalar onde a cobertura é introdutória |
+| Piloto de equipa e adaptação | Comparação offline reproduzida e adaptação linear executada | Se houver modelo íntegro, validar o piloto com a configuração fixada. Avaliar separadamente a viabilidade de medir adaptação de um LLM |
+| Interoperabilidade | Critérios de contrato, autorização e estados nos capítulos 20–24 e 40 | Validar operações e falhas com serviços de ensaio, se disponíveis. Registar versão, entradas e resultados |
+| Consulta e leitura | Cinco percursos na prova, 74 laboratórios e remissões verificadas | Observar se leitores com níveis diferentes encontram o ponto de entrada, conseguem executar um exercício e distinguem os tipos de evidência |

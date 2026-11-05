@@ -1,6 +1,23 @@
 # Ancoragem e retoma da terceira edição
 
-Retoma de 5 de novembro de 2026. O autor pediu um ponto de situação e trabalho dividido em blocos, com informação suficiente para retomar cada um. O registo de execução abaixo é o primeiro sítio a consultar antes de escrever, alterar ou testar.
+## Checkpoint I — fecho editorial
+
+A retoma partiu do HEAD `adf2272756cd03f0c41070f39a75ef84ce9ed396`, árvore `bc11d63cc630bef33e5ba0d88191c06c178bd0d6`. A prova de H tinha 292 páginas. Os lotes abaixo foram guardados em commits separados na mesma branch. A [lista de commits do PR #2](https://github.com/MPrazeres-1983/engenharia-de-prompts-codigo-oculto/pull/2/commits) liga cada lote à sua revisão.
+
+| Lote | Ficheiros revistos | O que ficou verificável |
+|---|---|---|
+| B — escrita, aprendizagem e prática | 12, 13, 14, 15, 16, 18, 19, 37 | Contas de aprendizagem, ensaios publicados com âmbito explícito, ficha por afirmação, SQL por pedido, teste Python que preserva zero e jogo em papel |
+| D — construção e interoperabilidade | 20, 21, 22, 23, 24, 40 | Critérios por identidade, fusão de pesquisa calculada, autorização e estados de protocolos, quatro execuções da Lavandaria |
+| F — cenários e comparação | 29, 48, 50 | Percurso por função, duas taxas com denominadores diferentes e reexecução da comparação offline |
+| Integração | Nota editorial, guia de consulta, documentos de progresso e prova A4 | Cinco percursos com remissões conferidas. Os 50 capítulos e os 74 laboratórios foram preservados. A [validação](V3_VALIDACAO.md) documenta a composição, a amostra e os ensaios |
+
+As 16 revisões de G, as 17 de H e as 17 de I completam uma passagem editorial pelos 50 capítulos. A leitura independente e a validação da edição composta têm etapas próprias. A redução da extensão resulta da revisão de repetições e da composição, com os capítulos e laboratórios verificados pelo manifesto.
+
+**Próxima retoma.** Começa pela iteração 2, ensaios e fontes. Confirma o HEAD e consulta a [matriz de lacunas](V3_MATRIZ_COBERTURA.md), o [registo de fontes](V3_FONTES_E_EVIDENCIAS.md) e o [protocolo do piloto](../experiencias/equipas/README.md). Se houver um GGUF íntegro, verifica o SHA-256 e o runtime antes de executar. Mantém o piloto pendente enquanto a dependência persistir. Em paralelo, verifica as afirmações sensíveis e fecha o âmbito de interoperabilidade, adaptação e leitura independente com evidências próprias.
+
+## Registo histórico do checkpoint H
+
+Retoma de 5 de novembro de 2026. O autor pediu um ponto de situação e trabalho dividido em blocos, com informação suficiente para retomar cada um. As secções seguintes preservam a base, os estados iniciais e as decisões desse checkpoint.
 
 ## Base confirmada
 
@@ -69,13 +86,13 @@ O piloto de equipa depende de uma cópia íntegra do GGUF na revisão fixada. As
 
 ## Próximas iterações
 
-Estimativa de três iterações para uma versão candidata à aprovação do autor. Uma quarta serve para alterações da leitura independente ou para correr separadamente um ensaio que só fique disponível mais tarde. A conclusão depende dos resultados e dos recursos de cada bloco.
+A estimativa feita em H previa três iterações até uma candidata e uma quarta se necessária. A primeira ficou concluída em I. Restam duas iterações planeadas, com uma terceira se a leitura independente pedir nova revisão ou se um ensaio se desbloquear mais tarde.
 
 | Iteração | Primeiro passo e âmbito | Evidência de fecho |
 |---|---|---|
-| 1. Fecho editorial | Começar em `src/capitulos/12-escrita.tex`. Acabar B (12, 13, 14, 15, 16, 18, 19, 37), depois D (20, 21, 22, 23, 24, 40) e F (29, 48, 50). Cruzar o resultado com a matriz para identificar aprofundamentos setoriais prioritários | 17 ficheiros revistos com alterações e fontes localizáveis. Percursos introdutório, prático e técnico com remissões verificadas. Um commit por lote |
+| 1. Fecho editorial | Concluída em I. Lotes B, D e F e guia de consulta | 17 ficheiros revistos com alterações e fontes localizáveis. Percursos introdutório, prático e técnico com remissões verificadas. Um commit por lote |
 | 2. Ensaios e fontes | Retomar o protocolo do piloto em `experiencias/equipas` se houver GGUF íntegro. Conferir fontes e versões das afirmações sensíveis. Decidir que experiências de adaptação, interoperabilidade e leitura podem ser efetivamente executadas e documentar as que ficam como propostas | Registos de entradas, configuração, resultados e falhas para os ensaios feitos. Alcance e estado por fonte e por experiência |
 | 3. Candidata a publicação | Leitura integral, revisão independente, correções, prova A4 e critérios de aceitação. Levar título, capa e aprovação ao autor | PDF identificado com a revisão, fontes conferidas, validação local e CI do HEAD. Registo de decisões para aprovação |
 | 4. Se necessária | Corrigir observações da leitura independente ou fechar um ensaio desbloqueado depois da candidata | Diferenças, nova prova e validação do conteúdo afetado |
 
-Para retomar, começa pelo primeiro ficheiro indicado, confirma o HEAD no PR #2 e lê os últimos registos deste documento. O histórico permite ligar cada decisão ao ficheiro, à fonte ou ao ensaio que a sustenta.
+Para retomar, confirma o HEAD no PR #2 e segue o próximo passo do checkpoint I, no início deste documento.
