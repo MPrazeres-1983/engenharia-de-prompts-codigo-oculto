@@ -1,5 +1,20 @@
 # Ancoragem e retoma da terceira edição
 
+## Checkpoint J — entrada acessível, fontes e ensaio
+
+Base remota `d981608d579e893bd132ab2ab231b1359277f692`, árvore `480561ecd2f29082742f4b6974f576b24309b641`. A prova anterior tinha 264 páginas. Nesta retoma o autor pediu explicações para leitores com e sem bases de matemática e informática. O trabalho prosseguiu na mesma branch e no [PR #2 em Draft](https://github.com/MPrazeres-1983/engenharia-de-prompts-codigo-oculto/pull/2).
+
+| Bloco | Entrega | Evidência de retoma |
+|---|---|---|
+| J1. Percurso introdutório | Ponto de partida de duas páginas, revisão de 18 capítulos e glossário com 70 termos | Em `src/livro.tex` e nos capítulos revistos. Começar pelo exemplo, explicar operação e só depois introduzir notação |
+| J2. Fontes sensíveis | Esclarecidos os denominadores de rastreio e aprendizagem, as datas do regulamento e as estimativas de eletricidade | [Localizadores e âmbito](V3_FONTES_E_EVIDENCIAS.md). Estes estudos têm populações e resultados próprios |
+| J3. Ensaio de interoperabilidade | Receção A2A e arquivo MCP locais. A pede uma consulta, retoma-a com o número e obtém artefacto. B fica sem acesso à tarefa de A | [Comando, versões e resultado de dez verificações](../experiencias/interoperabilidade/README.md). Zero inferências novas |
+| J4. Integração | Prova A4 e testes conferidos para a revisão da branch | [Validação e critérios de leitura](V3_VALIDACAO.md) e verificações da revisão no PR |
+
+O [piloto com modelo local](../experiencias/equipas/README.md) continua pendente. A ligação à revisão fixada esgotou o tempo antes de transferir dados. O ensaio de protocolos verifica mensagens e autorizações em ambiente controlado. Testes com outros clientes ou servidores, participantes e treino de um LLM têm dependências e critérios próprios.
+
+**Próxima retoma.** Confirma o HEAD no PR e começa a leitura da prova pelo guia, pelo Transformer e pelo capítulo de interoperabilidade, usando os três percursos da [validação](V3_VALIDACAO.md). Em seguida percorre o manuscrito completo, corrige as transições, fontes ou dificuldades encontradas, compila uma candidata e regista as escolhas que exigem apreciação do autor. Incorpora uma leitura independente quando houver comentários reais. A ordem de trabalho conserva os resultados já observados.
+
 ## Checkpoint I — fecho editorial
 
 A retoma partiu do HEAD `adf2272756cd03f0c41070f39a75ef84ce9ed396`, árvore `bc11d63cc630bef33e5ba0d88191c06c178bd0d6`. A prova de H tinha 292 páginas. Os lotes abaixo foram guardados em commits separados na mesma branch. A [lista de commits do PR #2](https://github.com/MPrazeres-1983/engenharia-de-prompts-codigo-oculto/pull/2/commits) liga cada lote à sua revisão.
@@ -13,7 +28,7 @@ A retoma partiu do HEAD `adf2272756cd03f0c41070f39a75ef84ce9ed396`, árvore `bc1
 
 As 16 revisões de G, as 17 de H e as 17 de I completam uma passagem editorial pelos 50 capítulos. A leitura independente e a validação da edição composta têm etapas próprias. A redução da extensão resulta da revisão de repetições e da composição, com os capítulos e laboratórios verificados pelo manifesto.
 
-**Próxima retoma.** Começa pela iteração 2, ensaios e fontes. Confirma o HEAD e consulta a [matriz de lacunas](V3_MATRIZ_COBERTURA.md), o [registo de fontes](V3_FONTES_E_EVIDENCIAS.md) e o [protocolo do piloto](../experiencias/equipas/README.md). Se houver um GGUF íntegro, verifica o SHA-256 e o runtime antes de executar. Mantém o piloto pendente enquanto a dependência persistir. Em paralelo, verifica as afirmações sensíveis e fecha o âmbito de interoperabilidade, adaptação e leitura independente com evidências próprias.
+O próximo passo previsto em I era a iteração 2, ensaios e fontes. O checkpoint J regista a execução e as dependências que subsistem.
 
 ## Registo histórico do checkpoint H
 
@@ -86,13 +101,13 @@ O piloto de equipa depende de uma cópia íntegra do GGUF na revisão fixada. As
 
 ## Próximas iterações
 
-A estimativa feita em H previa três iterações até uma candidata e uma quarta se necessária. A primeira ficou concluída em I. Restam duas iterações planeadas, com uma terceira se a leitura independente pedir nova revisão ou se um ensaio se desbloquear mais tarde.
+A estimativa feita em H previa três iterações até uma candidata e uma quarta se necessária. As duas primeiras estão registadas em I e J. Segue-se a prova candidata, com revisão adicional se surgirem correções da leitura independente ou se um ensaio se desbloquear mais tarde.
 
 | Iteração | Primeiro passo e âmbito | Evidência de fecho |
 |---|---|---|
 | 1. Fecho editorial | Concluída em I. Lotes B, D e F e guia de consulta | 17 ficheiros revistos com alterações e fontes localizáveis. Percursos introdutório, prático e técnico com remissões verificadas. Um commit por lote |
-| 2. Ensaios e fontes | Retomar o protocolo do piloto em `experiencias/equipas` se houver GGUF íntegro. Conferir fontes e versões das afirmações sensíveis. Decidir que experiências de adaptação, interoperabilidade e leitura podem ser efetivamente executadas e documentar as que ficam como propostas | Registos de entradas, configuração, resultados e falhas para os ensaios feitos. Alcance e estado por fonte e por experiência |
+| 2. Ensaios e fontes | Execução disponível fechada em J. Revisão de fontes, explicações desde a base e interoperabilidade local | Resultados e âmbito registados. Piloto, adaptação de LLM e leitura independente com dependências explícitas |
 | 3. Candidata a publicação | Leitura integral, revisão independente, correções, prova A4 e critérios de aceitação. Levar título, capa e aprovação ao autor | PDF identificado com a revisão, fontes conferidas, validação local e CI do HEAD. Registo de decisões para aprovação |
 | 4. Se necessária | Corrigir observações da leitura independente ou fechar um ensaio desbloqueado depois da candidata | Diferenças, nova prova e validação do conteúdo afetado |
 
-Para retomar, confirma o HEAD no PR #2 e segue o próximo passo do checkpoint I, no início deste documento.
+Para retomar, confirma o HEAD no PR #2 e segue o próximo passo do checkpoint J, no início deste documento.

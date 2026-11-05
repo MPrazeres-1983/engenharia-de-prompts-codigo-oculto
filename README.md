@@ -4,7 +4,7 @@
 
 Esta branch amplia *Engenharia de Prompts: O Código Oculto* para fundamentos, utilização criativa, sistemas, operação e impacto social da IA. O título é provisório. **O manuscrito ainda não satisfaz a ambição editorial final e não está aprovado para publicação ou merge.**
 
-A estrutura de trabalho tem dez partes, 50 capítulos, três apêndices, 74 laboratórios, 93 referências e 58 entradas de glossário. O guia de consulta liga pontos de entrada para tarefas concretas aos capítulos de aprofundamento. Os 17 capítulos revistos no checkpoint I completam a passagem editorial por todos os capítulos. Os resultados e a ordem de retoma estão na [ancoragem](docs/V3_ANCORAGEM.md).
+A estrutura de trabalho tem dez partes, 50 capítulos, três apêndices, 74 laboratórios, 93 referências e 70 entradas de glossário. O guia de consulta liga tarefas concretas aos capítulos de aprofundamento. O ponto de partida explica as contas e os termos informáticos dos primeiros exercícios. Os resultados e a ordem de retoma estão na [ancoragem](docs/V3_ANCORAGEM.md).
 
 O [projeto criativo A Meia Testemunha](exemplos/atelier/README.md), o caso SyRI e o [ensaio de cache](experiencias/operacao/README.md) integram a edição. A leitura independente e os ensaios pendentes têm critérios de fecho próprios.
 
@@ -50,11 +50,14 @@ python3 -m exemplos.laboratorio.adaptacao
 python3 -m exemplos.laboratorio.skills
 python3 -m exemplos.laboratorio.equipas
 python3 -m exemplos.laboratorio.operacao
+python3 -m experiencias.interoperabilidade.executar
 python3 experiencias/equipas/offline.py --verificar
 python3 experiencias/llm_local/verificar_registo.py
 ```
 
 A [Lavandaria](exemplos/lavandaria/README.md) é fictícia e usa pesquisa lexical, templates, contratos e autorização. Os fundamentos executam cálculos didáticos de regressão, atenção, quantização e memória. O [pacote de skill](exemplos/skills/rever-evidencias/SKILL.md) tem validador estrutural e recursos com hashes; esses controlos não verificam verdade factual nem ativação num produto.
+
+O [ensaio de interoperabilidade](experiencias/interoperabilidade/README.md) usa um servidor HTTP na própria máquina e um processo separado para o arquivo MCP. O comando verifica dez resultados, incluindo retoma da tarefa, erro de versão e recusa de acesso. O resultado de referência e o âmbito das implementações acompanham o ensaio.
 
 O controlador de equipa, por omissão, usa um **stub determinístico**. O ensaio offline acerta dois de quatro casos nos três modos; a equipa executa mais componentes sem acrescentar capacidade ao mesmo stub. Isto não mede desempenho de um LLM.
 

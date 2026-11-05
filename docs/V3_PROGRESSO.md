@@ -2,6 +2,14 @@
 
 Atualização de 05-11-2026. Branch `terceira-edicao-ia-referencia-2026`, [PR #2 em Draft](https://github.com/MPrazeres-1983/engenharia-de-prompts-codigo-oculto/pull/2).
 
+## Checkpoint J — explicações de base e ensaios
+
+O ponto de partida explica proporções, médias, letras, unidades, programas e pedidos entre serviços. Foram revistos os capítulos 01, 06–08, 13, 21–22, 25, 28, 31–33, 40–42, 44, 47 e 49 pelos prefixos dos ficheiros. As fórmulas preservam o detalhe técnico e passam a ter uma conta comentada ou um percurso acessível antes da notação. O glossário tem 70 termos.
+
+- **Fontes.** Confirmados o alcance dos estudos de rastreio e aprendizagem, os marcos de aplicação da alteração ao AI Act e a distinção entre estimativa histórica e projeção no relatório energético. [Fontes e passagens](V3_FONTES_E_EVIDENCIAS.md)
+- **Ensaio.** Dez verificações numa troca local A2A e MCP, incluindo retoma da mesma tarefa e recusa por identidade. [Comando e resultado](../experiencias/interoperabilidade/README.md)
+- **Retoma.** A próxima iteração prepara a candidata e inclui a leitura integral, a validação dos percursos e a correção dos problemas encontrados. A leitura independente aguarda leitores reais. O piloto continua dependente do ficheiro do modelo. [Ancoragem](V3_ANCORAGEM.md)
+
 ## Checkpoint I — fecho editorial e consulta
 
 Os 17 capítulos em falta foram revistos em três lotes. O [registo de retoma](V3_ANCORAGEM.md) identifica os ficheiros e a [validação](V3_VALIDACAO.md) descreve os resultados. A passagem editorial abrange agora os 50 capítulos. A edição conserva 74 laboratórios, tem 93 referências compostas e ganhou um guia de consulta de uma página.
@@ -10,7 +18,7 @@ Os 17 capítulos em falta foram revistos em três lotes. O [registo de retoma](V
 - **Verificação.** As consultas SQL e a função Python foram executadas. A Lavandaria demonstrou a diferença entre conhecer um identificador e ter autorização. As três abordagens do laboratório comparativo tiveram 2 acertos em 4, com diferentes chamadas de componentes e zero chamadas a um LLM.
 - **Fontes.** Foram acrescentadas três referências e conferidas as afirmações revistas nos trechos indicados no [registo](V3_FONTES_E_EVIDENCIAS.md). A revisão delimita o alcance dos estudos e identifica os exemplos de ficção e os cálculos construídos.
 
-O próximo bloco trata de ensaios e fontes. A [matriz](V3_MATRIZ_COBERTURA.md) separa as prioridades de validação e aprofundamento. A estimativa é de duas iterações planeadas até uma candidata e uma adicional se houver correções da leitura independente ou um ensaio tardio. O piloto de equipa continua dependente de um GGUF íntegro.
+A [matriz](V3_MATRIZ_COBERTURA.md) separa as prioridades de validação e aprofundamento. O bloco seguinte foi executado em J e o piloto de equipa conservou a dependência de um GGUF íntegro.
 
 ## Checkpoint H — projeto criativo, caso público e operação
 

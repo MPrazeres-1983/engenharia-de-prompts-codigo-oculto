@@ -150,3 +150,7 @@ H integrou um projeto audiovisual completo, um caso em serviço público e um in
 | Piloto de equipa e adaptação | Comparação offline reproduzida e adaptação linear executada | Se houver modelo íntegro, validar o piloto com a configuração fixada. Avaliar separadamente a viabilidade de medir adaptação de um LLM |
 | Interoperabilidade | Critérios de contrato, autorização e estados nos capítulos 20–24 e 40 | Validar operações e falhas com serviços de ensaio, se disponíveis. Registar versão, entradas e resultados |
 | Consulta e leitura | Cinco percursos na prova, 74 laboratórios e remissões verificadas | Observar se leitores com níveis diferentes encontram o ponto de entrada, conseguem executar um exercício e distinguem os tipos de evidência |
+
+### Estado após o checkpoint J
+
+Os capítulos selecionados ganharam exemplos que precedem a notação e o glossário inclui 70 termos. O [ensaio local](../experiencias/interoperabilidade/README.md) cobre operações específicas de MCP e A2A entre duas implementações do projeto. As fontes prioritárias acima têm passagens identificadas no [registo](V3_FONTES_E_EVIDENCIAS.md). A candidata precisa de uma leitura integral, da validação do percurso com leitores reais e do registo das dependências de ensaios que persistam.

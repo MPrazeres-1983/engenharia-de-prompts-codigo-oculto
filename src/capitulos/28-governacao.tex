@@ -11,7 +11,7 @@ Para cada sistema, regista finalidade, utilizadores, dados, fornecedores, ferram
 Na Lavandaria, uma pessoa pode rever um rascunho antes do envio. Aprovar uma compensação inicia um pagamento no cenário. Identifica quem pode tomar essa decisão, o que precisa de saber e como o cliente pede a sua revisão.
 
 \section{RGPD: o tratamento precisa de fundamento}
-O artigo 5 do RGPD estabelece princípios como finalidade, minimização, exatidão, limitação da conservação e segurança. O consentimento é um dos fundamentos de licitude do artigo 6, não uma solução universal; categorias especiais e transferências exigem análise adicional. Dados pseudonimizados que possam ser associados a uma pessoa continuam a ser dados pessoais. O artigo 35 exige avaliação de impacto antes de um tratamento suscetível de implicar elevado risco, nas condições aí previstas~\citep{rgpd2016}.
+Imagina que substituis o nome de cada cliente por um número e guardas à parte a tabela que permite voltar ao nome. Isso é um exemplo de \emph{pseudonimização}. Enquanto os registos puderem ser associados a uma pessoa, continuam a ser dados pessoais. O artigo 5 do Regulamento Geral sobre a Proteção de Dados (RGPD) estabelece princípios como ter uma finalidade definida, usar os dados necessários e limitar o tempo de conservação. O artigo 6 prevê vários fundamentos que podem tornar o tratamento lícito, incluindo o consentimento. O artigo 35 exige avaliação de impacto antes de um tratamento suscetível de implicar elevado risco, nas condições aí previstas~\citep{rgpd2016}.
 
 O artigo 22 trata de decisões exclusivamente automatizadas com efeitos jurídicos ou efeitos similarmente significativos, com condições e exceções. Não proíbe toda a automação nem transforma qualquer clique humano em supervisão suficiente. Nos casos de necessidade contratual ou consentimento explícito previstos no n.º 2, alíneas a) e c), o n.º 3 exige salvaguardas que incluem intervenção humana, expressão do ponto de vista e contestação. A exceção fundada em lei tem de prever medidas adequadas nessa lei~\citep{rgpd2016}.
 
@@ -20,7 +20,14 @@ Como prática de engenharia, começa com dados fictícios e usa apenas os campos
 \section{AI Act: finalidade, papéis e calendário}
 O Regulamento (UE) 2024/1689 estabelece obrigações que variam por prática, risco e papel, incluindo regras para modelos de finalidade geral~\citep{aiact2024}. Um chatbot não é automaticamente de alto risco por usar um LLM; finalidade e contexto contam.
 
-A regra geral de aplicação do artigo 113 aponta para 2 de agosto de 2026, com exceções. O Regulamento (UE) 2026/1744, publicado em 24 de julho e em vigor desde 27 de julho de 2026, alterou esse artigo. Para o capítulo III, secções 1 a 3, com exceção do artigo 6, n.º 5, distingue os sistemas do artigo 6, n.º 2, e anexo III, com marco em \textbf{2 de dezembro de 2027}, dos sistemas do artigo 6, n.º 1, e anexo I, com marco em \textbf{2 de agosto de 2028}~\citep{aiomnibus2026}. A cronologia do Conselho oferece enquadramento institucional~\citep{conselho2026}.
+A regra geral de aplicação do artigo 113 aponta para 2 de agosto de 2026, com exceções. O Regulamento (UE) 2026/1744, publicado em 24 de julho e em vigor desde 27 de julho de 2026, alterou esse artigo. Para ler o calendário de alto risco, identifica primeiro em que grupo se enquadra o sistema. O artigo 6 remete para anexos diferentes conforme a classificação. A distinção importa porque os marcos também são diferentes:
+
+\begin{itemize}[leftmargin=*]
+\item \textbf{2 de dezembro de 2027} para os sistemas de alto risco nos termos do artigo 6, n.º 2, e do anexo III.
+\item \textbf{2 de agosto de 2028} para os sistemas de alto risco nos termos do artigo 6, n.º 1, e do anexo I.
+\end{itemize}
+
+Estes dois marcos referem-se às secções 1 a 3 do capítulo III, com exceção do artigo 6, n.º 5~\citep{aiomnibus2026}. A cronologia do Conselho oferece enquadramento institucional~\citep{conselho2026}.
 
 Estas datas não significam que todas as obrigações de um sistema comecem no mesmo dia. Há exceções, regras transitórias e deveres com outros marcos, incluindo literacia e transparência. Consulta o artigo aplicável à finalidade e ao papel da organização. A verificação documental deste capítulo não determina a conformidade de um produto concreto.
 

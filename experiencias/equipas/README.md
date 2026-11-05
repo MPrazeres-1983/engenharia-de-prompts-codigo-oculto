@@ -12,6 +12,8 @@ Isto não altera os registos históricos de 03-11-2026, que continuam na pasta `
 
 Na retoma editorial do mesmo dia, a ligação à revisão fixada foi novamente tentada e terminou com `curl: (28) Operation timed out after 5010 milliseconds with 0 bytes received`. O estado continua bloqueado, sem inferências novas. O treino de adaptação linear 2×2 em `experiencias/adaptacao_linear` é outra experiência, executada sem esse modelo; não completa este piloto.
 
+No checkpoint J de 05-11-2026, uma nova verificação na área do projeto não encontrou uma cópia local do modelo. A ligação de verificação à revisão fixada terminou com `curl: (28) Proxy CONNECT aborted due to timeout`. O estado do piloto continua pendente, com zero chamadas novas ao modelo.
+
 ## Desenho fechado antes da tentativa
 
 Quatro pedidos sintéticos, duas seeds (42 e 1337), três modos. O fluxo usa regras, sem LLM. A chamada única usa um LLM. A equipa usa duas chamadas de especialistas em paralelo, com o mesmo snapshot, e uma síntese. No total estão planeadas 32 chamadas reais de modelo, com contexto novo, temperatura 0.2 e máximo de 96 tokens por chamada.

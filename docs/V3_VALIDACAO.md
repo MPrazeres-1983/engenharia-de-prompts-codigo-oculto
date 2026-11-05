@@ -2,6 +2,29 @@
 
 Atualização de 05-11-2026. O [registo de retoma](V3_ANCORAGEM.md) liga as verificações aos blocos e aos commits.
 
+## Checkpoint J — entrada acessível, ensaios e fontes
+
+| Verificação | Resultado observado |
+|---|---|
+| Compilação | 267 páginas físicas A4 na prova local. Dez partes, 50 capítulos, três apêndices, 74 laboratórios, 93 referências compostas e 70 entradas de glossário. Verificador de estrutura e log sem erros |
+| Consulta | 23 remissões no guia. A nova abre o ponto de partida, nas páginas físicas 5 e 6 |
+| Aritmética | 14 verificações de cálculo, com proporções, médias, matriz por vetor, atenção, perda e inclinações, temperatura, retorno, ruído, métricas e memória |
+| Regressão | 76 testes Python, 12 regressões da Lavandaria, verificação de integridade e métricas dos 52 registos históricos e `compileall` passaram |
+| Interoperabilidade | Dez verificações locais em duas execuções com o mesmo resumo. Descoberta, versão, autorização, retoma e artefacto. Zero chamadas a um LLM. [Registo e código](../experiencias/interoperabilidade/README.md) |
+| Composição | Geometria verificada em todas as páginas. Inspeção do ponto de partida e de amostras das contas, das tabelas, dos dados setoriais e do comando de interoperabilidade |
+
+O resultado do ensaio de protocolos é observável neste ambiente. As passagens de estudos, normas e relatórios foram confrontadas com os localizadores no [registo de fontes](V3_FONTES_E_EVIDENCIAS.md). O piloto com modelo local continua bloqueado antes da inferência. A leitura independente é a próxima forma de verificar se as explicações chegam ao leitor sem ajuda.
+
+### Percursos para a leitura independente
+
+| Percurso | Tarefa a entregar ao leitor | Evidência a recolher |
+|---|---|---|
+| Primeiro contacto | A partir do guia, encontrar a diferença entre 10 pontos percentuais e um aumento de 50%. Depois explicar o que significa dar mais peso ao valor 6 na conta simples de atenção | Página encontrada, conta ou explicação e primeiro termo que exigiu ajuda |
+| Aplicação sem código | Seguir a passagem do grande laboratório que propõe quatro mensagens. Dizer o que fazer quando falta o número de reclamação | Resposta esperada e trecho em que a regra ficou clara ou ambígua |
+| Experiência técnica | Encontrar o comando da receção e do arquivo, reproduzir o ensaio e explicar por que razão uma resposta 200 pode conter uma tarefa ainda em aberto | Resultado observado, versão, ambiente e ponto de fricção |
+
+Regista as respostas dadas espontaneamente antes de explicar. Distingue dificuldade de encontrar a passagem, de compreender o termo e de executar a tarefa. Esta tabela é o protocolo de leitura. As verificações acima são editoriais e técnicas.
+
 ## Checkpoint I — fecho editorial e guia de consulta
 
 | Verificação | Resultado observado |
