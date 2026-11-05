@@ -27,7 +27,7 @@ Experimentas no chat:
 \item recolhes casos fáceis e difíceis.
 \end{itemize}
 \item \textbf{Criação de golden set}
-A partir dos exemplos, montas um conjunto de teste (Secção anterior).
+A partir dos exemplos, montas um conjunto de teste como no capítulo~\ref{ch:avaliacao}.
 \item \textbf{Testes offline}
 Corres:
 \begin{itemize}[leftmargin=*]
@@ -222,9 +222,9 @@ Uma cache de respostas ou documentos deve incluir o âmbito de autorização, ve
 Pseudonimizar reduz associação direta, mas os dados continuam pessoais quando podem ser reatribuídos. Regista por defeito identificadores técnicos e métricas; conserva texto bruto apenas quando necessário, com acesso, fundamento e retenção definidos. Para reproduzir incidentes, guarda uma amostra controlada, não um arquivo ilimitado de conversas~\citep{rgpd2016}.
 
 \section{O incidente dos cinco dias}
-\textbf{Ensaio executado.} O simulador local começa com a política fictícia \texttt{v1}, de dez dias úteis. A aplicação guarda-a na cache com a chave \texttt{devolucoes}. Quando entra em vigor a \texttt{v2}, de cinco dias, o nome do documento continua igual. A cache encontra a entrada antiga. A proposta contém todos os campos e o prazo continua a ser um inteiro positivo.
+\textbf{Ensaio executado.} A cache guarda a política fictícia \texttt{v1}, de dez dias úteis, com a chave \texttt{devolucoes}. Entra em vigor a \texttt{v2}, de cinco dias. Como a chave continua igual, a cache devolve a entrada antiga. A proposta tem todos os campos e o prazo é um inteiro positivo.
 
-A sonda de teste representa um \emph{canário}, um pedido controlado que permite detetar a regressão antes de expor a resposta. Compara documento, versão e SHA-256 com a política vigente, obtida fora da cache. Confere também o prazo. Com a \texttt{v2} ativa, a sonda encontra uma proposta \texttt{v1} de dez dias. O simulador devolve o estado de encaminhamento sem enviar o prazo ao utilizador.
+O \emph{canário} é um pedido de teste que compara documento, versão, SHA-256 e prazo com a política vigente, obtida fora da cache. Com a \texttt{v2} ativa, a sonda encontra a \texttt{v1} e o simulador encaminha o pedido sem devolver o prazo antigo.
 
 \begin{table}[htbp]
 \small
@@ -241,12 +241,14 @@ Recuperação & v2, 5 dias úteis & v2, 5 dias úteis & Validada \\
 \label{tab:incidente-cache}
 \end{table}
 
-A recuperação usa uma chave composta pelo documento e pela versão. A entrada anterior pode continuar na cache durante o ensaio. A consulta da \texttt{v2} vai buscar o prazo certo e o canário volta a aprová-lo. Num serviço, o responsável pode suspender o fluxo ou reverter o código defeituoso enquanto mantém em vigor a política decidida pelo negócio. O registo da simulação inclui os hashes e os estados para que possamos verificar qual das duas versões foi aplicada.
+A recuperação usa a chave composta pelo documento e pela versão. A entrada \texttt{v1} fica na cache, mas a consulta da \texttt{v2} recupera os cinco dias. Os hashes e os estados estão no registo do ensaio. Num serviço, reverter o código e mudar a política vigente são decisões separadas.
 
 \begin{promptlabbox}{Reproduzir, conter e recuperar um incidente de cache}
 \textbf{Objetivo e contexto:} reproduzir os três estados da tabela~\ref{tab:incidente-cache}. Requisitos: Python 3.10+ e biblioteca padrão. Os dados são sintéticos e a execução tem zero chamadas a modelos.
 
-\textbf{Procedimento:} na raiz do projeto, executa \nolinkurl{python3 -m exemplos.laboratorio.operacao}. Compara a saída com \nolinkurl{experiencias/operacao/resultado.json}. Segue no código as chaves da cache e a comparação com a política vigente.
+\textbf{Procedimento:} na raiz do projeto, executa o comando abaixo.
+\par\noindent\texttt{python3 -m exemplos.laboratorio.operacao}\par
+Compara a saída com \texttt{experiencias/operacao/resultado.json} e segue no código as chaves da cache.
 
 \textbf{Resultado esperado e validação:} a proposta antiga passa a verificação estrutural e é encaminhada sem prazo. Depois da correção, o teste confirma versão \texttt{v2}, hash correspondente e cinco dias úteis. Experimenta propor dez dias com os identificadores da versão certa. A verificação do prazo deve travar também essa proposta.
 

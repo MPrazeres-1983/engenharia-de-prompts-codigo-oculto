@@ -1,10 +1,10 @@
 # O Código Oculto da Inteligência Artificial
 
-**Mário Prazeres — terceira edição em desenvolvimento, 4 de novembro de 2026.**
+**Mário Prazeres — terceira edição em desenvolvimento, 5 de novembro de 2026.**
 
 Esta branch amplia *Engenharia de Prompts: O Código Oculto* para fundamentos, utilização criativa, sistemas, operação e impacto social da IA. O título é provisório. **O manuscrito ainda não satisfaz a ambição editorial final e não está aprovado para publicação ou merge.**
 
-A estrutura de trabalho tem dez partes, 50 capítulos, três apêndices, 73 laboratórios, 87 referências e 58 entradas de glossário. O segundo ciclo revê 16 capítulos com progressão da intuição ao cálculo, casos investigativos e estudos setoriais. O PDF tem 299 páginas; a revisão editorial e várias experiências continuam pendentes. Não se acrescentaram páginas para atingir o intervalo indicativo de 450–600.
+A estrutura de trabalho tem dez partes, 50 capítulos, três apêndices, 74 laboratórios, 90 referências e 58 entradas de glossário. A retoma de 5 de novembro inclui a revisão de 17 dos 34 capítulos pendentes, o projeto criativo [A Meia Testemunha](exemplos/atelier/README.md), o caso SyRI e o [ensaio de cache](experiencias/operacao/README.md). Os resultados e a ordem de retoma estão na [ancoragem](docs/V3_ANCORAGEM.md).
 
 A segunda edição permanece em `main@975ade89632700918786603dc23722e74f8610f7`, integrada pelo [PR #1](https://github.com/MPrazeres-1983/engenharia-de-prompts-codigo-oculto/pull/1). Esta revisão usa `terceira-edicao-ia-referencia-2026` e o [PR #2, Draft](https://github.com/MPrazeres-1983/engenharia-de-prompts-codigo-oculto/pull/2). Não cria tags ou releases nem altera diretamente `main`.
 
@@ -24,7 +24,7 @@ O PDF e as evidências são guardados nos [artefactos de Actions](https://github
 
 ## Compilar e verificar
 
-Requer TeX Live com português, pdfLaTeX, latexmk, BibTeX, TikZ, natbib e tcolorbox. Não usa Biber ou shell escape. Em Ubuntu/Debian, os conjuntos `texlive-latex-extra`, `texlive-fonts-recommended`, `texlive-lang-portuguese`, `texlive-science` e `latexmk` cobrem as dependências usuais.
+Requer TeX Live com padrões de hifenização de português, pdfLaTeX, latexmk, BibTeX, TikZ, natbib e tcolorbox. O Babel importa o locale português incluído. Em Ubuntu/Debian, os conjuntos `texlive-latex-extra`, `texlive-fonts-recommended`, `texlive-lang-portuguese`, `texlive-science` e `latexmk` cobrem as dependências usuais.
 
 ```bash
 latexmk -cd -pdf -interaction=nonstopmode -halt-on-error -file-line-error src/livro.tex
@@ -47,6 +47,7 @@ python3 -m exemplos.laboratorio.decisoes
 python3 -m exemplos.laboratorio.adaptacao
 python3 -m exemplos.laboratorio.skills
 python3 -m exemplos.laboratorio.equipas
+python3 -m exemplos.laboratorio.operacao
 python3 experiencias/equipas/offline.py --verificar
 python3 experiencias/llm_local/verificar_registo.py
 ```
@@ -55,13 +56,13 @@ A [Lavandaria](exemplos/lavandaria/README.md) é fictícia e usa pesquisa lexica
 
 O controlador de equipa, por omissão, usa um **stub determinístico**. O ensaio offline acerta dois de quatro casos nos três modos; a equipa executa mais componentes sem acrescentar capacidade ao mesmo stub. Isto não mede desempenho de um LLM.
 
-Os cálculos de decisão distinguem sensibilidade e valor preditivo, redução do tempo e aumento da produção por tempo, e energia estimada e medida. A [adaptação linear](experiencias/adaptacao_linear/README.md) treina um adaptador de posto um sobre uma matriz 2×2 congelada, com resultado e código identificados. Inclui um alvo representável e outro que conserva erro por limite de capacidade. É uma experiência matemática executada; não é fine-tuning de LLM. O conjunto completo tem **70 testes aprovados** na validação deste ciclo.
+Os cálculos de decisão distinguem sensibilidade e valor preditivo, redução do tempo e aumento da produção por tempo, e energia estimada e medida. A [adaptação linear](experiencias/adaptacao_linear/README.md) treina um adaptador de posto um sobre uma matriz 2×2 congelada, com resultado e código identificados. Inclui um alvo representável e outro que conserva erro por limite de capacidade. É uma experiência matemática executada; não é fine-tuning de LLM. O conjunto completo tem **76 testes aprovados** na validação deste ciclo, incluindo seis para o incidente de cache.
 
 ## Inferência real e bloqueio atual
 
 As [52 inferências reais da segunda edição](experiencias/llm_local/README.md) estão preservadas, com respostas brutas, configuração e resultados negativos. A CI reavalia integridade; não volta a executar o modelo.
 
-O [novo piloto V3](experiencias/equipas/README.md) está implementado, com quatro casos e 32 chamadas de modelo planeadas. **Não foi executado com LLM:** a cópia disponível do modelo estava incompleta, e ambas as tentativas de obter outra cópia falharam por timeout. Não há medições com participantes humanos ou treino LoRA/QLoRA de um LLM. Esses percursos e os projetos multimédia continuam propostos para execução futura, sem resultados fictícios apresentados como reais.
+O [novo piloto V3](experiencias/equipas/README.md) está implementado, com quatro casos e 32 chamadas de modelo planeadas. **Não foi executado com LLM:** a cópia disponível do modelo estava incompleta, e ambas as tentativas de obter outra cópia falharam por timeout. Não há medições com participantes humanos ou treino LoRA/QLoRA de um LLM. O ateliê tem uma curta muda de quinze segundos e um cartaz exportados. Outras extensões multimédia e a avaliação com espectadores estão propostas nos laboratórios.
 
 ## Organização, autoria e licença
 

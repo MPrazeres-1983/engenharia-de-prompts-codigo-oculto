@@ -1,10 +1,29 @@
 # Validação da terceira edição
 
-Data: 04-11-2026. Este ficheiro distingue a base existente das alterações V3.
+Atualização de 05-11-2026. O [registo de retoma](V3_ANCORAGEM.md) liga as verificações aos blocos e aos commits.
+
+## Checkpoint H — terceira retoma
+
+| Verificação | Resultado observado |
+|---|---|
+| Compilação LaTeX e BibTeX | 292 páginas físicas A4 com pdfTeX 1.40.25 e padrões portugueses de hifenização |
+| Estrutura e composição | Dez partes, 50 capítulos, 74 laboratórios, três apêndices, 90 entradas bibliográficas compostas e 58 entradas de glossário. Verificador de referências, JSON e log sem erros |
+| Testes Python | 76 passaram, incluindo seis novos testes de operação. `compileall` passou |
+| Lavandaria | 12 de 12 regressões offline passaram |
+| Ensaio de cache | Execução atual igual ao registo versionado. Proposta v1 encaminhada sob v2 vigente e resposta de cinco dias úteis recuperada |
+| Ateliê | Quatro entradas e três saídas conferidas pelos hashes. Exportações de uma página A4 e vídeo mudo H.264 de 15 s, 24 fps e 360 fotogramas. Revistos cartaz, guião e fotogramas de início e fim de cada plano |
+| Registos históricos | 52 inferências reconferidas quanto a integridade e métricas. O piloto novo tem zero chamadas |
+| Inspeção visual | Folhas de contacto, localização dos materiais novos e revisão ampliada de páginas selecionadas. Verificação geométrica sem blocos de texto fora das páginas |
+
+A prova ampliada está indexada pelas páginas físicas 1, 2, 3, 39, 49, 76, 81, 102, 155, 156, 213, 218, 226, 227, 246, 291. A inspeção encontrou espaçamento irregular no primeiro guião, corrigido com fontes incorporadas, e problemas de composição na nota e no laboratório de cache. A nota cabe numa página, o laboratório ficou reunido e o comando pode ser copiado numa linha.
+
+A primeira compilação local parou porque faltava a definição portuguesa do Babel. A configuração passou a importar o locale incluído. Para a prova final, a compilação local usou um formato pdfLaTeX privado com os padrões portugueses oficiais, confirmados por hash antes de gerar o formato. [Padrões 1.4](https://github.com/hyphenation/tex-hyphen/blob/master/hyph-utf8/tex/generic/hyph-utf8/patterns/tex/hyph-pt.tex) e [carregador](https://github.com/hyphenation/tex-hyphen/blob/master/hyph-utf8/tex/generic/hyph-utf8/loadhyph/loadhyph-pt.tex).
+
+A inspeção tipográfica e os testes cobrem a composição e os exemplos descritos. A leitura integral, a validação independente e o piloto com LLM permanecem na ordem de retoma. A folha de rosto identifica a revisão do PDF. O [PR #2](https://github.com/MPrazeres-1983/engenharia-de-prompts-codigo-oculto/pull/2) liga as execuções da CI do HEAD.
 
 ## Checkpoint G — segundo ciclo, progressão e narrativa
 
-Retoma verificada a partir de `e990b891`. Foram revistos 16 capítulos e a nota editorial, com novos casos, mecanismos e aprofundamentos. A estrutura mantém dez partes, 50 capítulos, três apêndices e 73 laboratórios. **A composição atual tem 299 páginas e 87 entradas bibliográficas; 70 testes passaram.** O trabalho continua Draft e não está aprovado para publicação ou merge.
+Retoma verificada a partir de `e990b891`. Foram revistos 16 capítulos e a nota editorial, com novos casos, mecanismos e aprofundamentos. A estrutura mantém dez partes, 50 capítulos, três apêndices e 73 laboratórios. **A composição desse checkpoint tinha 299 páginas e 87 entradas bibliográficas. Os 70 testes passaram.** O trabalho continua Draft e não está aprovado para publicação ou merge.
 
 | Verificação executada neste ciclo | Resultado |
 |---|---|
@@ -37,7 +56,7 @@ O novo piloto LLM continua com zero inferências: a segunda tentativa de ligaç�
 
 ## Histórico da primeira entrega V3
 
-As verificações seguintes conservam a base e o primeiro ciclo: os seus números de páginas, referências e testes são históricos. O estado atual consta do checkpoint G acima.
+As verificações seguintes conservam a base e o primeiro ciclo: os seus números de páginas, referências e testes são históricos. Os checkpoints posteriores estão acima.
 
 ## Base, antes de alterações ao manuscrito
 

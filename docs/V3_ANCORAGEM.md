@@ -39,9 +39,9 @@ Os números são prefixos dos ficheiros, de acordo com `V3_ESTRUTURA.json`. A re
 | A | 02, 03, 04, 05, 10, 11, 17, 34 | Revisto. Entrada com um pedido, comparação com as mesmas fontes, casos reservados, autoridade, cálculo verificável e descodificação JSON |
 | B | 12, 13, 14, 15, 16, 18, 19, 35, 36, 37 | 35 e 36 revistos em H1. Faltam os oito restantes, de escrita, aprendizagem, criação e prática |
 | C | 06, 08, 09 | Revisto. Probabilidades condicionais, tokenização e temperatura, entrada multimodal e verificação por fonte |
-| D | 20, 21, 22, 23, 24, 40 | Construção, fontes, autoridade e interoperabilidade |
+| D | 20, 21, 22, 23, 24, 40 | Pendente. Construção, fontes, autoridade e interoperabilidade |
 | E | 25, 26, 27, 28 | Revisto. Métricas por decisão, autorização no executor, operação e supervisão. Integra H3 |
-| F | 29, 48, 50 | Futuros e comparação, com medidas e limites explícitos |
+| F | 29, 48, 50 | Pendente. Futuros e comparação, com medidas e limites explícitos |
 
 ## Regras de registo
 
@@ -55,14 +55,27 @@ Os números são prefixos dos ficheiros, de acordo com `V3_ESTRUTURA.json`. A re
 | Bloco | Evidência ou decisão registada | Próximo passo |
 |---|---|---|
 | H0 | Ancoragem publicada em `24d7057af22f06630892d8d7699cc4482786a9ad`. Base e PDF conferidos | Consultar o último bloco validado |
-| H1 | Entregue em `exemplos/atelier` e integrado nos capítulos 35, 36 e 49. Cartaz e guião A4, curta muda H.264 de 15 s com 360 fotogramas. Três amostras e seis fotogramas de fronteira revistos. Espaçamento do guião corrigido com fontes incorporadas. A montagem usa FFmpeg e uma ilustração original gerada | Integrar no PDF final em H5. A comparação com espectadores é uma extensão |
-| H2 | Caso SyRI escrito no capítulo 45. Decisão de 05-02-2020, parágrafos verificados, referência `syri2020` e comunicado identificados no registo de fontes | Conferir citações em H5. O texto distingue sinalização de sanção e aplica perguntas de desenho a um cenário próprio |
-| H3 | Ensaio executado em `experiencias/operacao` e laboratório no capítulo 27. Com v2 vigente, v1 passa a forma, é encaminhada sem prazo e a cache por versão recupera v2. Seis testes específicos aprovados | Confirmar a suíte completa e o novo laboratório no PDF em H5 |
-
-| H4-A | Oito capítulos revistos, de 02 a 34 pelos prefixos do lote A. Retomada a reclamação dos seis pares para ligar instrução, testes, evidência e estrutura. Corrigidos os exemplos de avaliação e de JSON | Continuar a partir do primeiro lote ainda aberto |
-| H4-E | Quatro capítulos revistos. Distinção entre lançamento canário, sonda e avaliação A/B, custos de encaminhar, segurança na ferramenta e responsáveis pela contenção e revisão. Datas do artigo 113 reconfirmadas | Consolidar e validar a composição em H5 |
-| H4-C | Três capítulos revistos. Corrigida a sequência de leitura em 06 e a remissão sobre cache KV. Contas de geração e exemplos Unicode conferidos localmente. O caso histórico de entrada de imagem e texto foi verificado no relatório técnico de 2023 | Consolidar em H5 |
+| H1 · `ad64b10d` | Entregue em `exemplos/atelier` e integrado nos capítulos 35, 36 e 49. Cartaz e guião A4, curta muda H.264 de 15 s com 360 fotogramas. Três amostras e seis fotogramas de fronteira revistos. Espaçamento do guião corrigido com fontes incorporadas. A montagem usa FFmpeg e uma ilustração original gerada | Ver a prova de H5. A comparação com espectadores é uma extensão |
+| H2 · `70803be9` | Caso SyRI escrito no capítulo 45. Decisão de 05-02-2020, parágrafos verificados, referência `syri2020` e comunicado identificados no registo de fontes | Citações compostas em H5. O texto distingue sinalização de sanção e aplica perguntas de desenho a um cenário próprio |
+| H3 · `28135e59` | Ensaio executado em `experiencias/operacao` e laboratório no capítulo 27. Com v2 vigente, v1 passa a forma, é encaminhada sem prazo e a cache por versão recupera v2. Seis testes específicos aprovados | Suíte completa e laboratório conferidos em H5 |
+| H4-A · `b03cab45` | Oito capítulos revistos, de 02 a 34 pelos prefixos do lote A. Retomada a reclamação dos seis pares para ligar instrução, testes, evidência e estrutura. Corrigidos os exemplos de avaliação e de JSON | Continuar a partir do primeiro lote ainda aberto |
+| H4-E · `8e638a30` | Quatro capítulos revistos. Distinção entre lançamento canário, sonda e avaliação A/B, custos de encaminhar, segurança na ferramenta e responsáveis pela contenção e revisão. Datas do artigo 113 reconfirmadas | Consolidar e validar a composição em H5 |
+| H4-C · `dc67d734` | Três capítulos revistos. Corrigida a sequência de leitura em 06 e a remissão sobre cache KV. Contas de geração e exemplos Unicode conferidos localmente. O caso histórico de entrada de imagem e texto foi verificado no relatório técnico de 2023 | Consolidar em H5 |
+| H5 | Prova A4 de 292 páginas, 74 laboratórios, 90 referências, 76 testes aprovados e geometria conferida. O locale português e os padrões de hifenização foram usados na composição final | Retomar em `12-escrita.tex`. O PR liga a CI da revisão identificada na folha de rosto |
 
 ## Dependências pendentes de outros ensaios
 
-O piloto de equipa depende de uma cópia íntegra do GGUF na revisão fixada. As duas tentativas anteriores terminaram por timeout e há zero inferências novas nesse piloto. O próximo passo desse ensaio é validar o SHA-256 e o runtime quando existir uma cópia íntegra. Estudos com participantes e ajuste de um LLM têm os seus próprios requisitos. Os blocos H0–H5 avançam com os recursos do manuscrito e experiências locais.
+O piloto de equipa depende de uma cópia íntegra do GGUF na revisão fixada. As duas tentativas anteriores terminaram por timeout e há zero inferências novas nesse piloto. O próximo passo desse ensaio é validar o SHA-256 e o runtime quando existir uma cópia íntegra. Estudos com participantes e ajuste de um LLM têm os seus próprios requisitos. Estas dependências têm registos próprios e a retoma editorial pode avançar em paralelo.
+
+## Próximas iterações
+
+Estimativa de três iterações para uma versão candidata à aprovação do autor. Uma quarta serve para alterações da leitura independente ou para correr separadamente um ensaio que só fique disponível mais tarde. A conclusão depende dos resultados e dos recursos de cada bloco.
+
+| Iteração | Primeiro passo e âmbito | Evidência de fecho |
+|---|---|---|
+| 1. Fecho editorial | Começar em `src/capitulos/12-escrita.tex`. Acabar B (12, 13, 14, 15, 16, 18, 19, 37), depois D (20, 21, 22, 23, 24, 40) e F (29, 48, 50). Cruzar o resultado com a matriz para identificar aprofundamentos setoriais prioritários | 17 ficheiros revistos com alterações e fontes localizáveis. Percursos introdutório, prático e técnico com remissões verificadas. Um commit por lote |
+| 2. Ensaios e fontes | Retomar o protocolo do piloto em `experiencias/equipas` se houver GGUF íntegro. Conferir fontes e versões das afirmações sensíveis. Decidir que experiências de adaptação, interoperabilidade e leitura podem ser efetivamente executadas e documentar as que ficam como propostas | Registos de entradas, configuração, resultados e falhas para os ensaios feitos. Alcance e estado por fonte e por experiência |
+| 3. Candidata a publicação | Leitura integral, revisão independente, correções, prova A4 e critérios de aceitação. Levar título, capa e aprovação ao autor | PDF identificado com a revisão, fontes conferidas, validação local e CI do HEAD. Registo de decisões para aprovação |
+| 4. Se necessária | Corrigir observações da leitura independente ou fechar um ensaio desbloqueado depois da candidata | Diferenças, nova prova e validação do conteúdo afetado |
+
+Para retomar, começa pelo primeiro ficheiro indicado, confirma o HEAD no PR #2 e lê os últimos registos deste documento. O histórico permite ligar cada decisão ao ficheiro, à fonte ou ao ensaio que a sustenta.

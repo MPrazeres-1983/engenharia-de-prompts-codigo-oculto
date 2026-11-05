@@ -1,8 +1,17 @@
 # Progresso da terceira edição
 
-Atualização: 04-11-2026. Branch `terceira-edicao-ia-referencia-2026`. [PR #2 em Draft](https://github.com/MPrazeres-1983/engenharia-de-prompts-codigo-oculto/pull/2).
+Atualização de 05-11-2026. Branch `terceira-edicao-ia-referencia-2026`, [PR #2 em Draft](https://github.com/MPrazeres-1983/engenharia-de-prompts-codigo-oculto/pull/2).
 
-**Estado atual: manuscrito ampliado e revisto em dois ciclos, ainda em desenvolvimento.** Tem 50 capítulos em dez partes, incluindo 21 novos, três apêndices, 73 Prompt Labs, 87 referências e 58 entradas de glossário. O segundo ciclo revê 16 capítulos e amplia o PDF de 268 para 299 páginas físicas, incluindo capa e preliminares. Os 70 testes passaram. Não se declara a obra concluída, pronta para publicação ou aprovada para merge.
+## Checkpoint H — projeto criativo, caso público e operação
+
+O manuscrito está em desenvolvimento. Tem 50 capítulos em dez partes, três apêndices, 74 laboratórios, 90 referências e 58 termos. Os 76 testes passaram. A prova e o âmbito da inspeção estão em [V3_VALIDACAO.md](V3_VALIDACAO.md).
+
+- **Projeto criativo.** Produzidos a ilustração, o cartaz editável, o guião visual e a curta muda de quinze segundos de [A Meia Testemunha](../exemplos/atelier/README.md). Os ficheiros incluem o pedido de imagem, os enquadramentos, as exportações e as verificações.
+- **Serviço público.** Acrescentado o caso SyRI com os parágrafos da decisão e distinção entre relatório de risco, investigação e sanção. O [registo de fontes](V3_FONTES_E_EVIDENCIAS.md) guarda o alcance da leitura.
+- **Operação.** Executado o [incidente da cache](../experiencias/operacao/README.md). A resposta desatualizada passa a forma, é encaminhada sem prazo e a versão vigente é recuperada. Seis testes acrescentados.
+- **Progressão.** Revistos A, C, E e dois capítulos de B, 17 dos 34 que estavam por rever. Foram reduzidas repetições e acrescentados exemplos que se podem verificar. Faltam 17 capítulos em B, D e F.
+
+A [ancoragem](V3_ANCORAGEM.md) identifica os commits, os ficheiros e as dependências. O próximo passo é `src/capitulos/12-escrita.tex`. A estimativa atual é de três a quatro iterações para uma candidata à aprovação do autor. O piloto com LLM aguarda um GGUF íntegro.
 
 ## Checkpoint G — progressão, narrativa e aprofundamento
 
@@ -21,7 +30,7 @@ Concluído neste ciclo:
 
 O piloto de equipa com LLM continua bloqueado. A nova tentativa de ligação ao modelo oficial terminou por timeout, sem bytes recebidos. Não foram executados participantes humanos, produção multimédia ou fine-tuning de LLM. O adaptador linear não preenche essas linhas de resultado.
 
-### Próximo passo exato após este ciclo
+### Próximo passo registado no fim do segundo ciclo
 
 1. Confirmar o HEAD, ler este checkpoint e continuar na mesma branch e no PR #2. Não recomeçar a auditoria nem reescrever os 21 capítulos novos como se estivessem ausentes.
 2. Desenvolver e executar um projeto criativo completo da Parte IV, com materiais próprios ou autorizados, caminho sem código, ficheiros finais e critérios de continuidade, legibilidade e direitos. Integrar resultados observados e manter os restantes projetos como propostas até à execução.

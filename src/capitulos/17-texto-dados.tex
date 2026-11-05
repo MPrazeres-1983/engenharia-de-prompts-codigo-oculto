@@ -219,7 +219,7 @@ O primeiro passo é descodificar o texto. O RFC~8259 exclui \texttt{NaN} e recom
 {'prazo': 5}
 \end{lstlisting}
 
-Se a regra exigir rejeitar duplicados, verifica-os no descodificador com \nolinkurl{object_pairs_hook}, quando os dois pares ainda existem. Para constantes numéricas fora do RFC, podes rejeitá-las com \texttt{parse\_constant}. Depois de o texto passar esse ponto, JSON Schema verifica os tipos e as restrições declaradas~\citep{jsonschema2020}. A aplicação ainda tem de verificar se o prazo corresponde à política e se a reclamação pertence ao cliente autorizado.
+Usa \texttt{object\_pairs\_hook} no descodificador para rejeitar nomes repetidos quando os dois pares ainda existem. Com \texttt{parse\_constant}, podes rejeitar as constantes numéricas excluídas pelo RFC. Depois de o texto passar esse ponto, JSON Schema verifica os tipos e as restrições declaradas~\citep{jsonschema2020}. A aplicação ainda tem de verificar se o prazo corresponde à política e se a reclamação pertence ao cliente autorizado.
 
 Algumas APIs oferecem saídas condicionadas por esquema~\citep{structured2026}. É uma capacidade útil, com subconjuntos de esquema e condições próprias do serviço. Não confundas «JSON mode», conformidade com esquema e correção factual. Trata recusas e gerações incompletas como estados explícitos.
 
