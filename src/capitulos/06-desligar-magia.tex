@@ -1,10 +1,14 @@
 \chapter{Desligar a Magia, Ligar a Engenharia}
 \label{ch:fundamentos}
 
-\section{O que é realmente um LLM}
+Escreve «A meia ficou no» e experimenta acabar a frase. Podes escolher «cesto», «tambor» ou «bolso». Agora troca o início por «O talão ficou no». As opções continuam a existir, mas a frase mudou a plausibilidade de cada uma. Um modelo autoregressivo usa uma distribuição para fazer essa escolha a cada passo.
+
+\section{Prever uma continuação}
 Um \emph{large language model} (LLM) é um modelo de linguagem de grande escala. Neste capítulo focamo-nos nos modelos \emph{autoregressivos}: produzem uma sequência condicionando cada novo token nos anteriores. Existem outros objetivos de treino e outras arquiteturas; esta descrição não é uma definição de toda a IA generativa.
 
-A fatorização da probabilidade de uma sequência é
+Um token é uma unidade de representação do texto. Pode ser uma palavra, um fragmento ou outro elemento do vocabulário. O capítulo~\ref{ch:tokens} mostra como é construído. Para seguir a ideia, imagina que cada palavra do exemplo ocupa um token.
+
+A probabilidade de uma sequência pode ser escrita como
 \[
 P(t_1,\ldots,t_n)=\prod_{k=1}^{n}P(t_k\mid t_1,\ldots,t_{k-1}).
 \]
@@ -21,17 +25,17 @@ Um modelo pode produzir uma resposta correta a partir do conhecimento aprendido.
 
 \section{Do n-gram ao Transformer}
 
-Antes de Transformers, modelos de linguagem já existiam, mas eram muito mais limitados.
+Podemos comparar as arquiteturas pelo modo como usam o que veio antes.
 
-\subsection*{Modelos n-gram (a pré-história útil)}
+\subsection*{Modelos n-gram e contexto de tamanho fixo}
 
-Um modelo n-gram olha para as últimas n-1 palavras e tenta prever a próxima. Por exemplo, num modelo trigram (n=3), para prever a próxima palavra em:
+Num modelo n-gram, estimamos a probabilidade da próxima unidade a partir das $n-1$ anteriores. Neste exemplo, as unidades são palavras. Para um trigrama, $n=3$. Considera a frase
 \begin{center}
 \texttt{o rato comeu o ?}
 \end{center}
-ele só olha para as duas anteriores: \texttt{comeu o}. Não vê o resto da frase, não percebe o tema global. Isto funciona de forma razoável para coisas simples, mas falha em dependências longas (pronomes, anáforas, estrutura de parágrafos).
+Para completar a frase, o modelo usa \texttt{comeu o}. Se trocar «o rato» por «o leitor», a parte que entra no cálculo continua igual. Uma referência que dependa do primeiro nome fica fora dessas duas palavras.
 
-\subsection*{RNNs e LSTMs (a era “quase dá”)}
+\subsection*{Redes recorrentes e estado acumulado}
 
 Depois vieram as \emph{Recurrent Neural Networks} e variantes como LSTM/GRU. A ideia: em vez de só olhar para as últimas n-1 palavras, mantemos um estado interno que vai sendo atualizado token a token. Em teoria, a rede pode “lembrar-se” de coisas ditas há muito tempo.
 
@@ -43,7 +47,7 @@ Na prática, tens:
 \item Contextos longos continuam difíceis de usar de forma eficiente.
 \end{itemize}
 
-Foi aqui que alguém decidiu que talvez fosse boa ideia deixar a sequência de lado e perguntar: e se cada palavra pudesse olhar diretamente para qualquer outra?
+A recorrência faz passar informação de um passo ao seguinte. A atenção introduz um caminho mais direto entre posições. Que posições podem comunicar depende da máscara e da arquitetura.
 
 \subsection*{Transformers (o “Attention Is All You Need”)}
 
@@ -128,7 +132,7 @@ Compara as respostas. O que mudou? Que tipo de palavras aparecem agora?
 \textbf{Falhas possíveis:} Escolher só as respostas engraçadas, continuar na mesma conversa ou atribuir probabilidades inventadas ao modelo.
 \end{promptlabbox}
 
-A moral da história: o que pedes, como pedes e em que ordem pedes muda a distribuição de probabilidades que o modelo vai usar. A “engenharia” está em controlar o contexto em vez de aceitar o default.
+Um pormenor ajuda a ler a fórmula. Imagina dois primeiros tokens, A com probabilidade 0,60 e B com 0,40. O melhor segundo token após A tem probabilidade 0,50. Após B, o melhor segundo token tem 0,90. As melhores sequências de dois passos em cada ramo têm, respetivamente, $0{,}60\times0{,}50=0{,}30$ e $0{,}40\times0{,}90=0{,}36$. A escolha gulosa começa em A. Neste exemplo sintético, a sequência mais provável começa em B.
 
 \section{Alucinações: quando a fluência ultrapassa a evidência}
 Uma resposta pode conter um título de artigo perfeito, autores plausíveis e um DOI inexistente. Chamamos frequentemente \emph{alucinação} a conteúdo fabricado ou sem suporte. Em tarefas documentais, convém distinguir erro factual de falta de sustentação: uma afirmação pode até ser verdadeira e, mesmo assim, não constar dos documentos autorizados.
@@ -145,7 +149,7 @@ RAG, pesquisa e ferramentas podem melhorar o acesso a evidência, mas também po
 
 
 \section{Da intuição à engenharia}
-Os capítulos~\ref{ch:ia} e~\ref{ch:primeira-conversa} introduziram IA, modelos e uma primeira experiência sem exigir programação. A partir daqui, a notação surge acompanhada da sua leitura em palavras. Podes experimentar os prompts num chat; só os laboratórios de implementação exigem Python.
+Já passámos pela ideia de um modelo e pela aprendizagem a partir de dados. A seguir, o capítulo~\ref{ch:transformer} abre o mecanismo de atenção. Se quiseres fazer primeiro um pedido num chat, podes saltar para o capítulo~\ref{ch:primeira-conversa} e voltar à fórmula depois.
 
 Se já programas, não confundas facilidade de integração com fiabilidade. Se estás a começar, não precisas de decorar matrizes para escrever um pedido claro. O objetivo comum é conseguir perguntar: «Que parte deste problema pede um modelo, que parte pede código e como vou saber se funcionou?»
 

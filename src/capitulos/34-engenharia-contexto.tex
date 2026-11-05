@@ -11,7 +11,7 @@ Uma boa seleção responde a quatro perguntas: para que decisão precisamos dest
 Convém separar classes de conteúdo por estrutura e metadados. Isso facilita validação e leitura, embora delimitadores não criem uma barreira de segurança infalível. As permissões têm de ser aplicadas antes de recuperar ou executar; não dependem de o modelo reconhecer corretamente a etiqueta.
 
 \section{Quatro sentidos diferentes de memória}
-Os pesos contêm regularidades aprendidas. A janela contém os elementos usados nesta inferência. A cache de atenção reutiliza chaves e valores durante a geração, como mostra o capítulo~\ref{ch:tokens}. A memória persistente da aplicação guarda dados para chamadas futuras. Uma cache de documentos, como a do ensaio, pertence à aplicação. Para a corrigir, verifica a chave, a versão e a origem do documento.
+Os pesos contêm regularidades aprendidas. A janela contém os elementos usados nesta inferência. A cache de atenção reutiliza chaves e valores durante a geração, como mostra o capítulo~\ref{ch:local}. A memória persistente da aplicação guarda dados para chamadas futuras. Uma cache de documentos, como a do ensaio, pertence à aplicação. Para a corrigir, verifica a chave, a versão e a origem do documento.
 
 Uma memória útil pode ser uma decisão aprovada com data e origem: «a política ativa é POL-02, versão 3». Uma memória perigosa é uma síntese sem origem: «este cliente costuma ter prioridade», extraída de uma conversa ambígua e reutilizada indefinidamente. A persistência aumenta o alcance de um erro se não houver correção, expiração e controlo de acesso.
 

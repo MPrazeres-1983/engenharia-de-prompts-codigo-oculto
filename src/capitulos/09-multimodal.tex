@@ -1,52 +1,18 @@
 \chapter{Prompting Multimodal: Texto, Imagem, Áudio e Ferramentas}
 \label{ch:multimodal}
 
-\section{O que quer dizer ``multimodal'' na prática}
+Tens uma fotografia do balcão e uma descrição da reclamação. Na fotografia vê-se uma meia vermelha. A descrição fala de duas peças. Uma entrada ajuda a interpretar a outra, desde que saibamos o que cada uma permite confirmar.
 
-“Multimodal” é uma daquelas palavras que toda a gente usa e poucos definem. De forma pragmática:
+\section{Entrada, saída e ferramenta}
+Uma modalidade é um tipo de informação, como texto, imagem ou áudio. Um modelo pode usar mais do que uma modalidade de entrada e produzir só uma de saída. O relatório técnico do GPT-4 de 2023 descreve um caso de entrada de texto e imagem com saída em texto~\citep{gpt4report2023}. Trata-se de uma capacidade documentada para aquela versão.
 
-\begin{itemize}[leftmargin=*]
-\item \textbf{Modelo unimodal}:
-\begin{itemize}[leftmargin=*]
-\item trabalha com uma modalidade, que pode ser texto, imagem, áudio ou outra,
-\item outras modalidades exigem componentes ou conversões adicionais.
-\end{itemize}
-\item \textbf{Modelo multimodal}:
-\begin{itemize}[leftmargin=*]
-\item aceita mais do que um tipo de input (texto + imagem, texto + áudio, etc.),
-\item pode aceitar ou produzir diferentes modalidades; aceitar imagem não implica gerar imagem,
-\item pode combinar isto com ferramentas externas.
-\end{itemize}
-\end{itemize}
+Uma aplicação também pode combinar componentes. Num serviço de voz, um reconhecedor pode transcrever o áudio, um modelo de texto preparar a resposta e outro componente lê-la em voz alta. Para investigar uma falha, guarda o ponto onde a informação mudou. Um erro de transcrição e uma resposta inventada deixam pistas diferentes.
 
-Em vez de pensares “modelo mágico que vê e ouve”, pensa:
-
-\begin{itemize}[leftmargin=*]
-\item podes ter modelos com representações partilhadas entre modalidades ou cadeias de componentes especializados. As capacidades exatas dependem da arquitetura~\citep{gpt4report2023}. A aplicação pode:
-\begin{itemize}[leftmargin=*]
-\item extrair informação de uma imagem (como se alguém a descrevesse em detalhe),
-\item gerar uma imagem a partir de uma descrição,
-\item transformar áudio em texto (ASR) e texto em áudio (TTS),
-\item coordenar isto com outras APIs.
-\end{itemize}
-\end{itemize}
-
-O teu trabalho, como engenheiro de prompts, é:
-
-\begin{itemize}[leftmargin=*]
-\item formular pedidos que usem bem esses canais (sem superegoísmo: “faz tudo sozinho”),
-\item combinar etapas de texto+imagem+áudio em fluxos coerentes,
-\item respeitar limites de cada modalidade (resolução, ruído, ambiguidade).
-\end{itemize}
-
-\begin{keyideabox}{Multimodal $\neq$ licença para preguiça}
-Meter um screenshot e dizer “resolve isto” é pouco melhor do que mandar uma foto do quadro ao professor e exigir nota 20.
-Continua a ser preciso dizer \emph{o que queres} que o modelo faça com aquilo que está na imagem/áudio.
-\end{keyideabox}
+Uma ferramenta é uma operação que a aplicação pode disponibilizar, como consultar um registo. Podes pedir ao modelo que descreva o que aparece na imagem, e depois usar uma ferramenta para verificar o número do talão. O primeiro passo olha para os píxeis. O segundo consulta dados com as permissões da aplicação.
 
 \section{Usar imagens como input: screenshots, gráficos e documentos}
 
-Modelos com visão conseguem “ler”:
+Uma entrada visual pode incluir:
 
 \begin{itemize}[leftmargin=*]
 \item screenshots de aplicações,
@@ -125,8 +91,7 @@ Sugere 2-3 análises adicionais que deveríamos fazer
 com os dados originais (não disponíveis na imagem).
 \end{lstlisting}
 
-Se não disseres que é um gráfico, o modelo normalmente percebe sozinho.
-Indicar a tarefa permite avaliar se a descrição, interpretação ou crítica cumpre o objetivo.
+Pede que distinga o que leu nos eixos do que inferiu sobre as causas. Para calcular taxas ou comparar totais, abre a tabela original. Se a escala estiver ilegível, guarda esse limite na descrição.
 
 \subsection*{Padrões para documentos e slides}
 
@@ -175,13 +140,7 @@ Isto transforma “foto de apontamentos” em algo pesquisável e reutilizável.
 
 \section{Gerar imagens com prompts de texto}
 
-Quando o modelo também gera imagens, voltamos à essência: \emph{especificar bem}. Pedidos vagos produzem:
-
-\begin{itemize}[leftmargin=*]
-\item imagens genéricas,
-\item estilos cliché,
-\item detalhes incoerentes.
-\end{itemize}
+Ao gerar uma ilustração, começa pelos elementos que precisam de aparecer e pela utilização da imagem. Com um pedido pouco específico, a composição e outros detalhes podem variar.
 
 Elementos a controlar num prompt de imagem:
 
@@ -357,7 +316,7 @@ Fluxo genérico:
 \begin{enumerate}[leftmargin=*]
 \item Utilizador fala.
 \item ASR converte para texto.
-\item LLM interpreta comando e decide ação:
+\item O modelo interpreta o comando e propõe o passo seguinte.
 \begin{itemize}[leftmargin=*]
 \item responder com texto,
 \item chamar ferramenta,
@@ -468,4 +427,4 @@ Se uma decisão é crítica, valida sempre com humanos e dados diretos.
 \section{Separar observação, interpretação e ação}
 Num teste de interface, uma captura permite observar que um botão está cortado. Não permite concluir, sozinha, que uma atualização à base de dados falhou. Regista «observado na imagem», «hipótese» e «verificação necessária». Faz o mesmo com áudio: uma palavra transcrita com erro pode inverter uma instrução.
 
-Para gráficos que comuniquem dados, usa ferramentas que desenhem os valores originais em SVG, PDF ou outro formato verificável. Uma imagem gerada de um dashboard é uma maquete, não evidência estatística. Para documentos, preserva a página ou região de origem para confirmar números e negações.
+Para gráficos que comuniquem dados, constrói as marcas e escalas com os valores originais. Para documentos, preserva a página ou região de origem para confirmar números e negações. No cartaz do capítulo~\ref{ch:imagem-design}, a segunda meia está no cesto. O primeiro plano da curta deixa esse cesto fora do quadro. Podes comparar os ficheiros para ver que evidência está disponível em cada versão.

@@ -1,65 +1,29 @@
 \chapter{Tokens, Temperatura e Controlo de Loucura}
 \label{ch:tokens}
 
-\section{Tokenização e as suas consequências desagradáveis}
+Uma peça de roupa pode chegar com a etiqueta «lã», um código e um desenho minúsculo de uma bacia. Para nós, cada um tem um significado. Para contar o que cabe na entrada de um modelo de texto, precisamos de conhecer a forma como o tokenizador representa esses sinais.
 
-Um LLM não vê “palavras” nem “frases” como tu. Vê \emph{tokens}. Dependendo do modelo, um token pode ser:
+\section{Como o texto se torna uma sequência de IDs}
+O tokenizador converte o texto numa sequência de identificadores do seu vocabulário. Um token pode representar uma palavra inteira, parte dela, pontuação ou uma sequência que inclui espaços. Usa o tokenizador que corresponde à versão e configuração do modelo, pois a segmentação pode variar.
 
-\begin{itemize}[leftmargin=*]
-\item uma palavra inteira (\texttt{gato}),
-\item um pedaço de palavra (\texttt{pro}, \texttt{gram}, \texttt{ação}),
-\item um símbolo (\texttt{?}, \texttt{,}, \texttt{)}),
-\item ou até espaços em branco.
-\end{itemize}
+\subsection*{Espaço e custos}
+Quando o serviço dá um limite em tokens, conta com o texto e com a estrutura que a aplicação acrescenta, conforme a interface. Cinco páginas de código e cinco páginas de prosa podem ter contagens diferentes. A contagem serve para decidir o que cabe e, quando a cobrança usa tokens, para estimar parte do custo.
 
-O processo de partir texto em tokens chama-se \emph{tokenização}. Cada modelo tem o seu tokenizador com regras próprias. Isto leva a efeitos curiosos:
-
-\begin{itemize}[leftmargin=*]
-\item Palavras raras ou com acentos estranhos podem partir-se em muitos tokens.
-\item Algumas sequências comuns (como \texttt{https://}) podem ser um único token.
-\item Um emoji pode ocupar vários tokens; mede com o tokenizador correspondente, sem assumir equivalência entre um símbolo visível e um token.
-\end{itemize}
-
-Porque é que isto te deve interessar como engenheiro de prompts?
-
-\subsection*{1. Custos e limites contam em tokens, não em palavras}
-
-Quando a documentação diz “máximo 8k tokens” ou “custo de X por 1M tokens”, não é “palavras”. Um texto de 500 palavras pode ser 700, 800 ou mais tokens, dependendo da língua e do estilo.
-
-\subsection*{2. Contar letras ou sílabas é pedir problemas}
-
-Se pedires:
-
-\begin{quote}
-\small
-“Escreve um poema em que cada verso tem exatamente 7 sílabas.”
-\end{quote}
-
-o modelo tem de fazer ginástica para conectar o teu pedido (sílabas) com a sua realidade interna (tokens). Às vezes acerta surpreendentemente bem; noutras falha miseravelmente. A tokenização, por si só, não prova incapacidade de contagem. Contudo, não existe garantia de cumprimento da métrica poética; valida o resultado com um critério linguístico apropriado.
-
-\subsection*{3. Formatação estranha pode rebentar a tokenização}
-
-Sequências como:
+\subsection*{Dois textos que parecem iguais}
+Em Python, podemos representar «é» por um ponto de código ou por um \texttt{e} seguido de um acento combinante. O seguinte cálculo mostra o número de pontos de código e de bytes em UTF-8 de cada representação.
 
 \begin{lstlisting}
-########## TÍTULO ##########
+>>> [ (len(s), len(s.encode("utf-8")))
+...   for s in ("\u00e9", "e\u0301") ]
+[(1, 2), (2, 3)]
 \end{lstlisting}
 
-ou
-\begin{lstlisting}
----- passo 1 ----
-\end{lstlisting}
-
-são perfeitamente válidas para humanos, mas podem gerar tokens pouco usuais. Não é grave, mas se enchermos o prompt de ruído decorativo, gastamos tokens sem acrescentar significado.
-
-\begin{warningboxenv}{Cuidado com “prompts artísticos”}
-Prompts cheios de emojis, molduras ASCII e ornamentos tipo “====” podem ser bonitos para screenshots no Twitter, mas podem aumentar o custo sem melhorar o resultado; isso deve ser testado, não presumido. Num sistema de produção, menos espetáculo e mais clareza.
-\end{warningboxenv}
+A contagem de tokens depende ainda do tokenizador e da normalização que este aplicar. Para contar palavras, letras ou sílabas numa saída, define a regra da tarefa e verifica segundo essa regra. Um limite de tokens controla outro tamanho.
 
 \begin{promptlabbox}{Ver a tokenização com os teus próprios olhos}
 \textbf{Objetivo e contexto:} Medir segmentação com um tokenizador identificado. Guarda os três textos completos e a versão usada.
 
-Quase todas as grandes APIs fornecem uma forma de ver como um texto é tokenizado (via ferramentas web ou SDKs).
+Usa um tokenizador fornecido ou documentado para o modelo escolhido. Se a interface só mostrar a contagem de utilização, regista essa contagem e a diferença entre o pedido escrito e a chamada completa.
 
 \medskip
 
@@ -83,11 +47,11 @@ O modelo produz \emph{logits}, scores reais $z_i$ para tokens candidatos. Para $
 \[
 p_i(T)=\frac{\exp(z_i/T)}{\sum_j\exp(z_j/T)}.
 \]
-Reduzir $T$ concentra massa nos scores maiores; aumentar $T$ torna a distribuição mais uniforme. Isto altera a amostragem, não a veracidade do que está a ser dito. Um erro muito provável pode continuar muito provável a baixa temperatura.
+Reduzir $T$ concentra a distribuição nos scores maiores. Num exemplo com dois tokens e logits $\ln 2$ e $0$, o primeiro tem probabilidade $2/3$ a $T=1$. A $T=0{,}5$, tem $4/5$. A $T=2$, desce para cerca de $0{,}586$. Pensa na temperatura como controlo da distribuição de escolha. Se o token mais favorecido fizer parte de uma resposta errada, baixar $T$ dá-lhe mais peso.
 
 \emph{Top-k} restringe a escolha aos $k$ candidatos de maior probabilidade. \emph{Top-p}, ou nucleus sampling, retém o menor prefixo da lista ordenada cuja probabilidade acumulada atinge pelo menos $p$; depois renormaliza~\citep{holtzman2020}. Empates e combinação de filtros dependem da implementação.
 
-Com probabilidades ilustrativas $[0.60,0.25,0.10,0.05]$, top-p de $0.80$ retém os dois primeiros candidatos, cuja massa é $0.85$. Top-k igual a 1 corresponde a escolha gulosa no passo considerado. O limite $T\to0^+$ também concentra a escolha nos máximos; muitos serviços tratam o valor zero como opção especial. Não substituas essa convenção pela divisão por zero na fórmula.
+Com probabilidades ilustrativas $[0.60,0.25,0.10,0.05]$, top-p de $0.80$ retém os dois primeiros candidatos, cuja massa é $0.85$. Depois de renormalizar, as probabilidades são $12/17$ e $5/17$. Top-k igual a 1 corresponde a escolha gulosa no passo considerado. O limite $T\to0^+$ também concentra a escolha nos máximos; muitos serviços tratam o valor zero como opção especial. Não substituas essa convenção pela divisão por zero na fórmula.
 
 \begin{warningboxenv}{Repetível não significa garantidamente idêntico}
 Mesmo sem amostragem, uma aplicação pode mudar de versão, contexto, ferramenta ou implementação numérica. Temperatura zero não é contrato de reprodução de um serviço inteiro. Guarda a versão do modelo, configuração, entradas e resultados das ferramentas.
@@ -98,7 +62,7 @@ Nem todos os modelos expõem estes controlos, e alguns modelos de raciocínio im
 
 \section{Orientar o estilo quando não controlas a API}
 
-Nem sempre tens acesso direto aos parâmetros de \emph{sampling}. Num chat “normal”, não podes mexer no \texttt{temperature} ou no \texttt{top-p}. Ainda assim, consegues influenciar o comportamento com instruções.
+Nem sempre tens acesso direto aos parâmetros de \emph{sampling}. Se o chat não expõe temperatura ou top-p, podes descrever o tom e o formato que queres. Ainda assim, consegues influenciar o comportamento com instruções.
 
 Alguns padrões úteis:
 
@@ -178,8 +142,9 @@ Nas APIs, encontras coisas como:
 
 \begin{itemize}[leftmargin=*]
 \item \texttt{max\_tokens} ou equivalente: limite de geração; o nome e a inclusão de tokens de raciocínio variam por API.
-\item \texttt{frequency\_penalty}: penaliza repetir o mesmo token muitas vezes.
-\item \texttt{presence\_penalty}: penaliza repetir tokens que já apareceram no contexto.
+\item Penalização por frequência, quando disponível: pode depender de quantas vezes um token foi visto.
+\item Penalização por presença, quando disponível: pode depender de o token já ter aparecido.
+\item Confirma na documentação a fórmula e os tokens a que cada parâmetro se aplica.
 \end{itemize}
 
 Se não tens acesso direto a estes controlos, podes aproximar-te com linguagem natural:

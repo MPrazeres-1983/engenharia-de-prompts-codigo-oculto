@@ -106,6 +106,8 @@ Em 05-11-2026, o caso SyRI foi verificado no texto da decisão de 5 de fevereiro
 
 O terceiro ciclo reconfirmou em 05-11-2026 o [Regulamento (UE) 2026/1744](https://eur-lex.europa.eu/eli/reg/2026/1744/oj), considerando 40, alteração do artigo 113 e artigo 4. Os marcos de dezembro de 2027 e agosto de 2028 mantêm o âmbito descrito no capítulo de governação. A revisão de segurança consultou [OWASP LLM01](https://genai.owasp.org/llmrisk/llm01-prompt-injection/) e [LLM07](https://genai.owasp.org/llmrisk/llm072025-system-prompt-leakage/) para origem das instruções, credenciais e autorização no executor.
 
+No lote de mecanismos, reconfirmou-se no [resumo do relatório técnico GPT-4 de 2023](https://arxiv.org/abs/2303.08774) a entrada de imagem e texto com saída de texto. A descrição refere-se à versão documentada. As contas de probabilidades condicionais, temperatura e comprimento Unicode são exemplos construídos e conferidos em Python.
+
 ## Recursos e licenças
 
 Texto novo, diagrama de equipa, tabelas, dados sintéticos e scripts foram produzidos para esta revisão sob as condições da obra. Capa original preservada byte a byte. Não se copiaram figuras dos estudos ou modelos; os artigos são citados e resumidos com alcance limitado. Python usa biblioteca padrão. Modelos e runtime mantêm as licenças indicadas no registo histórico; os pesos não são redistribuídos. O pacote SKILL.md não recebe uma licença comercial diferente da obra.

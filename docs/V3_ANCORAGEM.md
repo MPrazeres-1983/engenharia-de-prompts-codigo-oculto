@@ -38,7 +38,7 @@ Os números são prefixos dos ficheiros, de acordo com `V3_ESTRUTURA.json`. A re
 |---|---|---|
 | A | 02, 03, 04, 05, 10, 11, 17, 34 | Revisto. Entrada com um pedido, comparação com as mesmas fontes, casos reservados, autoridade, cálculo verificável e descodificação JSON |
 | B | 12, 13, 14, 15, 16, 18, 19, 35, 36, 37 | 35 e 36 revistos em H1. Faltam os oito restantes, de escrita, aprendizagem, criação e prática |
-| C | 06, 08, 09 | Mecanismo, unidades e modalidades |
+| C | 06, 08, 09 | Revisto. Probabilidades condicionais, tokenização e temperatura, entrada multimodal e verificação por fonte |
 | D | 20, 21, 22, 23, 24, 40 | Construção, fontes, autoridade e interoperabilidade |
 | E | 25, 26, 27, 28 | Revisto. Métricas por decisão, autorização no executor, operação e supervisão. Integra H3 |
 | F | 29, 48, 50 | Futuros e comparação, com medidas e limites explícitos |
@@ -61,6 +61,7 @@ Os números são prefixos dos ficheiros, de acordo com `V3_ESTRUTURA.json`. A re
 
 | H4-A | Oito capítulos revistos, de 02 a 34 pelos prefixos do lote A. Retomada a reclamação dos seis pares para ligar instrução, testes, evidência e estrutura. Corrigidos os exemplos de avaliação e de JSON | Continuar a partir do primeiro lote ainda aberto |
 | H4-E | Quatro capítulos revistos. Distinção entre lançamento canário, sonda e avaliação A/B, custos de encaminhar, segurança na ferramenta e responsáveis pela contenção e revisão. Datas do artigo 113 reconfirmadas | Consolidar e validar a composição em H5 |
+| H4-C | Três capítulos revistos. Corrigida a sequência de leitura em 06 e a remissão sobre cache KV. Contas de geração e exemplos Unicode conferidos localmente. O caso histórico de entrada de imagem e texto foi verificado no relatório técnico de 2023 | Consolidar em H5 |
 
 ## Dependências pendentes de outros ensaios
 
