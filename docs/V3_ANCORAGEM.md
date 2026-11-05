@@ -54,8 +54,8 @@ Os números são prefixos dos ficheiros, de acordo com `V3_ESTRUTURA.json`. A re
 
 | Bloco | Evidência ou decisão registada | Próximo passo |
 |---|---|---|
-| H0 | HEAD e PR confirmados, comparação do PDF feita, árvore local limpa | Guardar a ancoragem no GitHub |
-| H1 | Ficção original da Lavandaria. Conceito de uma ilustração reutilizada em três enquadramentos. FFmpeg disponível. CLI HyperFrames ausente da cache local | Gerar a imagem, verificar pistas e composição, montar e exportar o cartaz e a curta |
+| H0 | Ancoragem publicada em `24d7057af22f06630892d8d7699cc4482786a9ad`. Base e PDF conferidos | Consultar o último bloco validado |
+| H1 | Entregue em `exemplos/atelier` e integrado nos capítulos 35, 36 e 49. Cartaz e guião A4, curta muda H.264 de 15 s com 360 fotogramas. Três amostras e seis fotogramas de fronteira revistos. Espaçamento do guião corrigido com fontes incorporadas. A montagem usa FFmpeg e uma ilustração original gerada | Integrar no PDF final em H5. A comparação com espectadores é uma extensão |
 | H2 | Identificados o acórdão SyRI e o comunicado oficial do tribunal | Conferir fundamentos e dispositivo, escrever o caso com alcance delimitado |
 | H3 | Caso sintético de duas versões de uma política e uma cache indexada apenas pelo documento | Implementar a reprodução e validar a contenção e recuperação |
 

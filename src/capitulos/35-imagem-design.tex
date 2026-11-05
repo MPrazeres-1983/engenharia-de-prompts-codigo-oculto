@@ -1,7 +1,9 @@
 \chapter{Uma Ideia Visível: Imagem, Edição e Design com IA}
 \label{ch:imagem-design}
 
-Queres um cartaz para um clube de leitura: uma mesa, uma chávena e um livro aberto, com espaço para a data. «Faz um cartaz bonito» entrega ao sistema quase todas as decisões. Especificar público, composição e destino permite-te avaliar o resultado. Não precisas de programar, mas precisas de olhar.
+\ficcao O gerente da Lavandaria quer um cartaz para o seu primeiro filme policial. O orçamento dá para um balcão, um cesto e dois suspeitos que aceitam trabalhar em lã. Falta decidir o que o público deve ver primeiro.
+
+«Faz um cartaz bonito» deixa essa decisão ao sistema. Neste projeto, o cartaz tem de anunciar um mistério, a ilustração tem de conter a pista e o título tem de se ler em miniatura. São três coisas que podemos verificar, mesmo sem saber desenhar.
 
 \section{Começar pelo destino, antes do estilo}
 Uma imagem para o ecrã de um telemóvel e uma para impressão pedem proporções e detalhe diferentes. Define a orientação, a utilização, a zona de texto e os elementos que precisam de ficar legíveis. Se há informação exata, como data, preço ou morada, conserva-a numa camada de texto editável sempre que possível. Uma imagem de uma palavra não é a própria palavra armazenada como texto.
@@ -14,7 +16,7 @@ Composicao vertical; metade superior calma para titulo posterior.
 Paleta azul escuro e creme; sem marcas ou texto incorporado.
 Deve continuar reconhecivel em miniatura.
 \end{lstlisting}
-Estes critérios são escolhas editoriais, não fórmulas cientificamente superiores de prompting. Podemos compará-los com um pedido mais vago e observar quais ajudam naquele projeto.
+Os critérios são escolhas de projeto. Para perceber quais ajudam, compara o resultado com o de um pedido mais vago e observa onde cada cartaz deixa espaço para o texto.
 
 \section{Gerar alternativas e escolher uma direção}
 Pede poucas alternativas com uma diferença relevante: composição, iluminação ou linguagem visual. Se alterares tudo em simultâneo, será difícil explicar a preferência. Uma grelha simples pode avaliar presença dos elementos, espaço disponível, legibilidade em miniatura e adequação ao público.
@@ -44,6 +46,20 @@ Se queres um logótipo que será redimensionado, editado e impresso, considera u
 Usa imagens próprias, autorizadas ou com condições compatíveis. Regista origem, licença e transformações. Uma plataforma permitir uma operação não resolve direitos de imagem, marcas ou autoria. Condições comerciais dependem da ferramenta, da jurisdição e dos materiais usados; verifica-as antes de distribuir um projeto. A licença deste livro não concede direitos sobre imagens de terceiros.
 
 Credenciais de conteúdo, como as especificadas por C2PA, podem associar proveniência verificável a um recurso~\citep{c2pa22}. Não demonstram que a cena retratada aconteceu. Uma fotografia autêntica de uma encenação continua a ser uma encenação; ausência de credenciais também não prova falsidade.
+
+\section{O cartaz da Lavandaria}
+Para \emph{A Meia Testemunha}, pedimos uma ilustração horizontal com três zonas de interesse. À esquerda, a meia no balcão. Ao centro, o tambor da máquina. À direita, a segunda meia presa ao lado exterior de um cesto de vime. A faixa clara no punho liga as duas peças dentro da ficção.
+
+\textbf{Resultado observado.} A imagem guardada tem $1672 \times 941$ píxeis. Vêem-se as duas meias, as respetivas faixas e o cesto. O cartaz A4 usa a imagem inteira e acrescenta o título, a frase de apresentação e a autoria em texto editável no SVG. A figura~\ref{fig:cartaz-meia-testemunha} mostra o ficheiro exportado. O pedido, as fontes tipográficas e os ficheiros de montagem estão em \nolinkurl{exemplos/atelier}.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=.54\textwidth]{../exemplos/atelier/saidas/cartaz.pdf}
+\caption{Cartaz de \emph{A Meia Testemunha}. Ilustração gerada para a cena fictícia, composição e tipografia definidas no SVG.}
+\label{fig:cartaz-meia-testemunha}
+\end{figure}
+
+O público do cartaz pode descobrir a pista antes de ver a curta. No capítulo~\ref{ch:audiovisual}, vamos usar o enquadramento para mudar a ordem da descoberta. Os materiais são os mesmos. O momento em que cada pista entra em cena é uma decisão de montagem.
 
 \begin{promptlabbox}{Um cartaz que sobrevive à miniatura}
 \textbf{Objetivo e contexto:} criar o cartaz fictício do clube de leitura. Requisitos: ferramenta de imagem disponível e editor de texto sobre imagem. Verifica o plano e eventuais custos antes de gerar; a alternativa offline é desenhar três composições em papel.
