@@ -64,6 +64,15 @@ Uma supervisão útil permite perceber dados, corrigir erro e alterar o resultad
 
 Avalia também falsos positivos, grupos afetados, qualidade dos dados históricos e ciclos de retroalimentação. Se fiscalizamos mais um grupo, encontraremos mais registos nesse grupo; treinar sobre esses registos sem considerar a política de recolha pode reforçar a mesma seleção. O exemplo descreve um mecanismo possível, cuja presença num caso concreto deve ser demonstrada.
 
+\section{SyRI, o que acontece quando o Estado assinala um risco}
+Em fevereiro de 2020, um tribunal neerlandês teve de avaliar uma ferramenta concebida para detetar fraude. O \emph{Systeem Risico Indicatie}, ou SyRI, cruzava dados já detidos por entidades públicas. Um modelo com indicadores de risco ajudava a selecionar casos. Após análise adicional, podia ser emitido um relatório de risco para eventual investigação~\citep[§§ 4.27--4.29 e 6.62]{syri2020}.
+
+O relatório podia ficar num registo durante dois anos sem que a pessoa afetada soubesse. O tribunal considerou significativo esse efeito na vida privada. Uma sanção teria de assentar também noutros elementos. A análise judicial incidiu no artigo 8.º, n.º 2, da Convenção Europeia dos Direitos Humanos. A classificação jurídica do processo ao abrigo do artigo 22.º do RGPD ficou por decidir nesse processo~\citep[§§ 6.54--6.60]{syri2020}.
+
+O Tribunal Distrital de Haia examinou o equilíbrio entre combater fraude e respeitar a vida privada. Entre os problemas, identificou a falta de informação verificável sobre os indicadores e o modelo de risco, além de garantias insuficientes quanto ao volume e à necessidade dos dados. Em 5 de fevereiro de 2020, declarou sem efeito vinculativo, relativamente às organizações indicadas e às pessoas que representavam, o artigo 65.º da lei SUWI e o capítulo 5a do decreto SUWI~\citep[§§ 6.49, 6.80, 6.106 e 7.2]{syri2020}.
+
+Para desenhar um serviço semelhante, seguiríamos o percurso de uma sinalização. Quem autorizou o cruzamento? Que dado sustentou a análise? Quem pode verificar a versão da regra e corrigir um erro? A evidência para responder a cada pergunta é diferente. Uma taxa de acerto vem de um conjunto avaliado. A possibilidade de contestar exige um processo que a pessoa consiga usar. O caso SyRI permite discutir este segundo problema mesmo sem estimar a precisão do modelo.
+
 \section{Dois critérios de equidade podem pedir coisas diferentes}
 Uma discussão sobre enviesamento precisa de especificar o erro e a comparação. Queremos a mesma taxa de falsos positivos? A mesma capacidade de detetar casos? A mesma proporção de acertos entre as pessoas sinalizadas? Ou acesso equivalente a uma revisão? Não são maneiras diferentes de escrever uma única medida.
 

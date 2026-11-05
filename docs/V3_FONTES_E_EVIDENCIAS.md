@@ -94,6 +94,14 @@ Retoma em 04-11-2026 a partir de `e990b891`. Acrescentadas 14 entradas: a biblio
 | `unctad2025` | [Relatório oficial](https://unctad.org/publication/technology-and-innovation-report-2025), página e registo DOI 10.18356/9789211068016 | Estrutura e orientação de política para capacidades/acesso; não evidência causal de cada recomendação. |
 | `henderson2020` | [JMLR 21(248), 1–43](https://www.jmlr.org/papers/v21/20-312.html), resumo, secções 3.1, 4.3 e limitações no PDF | Contabilização, PUE e fronteiras de telemetria. Exemplo numérico do livro é construído, sem medição elétrica real. |
 
+## Terceiro ciclo — serviço público
+
+Em 05-11-2026, o caso SyRI foi verificado no texto da decisão de 5 de fevereiro de 2020. A página oficial do original neerlandês foi consultada por indexação. Para ler os parágrafos numerados, usou-se uma reprodução do texto da tradução do tribunal.
+
+| Chave | Fonte primária e localizador | Alcance efetivamente verificado |
+|---|---|---|
+| `syri2020` | [Decisão neerlandesa ECLI:NL:RBDHA:2020:865](https://uitspraken.rechtspraak.nl/details?id=ECLI%3ANL%3ARBDHA%3A2020%3A865), [texto inglês ECLI:NL:RBDHA:2020:1878](https://www.uitspraken.nl/uitspraak/rechtbank-den-haag/civiel-recht/civiel-recht-overig/bodemzaak/ecli-nl-rbdha-2020-1878) e [comunicado do tribunal](https://www.rechtspraak.nl/organisatie-en-contact/organisatie/rechtbanken/rechtbank-den-haag/nieuws/2020/02/syri-wetgeving-in-strijd-met-het-europees-verdrag-voor-de-rechten-voor-de-mens) | §§ 4.27–4.29 e 6.62, cruzamento e análise. §§ 6.49, 6.54–6.60, 6.80 e 6.106, transparência, relatório de risco e proporcionalidade. § 7.2, dispositivo e alcance. O capítulo distingue a sinalização da decisão sancionatória e a questão do artigo 22.º do RGPD do fundamento decidido. |
+
 ## Recursos e licenças
 
 Texto novo, diagrama de equipa, tabelas, dados sintéticos e scripts foram produzidos para esta revisão sob as condições da obra. Capa original preservada byte a byte. Não se copiaram figuras dos estudos ou modelos; os artigos são citados e resumidos com alcance limitado. Python usa biblioteca padrão. Modelos e runtime mantêm as licenças indicadas no registo histórico; os pesos não são redistribuídos. O pacote SKILL.md não recebe uma licença comercial diferente da obra.

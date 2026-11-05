@@ -56,7 +56,7 @@ Os números são prefixos dos ficheiros, de acordo com `V3_ESTRUTURA.json`. A re
 |---|---|---|
 | H0 | Ancoragem publicada em `24d7057af22f06630892d8d7699cc4482786a9ad`. Base e PDF conferidos | Consultar o último bloco validado |
 | H1 | Entregue em `exemplos/atelier` e integrado nos capítulos 35, 36 e 49. Cartaz e guião A4, curta muda H.264 de 15 s com 360 fotogramas. Três amostras e seis fotogramas de fronteira revistos. Espaçamento do guião corrigido com fontes incorporadas. A montagem usa FFmpeg e uma ilustração original gerada | Integrar no PDF final em H5. A comparação com espectadores é uma extensão |
-| H2 | Identificados o acórdão SyRI e o comunicado oficial do tribunal | Conferir fundamentos e dispositivo, escrever o caso com alcance delimitado |
+| H2 | Caso SyRI escrito no capítulo 45. Decisão de 05-02-2020, parágrafos verificados, referência `syri2020` e comunicado identificados no registo de fontes | Conferir citações em H5. O texto distingue sinalização de sanção e aplica perguntas de desenho a um cenário próprio |
 | H3 | Caso sintético de duas versões de uma política e uma cache indexada apenas pelo documento | Implementar a reprodução e validar a contenção e recuperação |
 
 ## Dependências pendentes de outros ensaios
