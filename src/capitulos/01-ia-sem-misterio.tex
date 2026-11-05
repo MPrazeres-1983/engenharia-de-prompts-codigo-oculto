@@ -1,52 +1,48 @@
 \chapter{IA, Aprendizagem e Modelos: Começar do Zero}
 \label{ch:ia}
 
-Uma lavandaria descobre que recebe cada vez mais reclamações sobre meias desaparecidas. O gerente conclui que as máquinas de lavar têm preferência pelo pé esquerdo. A contabilista pede dados. Alguém sugere inteligência artificial. Ainda ninguém contou as meias.
+\ficcao A Ana recebe um email da biblioteca do bairro. A reserva do livro ficou registada. Antes de sair de casa, pergunta se já o pode levantar. No balcão, o registo mostra «pedido recebido». A colega que organiza as reservas ainda está a conferir os exemplares. Quem redige a resposta tem uma frase muito fácil de escrever, «O livro está à sua espera», e uma informação que lhe falta para a poder usar.
 
-\ficcao Esta é a \emph{Lavandaria das Meias Desaparecidas}, o caso que vamos desenvolver. O absurdo pertence à história; os problemas de dados, instruções, permissões e testes são reais. A empresa existe apenas neste livro e nos ficheiros de demonstração.
+É por aí que vamos começar. O que queremos saber? Que informação temos? Como confirmamos a resposta? Podes seguir o caso com papel e lápis.
 
-Antes de escolher uma ferramenta, precisamos de perceber que tipo de problema temos. Se queremos contar dez pares, uma soma chega. Se queremos agrupar milhares de reclamações escritas de formas diferentes, um modelo de linguagem pode ajudar. Se queremos saber onde está uma meia concreta, uma resposta eloquente não substitui o registo de entrada e saída.
+\section{Uma pergunta pode esconder três trabalhos}
 
-\section{IA é uma família de abordagens}
-Inteligência artificial é um campo de investigação e engenharia que procura construir sistemas capazes de executar tarefas associadas a capacidades como perceção, aprendizagem, raciocínio e decisão. Não é uma técnica única nem um selo de qualidade. Existem sistemas baseados em regras explícitas, procura, otimização e aprendizagem a partir de dados.
+Se quisermos contar quantas reservas entraram hoje, basta contar os registos desse dia. Se quisermos separar centenas de mensagens em «reservas», «devoluções» e «horários», podemos usar um sistema que reconheça formas diferentes de fazer a mesma pergunta. Se quisermos confirmar o estado da reserva da Ana, precisamos do registo correspondente e de saber o que significa o estado nele escrito.
 
-Num programa de regras, escrevemos condições: «se o pedido tem mais de dez dias, sinaliza-o». Em \emph{aprendizagem automática} (machine learning), ajustamos um modelo a dados e usamos o resultado para tratar casos novos. Se lhe mostramos mensagens já classificadas, pode aprender padrões que distinguem uma pergunta de uma reclamação. A generalização, isto é, funcionar além dos exemplos de treino, tem de ser medida.
+No primeiro caso, a regra é uma contagem. No segundo, a tarefa é de \emph{classificação}, isto é, escolher uma categoria para cada mensagem. No terceiro, é uma consulta. Redigir a resposta é ainda outra operação. Separar estes trabalhos ajuda a escolher a ferramenta e a detetar onde falta informação.
 
-Uma rede neuronal é uma família de modelos que combina transformações parametrizadas. Os parâmetros são números ajustados durante o treino. Em \emph{deep learning}, várias camadas aprendem representações que ajudam na tarefa~\citep{goodfellow2016}. Não são pequenos neurónios humanos a trabalhar num escritório. A analogia biológica explica a origem do nome e deixa de ser útil bastante depressa.
+\section{O que a máquina aprende}
 
-\begin{keyideabox}{Três coisas diferentes}
-O \textbf{algoritmo de treino} ajusta parâmetros; o \textbf{modelo treinado} usa esses parâmetros; a \textbf{aplicação} envolve o modelo com interface, dados, regras e ferramentas. Uma capacidade da aplicação não é necessariamente uma capacidade isolada do modelo.
+A inteligência artificial (IA) reúne abordagens para tarefas como reconhecer padrões, procurar uma solução ou escolher uma ação. Num programa de regras, alguém escreve as condições. Por exemplo, quando a reserva tem o estado «pronto para levantamento», a aplicação pode preparar um aviso. Na \emph{aprendizagem automática}, ou \emph{machine learning}, usamos dados para ajustar um modelo. A partir de mensagens já classificadas, o modelo pode aprender padrões que o ajudam a tratar mensagens novas.
+
+Chama-se \emph{generalização} a capacidade de funcionar em casos novos. Acertar nas mensagens usadas para aprender é uma parte do trabalho. Para saber se o modelo também reconhece pedidos escritos de outras formas, testa-o com mensagens que ficaram de fora. O capítulo~\ref{ch:ml} abre essa experiência com números pequenos.
+
+Uma rede neuronal organiza operações em etapas chamadas \emph{camadas}. Os \emph{parâmetros} são os números que controlam essas operações. Pensa na regra de uma conta: se cada quilo acrescenta dois minutos, o dois controla o resultado. Numa rede, o treino ajusta muitos números deste género. Na \emph{aprendizagem profunda}, ou \emph{deep learning}, várias camadas transformam a entrada em representações que ajudam na tarefa~\citep{goodfellow2016}.
+
+\begin{keyideabox}{Treino, modelo e aplicação}
+O \textbf{algoritmo de treino} é o procedimento que ajusta os parâmetros. O \textbf{modelo treinado} usa os valores obtidos. A \textbf{aplicação} organiza o pedido, os dados, o modelo e as ferramentas. A mesma aplicação pode procurar um registo, calcular uma data por regras e pedir ao modelo que explique o resultado.
 \end{keyideabox}
 
-\section{Prever uma classe e gerar uma resposta}
-Um classificador pode devolver «reclamação», «pergunta» ou «outro». Um modelo generativo pode produzir texto, imagem, áudio ou outras representações. O formato de entrada e saída depende do modelo e da aplicação. Generativo não significa criativo no sentido humano; significa que o sistema produz uma saída, em vez de se limitar a selecionar um registo existente.
+\section{Gerar uma resposta e consultar um registo}
 
-Um modelo de linguagem atribui probabilidades a sequências de unidades de texto. Um LLM é um modelo de linguagem de grande escala. Mais à frente veremos tokens, redes e Transformers. Por agora, basta esta distinção: gerar uma continuação plausível e consultar um registo são operações diferentes. Uma aplicação pode combinar ambas.
+Um modelo \emph{generativo} pode produzir texto, imagem, som ou outros tipos de saída, conforme o seu desenho. Um modelo de linguagem aprende regularidades de texto. Nos modelos que geram texto por continuação, a entrada é dividida em \emph{tokens}, unidades que podem ser palavras, fragmentos ou sinais. O modelo atribui probabilidades a unidades que podem aparecer a seguir. Um LLM, do inglês \emph{large language model}, é um modelo de linguagem de grande escala.
 
-Quando perguntas «qual é a política de devoluções?», o sistema pode usar apenas o que aprendeu no treino, ler documentos fornecidos ou consultar uma ferramenta. A resposta final pode parecer idêntica nos três casos. Para avaliar confiança, interessa saber de onde veio a informação, se está atualizada e se a consegues confirmar.
+A frase «Pode levantar o livro hoje» é uma continuação plausível de um pedido sobre uma reserva. Para a usar, o balcão precisa de confirmar que aquele exemplar foi separado para aquela pessoa. Se a aplicação tiver acesso ao registo, pode consultá-lo antes de gerar o texto. Se a informação ficar por confirmar, a resposta pode indicar o que já se sabe e o que falta.
 
-\section{Treino, inferência e contexto}
-No \emph{treino}, os parâmetros mudam com os dados e com o objetivo escolhido. Na \emph{inferência}, usamos um modelo para produzir uma saída. Dar-lhe exemplos num prompt é, em geral, mudar a entrada dessa inferência; não é voltar a treinar o modelo. O ajuste posterior com novos dados, ou fine-tuning, é uma operação distinta.
+\section{O que muda quando escrevemos um pedido}
 
-O \emph{prompt} é o pedido e o material usado para orientar a resposta: instruções, exemplos e contexto. O \emph{contexto} disponível pode incluir mensagens, documentos e resultados de ferramentas. Tem limites de tamanho e depende do que a aplicação efetivamente envia ao modelo.
+No \emph{treino}, ajustamos os parâmetros do modelo. Na \emph{inferência}, usamos os parâmetros para produzir uma saída. Quando colocas a regra da biblioteca na conversa, mudas a informação disponível nessa utilização. O capítulo~\ref{ch:contexto} mostra como o resultado pode mudar com exemplos e informação adicional. O ajuste posterior dos parâmetros, ou \emph{fine-tuning}, é tratado no capítulo~\ref{ch:adaptacao}.
 
-Pensa numa reunião: a mesma pergunta, com ou sem o relatório em cima da mesa, pode levar a respostas diferentes. É uma analogia sobre disponibilidade de informação. Um LLM não tem uma memória humana nem a experiência de quem participou na reunião.
+O \emph{prompt} é o pedido e as instruções que fornecemos ao modelo. O \emph{contexto} é o conjunto de informação que o sistema lhe disponibiliza naquele momento. Pode incluir o pedido, mensagens anteriores, um documento ou o resultado de uma consulta. Pensa numa reunião. Uma coisa é responder com a agenda à frente. Outra é ter também o relatório atualizado sobre a mesa.
 
-Também há três datas a distinguir: a data do documento, a data da sua atualização e o momento em que o sistema o consultou. «Esta informação estava no treino» não nos diz qual das três é relevante para decidir hoje.
+\begin{promptlabbox}{Escolher a ferramenta para a pergunta}
+\textbf{Objetivo e contexto:} distinguir contagem, classificação e consulta. Considera três tarefas na biblioteca fictícia: contar as reservas de hoje, organizar mensagens por assunto e confirmar o estado de uma reserva.
 
-\section{O que não podemos concluir a partir de uma boa resposta}
-Uma resposta certa num exemplo não demonstra fiabilidade em todos os casos. Uma explicação convincente não prova que os passos descritos correspondem ao processo interno. Uma persona de «especialista» não concede credenciais. E uma recusa não prova que a aplicação está segura contra todas as formas de abuso.
+\textbf{Instruções:} escreve a informação necessária e um modo de verificar o resultado de cada tarefa. Experimenta decidir se usarias uma regra, um modelo, uma consulta ou uma combinação.
 
-Estas limitações não tornam a ferramenta inútil. Definem o trabalho que continua a caber-nos: escolher a tarefa, fornecer dados adequados, estabelecer critérios e verificar resultados. É a diferença entre experimentar uma máquina e construir um processo à volta dela.
+\textbf{Resultado esperado e validação:} a contagem deve corresponder aos registos do dia. As categorias precisam de critérios e casos novos para as verificar. Para confirmar uma reserva, é preciso consultar o registo certo e interpretar o estado.
 
-\begin{promptlabbox}{Escolher a ferramenta antes de escrever o prompt}
-\textbf{Objetivo e contexto:} distinguir regras fixas, interpretação e consulta. Considera três tarefas fictícias: contar os pares recebidos; agrupar reclamações em linguagem livre; confirmar o estado da reclamação \texttt{LAV-001}.
-
-\textbf{Instruções:} para cada tarefa, escreve a entrada, a saída, a fonte necessária e uma forma de verificar o resultado. Decide se usarias código, um modelo, uma consulta ou uma combinação. Não é necessário abrir um chat.
-
-\textbf{Resultado esperado e validação:} a contagem deve apoiar-se nos registos; a classificação pode usar interpretação; o estado deve vir do sistema autorizado. Confirma se a ferramenta escolhida tem acesso à informação necessária.
-
-\textbf{Falhas possíveis:} confundir uma tarefa difícil de explicar com uma tarefa que precisa de IA; usar um modelo para inventar um dado ausente; automatizar antes de definir a decisão.
+\textbf{Falhas possíveis:} contar mensagens em vez de reservas, presumir que toda a pergunta requer IA ou inventar um estado que o registo não mostra.
 \end{promptlabbox}
 
-No próximo capítulo vamos escrever o primeiro pedido e observar o que muda quando lhe acrescentamos informação útil. As matrizes podem esperar. As meias, aparentemente, já esperaram demasiado.
+A Ana ainda não sabe se pode sair de casa para levantar o livro. No próximo capítulo, vamos escrever uma resposta que lhe permita decidir o que fazer com a informação disponível.

@@ -1,0 +1,136 @@
+\chapter{Ciência, Saúde e Mundo Físico: da Previsão ao Benefício}
+\label{ch:ciencia}
+
+Uma rede reconhece uma doença numa folha. Um modelo prevê uma estrutura de proteína. Outro encontra um padrão numa mamografia. As três demonstrações podem ser valiosas, mas o caminho até uma colheita protegida, um medicamento ou uma pessoa melhor acompanhada contém outras decisões.
+
+O mistério deste capítulo está nesse caminho. Como é que um sistema pode acertar uma previsão e falhar a finalidade que nos levou a construí-lo? Vamos seguir a informação desde a bancada até ao campo e à organização de cuidados. Pelo meio, um pequeno conjunto de contas mostrará por que uma taxa de deteção aparentemente boa não significa que a maioria dos alarmes esteja certa.
+
+\section{Uma aceleração científica com objeto definido}
+AlphaFold apresentou resultados de previsão de estruturas de proteínas avaliados no CASP14, uma avaliação cega que permite comparar previsões com estruturas ainda não publicamente disponíveis~\citep{jumper2021}. É um avanço num problema concreto. Não equivale a explicar toda a biologia de uma proteína nem a demonstrar que um medicamento é eficaz e seguro.
+
+Entre estrutura prevista e intervenção existem interações, dinâmica, contexto celular, hipóteses e experiências. Um sistema pode reduzir trabalho numa etapa e deslocar o gargalo para a seguinte. Esta é uma forma útil de procurar oportunidades: identifica a etapa lenta, o objeto que o modelo prevê e a experiência capaz de a contrariar.
+
+Em investigação assistida, conserva hipóteses, dados e resultados separados. Uma sugestão de composto é uma proposta; uma simulação é um resultado de um modelo; uma medição em laboratório tem o seu procedimento e incerteza. Apagar estas distinções torna a investigação mais convincente no papel e menos reprodutível.
+
+O processo científico pode usar IA para procurar candidatos, relacionar literatura, analisar sinais ou decidir que experiência comparar a seguir. A utilidade depende da etapa. Um candidato mais promissor pode reduzir procura, mas ainda precisa de confirmação; um resumo pode acelerar leitura, mas uma referência inventada obriga a voltar atrás. Convém perguntar qual foi o recurso poupado e qual a nova incerteza introduzida.
+
+Uma distinção ajuda especialmente em biotecnologia: prever uma propriedade e desenhar algo que a possua são problemas diferentes. Mesmo que um modelo proponha uma sequência com uma propriedade prevista favorável, continua a existir o problema de verificar o objeto proposto. O avaliador computacional pode partilhar erros com o gerador, ou o candidato pode explorar regularidades que não se mantêm na experiência física.
+
+Esta possibilidade é uma razão para procurar verificação com informação diferente. A mesma hipótese reformulada por outro modelo não equivale a uma medição independente. Métodos computacionais, conhecimento do domínio e experiência podem reforçar-se, desde que saibamos que tipo de evidência cada um acrescentou.
+
+\section{Saúde: prever bem não é cuidar bem}
+Um modelo pode ter bom desempenho num conjunto de imagens e falhar quando mudam o equipamento, a população ou a \emph{prevalência}, a proporção de casos com a condição de interesse. Uma medida de \emph{discriminação} pergunta se o modelo tende a pôr esses casos acima dos outros na lista de risco. A \emph{calibração} pergunta se as probabilidades estimadas correspondem às frequências observadas. Por exemplo, entre cem casos avaliados com risco de 10\%, a frequência esperada seria cerca de dez em cem se a estimativa estivesse bem calibrada para esse grupo. A utilidade clínica exige ainda perceber que decisões mudam e que consequências são observadas.
+
+A orientação da OMS sobre grandes modelos multimodais discute benefícios possíveis e riscos como erros, enviesamento, privacidade e confiança excessiva na automação~\citep{who2024}. É orientação institucional; não certifica um produto. Este capítulo analisa critérios de avaliação, sem fornecer diagnóstico ou tratamento.
+
+Uma tarefa administrativa, como resumir uma consulta para revisão profissional, também precisa de confirmar negações, doses, datas e atribuição de sintomas. Chamar «apenas documentação» ao texto não elimina consequências se esse documento for usado depois numa decisão.
+
+\section{Um estudo prospetivo aproxima o sistema do processo real}
+O estudo PRAIM acompanhou o rastreio mamográfico de 463\,094 mulheres entre os 50 e os 69 anos, em doze locais na Alemanha. Os radiologistas escolhiam se usavam apoio de IA, pelo que a comparação foi observacional. As taxas estimadas no estudo foram de $6{,}7$ deteções por mil mulheres rastreadas com apoio e $5{,}7$ por mil sem apoio. A diferença equivale a cerca de uma deteção adicional por mil no estudo. A taxa de reconvocação, ou seja, de voltar a chamar uma mulher para avaliação, cumpriu o critério do estudo para excluir um agravamento acima da margem definida~\citep{eisemann2025}. A Vara financiou e participou no estudo, como declarado no artigo.
+
+É evidência sobre um processo de rastreio, mais próxima da prática do que classificar imagens isoladas. Não demonstra, por si só, redução de mortalidade nem substituição geral de profissionais. O resultado observado, a comparação causal e o benefício final para a pessoa são perguntas relacionadas, mas distintas.
+
+Esta diferença pode ser organizada numa sequência de avaliação. Uma fase retrospetiva usa dados já existentes. Uma fase prospetiva acompanha o funcionamento segundo um protocolo antes de se conhecer o desfecho de interesse. Uma avaliação do impacto pergunta o que mudou nas decisões e nos resultados com a utilização do sistema. A designação de cada fase não garante qualidade: seleção dos casos, comparação, seguimento e medição continuam a importar.
+
+Também é preciso saber quem ficou de fora. Um modelo treinado num equipamento pode enfrentar outro tipo de imagem; uma população pode ter distribuição diferente de casos. A pergunta de implementação não é apenas «foi publicado?», mas «o que permite transportar o resultado para as condições pretendidas?». A resposta pode exigir nova avaliação em vez de uma simples instalação.
+
+\section{Noventa por cento de deteção; quinze por cento de alarmes certos}
+Para abrir esta conta, saímos da clínica. Construímos uma fábrica fictícia onde 1\% de dez mil peças tem um defeito definido. Um detetor imaginado sinaliza 90\% das peças com defeito e deixa passar como normais 95\% das peças sem defeito. São pressupostos sintéticos, não características de um produto ou resultados de um estudo.
+
+Há cem peças com defeito: noventa são sinalizadas e dez passam despercebidas. Nas 9900 restantes, os 5\% de alarmes falsos correspondem a 495 peças. A máquina emite 585 alarmes; apenas noventa dizem respeito ao defeito. O valor preditivo positivo é $90/585$, cerca de 15.4\%.
+
+\begin{table}[htbp]
+\small
+\begin{tabularx}{\textwidth}{@{}Xrrr@{}}
+\toprule
+Resultado do detetor & Com defeito & Sem defeito & Total \\
+\midrule
+Alarme & 90 & 495 & 585 \\
+Sem alarme & 10 & 9405 & 9415 \\
+Total & 100 & 9900 & 10000 \\
+\bottomrule
+\end{tabularx}
+\caption{Contagens esperadas sob os pressupostos sintéticos indicados. Não são observações de uma fábrica ou de um ensaio clínico.}
+\label{tab:alarme-raro}
+\end{table}
+
+A sensibilidade responde a «entre os casos com defeito, quantos detetámos?». A especificidade responde a «entre os casos sem defeito, quantos ficaram sem alarme?». A pessoa que recebe um alarme quer outra coisa: «entre os alarmes, quantos correspondem ao defeito?». Trocar estas perguntas torna a estatística mais impressionante e a decisão pior informada.
+
+Se mantivermos as duas taxas condicionais e mudarmos a prevalência para 10\%, as contagens esperadas passam a novecentos alarmes verdadeiros e 450 falsos. O valor preditivo positivo sobe para dois terços. Não melhorámos o detetor; mudámos a frequência do fenómeno nos casos avaliados. O módulo \texttt{exemplos.laboratorio.decisoes} confirma as duas tabelas com frações exatas, sem arredondar pessoas ou peças durante as contas.
+
+\textbf{Aprofundamento opcional.} Com prevalência $p$, sensibilidade $s$ e especificidade $e$, o valor preditivo positivo é
+\[
+\frac{sp}{sp+(1-e)(1-p)},
+\]
+quando o denominador é diferente de zero. A expressão resulta de contar positivos verdadeiros e falsos na mesma população. Se o sistema não emite alarmes, a razão fica indefinida; não se transforma num desempenho perfeito por conveniência de uma tabela.
+
+Uma decisão real acrescenta custos, capacidade de revisão e consequências de perder um caso. Subir um limiar pode reduzir certos alarmes e deixar escapar mais casos; as taxas efetivas precisam de ser medidas. A conta sintética não escolhe o limiar de um serviço de saúde ou de uma fábrica. Ensina a pedir as grandezas que tornam essa escolha discutível.
+
+\section{O alvo errado pode produzir um erro social}
+Obermeyer e colaboradores estudaram um algoritmo de gestão de saúde nos Estados Unidos que previa despesa como aproximação de necessidade de cuidados. Encontraram diferenças de saúde entre grupos com o mesmo score e ligaram o problema à escolha desse alvo: desigualdade de acesso podia gerar menor despesa sem menor necessidade~\citep{obermeyer2019}. O resultado ilustra uma falha de definição e de contexto, não uma intenção que possamos atribuir à máquina.
+
+Na prática, isto pede uma auditoria anterior à comparação de arquiteturas. O que representa a etiqueta? Quem teve oportunidade de aparecer nos dados? Que acontecimentos nunca foram registados? Uma previsão precisa de compras de cuidados pode continuar a ser inadequada para distribuir ajuda por necessidade. Medir melhor o alvo errado pode aperfeiçoar a falha.
+
+\section{Meteorologia não é climatologia}
+GraphCast foi apresentado como método de previsão meteorológica de médio prazo treinado em dados de reanálise, com avaliação sobre alvos definidos~\citep{graphcast2023}. Uma comparação desse tipo permite discutir previsões de variáveis e horizontes específicos. Não demonstra que o sistema resolve todas as escalas de previsão nem que substitui a física e a observação que contribuíram para os dados.
+
+Para clima, eventos raros ou condições fora do histórico, o horizonte e o problema mudam. Pergunta que dados de referência existem, que distribuição se está a avaliar e como se tratam incerteza e extremos. «Previsão» é uma palavra demasiado ampla para transportar uma percentagem de um estudo para outro domínio.
+
+Uma previsão de valor médio também pode deixar de fora a decisão que interessa. Para preparar uma resposta a um evento raro, pode importar a probabilidade de ultrapassar um limiar e o tempo disponível para agir. A calibração das probabilidades e o desempenho em extremos merecem uma avaliação própria. Acertar muitos dias comuns não resolve automaticamente os dias de maior consequência.
+
+Os dados de referência fazem parte da história. Uma reanálise combina observações e modelação; não é uma coleção de medições puras sem escolhas de reconstrução. Isto não a torna inútil. Significa que precisamos de compreender como foi produzida e que questões permite avaliar. A IA meteorológica trabalha sobre uma infraestrutura científica anterior, em vez de a substituir retroativamente.
+
+\section{Indústria e agricultura: exemplos de desenho}
+Num caso industrial conceptual, sensores e registos podem apoiar manutenção preditiva. O resultado esperado não deve ser apenas «deteta anomalias», mas uma decisão útil antes de uma falha, com custo de alarme falso e de intervenção. Se as máquinas mais antigas são inspecionadas mais vezes, os registos podem refletir a política de inspeção além da condição física.
+
+Na agricultura, uma proposta de classificar sinais de doença em folhas exige testar iluminação, variedade, região, estação e doenças visualmente semelhantes. Um conjunto de fotografias de laboratório não representa automaticamente uma exploração agrícola. Trata estes exemplos como perguntas de projeto, não como resultados experimentais atribuídos a um produto.
+
+Em ambos, os operadores conhecem exceções e limites que podem não constar dos dados. A recolha dessa informação é trabalho técnico. Instalar um modelo antes de perceber como o sensor falha é uma maneira rápida de automatizar uma interpretação errada.
+
+\section{A folha saiu do estúdio}
+No estudo de Mohanty, Hughes e Salathé de 2016, a classificação de pares cultura--doença alcançou 99.35\% de acerto no conjunto controlado. Em dois pequenos conjuntos de imagens externas, com 121 e 119 imagens, o melhor modelo obteve 31.40\% e 31.69\%~\citep{mohanty2016}. Os números não contradizem um ao outro: mudaram as condições de avaliação. Não estimam o desempenho de toda a agricultura nem isolam, sozinhos, a causa da diferença.
+
+Esta passagem dá forma a uma dúvida de engenharia. A fotografia de uma folha pode conter a doença, mas também fundo, iluminação, equipamento, variedade e estado da planta. Se uma característica incidental acompanha as etiquetas no treino, o sistema pode usá-la. Para descobrir o que acontece, precisamos de avaliações que alterem essas condições de forma informativa, em vez de apenas procurar mais imagens parecidas com as primeiras.
+
+Num projeto agrícola conceptual, separaríamos parcelas, momentos de recolha e plantas conforme a utilização pretendida. Várias fotografias da mesma planta não deviam dar a aparência de avaliação em plantas independentes. Poderíamos ainda registar qualidade da imagem e permitir encaminhamento quando não é possível identificar o caso com suporte suficiente.
+
+O percurso até uma decisão inclui outras perguntas: a suspeita pode ser confirmada por quem conhece a cultura? Que ação é apropriada e em que prazo? Há condições locais que alteram a interpretação? A função do classificador pode ser apoiar observação e triagem. A passagem para uma intervenção exige conhecimento e validação próprios, não apenas a etiqueta com maior score.
+
+\section{Uma anomalia não vem com a ordem de manutenção}
+MVTec AD foi apresentado em 2019 como um conjunto de imagens para estudar deteção de anomalias visuais, com imagens sem defeito para treino e casos anómalos para avaliação, incluindo regiões anotadas~\citep{bergmann2019}. É uma tarefa de inspeção de imagens. Não demonstra que um método prevê, com antecedência, a avaria de uma máquina ou reduz paragens numa linha industrial.
+
+Para perceber a diferença, imagina uma marca numa peça. Podemos querer responder «há uma irregularidade?» e «onde está?». Uma decisão de rejeitar a peça acrescenta tolerâncias e critérios de qualidade. Uma decisão de parar a máquina acrescenta ainda o risco de continuarem a sair peças defeituosas, o custo da paragem e a possibilidade de inspeção. São níveis de uso que não cabem numa única métrica de classificação.
+
+Na manutenção preditiva, o tempo muda o problema. Precisamos de uma janela de aviso útil e de dados que existam antes da falha. Um registo após reparação pode tornar-se fuga de informação se entrar como característica. Máquinas substituídas, manutenção preventiva e equipamentos que ainda não avariaram também influenciam aquilo que conseguimos observar.
+
+Uma avaliação operacional pode começar por uma decisão limitada: enviar um conjunto de casos para inspeção, sem controlo automático de equipamento. Regista-se se o aviso permitiu agir, quantos alarmes consumiram trabalho e que falhas passaram despercebidas. O modelo de imagem ou de sensores é apenas parte desse processo. A oficina, infelizmente para a simplicidade das apresentações, continua a existir fora do slide.
+
+\section{Robótica acrescenta consequências físicas}
+Uma ação errada num chat pode ser revista antes de uso. Uma ação errada de um braço robótico pode colidir com um objeto ou uma pessoa. Perceção, planeamento, controlo e limites físicos precisam de avaliação conjunta. Demonstrações gravadas devem indicar condições, supervisão, tentativas e intervenções.
+
+RT-2 estuda uma integração de visão, linguagem e ações representadas por tokens em tarefas robóticas~\citep{rt22023}. Isso mostra uma linha de investigação sobre transferência de representações. Não demonstra autonomia doméstica geral. A mesma instrução pode enfrentar geometria, força e objetos que nunca apareceram na avaliação.
+
+Uma estratégia de engenharia separa proposta de plano e controlo físico com limites. A validação pode começar em simulação e avançar para ambientes controlados. A passagem ao mundo físico continua a exigir análise própria de segurança; não se resolve com uma frase «tem cuidado» no prompt.
+
+Um pedido como «arruma a mesa» esconde reconhecimento de objetos, estimativa da sua posição, escolha de uma pega, planeamento de trajetória e deteção de contacto. Um erro numa etapa pode tornar correta a decisão seguinte para um estado do mundo que afinal não existe. Testar apenas se a frase final diz «concluído» seria um critério particularmente otimista.
+
+As avaliações precisam de distinguir sucessos sem ajuda, sucessos com intervenção e falhas, e descrever objetos, condições e limites. A demonstração que escolhe apenas a melhor tentativa mostra possibilidade; não permite estimar frequência de sucesso. A dificuldade de transferir entre ambientes é uma pergunta de investigação, não um pormenor a esconder na edição do vídeo.
+
+\section{Benefício público e acesso}
+Mesmo uma ferramenta eficaz pode não chegar a quem mais precisa se exigir equipamento, dados, conectividade ou formação indisponíveis. A avaliação deve incluir a população e as condições de uso pretendidas. Métricas agregadas podem esconder grupos para os quais o erro é maior.
+
+Uma pergunta completa combina capacidade e distribuição: melhorou o resultado, para quem, com que recursos e com que possibilidade de contestação? É assim que um benchmark se liga a uma decisão de implementação, sem fingir que as duas coisas são iguais.
+
+Podemos agora fechar o percurso que abriu o capítulo. Primeiro identificamos aquilo que foi previsto. Depois examinamos dados e comparação. A seguir investigamos a decisão que usará a previsão e o resultado que queremos melhorar. Por fim, perguntamos quem recebe o benefício e quem suporta o erro. Saltar uma dessas passagens pode transformar um bom resultado técnico numa aplicação mal justificada.
+
+\begin{promptlabbox}{Do resultado do artigo à decisão de projeto}
+\textbf{Objetivo e contexto:} ler uma fonte primária de ciência aplicada. Usa um dos artigos identificados neste capítulo e uma ficha de evidência.
+
+\textbf{Procedimento:} identifica objeto previsto, dados, comparação, horizonte e métrica. Escreve uma utilização que o estudo suporta discutir e outra que ainda exige evidência. Executa \texttt{python3 -m exemplos.laboratorio.decisoes} para confirmar a tabela sintética de alarmes, sem a apresentar como dados clínicos. Não experimentes intervenções clínicas ou físicas a partir do exercício.
+
+\textbf{Resultado esperado e validação:} cada conclusão tem localizador e alcance. A passagem da previsão ao benefício identifica as etapas que faltam.
+
+\textbf{Falhas possíveis:} trocar acerto em benchmark por eficácia clínica, generalizar entre horizontes ou apresentar um caso conceptual de agricultura como estudo executado.
+\end{promptlabbox}
+
+A próxima passagem leva-nos da previsão para a informação que circula. Um erro pode ficar num relatório ou chegar a milhares de pessoas com uma legenda convincente. Saber onde acaba a evidência passa a ser também uma questão de poder.

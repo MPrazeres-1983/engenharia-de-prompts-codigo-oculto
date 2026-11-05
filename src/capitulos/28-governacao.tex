@@ -3,15 +3,15 @@
 
 Uma equipa pode ter bons testes e continuar sem saber se pode usar os dados, quem responde pelo sistema ou como um cliente contesta uma decisão. São perguntas diferentes da taxa de acerto. Chegam frequentemente tarde porque não parecem problemas de programação. Continuam a ser problemas do projeto.
 
-Este capítulo distingue enquadramento legal, orientação voluntária e escolhas de engenharia. A verificação documental termina em \textbf{3 de novembro de 2026}. Um caso concreto depende da finalidade, dos dados, do papel da organização e das regras setoriais e nacionais aplicáveis.
+Este capítulo distingue enquadramento legal, orientação voluntária e escolhas de engenharia. O enquadramento foi verificado em 3 de novembro de 2026. O calendário do artigo 113 foi conferido de novo em \textbf{5 de novembro de 2026}. Um caso concreto depende da finalidade, dos dados, do papel da organização e das regras setoriais e nacionais aplicáveis.
 
 \section{Um inventário antes dos princípios}
 Para cada sistema, regista finalidade, utilizadores, dados, fornecedores, ferramentas, decisões afetadas e responsável. Acrescenta onde corre, quem pode alterar o modelo e o que acontece quando falha. Um inventário pequeno pode ser mais útil do que cinquenta páginas a afirmar que a empresa valoriza a ética.
 
-Na Lavandaria, «preparar um rascunho» e «aprovar uma compensação» têm efeitos diferentes. A mudança exige rever dados, autorização, critérios e responsabilidade. Não é apenas acrescentar uma ferramenta.
+Na Lavandaria, uma pessoa pode rever um rascunho antes do envio. Aprovar uma compensação inicia um pagamento no cenário. Identifica quem pode tomar essa decisão, o que precisa de saber e como o cliente pede a sua revisão.
 
 \section{RGPD: o tratamento precisa de fundamento}
-O artigo 5 do RGPD estabelece princípios como finalidade, minimização, exatidão, limitação da conservação e segurança. O consentimento é um dos fundamentos de licitude do artigo 6, não uma solução universal; categorias especiais e transferências exigem análise adicional. Dados pseudonimizados que possam ser associados a uma pessoa continuam a ser dados pessoais. O artigo 35 exige avaliação de impacto antes de um tratamento suscetível de implicar elevado risco, nas condições aí previstas~\citep{rgpd2016}.
+Imagina que substituis o nome de cada cliente por um número e guardas à parte a tabela que permite voltar ao nome. Isso é um exemplo de \emph{pseudonimização}. Enquanto os registos puderem ser associados a uma pessoa, continuam a ser dados pessoais. O artigo 5 do Regulamento Geral sobre a Proteção de Dados (RGPD) estabelece princípios como ter uma finalidade definida, usar os dados necessários e limitar o tempo de conservação. O artigo 6 prevê vários fundamentos que podem tornar o tratamento lícito, incluindo o consentimento. O artigo 35 exige avaliação de impacto antes de um tratamento suscetível de implicar elevado risco, nas condições aí previstas~\citep{rgpd2016}.
 
 O artigo 22 trata de decisões exclusivamente automatizadas com efeitos jurídicos ou efeitos similarmente significativos, com condições e exceções. Não proíbe toda a automação nem transforma qualquer clique humano em supervisão suficiente. Nos casos de necessidade contratual ou consentimento explícito previstos no n.º 2, alíneas a) e c), o n.º 3 exige salvaguardas que incluem intervenção humana, expressão do ponto de vista e contestação. A exceção fundada em lei tem de prever medidas adequadas nessa lei~\citep{rgpd2016}.
 
@@ -20,17 +20,24 @@ Como prática de engenharia, começa com dados fictícios e usa apenas os campos
 \section{AI Act: finalidade, papéis e calendário}
 O Regulamento (UE) 2024/1689 estabelece obrigações que variam por prática, risco e papel, incluindo regras para modelos de finalidade geral~\citep{aiact2024}. Um chatbot não é automaticamente de alto risco por usar um LLM; finalidade e contexto contam.
 
-A regra geral de aplicação do artigo 113 aponta para 2 de agosto de 2026, com exceções. O Regulamento (UE) 2026/1744, publicado em 24 de julho e em vigor desde 27 de julho de 2026, alterou esse artigo. Para o capítulo III, secções 1 a 3, com exceção do artigo 6, n.º 5, distingue os sistemas do artigo 6, n.º 2, e anexo III, com marco em \textbf{2 de dezembro de 2027}, dos sistemas do artigo 6, n.º 1, e anexo I, com marco em \textbf{2 de agosto de 2028}~\citep{aiomnibus2026}. A cronologia do Conselho oferece enquadramento institucional~\citep{conselho2026}.
+A regra geral de aplicação do artigo 113 aponta para 2 de agosto de 2026, com exceções. O Regulamento (UE) 2026/1744, publicado em 24 de julho e em vigor desde 27 de julho de 2026, alterou esse artigo. Para ler o calendário de alto risco, identifica primeiro em que grupo se enquadra o sistema. O artigo 6 remete para anexos diferentes conforme a classificação. A distinção importa porque os marcos também são diferentes:
+
+\begin{itemize}[leftmargin=*]
+\item \textbf{2 de dezembro de 2027} para os sistemas de alto risco nos termos do artigo 6, n.º 2, e do anexo III.
+\item \textbf{2 de agosto de 2028} para os sistemas de alto risco nos termos do artigo 6, n.º 1, e do anexo I.
+\end{itemize}
+
+Estes dois marcos referem-se às secções 1 a 3 do capítulo III, com exceção do artigo 6, n.º 5~\citep{aiomnibus2026}. A cronologia do Conselho oferece enquadramento institucional~\citep{conselho2026}.
 
 Estas datas não significam que todas as obrigações de um sistema comecem no mesmo dia. Há exceções, regras transitórias e deveres com outros marcos, incluindo literacia e transparência. Consulta o artigo aplicável à finalidade e ao papel da organização. A verificação documental deste capítulo não determina a conformidade de um produto concreto.
 
-\section{Uma checklist não é uma certificação}
+\section{O que a equipa consegue verificar}
 O NIST AI RMF e o perfil de IA generativa oferecem um quadro voluntário de gestão de riscos~\citep{nist2024}. OWASP ajuda a identificar falhas. Estas referências têm funções próprias; segui-las não prova conformidade legal.
 
-Em engenharia, ajudam a perguntar que danos são plausíveis, que evidência existe, como se controla acesso e que risco residual é aceite. A resposta deve ficar ligada a quem decide e à versão do sistema, não a uma declaração abstrata.
+Um registo de risco útil liga cada problema a um responsável, a uma versão e a uma evidência. No caso da cache do capítulo~\ref{ch:llmops}, a equipa técnica consegue mostrar que bloqueou o prazo antigo e recuperou a versão vigente. A área responsável decide o que fazer com pedidos que já receberam uma resposta errada. São decisões diferentes, com registos próprios.
 
 \section{Supervisão que possa alterar o resultado}
-O revisor precisa de informação, tempo, competência e poder para rejeitar a proposta. Se recebe cem decisões por minuto e só pode carregar em «aceitar», a presença humana pouco acrescenta. Mede carga, divergências, erros apanhados e tempo de resposta.
+O revisor precisa de informação, tempo, competência e poder para rejeitar a proposta. Se recebe cem decisões por minuto e só pode carregar em «aceitar», a presença humana pouco acrescenta. Mede carga, divergências, erros apanhados e tempo de resposta. Verifica também se a pessoa afetada consegue chegar a esse revisor. O caso SyRI, no capítulo~\ref{ch:poder}, mostra que até a fase de sinalização pode ter efeitos que merecem exame.
 
 Um modelo não é uma pessoa a quem a organização possa atribuir a culpa. O responsável pelo processo tem de conhecer limites, aprovar o uso e manter alternativa quando o sistema fica indisponível.
 

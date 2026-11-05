@@ -1,14 +1,14 @@
 \chapter{RAG: Dar Fontes ao Modelo sem Lhe Entregar a Empresa Inteira}
 \label{ch:rag}
 
-O assistente da Lavandaria explica com segurança que todos os clientes têm direito a uma meia de substituição em prata. A empresa nunca teve essa política. O modelo não precisava de mais entusiasmo; precisava de acesso à fonte certa e de critérios para a usar.
+\ficcao O assistente da Lavandaria explica com segurança que todos os clientes têm direito a uma meia de substituição em prata. A empresa nunca teve essa política. O modelo não precisava de mais entusiasmo; precisava de acesso à fonte certa e de critérios para a usar.
 
 \emph{Retrieval-augmented generation} (RAG) combina recuperação de informação com geração. O trabalho de Lewis e colaboradores apresentou uma arquitetura de investigação que liga memória paramétrica e recuperação externa~\citep{lewis2020}. Na prática, o termo também cobre sistemas que pesquisam documentos e colocam excertos no contexto de um modelo sem o voltar a treinar.
 
 RAG não é uma promessa de verdade. É uma arquitetura com passos que podemos observar separadamente. Se não recuperou a política certa, mudar o tom da resposta é arrumar o balcão enquanto a máquina de lavar inunda a cave.
 
 \section{Duas fases: preparar e consultar}
-Na preparação, recolhes documentos autorizados, extrais texto, preservas estrutura e metadados, divides em unidades pesquisáveis e constróis um índice. Na consulta, identificas o utilizador e o âmbito de acesso, pesquisas, selecionas evidência e pedes uma resposta sustentada.
+Na preparação, divides documentos autorizados em excertos que o sistema possa procurar. Guardas junto de cada excerto a sua origem, a versão e quem o pode ler. Estes dados sobre o excerto chamam-se \emph{metadados}. Um \emph{índice} ajuda a encontrá-lo sem percorrer todos os documentos. Na consulta, identificas quem fez o pedido, procuras nas fontes autorizadas e envias ao modelo os excertos que podem sustentar a resposta.
 
 \begin{figure}[htbp]
 \centering
@@ -40,11 +40,15 @@ A pesquisa lexical procura termos e pode usar uma função de ranking, como BM25
 
 Uma base de dados vetorial é uma forma de guardar e pesquisar vetores, não o próprio RAG. Para conjuntos pequenos, uma comparação exata pode chegar. Índices aproximados podem reduzir custo em escala, com compromissos de cobertura e latência que devem ser medidos.
 
-Na pesquisa híbrida, combinas rankings lexicais e vetoriais. Não somes scores de escalas diferentes sem justificação. Podes usar fusão por posição, por exemplo reciprocal rank fusion:
+Na pesquisa híbrida, combinas listas de resultados ordenadas por métodos diferentes. A \emph{fusão por posição}, ou \emph{reciprocal rank fusion} (RRF), dá a cada documento pontos pela posição que ocupa em cada lista. Posições melhores valem mais pontos. Um documento que apareça em duas listas recebe pontos das duas.
+
+\textbf{Aprofundamento opcional.} A expressão soma uma fração por lista onde aparece o documento $d$:
 \[
 \operatorname{RRF}(d)=\sum_{r}\frac{1}{k+\operatorname{rank}_{r}(d)},
 \]
-onde a soma percorre os rankings em que o documento aparece e $k$ é um parâmetro positivo~\citep{cormack2009}. Isto combina ordens; não transforma posições em probabilidades de a resposta estar certa.
+$\operatorname{rank}_r(d)$ é a posição de $d$ na lista $r$, a contar de um. Somar o mesmo $k$ positivo no denominador reduz a diferença entre a pontuação das primeiras posições e das seguintes~\citep{cormack2009}. Os pontos servem para ordenar fontes candidatas.
+
+Num exemplo com $k=10$, a lista lexical devolve A, B e a lista vetorial C, B. B soma $1/12+1/12=1/6$. A e C recebem $1/11$ cada. A fusão sobe B porque aparece nas duas listas. Se B estiver desatualizado, a classificação continua a não resolver a validade da fonte.
 
 Um reranker volta a ordenar um conjunto de candidatos com um método mais atento à relação consulta--documento. Pode melhorar relevância, mas não recupera o documento que ficou fora de todos os candidatos. Mede se o ganho paga a latência e o custo.
 
@@ -73,9 +77,11 @@ Se POL-02 não define prazo, o sistema deve dizer que não há prazo confirmado 
 \end{promptlabbox}
 
 \section{Avaliar as duas metades}
-Para recuperação, mede se a evidência relevante aparece nos primeiros $k$ resultados: recall@k relaciona documentos relevantes recuperados com os relevantes conhecidos. A definição exige uma referência de relevância e depende da unidade avaliada: documento ou segmento. Para geração, mede correção, suporte documental, completude e abstinência. Uma recuperação perfeita pode alimentar uma resposta errada; um gerador competente pode ficar sem o documento necessário.
+Para medir recuperação, fixa uma unidade de avaliação. Se a pergunta requer os segmentos A e B, e o motor devolve A e C nos dois primeiros lugares, o \emph{recall@2} é $1/2$. Mede quantos dos segmentos relevantes conhecidos recuperaste. Se só avaliares ao nível do documento, podes ocultar a falta do parágrafo que contém a exceção. Para uma pergunta sem evidência no corpus, regista separadamente a decisão de encaminhar.
 
-Acrescenta testes de atualização: publica uma nova versão da política, retira a antiga do índice ativo e verifica se respostas e caches deixam de a usar. Guarda a versão da fonte no registo de avaliação. «Citou POL-01» é insuficiente quando há três POL-01 diferentes.
+Para a geração, lê a resposta e confronta-a com os excertos que chegaram ao modelo. Se o parágrafo certo foi recuperado e a resposta lhe atribui um prazo inexistente, a falha é diferente de uma busca que nunca encontrou o parágrafo. Esta separação permite testar a mudança certa.
+
+Testa a passagem para uma versão nova. Usa o mesmo pedido antes e depois da mudança e verifica a versão do excerto, a regra aplicada e a cache. Inclui uma pergunta a que a regra antiga e a nova dão respostas diferentes. Se a migração do índice falhar, encaminha as perguntas afetadas enquanto corriges o índice. O incidente do capítulo~\ref{ch:llmops} mostra a mesma separação entre recuperar o serviço e alterar a política.
 
 \section{RAG, contexto longo ou fine-tuning?}
 Se os documentos são poucos e cabem no contexto, enviá-los diretamente pode ser uma boa base de comparação. Se são muitos, mudam frequentemente ou exigem seleção e controlo de acesso, recuperação pode acrescentar valor. Fine-tuning altera parâmetros e pode ajudar em comportamento ou formato; não deve ser tratado como atualização instantânea e auditável de todos os factos.

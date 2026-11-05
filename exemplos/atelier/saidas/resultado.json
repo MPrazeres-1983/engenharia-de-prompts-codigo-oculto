@@ -1,0 +1,52 @@
+{
+  "projeto": "A Meia Testemunha",
+  "tipo": "ficção e montagem de uma ilustração gerada",
+  "imagem_dimensoes": [
+    1672,
+    941
+  ],
+  "fontes_sha256": {
+    "ilustracao.png": "887534be4c552355d6a57db765840aa4415b39e127b5091bae148aa2d882c6df",
+    "plano.json": "d3d26b5a16b61685ab94375aaa84105b2852f287a96402921ba4696ccc6cdb08",
+    "cartaz.svg": "febd99d71460fbd44ea938135d1bbe107f03497e77920e68bd000c7f27596729",
+    "montar.py": "e5979b18b017a5af019cc51b8e700c3af7b02f64d6a612b237347e9405e7653b"
+  },
+  "tipografia_sha256": {
+    "DejaVuSerif-Bold.ttf": "847b33e13925f19ff87e4d934d6b3cf7cac35ce16424f6f670e40c2f377cf2df",
+    "DejaVuSans-Bold.ttf": "5c1247acef7f2b8522a31742c76d6adcb5569bacc0be7ceaa4dc39dd252ce895",
+    "DejaVuSans.ttf": "ae7b7855e115a5966d8b1b3f80f254ccc117ec86f9965e202ee2940453837280"
+  },
+  "video_verificado": {
+    "codec": "h264",
+    "largura": 1280,
+    "altura": 720,
+    "fps": 24,
+    "fotogramas": 360,
+    "duracao_s": 15.0,
+    "audio": false
+  },
+  "amostras_s": [
+    2.5,
+    7.5,
+    12.5
+  ],
+  "artefactos": {
+    "cartaz.pdf": {
+      "sha256": "3046e2cc114b9ff4ff3e137867d0b121b53e4c8fe307216f52d984f0de14b0bb",
+      "bytes": 4032336
+    },
+    "curta.mp4": {
+      "sha256": "08a9628c7c30ffe1173f79dd7b2a4ca05fec150488a5e5ddc9ef5f926a250d79",
+      "bytes": 1130669
+    },
+    "guiao_visual.pdf": {
+      "sha256": "7fa0e3aac8f05423e253967b774064260a46c916af4d4022f981085af6e45093",
+      "bytes": 442212
+    }
+  },
+  "ambiente": {
+    "ffmpeg": "ffmpeg version 6.1.1-3ubuntu5 Copyright (c) 2000-2023 the FFmpeg developers",
+    "inkscape": "Inkscape 1.2.2 (b0a8486541, 2022-12-01)",
+    "reportlab": "4.4.9"
+  }
+}

@@ -1,0 +1,109 @@
+\chapter{Trabalho, Produtividade e Quem Fica com o Ganho}
+\label{ch:trabalho}
+
+\ficcao O relatório da Lavandaria chega com uma boa notícia: o rascunho de resposta passou de vinte minutos para quatro. O gerente prepara o anúncio. A contabilista pede as linhas seguintes. Oito minutos de revisão. Dez de correção. O anúncio espera; a soma dá vinte e dois.
+
+O rascunho ganhou dezasseis minutos. A tarefa completa, com revisão e correção, demorou mais dois. Para medir produtividade, escolhe primeiro o resultado que conta como trabalho concluído. Depois pergunta quem fez cada etapa e quanto tempo lhe custou.
+
+Vamos partir da tarefa individual e aumentar a escala: processo, organização e economia. Em cada passagem, será preciso acrescentar evidência. Um ganho no primeiro nível não transporta sozinho a conclusão para os seguintes.
+
+\section{Exposição não é despedimento}
+Uma profissão é um conjunto de tarefas, relações, responsabilidades e condições de trabalho. Um índice de exposição estima em que medida determinadas tarefas podem ser afetadas por uma tecnologia. Não observa automaticamente substituição de pessoas.
+
+O índice da OIT de 2025 combina informação sobre tarefas, apreciação humana e apoio de modelos para estimar exposição ocupacional. Aponta para cerca de um quarto do emprego mundial em ocupações com algum grau de exposição, com diferenças importantes entre grupos e países~\citep{ilo2025}. Isto não equivale a «um quarto dos empregos vai desaparecer». Entre capacidade técnica e emprego existem adoção, custos, procura, reorganização, normas e decisões políticas.
+
+Uma organização pode automatizar parte de uma função e aumentar produção; pode redistribuir trabalho; pode reduzir contratação; pode criar novas tarefas. São mecanismos possíveis, não efeitos garantidos. Precisamos de observar quais ocorreram e em que condições.
+
+Pensa numa profissão como um cesto de atividades. Algumas são repetíveis, outras exigem negociação, presença, responsabilidade ou conhecimento de situações particulares. Automatizar a redação de uma minuta não demonstra que desapareceu a necessidade de interpretar o pedido, responder por uma decisão ou acompanhar a sua execução.
+
+O próprio cesto pode mudar. Se escrever ficou mais barato, podem passar a pedir-se mais versões ou mais documentos. Se verificar continua caro, o trabalho pode deslocar-se para revisão. Para saber o efeito sobre pessoas, precisamos de observar tarefas, horas, contratação, salários, qualidade e condições de trabalho. Uma lista de capacidades técnicas responde apenas a uma parte da pergunta.
+
+\section{Resultados que parecem contraditórios}
+No artigo final de Brynjolfsson, Li e Raymond, a introdução faseada de um assistente em apoio ao cliente foi estudada com dados de 5172 agentes. A produtividade, medida por questões resolvidas por hora, aumentou em média 15\%, com forte heterogeneidade~\citep{brynjolfsson2025}. O desenho inclui comparação temporal e entre grupos sob hipóteses de identificação; não foi uma experiência que distribuiu aleatoriamente todos os trabalhadores do mundo.
+
+Num ensaio da METR sobre ferramentas do início de 2025, 16 programadores experientes trabalharam em 246 tarefas dos seus próprios projetos maduros. As tarefas foram atribuídas a condições com ou sem IA; o tempo de conclusão aumentou 19\% quando o uso era permitido~\citep{metr2025}. É um retrato daquela população, ferramentas e período, não uma estimativa eterna de programação com IA.
+
+\begin{table}[htbp]
+\small
+\begin{tabularx}{\textwidth}{@{}lXX@{}}
+\toprule
+Aspeto & Apoio ao cliente & Programação experiente \\
+\midrule
+Tarefa & Resolver questões de clientes & Alterar projetos conhecidos \\
+Medida & Questões por hora & Tempo para concluir tarefas \\
+Desenho & Adoção faseada, análise econométrica & Atribuição aleatória por tarefa \\
+Resultado citado & Ganho médio com heterogeneidade & Aumento de tempo nas condições testadas \\
+Limite & Uma operação e um assistente & Pequena população, ferramentas de 2025 \\
+\bottomrule
+\end{tabularx}
+\caption{Resultados diferentes não respondem necessariamente à mesma pergunta.}
+\end{table}
+
+Não precisamos de escolher o estudo de que gostamos mais. Precisamos de perguntar se o nosso trabalho se aproxima das tarefas, do nível de experiência e do processo de revisão avaliados. A opinião do utilizador sobre rapidez também pode divergir do tempo observado.
+
+Os dois desenhos ajudam ainda a formular hipóteses diferentes. Um assistente pode disponibilizar conhecimento útil a quem ainda está a aprender um procedimento. Um especialista pode gastar mais tempo a rever propostas para um projeto que conhece profundamente. Estas são explicações plausíveis a confrontar com os dados de cada contexto, não uma regra segundo a qual principiantes ganham sempre e especialistas perdem sempre.
+
+É tentador escolher um herói e um vilão. Os estudos não são equipas adversárias num campeonato sobre gostar de IA. São instrumentos para reduzir incerteza em perguntas delimitadas.
+
+\section{A conta que o rascunho deixou fora}
+Voltemos aos tempos fictícios da abertura. Admitimos etapas seriais, sem sobreposição, e uma tarefa final com o mesmo critério de qualidade. O processo sem IA demora vinte minutos. O processo com IA inclui quatro de geração, oito de revisão e dez de retrabalho. A soma é vinte e dois: o tempo aumentou 10\%.
+
+Produção por unidade de tempo não é a mesma percentagem com o sinal trocado. Com uma tarefa a cada vinte minutos, seriam três por hora neste modelo simplificado; com uma a cada vinte e dois, seriam cerca de $2.73$. A redução é aproximadamente 9.1\%. A diferença nasce do denominador: numa medida dividimos por vinte, na outra comparamos os respetivos inversos.
+
+Agora construímos uma alternativa que realmente termina em dez minutos. O tempo caiu 50\%; mantendo tarefa e qualidade, a produção por hora duplicou, um aumento de 100\%. Dizer apenas «ganho de cinquenta por cento» deixa em aberto qual destas grandezas foi medida.
+
+\textbf{Aprofundamento opcional.} Se $t_0$ é o tempo inicial e $t_1$ o tempo novo para a mesma unidade de trabalho aceite, a redução relativa do tempo é $1-t_1/t_0$. A variação relativa da produção por tempo é $t_0/t_1-1$. O módulo \texttt{exemplos.laboratorio.decisoes} executa as duas contas. Os valores são sintéticos; não resultam de participantes ou de um ensaio de produtividade real.
+
+Se as etapas podem decorrer em paralelo, a simples soma deixa de representar o tempo de calendário. Se uma geração demora dois minutos enquanto a pessoa faz outra tarefa, esse intervalo também não equivale automaticamente a dois minutos de trabalho humano. Um relatório útil distingue tempo de parede, tempo de pessoas e consumo computacional. Misturá-los pode produzir ganhos impossíveis de localizar na agenda.
+
+\section{O contrafactual: o que teria acontecido sem a ferramenta?}
+Comparar esta semana com a anterior pode confundir efeito da IA com sazonalidade, mudança de equipa ou tarefas mais fáceis. Uma experiência aleatorizada, quando adequada e viável, ajuda a separar efeitos. Estudos observacionais podem ser informativos com desenho e hipóteses explícitos. Nenhum método dispensa qualidade da medição.
+
+Define o resultado antes de recolher: tarefa aceite, defeitos posteriores, tempo total, intervenção humana, custo e satisfação. Linhas de código, número de mensagens ou palavras produzidas podem aumentar sem que haja mais valor. Uma empresa que duplicou a produção de relatórios que ninguém lê fez crescer uma coluna de Excel, não necessariamente a produtividade.
+
+Conta o trabalho invisível: formular pedidos, preparar dados, verificar, recuperar de falhas e manter integrações. Se o tempo do revisor fica fora da medida, o ganho pode ter sido apenas transferido para outra pessoa.
+
+Um desenho pequeno pode começar por fixar a unidade de aceitação. Para extrair campos de mensagens sintéticas, por exemplo, define quais os campos obrigatórios, o que conta como erro e como se resolvem ambiguidades. Regista tempo até aceitação, incluindo tentativas rejeitadas. Se uma condição produz mais saídas erradas, comparar apenas as que passaram seleciona os sucessos e esconde o custo das restantes.
+
+Há ainda efeitos de ordem. Quem faz a mesma tarefa duas vezes pode aprender com a primeira, mesmo sem IA. E pessoas que trabalham juntas podem partilhar uma solução entre condições. Distribuir casos equivalentes, variar a ordem quando apropriado e registar dependências ajuda; não cria automaticamente uma experiência capaz de estimar todos os efeitos. O desenho deve conservar as suas limitações.
+
+Para uma organização, convém definir também o que faria mudar a decisão. Se não há ganho líquido, melhora-se o processo, restringe-se a tarefa ou abandona-se a aplicação. Continuar porque o tempo de redação caiu pode ser racional para um objetivo de comunicação específico; não deve ser apresentado como prova de uma redução no custo total.
+
+\section{Uma parte cinco vezes mais rápida não acelera tudo cinco vezes}
+Suponhamos, noutro cenário sintético, que produzir o rascunho ocupa 20\% de um processo e o restante ocupa 80\%. Se o rascunho ficar cinco vezes mais rápido e tudo o resto permanecer igual, a duração passa de uma unidade para $0.8+0.2/5=0.84$. A redução total é 16\%, não 80\%. Mesmo eliminando inteiramente essa etapa, continuaríamos com as outras quatro quintas partes.
+
+O pressuposto de «tudo o resto igual» é o ponto de partida da conta, não uma previsão. Na prática, a revisão pode aumentar, diminuir ou mudar. A conta serve para perguntar onde está o obstáculo. Se o maior tempo está à espera de uma aprovação, gerar mais depressa não resolve essa espera. Se está a procurar informação dispersa, a recuperação pode ser mais valiosa do que a redação.
+
+Esta forma de abrir o processo também permite identificar complementaridades. Formatos mais claros podem reduzir integração; dados consistentes podem tornar uma resposta verificável; uma autorização bem definida pode evitar retrabalho. A melhoria pode pertencer ao desenho conjunto e ser mal atribuída a um único modelo. Separar componentes na avaliação ajuda a descobrir o que merece investimento.
+
+\section{Distribuição, competências e entrada na profissão}
+Mesmo com um ganho médio, pessoas e organizações podem beneficiar de forma desigual. Quem controla dados, distribuição, equipamento e decisão de adoção pode capturar uma parte diferente do valor de quem executa o trabalho. Salários e emprego não são resultados automáticos de uma melhoria técnica.
+
+A aprendizagem profissional também muda se forem removidas tarefas que serviam de treino a principiantes. É uma hipótese organizacional a avaliar: como se adquire experiência quando o rascunho inicial é sempre produzido por uma máquina? Podemos criar revisão acompanhada, explicar escolhas e reservar tarefas sem assistência. O objetivo é medir competência futura, além da entrega de hoje.
+
+Formação, acessibilidade e participação dos trabalhadores são escolhas de governação. Não há fundamento para prometer segurança de emprego a quem aprende meia dúzia de prompts. Há fundamento para testar competências e tornar transparentes os efeitos de uma mudança de processo.
+
+Uma pergunta distributiva acompanha cada ganho: quem dispõe do tempo libertado? Uma equipa pode usá-lo para reduzir sobrecarga, atender mais pessoas ou aumentar exigências. A escolha não vem codificada na taxa de tokens por segundo. É uma decisão organizacional que deve aparecer na análise de benefícios.
+
+Para quem começa uma profissão, interessa preservar situações em que se constrói julgamento. Pode ser necessário criar exercícios, revisão acompanhada e tarefas graduais que antes apareciam no trabalho corrente. A proposta é uma opção de formação a avaliar, não uma prova de que toda a automatização destrói aprendizagem. O capítulo~\ref{ch:relacoes} separa desempenho assistido de competência transferível.
+
+\section{Do ganho de uma tarefa à economia}
+Efeitos macroeconómicos dependem de difusão, investimento complementar, procura, concorrência e reorganização. Um estudo de uma tarefa não estima diretamente o PIB. Uma projeção deve identificar cenários de adoção e produtividade, horizonte e incerteza.
+
+Também pode haver criação de procura: se uma atividade fica mais barata, faz-se mais dela. O benefício e o custo total podem ambos crescer. Esta possibilidade reaparece no capítulo de energia. Não concluas que eficiência unitária reduz automaticamente consumo ou emprego agregado.
+
+A cadeia de inferência deve, por isso, ficar visível. Primeiro observamos um resultado numa tarefa. Depois investigamos se permanece quando muitas pessoas e processos mudam. Por fim, perguntamos como difusão, procura e distribuição alteram os efeitos. Cada salto pede dados novos. Multiplicar uma percentagem de laboratório por todo o emprego de um país não resolve as etapas que ficaram pelo caminho.
+
+O relatório fictício da Lavandaria termina, desta vez, com uma alteração concreta: a equipa vai medir respostas aceites e tempo completo, e não apenas rascunhos gerados. Talvez a ferramenta venha a compensar. A investigação deixou de depender de uma impressão e passou a ter uma condição de sucesso.
+
+\begin{promptlabbox}{Medir a tarefa aceite, incluindo a revisão}
+\textbf{Objetivo e contexto:} preparar uma comparação pequena de trabalho fictício ou autorizado. Escolhe uma tarefa repetível, como extrair campos de mensagens sintéticas.
+
+\textbf{Procedimento:} executa \texttt{python3 -m exemplos.laboratorio.decisoes} para confirmar as contas sintéticas de vinte para dez e de vinte para vinte e dois minutos. Para uma extensão com pessoas, define antes aceitação, erros e tempo total; distribui tarefas de dificuldade semelhante entre condições; inclui verificação e correções; regista experiência prévia e versão das ferramentas. Se participares em ambas, trata aprendizagem e ordem como limitações.
+
+\textbf{Resultado esperado e validação:} as contas distinguem redução de tempo e aumento da produção por tempo. O relatório de uma eventual extensão mostra tempo até aceitação e defeitos. Não há resultados com participantes humanos nesta edição; essa extensão é um protocolo proposto.
+
+\textbf{Falhas possíveis:} escolher tarefas depois de ver o desempenho, contar só geração ou transformar exposição em previsão de desemprego.
+\end{promptlabbox}
+
+Uma tarefa aceite é um critério adequado para muitas operações de escritório. Na saúde, na ciência ou numa fábrica, é preciso abrir ainda outra porta: que ligação existe entre acertar uma previsão e melhorar o que acontece no mundo? É essa passagem que vamos investigar a seguir.

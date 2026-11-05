@@ -1,0 +1,80 @@
+\chapter{Modelos Locais: Pesos, Memória e uma Execução que Possamos Repetir}
+\label{ch:local}
+
+«O modelo ocupa quatro gigabytes; o computador tem oito; deve chegar.» Esta conta ignora tudo o que está à volta do ficheiro. Pode até acertar por sorte. Para planear uma execução, convém saber o que estamos a contar e o que continua fora da conta.
+
+\section{Pesos disponíveis não significam todas as liberdades}
+Um modelo com pesos disponíveis permite obter esses parâmetros nas condições da licença. Isso não implica acesso aos dados de treino, código completo, direito de redistribuição irrestrito ou licença open-source. Verifica a licença da revisão concreta, usos permitidos, atribuição e condições de materiais associados.
+
+Chamamos \emph{runtime} ao programa e componentes que carregam e executam o modelo. Correr o modelo na tua máquina permite processar o pedido sem o enviar a um servidor remoto. Para saber se a aplicação inteira trabalha dessa forma, verifica também os registos de atividade, as extensões e a sincronização. Controlo, disponibilidade, custo e qualidade da resposta medem-se separadamente.
+
+\section{Uma estimativa de memória com hipóteses visíveis}
+Um bit pode ter dois valores, 0 ou 1. Oito bits formam um byte. Se guardarmos cada peso em quatro bits, dois pesos cabem num byte ideal. Sete mil milhões de pesos divididos por dois dão três mil e quinhentos milhões de bytes. Isso são $3{,}5$ GB, usando mil milhões de bytes por GB, ou cerca de $3{,}26$ GiB, usando $2^{30}$ bytes por GiB. Os formatos reais guardam ainda informação para interpretar os pesos e podem misturar representações com números de bits diferentes.
+
+\textbf{Aprofundamento opcional.} Para $P$ parâmetros a $b$ bits, a conta ideal dos pesos é $Pb/8$ bytes. Outra parcela é a \emph{cache KV}. É uma zona de memória que guarda as keys e values já calculadas para os tokens anteriores, para as podermos reutilizar no cálculo de atenção. Com as listas guardadas integralmente, uma estimativa ideal é
+\[
+M_{KV}=2L H_{KV}d_h N B\,\frac{b_{KV}}8.
+\]
+$L$ é o número de camadas, $H_{KV}$ o de cabeças que guardam keys e values, $d_h$ o número de elementos em cada lista da cabeça e $N$ o número de tokens guardados por sequência. $B$ conta as sequências de igual comprimento processadas no lote. Cada número ocupa $b_{KV}$ bits. O fator dois conta keys e values. Variantes de arquitetura e de cache podem mudar esta conta.
+
+Num exemplo hipotético com 32 camadas, oito cabeças KV, dimensão 128, 4096 tokens, lote um e cache de 16 bits, o resultado é 536\,870\,912 bytes, ou 512 MiB. O script \texttt{fundamentos.py} executa ambas as contas e os testes conferem os valores. São dimensões didáticas, sem as atribuir a um produto específico.
+
+Ainda faltam ativações, buffers, runtime e memória de outros processos. Para treino faltam também estruturas como estados de otimizador e gradientes. Não concluas que o modelo cabe numa placa de quatro GB porque a soma ideal parece próxima desse número.
+
+\section{A margem desaparece antes do ficheiro}
+Vamos manter os valores hipotéticos e assumir uma reserva exata de 4 GiB, isto é, $4\,294\,967\,296$ bytes. Os pesos ideais e a cache de 4096 tokens somam $4\,036\,870\,912$ bytes. Sobram $258\,096\,384$ bytes, cerca de 246 MiB, antes de contar as parcelas excluídas. Esta reserva é uma construção matemática, não a memória disponível de um computador ou GPU identificados.
+
+Se duplicarmos o contexto para 8192 tokens nas mesmas condições, a parcela KV duplica para $1\,073\,741\,824$ bytes. A soma com os pesos já passa para $4\,573\,741\,824$ bytes, acima da reserva hipotética. O ficheiro dos pesos não cresceu. Cresceu o estado necessário à sequência.
+
+O exemplo explica por que «consegui carregar» e «consigo executar a tarefa pretendida» são verificações diferentes. O contexto, a geração e o número de sequências podem mudar a utilização de memória depois do carregamento. Uma aplicação precisa de margem medida sob o perfil de trabalho que vai servir.
+
+O modelo da conta é uma cache densa com as dimensões indicadas. Arquiteturas, formatos, partilha de prefixos ou outras estratégias de runtime podem alterar o comportamento observado. Não devemos transportar a expressão sem verificar essas condições. A função de estimativa torna os pressupostos visíveis; a medição posterior mostra o que a implementação acrescentou ou mudou.
+
+\section{Quantização troca representação, não apenas tamanho}
+Quantizar aproxima valores usando uma representação com menos níveis. No exemplo local, uma grelha simétrica de quatro bits usa inteiros de $-7$ a $7$ e uma escala. Os valores $[-1,-0.3,0.2,1]$ são aproximados por $[-1,-2/7,1/7,1]$. O erro de arredondamento nessa grelha fica limitado a meia escala quando não há saturação.
+
+O programa é deliberadamente simples: não empacota bits, não cria GGUF e não reproduz NF4. Mostra a aproximação e permite medir o erro. Num modelo real, a perda de qualidade depende da técnica, tensores, calibração e tarefa. Menos bits não implicam a mesma degradação em todas as capacidades.
+
+Para comparar, conserva base e avaliação e varia uma configuração de cada vez. Mede acerto, memória e tempo. Um formato que reduz memória pode não acelerar um dispositivo sem kernels adequados. O ficheiro pequeno não obrigou o processador a aprender uma instrução nova.
+
+\section{Um erro pequeno no peso pode mudar a decisão}
+Considera pesos sintéticos $[1,0.02]$ numa combinação linear e uma entrada $[0,1]$. O score é $0.02$. Na grelha simétrica de quatro bits do nosso exemplo, o maior valor fixa a escala em $1/7$; o peso $0.02$ arredonda para zero. O score da mesma entrada passa a zero.
+
+Se a regra construída decidir pela classe positiva acima de $0.01$, a decisão muda. O erro absoluto num peso foi pequeno e a consequência nesta tarefa foi uma troca de classe. Isto não mede a degradação de um LLM. Mostra por que um erro de representação e um erro na tarefa precisam de avaliações diferentes.
+
+Num sistema real, certas alterações podem não afetar saídas relevantes e outras podem ser amplificadas por operações seguintes ou por decisões perto de um limiar. A comparação com menos bits deve conservar tarefas, critérios e casos difíceis. Um tamanho de ficheiro reduzido é um resultado de armazenamento, não uma certificação das capacidades que interessam.
+
+\section{CPU, GPU e diferentes tempos de espera}
+A CPU é o processador de uso geral da máquina. Uma GPU, ou unidade de processamento gráfico, pode fazer muitas operações semelhantes ao mesmo tempo. Isso pode acelerar as multiplicações do modelo quando o programa, a memória e os controladores do equipamento o permitem. \emph{Offload} é passar parte do trabalho para outro componente, por exemplo da CPU para a GPU. Mover dados entre ambos custa tempo. O resultado depende de quanto trabalho consegues acelerar e de quanto precisas de transferir.
+
+Separa processamento do contexto, tempo até ao primeiro token e geração seguinte. Uma aplicação que lê um documento longo e responde pouco tem perfil diferente de outra que escreve milhares de tokens. Mede também concorrência: duas sessões podem dividir memória e aumentar a espera mesmo quando cada uma isolada parece rápida.
+
+Os valores publicados por fornecedores ou comunidades precisam de configuração: modelo, quantização, contexto, lote, hardware, versões e comando. Um número de tokens por segundo sem essas condições não permite escolher uma máquina com rigor.
+
+Um ensaio útil mede separadamente a primeira utilização e execuções posteriores quando há carregamento ou caches que alteram o tempo. Também fixa a tarefa: contexto de entrada, comprimento de saída e critérios de paragem. Uma resposta curta pode parecer muito rápida porque fez menos trabalho; um resultado inválido não devia ganhar a comparação por ter terminado primeiro.
+
+Se o objetivo é escolher uma configuração, define primeiro o limite de qualidade e o perfil de recursos aceitável. Só depois compara alternativas dentro desses limites. Este procedimento liga a especialização técnica ao método do primeiro capítulo: a tarefa, a informação e a maneira de confirmar que resultou continuam a decidir a experiência.
+
+\section{Um manifesto para repetir o que aconteceu}
+Guarda a revisão e o \emph{hash} do modelo, um valor calculado a partir do ficheiro para o comparar com a cópia de referência. Regista também a versão do programa que o executa, o equipamento, as entradas, as saídas e a configuração. Uma \emph{seed} fixa o ponto de partida das escolhas pseudoaleatórias onde o programa o permite. Anota se houve uma execução de preparação (\emph{warm-up}), dados reutilizados da memória, trabalhos em paralelo ou ferramentas. Usa pastas novas para experiências novas.
+
+O ensaio de 03-11-2026 conserva 52 inferências reais com Qwen e llama.cpp~\citep{qwengguf,llamacpp}. A tentativa V3 encontrou uma cópia incompleta do modelo: o runtime recusou o carregamento e o hash diferia da referência. Sem conseguir obter uma cópia íntegra, não houve novo ensaio com LLM. É precisamente o tipo de falha que o manifesto deve tornar visível.
+
+Hashes não demonstram qualidade ou segurança do modelo; demonstram identidade de bytes em relação à referência. Um download que termina sem erro também deve ser conferido quando a integridade faz parte da experiência.
+
+\section{Da experiência local a um serviço}
+Abrir um servidor apenas em loopback limita a exposição de rede. Torná-lo acessível a outras máquinas exige autenticação, limites, atualização, monitorização e uma política de dados. Um runtime de laboratório sem chave não se transforma num serviço seguro por mudar o endereço para todas as interfaces.
+
+O adaptador V3 recusa endereços externos e redirecionamentos porque o seu objetivo é um piloto local com dados sintéticos. Não é um cliente universal nem uma plataforma de produção. Os custos de API são zero nesse percurso; eletricidade, equipamento e tempo continuam a existir e não foram convertidos numa fatura imaginária.
+
+\begin{promptlabbox}{O modelo cabe, com que margem?}
+\textbf{Objetivo e contexto:} calcular uma estimativa antes de obter pesos. Requisitos: Python 3.10+ ou calculadora; sem GPU e sem rede.
+
+\textbf{Procedimento:} executa o módulo de fundamentos; duplica tokens e depois lote na função de memória; explica quais termos crescem. Lista as parcelas que a função exclui. Se executares depois um modelo, compara o pico observado com esta estimativa ideal.
+
+\textbf{Resultado esperado e validação:} cada duplicação duplica a parcela KV nas hipóteses usadas; o peso ideal mantém-se. O resultado não certifica que um computador concreto suporta a execução.
+
+\textbf{Falhas possíveis:} confundir GB e GiB, contar cabeças de queries em vez de KV, omitir buffers ou apresentar uma previsão de memória como medição de hardware.
+\end{promptlabbox}
+
+O tamanho do ficheiro revelou apenas a primeira parcela. Já sabemos procurar cache, buffers, tarefa e identidade dos bytes. A etapa seguinte pergunta como testar e operar o sistema que conseguimos executar, incluindo o dia em que uma atualização faz desaparecer a margem ou altera uma resposta importante.

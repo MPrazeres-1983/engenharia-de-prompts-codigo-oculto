@@ -1,224 +1,48 @@
-\chapter{Auto-Correção, Metacognição e Ferramentas Externas}
+\chapter{Rever Respostas e Verificar Resultados}
 \label{ch:autocorrecao}
 
-\section{O modelo como próprio crítico}
+\ficcao O rascunho para a Ana diz «O livro estará pronto às 17h». A revisão propõe «Prevemos que esteja pronto às 17h». O tom mudou. A hora continua a vir de lado nenhum. Para corrigir o rascunho, precisamos de comparar a frase com a ficha de R-014.
 
-Além de pedir ao modelo para explicar o que faz, podes pedir-lhe para \emph{avaliar} a própria resposta. É uma espécie de metacognição artificial: “pensa sobre o que acabaste de dizer”.
+\section{Dar à revisão uma pergunta que possa resolver}
 
-Padrão básico:
-
-\begin{enumerate}[leftmargin=*]
-\item Primeiro, o modelo produz uma resposta qualquer.
-\item Depois, pedes-lhe explicitamente para a criticar.
-\item Só então pedes uma versão revista.
-\end{enumerate}
-
-Em termos de prompts, pode ser algo como:
+Se queres melhorar a redação, pede uma frase mais curta ou a eliminação de uma repetição. Se queres verificar o conteúdo, dá ao revisor a fonte e indica o que deve procurar. No caso da Ana, a ficha diz «pedido recebido» e deixa a hora por confirmar. Uma revisão que conserve as 17h falha, mesmo que a nova frase soe mais prudente.
 
 \begin{lstlisting}
-[FASE 1]
-Responde à pergunta seguinte o melhor que conseguires.
-
-[pergunta]
-
-[FASE 2]
-Agora lê a tua resposta anterior com espírito crítico.
-Aponta:
-
-possíveis erros factuais,
-
-partes pouco claras,
-
-oportunidades de melhoria.
-
-[FASE 3]
-Escreve uma nova versão da resposta incorporando
-as correções que identificaste.
+Compara cada afirmação do rascunho com a ficha R-014.
+Mostra o trecho da ficha que sustenta cada afirmação.
+Se não houver suporte, assinala a lacuna.
+Redige uma única versão revista e mantém a hora por
+confirmar quando a ficha não a indicar.
 \end{lstlisting}
 
-A revisão pode melhorar clareza, mas a autocorreção de raciocínio sem feedback externo pode falhar ou piorar a resposta nos cenários estudados~\citep{huang2024}. Não generalizes esse resultado a todos os modelos nem suponhas o contrário. Usa dados, testes e verificadores quando a correção importa. O protocolo:
+Um modelo pode ajudar a encontrar problemas numa segunda leitura. Em tarefas de raciocínio estudadas por Huang e colaboradores, a autocorreção sem informação externa também falhou ou piorou resultados~\citep{huang2024}. A ficha traz informação que podemos conferir separadamente. Mudar de tom ou de persona pode mudar a forma de ler a resposta, mas a hora continua a depender do registo.
 
-\begin{itemize}[leftmargin=*]
-\item força o modelo a olhar para a própria saída com outros “óculos”,
-\item cria duas vistas diferentes sobre o mesmo problema (bom para detetar incoerências).
-\end{itemize}
+\begin{promptlabbox}{Rever um rascunho com a ficha à frente}
+\textbf{Objetivo e contexto:} distinguir melhorias de redação de correções factuais. Usa o rascunho das 17h e a ficha fictícia do capítulo~\ref{ch:primeira-conversa}.
 
-\begin{promptlabbox}{Transformar o modelo em revisor de si próprio}
-\textbf{Objetivo e contexto:} Rever uma resposta identificando primeiro defeitos concretos de clareza e suporte factual.
+\textbf{Procedimento:} sublinha a afirmação sem suporte. Faz uma revisão à mão ou pede a um modelo que compare rascunho e ficha. Guarda as duas versões e assinala o que mudou na clareza e nos factos.
 
-Escolhe uma resposta que o modelo te tenha dado recentemente e de que não tenhas gostado (texto confuso, muito genérico, etc.).
+\textbf{Resultado esperado e validação:} a nova redação conserva o estado recebido, permite agir e deixa a hora em aberto. Confere os três pontos na ficha e na regra.
 
-\medskip
-
-\textbf{Passo 1} — Cola a resposta no chat e pede uma crítica detalhada.
-
-\textbf{Passo 2} — Pede uma nova versão, “ótima”, que resolva os problemas apontados.
-
-Compara a nova versão com a antiga. O objetivo não é confiar cegamente na revisão, mas perceber se a estrutura metacognitiva te aproxima de algo utilizável.
-
-\textbf{Resultado esperado e validação:} Compara versões com a mesma grelha e confirma os factos numa fonte externa. A revisão pode melhorar a forma e piorar o conteúdo: regista ambos.
-
-\textbf{Falhas possíveis:} Tratar uma crítica eloquente como prova, pedir apenas que fique ótima ou premiar mudanças sem ganho.
+\textbf{Falhas possíveis:} premiar uma frase mais fluida que conserva o erro, aceitar outra hora inventada ou pedir crítica sem fornecer a fonte.
 \end{promptlabbox}
 
-\section{Protocolos recursivos: escrever \texorpdfstring{$\to$}{->} criticar \texorpdfstring{$\to$}{->} reescrever}
+\section{Escolher a verificação pelo tipo de dúvida}
 
-Podemos generalizar a ideia anterior em \emph{protocolos recursivos}. Em vez de uma única ronda de crítica, defines um processo:
+Para confirmar uma afirmação, abre a fonte ou consulta a ficha. Para confirmar um cálculo, repete a operação numa calculadora, numa folha de cálculo ou num programa que possas testar. Se o resultado tiver consequências, guarda a entrada e explica como chegaste ao valor. O capítulo~\ref{ch:analise-dados} aplica essa disciplina a uma consulta de dados. O capítulo~\ref{ch:mcp} mostra o que a aplicação precisa de verificar quando o próprio modelo propõe uma operação.
 
-\begin{enumerate}[leftmargin=*]
-\item Gerar rascunho.
-\item Criticar rascunho.
-\item Reescrever com base na crítica.
-\item (Opcional) Repetir 2–3 vezes, com critério de paragem.
-\end{enumerate}
+\begin{promptlabbox}{Fazer a ponte entre explicação e cálculo}
+\textbf{Objetivo e contexto:} verificar uma média com um resultado que se pode calcular à mão. Três atendimentos fictícios demoraram 2, 4 e 6 minutos.
 
-Para evitar loops intermináveis, convém pôr limites explícitos:
+\textbf{Procedimento:} soma os tempos e divide pelo número de atendimentos. Pede ao modelo que escreva a conta com unidades e compara. Como extensão, faz a mesma operação numa folha de cálculo ou em Python. Experimenta acrescentar um atendimento de 0 minutos e conservar esse valor na contagem.
 
-\begin{lstlisting}
-Vamos seguir este processo:
+\textbf{Resultado esperado e validação:} a primeira média é 4 minutos. Com o zero, são os mesmos 12 minutos divididos por quatro atendimentos, ou 3 minutos. Confirma se o método distingue um valor zero de um valor em falta.
 
-Escreves um rascunho de resposta.
-
-Escreves uma crítica ao rascunho, em 5 pontos.
-
-Escreves uma nova versão melhorada.
-
-Pára depois da segunda versão melhorada.
-
-Começa pelo rascunho.
-\end{lstlisting}
-
-Podes até usar personas diferentes para cada fase:
-
-\begin{itemize}[leftmargin=*]
-\item Persona A: “autor”.
-\item Persona B: “revisor mal-disposto”.
-\item Persona C: “editor final”.
-\end{itemize}
-
-\begin{warningboxenv}{Mais iterações não significam melhor qualidade sem critério}
-Se o critério de melhoria for vago (“melhora o texto”), o modelo pode ficar a girar em torno do mesmo estilo, mudando palavras sem ganhos reais. Usa críticas específicas (clareza, precisão, estrutura) para guiar a recursão.
-\end{warningboxenv}
-
-\section{Quando chamar Python, SQL ou outra ferramenta}
-
-Há uma linha clara entre o que é cómodo fazer com LLMs e o que faz sentido delegar para ferramentas clássicas. Sinais de que está na hora de chamar Python, SQL ou outra coisa:
-
-\begin{itemize}[leftmargin=*]
-\item Precisão numérica é crítica (contabilidade, estatísticas, engenharia).
-\item O problema envolve grandes volumes de dados estruturados.
-\item Tens de repetir a mesma operação muitas vezes de forma idêntica.
-\end{itemize}
-
-Padrão de trabalho saudável:
-
-\begin{enumerate}[leftmargin=*]
-\item Usa o LLM para:
-\begin{itemize}[leftmargin=*]
-\item esclarecer o problema,
-\item desenhar a estratégia de cálculo,
-\item gerar código de esqueleto (em Python, SQL, etc.).
-\end{itemize}
-\item Usa a linguagem de programação / base de dados para:
-\begin{itemize}[leftmargin=*]
-\item executar os cálculos,
-\item validar resultados,
-\item automatizar pipelines.
-\end{itemize}
-\end{enumerate}
-
-\begin{promptlabbox}{Fazer a ponte entre explicação e código}
-\textbf{Objetivo e contexto:} Implementar um cálculo numérico num ambiente local, com inputs e resultados de referência definidos antes.
-
-Escolhe um problema numérico simples mas chatinho (por exemplo, calcular prestações de um empréstimo com juros compostos).
-
-\medskip
-
-\textbf{Passo 1} — Pede ao LLM para explicar passo a passo como calcular.
-
-\textbf{Passo 2} — Pede para gerar código Python que implemente esses passos.
-
-\textbf{Passo 3} — Corre o código num ambiente real (fora do LLM) com diferentes valores e compara com resultados de uma calculadora independente.
-
-Assim aproveitas o modelo como tutor/codificador, mas confias a execução à ferramenta certa.
-
-\textbf{Resultado esperado e validação:} Executa o código, inclui valores de fronteira e compara com cálculo independente. Usa unidades e convenção de taxa explícitas; não testes com decisões financeiras reais.
-
-\textbf{Falhas possíveis:} Confundir taxa anual com mensal, aceitar código não executado ou usar duas respostas do mesmo modelo como confirmação independente.
+\textbf{Falhas possíveis:} dividir pelo número errado, excluir o zero ou comparar duas respostas do mesmo modelo sem refazer a conta.
 \end{promptlabbox}
 
-\section{Prompting com ferramentas e \emph{function calling}}
+\section{Saber quando parar}
 
-Muitas aplicações ligam modelos a \emph{ferramentas} (APIs, bases de dados e calculadoras). Em function calling, o modelo propõe uma chamada estruturada; a aplicação valida argumentos, identidade e autorização antes de executar~\citep{functioncalling2026}. O modelo não ganha acesso a uma base de dados por a mencionares num prompt. Em vez de só gerar texto, o modelo pode:
+Se a revisão muda a frase mas a informação necessária continua em falta, regista a dúvida e decide como obter a fonte. Quando o erro é de redação, uma correção com critério pode chegar. Num processo repetido, define também quantas tentativas são aceitáveis e quem decide o passo seguinte. O capítulo~\ref{ch:agentes} leva essas escolhas para o programa que executa o trabalho.
 
-\begin{itemize}[leftmargin=*]
-\item interpretar o pedido,
-\item decidir que ferramenta chamar,
-\item construir os argumentos da chamada,
-\item integrar o resultado da ferramenta na resposta final.
-\end{itemize}
-
-Do ponto de vista de prompting, isto muda o jogo:
-
-\begin{itemize}[leftmargin=*]
-\item Tens de explicar ao modelo \emph{quando} usar a ferramenta (não é óbvio).
-\item Tens de definir claramente o que cada ferramenta faz e que argumentos aceita.
-\end{itemize}
-
-Um padrão típico (em pseudo-system prompt) é:
-
-\begin{lstlisting}
-Tens acesso às seguintes ferramentas:
-
-get_exchange_rate(base, target)
-
-Devolve a taxa de câmbio atual entre duas moedas.
-
-consultar_estado_reclamacao(reclamacao_id)
-
-Consulta o estado de uma reclamacao autorizada.
-A identidade e as permissoes sao verificadas pelo servidor.
-
-Usa uma ferramenta sempre que:
-
-Precisares de dados atualizados.
-
-Precisares de resultados numéricos exatos.
-
-Quando a ferramenta devolver um resultado, explica
-ao utilizador, em português simples, o que significa.
-\end{lstlisting}
-
-\begin{warningboxenv}{Ferramentas não são brinquedos, são responsabilidades}
-Se dás ao modelo acesso a ferramentas que mexem em sistemas reais (encomendas, pagamentos, utilizadores), estás a pôr um modelo estocástico a interagir com o mundo. Guardrails, autenticação e limites de ação deixam de ser opcionais.
-\end{warningboxenv}
-
-\section{Evitar loops infinitos e verificação inútil}
-
-Protocolos recursivos e uso de ferramentas trazem um problema: se mal desenhados, podem cair em loops de:
-
-\begin{itemize}[leftmargin=*]
-\item reexplicar a mesma coisa,
-\item pedir mais dados irrelevantes,
-\item chamar ferramentas sem necessidade.
-\end{itemize}
-
-Regras simples para evitar isso:
-
-\begin{itemize}[leftmargin=*]
-\item Define \emph{critérios de paragem} claros nos prompts:
-\begin{itemize}[leftmargin=*]
-\item “No máximo 2 iterações de revisão.”
-\item “Se não tiveres nova informação relevante, não faças nova tentativa.”
-\end{itemize}
-\item Distingue entre:
-\begin{itemize}[leftmargin=*]
-\item \emph{erro recuperável} (pode valer a pena tentar de novo),
-\item \emph{erro estrutural} (falta de dados, pedido impossível).
-\end{itemize}
-\item Regista o nome da ferramenta, argumentos validados, resultado, duração e motivo operacional breve. O limite de passos e de tempo deve existir no executor, mesmo que o modelo não o cumpra.
-\end{itemize}
-
-\begin{keyideabox}{Mais passos não equivalem a mais inteligência}
-É tentador montar pipelines com 10 fases “para garantir qualidade”. Sem critérios claros, isso só acrescenta latência, custo e pontos de falha. O objetivo é \emph{raciocínio suficiente}, não \emph{raciocínio infinito}.
-\end{keyideabox}
+Já tens um pedido, um critério e uma forma de conferir a resposta. Na próxima parte vais usar este processo para escrever, aprender e criar.

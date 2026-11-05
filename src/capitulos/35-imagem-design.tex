@@ -1,0 +1,72 @@
+\chapter{Uma Ideia Visível: Imagem, Edição e Design com IA}
+\label{ch:imagem-design}
+
+\ficcao O gerente da Lavandaria quer um cartaz para o seu primeiro filme policial. O orçamento dá para um balcão, um cesto e dois suspeitos que aceitam trabalhar em lã. Falta decidir o que o público deve ver primeiro.
+
+«Faz um cartaz bonito» deixa essa decisão ao sistema. Neste projeto, o cartaz tem de anunciar um mistério, a ilustração tem de conter a pista e o título tem de se ler em miniatura. São três coisas que podemos verificar, mesmo sem saber desenhar.
+
+\section{Começar pelo destino, antes do estilo}
+Uma imagem para o ecrã de um telemóvel e uma para impressão pedem proporções e detalhe diferentes. Define a orientação, a utilização, a zona de texto e os elementos que precisam de ficar legíveis. Se há informação exata, como data, preço ou morada, conserva-a numa camada de texto editável sempre que possível. Uma imagem de uma palavra não é a própria palavra armazenada como texto.
+
+O primeiro pedido pode ser um briefing curto:
+\begin{lstlisting}
+Ilustracao para cartaz de clube de leitura, publico adulto.
+Mesa de madeira, livro aberto e uma chavena, luz de fim de tarde.
+Composicao vertical; metade superior calma para titulo posterior.
+Paleta azul escuro e creme; sem marcas ou texto incorporado.
+Deve continuar reconhecivel em miniatura.
+\end{lstlisting}
+Os critérios são escolhas de projeto. Para perceber quais ajudam, compara o resultado com o de um pedido mais vago e observa onde cada cartaz deixa espaço para o texto.
+
+\section{Gerar alternativas e escolher uma direção}
+Pede poucas alternativas com uma diferença relevante: composição, iluminação ou linguagem visual. Se alterares tudo em simultâneo, será difícil explicar a preferência. Uma grelha simples pode avaliar presença dos elementos, espaço disponível, legibilidade em miniatura e adequação ao público.
+
+Não precisas de atribuir uma nota aparentemente precisa a gosto pessoal. Podes escrever: «A deixa espaço para o título; B comunica melhor a reunião; C perde o livro em miniatura». A comparação torna a escolha discutível e melhorável. «O algoritmo disse que B tem qualidade 9.2» só seria útil se soubéssemos o que esse número mede.
+
+Num estudo sobre histórias curtas, Doshi e Hauser distinguiram ganhos de avaliações individuais e menor diversidade coletiva com assistência generativa~\citep{doshi2024}. O resultado não mede cartazes nem todas as formas de criatividade. Sugere uma pergunta pertinente para o nosso processo: as três alternativas são realmente diferentes ou repetem a mesma solução com outra cor?
+
+\section{Editar com uma intenção localizada}
+Gerar de novo toda a cena para corrigir uma chávena pode mudar a mesa, a luz e a personagem. Uma edição localizada, quando suportada, tenta preservar o resto. Guarda uma cópia anterior e descreve precisamente o elemento, a alteração e o que precisa de continuar reconhecível.
+
+Uma máscara identifica uma região de edição; não garante uma fronteira perfeita. O sistema pode alterar transições, sombras ou detalhes próximos. Revê a imagem inteira, incluindo zonas que não pediste para mudar. É o equivalente visual de rever o diff de código: a intenção da mudança não demonstra o seu alcance real.
+
+Para remover um fundo, verifica bordas, cabelo, sombras e transparência. Um fundo axadrezado desenhado nos píxeis não é um canal alfa. Para preparar um objeto sobre várias cores, experimenta fundo claro e escuro; defeitos que não se viam num tornam-se óbvios no outro.
+
+\section{Consistência de personagens e de séries}
+Num conjunto de imagens, define uma ficha de identidade visual: traços, roupa, acessórios, proporções e paleta. Referências autorizadas ajudam a especificar a continuidade. Mesmo assim, compara rosto, mãos, símbolos e detalhes de roupa de imagem para imagem. A semelhança pode variar com pose, iluminação e ferramenta.
+
+Uma solução prática é aprovar primeiro uma folha de referência e reduzir a variação por cena. Outra é separar personagem e cenário em recursos editáveis. Uma terceira é aceitar deliberadamente variações e fazer delas uma regra do projeto, como num jogo de cartas surrealista. São decisões de direção artística, não correções obrigatórias da máquina.
+
+\section{Design editável e imagem de design}
+Uma imagem de um dashboard é uma maquete. Um dashboard funcional tem dados, controlos, estados e relações verificáveis. O capítulo~\ref{ch:multimodal} explica por que os gráficos de dados devem ser construídos com os valores de origem. O mesmo vale para diagramas técnicos: setas e legendas precisam de corresponder à arquitetura.
+
+Se queres um logótipo que será redimensionado, editado e impresso, considera um processo vetorial. Gerar uma imagem com «estilo vetorial» não a transforma num ficheiro SVG de curvas limpas. A conversão posterior pode exigir redesenho, simplificação e verificação. Escolhe o formato pela utilização, não pelo adjetivo do prompt.
+
+\section{Proveniência, consentimento e direitos}
+Usa imagens próprias, autorizadas ou com condições compatíveis. Regista origem, licença e transformações. Uma plataforma permitir uma operação não resolve direitos de imagem, marcas ou autoria. Condições comerciais dependem da ferramenta, da jurisdição e dos materiais usados; verifica-as antes de distribuir um projeto. A licença deste livro não concede direitos sobre imagens de terceiros.
+
+Credenciais de conteúdo, como as especificadas por C2PA, podem associar proveniência verificável a um recurso~\citep{c2pa22}. Não demonstram que a cena retratada aconteceu. Uma fotografia autêntica de uma encenação continua a ser uma encenação; ausência de credenciais também não prova falsidade.
+
+\section{O cartaz da Lavandaria}
+Para \emph{A Meia Testemunha}, pedimos uma ilustração horizontal com três zonas de interesse. À esquerda, a meia no balcão. Ao centro, o tambor da máquina. À direita, a segunda meia presa ao lado exterior de um cesto de vime. A faixa clara no punho liga as duas peças dentro da ficção.
+
+\textbf{Resultado observado.} A imagem guardada tem $1672 \times 941$ píxeis. Vêem-se as duas meias, as respetivas faixas e o cesto. O cartaz A4 usa a imagem inteira e acrescenta o título, a frase de apresentação e a autoria em texto editável no SVG. A figura~\ref{fig:cartaz-meia-testemunha} mostra o ficheiro exportado. O pedido, as fontes tipográficas e os ficheiros de montagem estão em \nolinkurl{exemplos/atelier}.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=.74\textwidth]{../exemplos/atelier/saidas/cartaz.pdf}
+\caption{Cartaz de \emph{A Meia Testemunha}. Ilustração gerada para a cena fictícia, composição e tipografia definidas no SVG.}
+\label{fig:cartaz-meia-testemunha}
+\end{figure}
+
+O público do cartaz pode descobrir a pista antes de ver a curta. No capítulo~\ref{ch:audiovisual}, vamos usar o enquadramento para mudar a ordem da descoberta. Os materiais são os mesmos. O momento em que cada pista entra em cena é uma decisão de montagem.
+
+\begin{promptlabbox}{Um cartaz que sobrevive à miniatura}
+\textbf{Objetivo e contexto:} criar o cartaz fictício do clube de leitura. Requisitos: ferramenta de imagem disponível e editor de texto sobre imagem. Verifica o plano e eventuais custos antes de gerar; a alternativa offline é desenhar três composições em papel.
+
+\textbf{Procedimento:} escreve cinco critérios; gera ou desenha três composições; escolhe uma com razões; acrescenta título e data como texto; testa em tamanho pequeno e exporta uma versão de trabalho. Guarda a origem das referências.
+
+\textbf{Resultado esperado e validação:} o livro é reconhecível, o título lê-se e a data corresponde à informação fornecida. Outra pessoa consegue identificar o evento sem explicação adicional.
+
+\textbf{Falhas possíveis:} texto deformado, objetos extra, ausência de espaço, formato inadequado ou confundir o cartaz fictício com um evento anunciado. Este laboratório descreve um projeto a executar; não apresenta imagens geradas como resultados medidos.
+\end{promptlabbox}

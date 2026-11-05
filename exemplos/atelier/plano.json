@@ -1,0 +1,36 @@
+{
+  "titulo": "A Meia Testemunha",
+  "imagem": "ilustracao.png",
+  "largura": 1280,
+  "altura": 720,
+  "fps": 24,
+  "planos": [
+    {
+      "inicio_s": 0,
+      "fim_s": 5,
+      "recorte": [1056, 594, 0, 340],
+      "zoom": 0.035,
+      "selo": "01  /  O BALCÃO",
+      "legenda": "Faltava uma meia.",
+      "observacao": "Uma meia vermelha repousa no balcão. O plano deixa o cesto fora do enquadramento."
+    },
+    {
+      "inicio_s": 5,
+      "fim_s": 10,
+      "recorte": [832, 468, 390, 154],
+      "zoom": 0.055,
+      "selo": "02  /  A SUSPEITA",
+      "legenda": "A máquina parecia culpada.",
+      "observacao": "O vidro e o tambor ocupam o quadro. A máquina é uma hipótese da história."
+    },
+    {
+      "inicio_s": 10,
+      "fim_s": 15,
+      "recorte": [832, 468, 840, 422],
+      "zoom": 0.04,
+      "selo": "03  /  A PISTA",
+      "legenda": "Estava no cesto. Do lado de fora.",
+      "observacao": "Vê-se a segunda meia na borda exterior do cesto. A faixa clara liga as duas pistas."
+    }
+  ]
+}

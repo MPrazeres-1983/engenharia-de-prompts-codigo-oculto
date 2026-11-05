@@ -1,471 +1,50 @@
-\chapter{Prompting Multimodal: Texto, Imagem, Áudio e Ferramentas}
+\chapter{Ler Imagens, Ouvir Áudio e Conferir a Fonte}
 \label{ch:multimodal}
 
-\section{O que quer dizer ``multimodal'' na prática}
+\ficcao A mensagem diz que há duas peças no balcão. Na fotografia vê-se uma meia vermelha. A pergunta tem duas respostas possíveis. «Vejo uma peça» descreve o enquadramento. «Só havia uma peça» afirma algo sobre todo o balcão, incluindo a zona que a fotografia deixou de fora.
 
-“Multimodal” é uma daquelas palavras que toda a gente usa e poucos definem. De forma pragmática:
+\section{Uma aplicação pode atravessar várias modalidades}
 
-\begin{itemize}[leftmargin=*]
-\item \textbf{Modelo unimodal}:
-\begin{itemize}[leftmargin=*]
-\item só lida com texto (input e output),
-\item tudo o resto tens de converter tu (imagens, áudio, etc.).
-\end{itemize}
-\item \textbf{Modelo multimodal}:
-\begin{itemize}[leftmargin=*]
-\item aceita mais do que um tipo de input (texto + imagem, texto + áudio, etc.),
-\item pode gerar mais do que um tipo de output (texto, imagem, áudio…),
-\item pode combinar isto com ferramentas externas.
-\end{itemize}
-\end{itemize}
+Uma modalidade é um tipo de informação, como texto, imagem ou áudio. Um modelo pode aceitar mais do que uma modalidade e produzir só uma de saída. O relatório técnico do GPT-4 de 2023 documentou um caso de entrada de texto e imagem com saída em texto~\citep{gpt4report2023}. A capacidade depende da versão.
 
-Em vez de pensares “modelo mágico que vê e ouve”, pensa:
+Também podemos juntar programas. Numa chamada de voz, um reconhecedor transcreve o áudio, um modelo de texto prepara a resposta e um sintetizador lê-a. O utilizador ouve um só serviço. Para investigar uma falha, podemos guardar e comparar o que entrou e saiu de cada etapa.
 
-\begin{itemize}[leftmargin=*]
-\item podes ter modelos com representações partilhadas entre modalidades ou cadeias de componentes especializados. As capacidades exatas dependem da arquitetura~\citep{gpt4report2023}. A aplicação pode:
-\begin{itemize}[leftmargin=*]
-\item extrair informação de uma imagem (como se alguém a descrevesse em detalhe),
-\item gerar uma imagem a partir de uma descrição,
-\item transformar áudio em texto (ASR) e texto em áudio (TTS),
-\item coordenar isto com outras APIs.
-\end{itemize}
-\end{itemize}
+\section{Começar pelo que se vê}
 
-O teu trabalho, como engenheiro de prompts, é:
+Numa imagem, distingue três pedidos. \emph{Descrever} é indicar o que se vê. \emph{Transcrever} é copiar texto, símbolos ou números. \emph{Interpretar} é explicar o que esses elementos podem significar. Uma captura de ecrã pode mostrar uma mensagem de erro. O texto da mensagem permite formular hipóteses. Para confirmar qual é a causa, precisamos de dados da execução.
 
-\begin{itemize}[leftmargin=*]
-\item formular pedidos que usem bem esses canais (sem superegoísmo: “faz tudo sozinho”),
-\item combinar etapas de texto+imagem+áudio em fluxos coerentes,
-\item respeitar limites de cada modalidade (resolução, ruído, ambiguidade).
-\end{itemize}
+O reconhecimento ótico de caracteres, ou OCR, transforma texto visível numa imagem em caracteres que um programa consegue pesquisar. Se uma fatura estiver desfocada, conserva a página original e assinala o número duvidoso. Uma ferramenta pode confundir 1 e 7, omitir um sinal negativo ou juntar uma célula ao cabeçalho errado. Numa tabela, confirma a linha, a coluna e a unidade antes de fazer contas com o valor transcrito.
 
-\begin{keyideabox}{Multimodal $\neq$ licença para preguiça}
-Meter um screenshot e dizer “resolve isto” é pouco melhor do que mandar uma foto do quadro ao professor e exigir nota 20.
-Continua a ser preciso dizer \emph{o que queres} que o modelo faça com aquilo que está na imagem/áudio.
-\end{keyideabox}
+\begin{promptlabbox}{Transcrever uma página e localizar as dúvidas}
+\textbf{Objetivo e contexto:} conferir a transcrição de uma página autorizada com números, texto ou fórmulas.
 
-\section{Usar imagens como input: screenshots, gráficos e documentos}
+\textbf{Procedimento:} escolhe três trechos legíveis e um duvidoso. Pede uma transcrição que identifique a zona de origem de cada trecho e marque os caracteres incertos. Compara com a leitura manual, ampliando a imagem quando ajudar.
 
-Modelos com visão conseguem “ler”:
+\textbf{Resultado esperado e validação:} confirma caracteres, sinais, unidades e posições. A resposta identifica a dúvida e preserva a imagem como fonte.
 
-\begin{itemize}[leftmargin=*]
-\item screenshots de aplicações,
-\item gráficos e dashboards,
-\item fotografias de quadros brancos,
-\item páginas de documentos (PDFs, apresentações).
-\end{itemize}
-
-Mas a forma como pedes faz muita diferença.
-
-\subsection*{Padrões para screenshots de aplicações}
-
-Mau prompt:
-
-\begin{lstlisting}
-[envias screenshot de um erro]
-O que se passa aqui?
-\end{lstlisting}
-
-Melhor:
-
-\begin{lstlisting}
-[envias screenshot]
-
-Contexto:
-
-Aplicação: painel de gestão interno.
-
-Ação que fiz: cliquei em "Guardar" após editar
-os campos [A, B, C].
-
-Expectativa: os dados deveriam ser atualizados
-sem erro.
-
-Pedido:
-
-Descreve o que vês na imagem relevante para o erro.
-
-Identifica mensagens de erro ou sinais de problema.
-
-Propõe 3 hipóteses possíveis para a causa do erro
-(lado cliente, servidor, dados).
-
-Sugere próximos passos de debug.
-\end{lstlisting}
-
-Repara que:
-
-\begin{itemize}[leftmargin=*]
-\item dás contexto que a imagem não tem,
-\item divides o pedido em sub-tarefas,
-\item focas o modelo em “diagnosticar” em vez de “adivinhar”.
-\end{itemize}
-
-\subsection*{Padrões para gráficos e dashboards}
-
-Quando é um gráfico de dados:
-
-\begin{lstlisting}
-[envias imagem de um gráfico ou dashboard]
-
-Quero que assumes o papel de analista de dados.
-
-Para a imagem:
-
-Descreve sucintamente o que o gráfico mostra
-(variáveis, eixos, período).
-
-Identifica tendências principais (subida, descida,
-sazonalidade, outliers).
-
-Faz 3 hipóteses possíveis para explicar a tendência
-principal.
-
-Sugere 2-3 análises adicionais que deveríamos fazer
-com os dados originais (não disponíveis na imagem).
-\end{lstlisting}
-
-Se não disseres que é um gráfico, o modelo normalmente percebe sozinho.
-Mas dizer o tipo de tarefa (descrever, interpretar, criticar) aumenta muito a utilidade.
-
-\subsection*{Padrões para documentos e slides}
-
-Para páginas de relatório, slides, etc.:
-
-\begin{lstlisting}
-[envias uma ou mais imagens/páginas]
-
-Quero um resumo focado em:
-
-objetivo deste documento (1-2 frases);
-
-principais conclusões (bullet points);
-
-qualquer recomendação explícita que apareça;
-
-campos ou números que possam ter impacto
-financeiro/legal.
-
-Depois, indica-me:
-
-3 perguntas que um gestor deveria fazer após ler isto.
-\end{lstlisting}
-
-\begin{promptlabbox}{Modo ``OCR crítico''}
-\textbf{Objetivo e contexto:} Transcrever uma página autorizada com texto ou fórmulas e conservar a imagem original.
-
-Experimenta usar a visão do modelo como OCR+analista:
-
-\begin{itemize}[leftmargin=*]
-\item tira uma fotografia de um quadro com fórmulas ou de um slide confuso,
-\item pede ao modelo para:
-\begin{itemize}[leftmargin=*]
-\item transcrever as equações/texto,
-\item apontar ambiguidade ou problemas de formatação,
-\item sugerir uma versão mais clara (por exemplo, em LaTeX).
-\end{itemize}
-\end{itemize}
-
-Isto transforma “foto de apontamentos” em algo pesquisável e reutilizável.
-
-\textbf{Resultado esperado e validação:} Confere caracteres, sinais, unidades e estrutura contra a região de origem. Marca trechos ilegíveis em vez de os completar por adivinhação.
-
-\textbf{Falhas possíveis:} Aceitar uma equação plausível mas diferente ou tratar o texto extraído como fonte infalível.
+\textbf{Falhas possíveis:} aceitar uma equação plausível mas diferente, corrigir silenciosamente o original ou transformar um trecho ilegível num valor exato.
 \end{promptlabbox}
 
-\section{Gerar imagens com prompts de texto}
+\section{O que se perde ao mudar de formato}
 
-Quando o modelo também gera imagens, voltamos à essência: \emph{especificar bem}. Pedidos vagos produzem:
+Um desenho em papel pode mostrar a disposição de uma página antes de existir código. O capítulo~\ref{ch:imagem-design} apresenta um percurso para criar, editar e verificar a imagem. Aqui interessa a passagem inversa. Se entregarmos a imagem a outro programa, que parte da intenção consegue recuperar? Um botão visível pode ser descrito como botão, mas a imagem não demonstra o que aconteceria ao carregá-lo.
 
-\begin{itemize}[leftmargin=*]
-\item imagens genéricas,
-\item estilos cliché,
-\item detalhes incoerentes.
-\end{itemize}
+\begin{promptlabbox}{Do texto à imagem e de volta ao texto}
+\textbf{Objetivo e contexto:} observar o que se conserva ao converter uma descrição numa maquete visual e voltar a descrevê-la. Uma maquete é uma representação da página antes de estar construída.
 
-Elementos a controlar num prompt de imagem:
+\textbf{Procedimento:} descreve uma página com um título, dois campos e um botão. Desenha-a em papel ou gera uma imagem. Dá só a imagem a quem vai descrevê-la e pede a posição e a função aparente de cada elemento. Mantém a descrição original à parte para comparar.
 
-\begin{itemize}[leftmargin=*]
-\item \textbf{Sujeito principal}: quem/quê está em foco?
-\item \textbf{Ação/pose}: o que está a acontecer?
-\item \textbf{Ambiente}: interior/exterior, contexto?
-\item \textbf{Estilo}: realista, desenho, vector, “flat”, etc.
-\item \textbf{Composição}: close-up, plano geral, perspectiva.
-\item \textbf{Cores/clima}: claro/escuro, minimalista, saturado.
-\end{itemize}
+\textbf{Resultado esperado e validação:} confronta os elementos, os nomes e a ordem de leitura com o pedido inicial. Se uma função não for visível, marca-a como hipótese. Uma imagem pode verificar a disposição. Para confirmar interações, precisas de uma página funcional e de testes.
 
-Exemplo fraco:
-
-\begin{lstlisting}
-Desenha um dashboard bonito sobre vendas.
-\end{lstlisting}
-
-Exemplo melhor:
-
-\begin{lstlisting}
-Gera uma imagem raster com aspeto de ilustracao plana de um dashboard
-de vendas numa aplicação web moderna.
-
-Requisitos:
-
-Fundo claro, layout limpo.
-
-Um grafico ilustrativo, sem dados reais nem numeros
-que possam ser confundidos com metricas de negocio.
-
-Uma tabela pequena à direita com 5 produtos top.
-
-Cores suaves, sem elementos 3D.
-\end{lstlisting}
-
-\begin{warningboxenv}{Imagens com pessoas reais, logotipos e marcas}
-Gerar ou editar imagens com:
-\begin{itemize}[leftmargin=*]
-\item rostos de pessoas reais,
-\item logotipos registados,
-\item marcas comerciais,
-\end{itemize}
-tem implicações legais e éticas:
-
-\begin{itemize}[leftmargin=*]
-\item direitos de imagem,
-\item direitos de autor,
-\item risco de deepfakes e desinformação.
-\end{itemize}
-
-Mesmo que a ferramenta permita tecnicamente, pensa se \emph{deves}.
-E verifica políticas de uso da plataforma e da tua organização.
-\end{warningboxenv}
-
-\section{Combinar texto + imagem em fluxos de trabalho}
-
-A parte interessante é quando combinas:
-
-\begin{itemize}[leftmargin=*]
-    \item texto $\Rightarrow$ imagem,
-    \item imagem $\Rightarrow$ texto,
-    \item texto + imagem $\Rightarrow$ outra coisa (código, plano, crítica).
-\end{itemize}
-
-
-Alguns padrões úteis:
-
-\subsection*{Design assistido}
-
-\begin{enumerate}[leftmargin=*]
-\item Desenhas um wireframe à mão, tiras foto.
-\item Pedes ao modelo para:
-\begin{itemize}[leftmargin=*]
-\item descrever o layout,
-\item avaliar problemas de usabilidade,
-\item sugerir melhorias.
-\end{itemize}
-\item Com base nisso, pedes uma imagem mais refinada ou código HTML/CSS.
-\end{enumerate}
-
-\subsection*{Debug visual}
-
-\begin{enumerate}[leftmargin=*]
-\item Screenshot de um erro numa UI.
-\item Modelo analisa elementos visuais + texto.
-\item Sugere hipóteses de bug (CSS, lógica, layout responsivo).
-\end{enumerate}
-
-\subsection*{Documentação ``visual-first''}
-
-\begin{enumerate}[leftmargin=*]
-\item Tiras screenshots de ecrãs importantes da tua app.
-\item O modelo gera:
-\begin{itemize}[leftmargin=*]
-\item descrições,
-\item bullet points de funcionalidade,
-\item secções de ajuda “como fazer X”.
-\end{itemize}
-\end{enumerate}
-
-\begin{promptlabbox}{Pipeline texto $\Rightarrow$  imagem $\Rightarrow$  texto}
-\textbf{Objetivo e contexto:} Observar perdas ao converter descrição em maquete raster e voltar a extrair estrutura.
-
-Faz um teste:
-
-\begin{enumerate}[leftmargin=*]
-\item Descreve um layout de página (texto).
-\item Gera uma imagem de mockup com o modelo.
-\item Depois, alimenta a imagem ao modelo e pede-lhe para:
-\begin{itemize}[leftmargin=*]
-\item extrair a estrutura (componentes, hierarquia),
-\item propor melhorias de UX.
-\end{itemize}
-\end{enumerate}
-
-Repara em quanta informação se perde/ganha em cada conversão.
-Isto ajuda-te a calibrar expectativas sobre “fidelidade” multimodal.
-
-\textbf{Resultado esperado e validação:} Define previamente os elementos obrigatórios. Verifica presença, hierarquia e detalhes; a imagem é uma maquete sem valor de gráfico de dados.
-
-\textbf{Falhas possíveis:} Usar números inventados como métricas, presumir que raster é vetor ou avaliar apenas beleza.
+\textbf{Falhas possíveis:} dar a descrição original a quem avalia a imagem, tratar uma legenda inventada como transcrição ou presumir que uma imagem de interface é um programa pronto a usar.
 \end{promptlabbox}
 
-\section{Áudio: ASR, TTS e comandos por voz}
+\section{Áudio: da fala ao texto e do texto à fala}
 
-Uma arquitetura comum de voz encadeia três peças; outras processam áudio diretamente sem uma transcrição como etapa obrigatória:
+O reconhecimento automático de fala (ASR) converte áudio em texto. A síntese de fala (TTS) faz a passagem de texto para voz. Num serviço de apoio, uma transcrição que perde «não» pode transformar «não cancele a reserva» numa instrução para cancelar. Antes de uma ação com efeitos, confirma a intenção por uma etapa própria e guarda a decisão de forma proporcional ao risco. O capítulo~\ref{ch:audiovisual} aplica a síntese ao guião e à revisão de pronúncia.
 
-\begin{itemize}[leftmargin=*]
-\item \textbf{ASR (Automatic Speech Recognition)}: converter fala em texto.
-\item \textbf{LLM}: processar o texto (como sempre).
-\item \textbf{TTS (Text-to-Speech)}: converter a resposta textual em voz.
-\end{itemize}
+\section{Separar leitura, interpretação e execução}
 
-Padrões comuns:
+Ler um número numa imagem permite propor uma consulta. A ferramenta que consulta o registo ainda tem de confirmar a identidade, o número e o acesso, como no capítulo~\ref{ch:mcp}. Um ficheiro pode conter palavras que parecem ordens dirigidas ao modelo. No capítulo~\ref{ch:seguranca}, vamos testar o que acontece quando essas palavras chegam através de uma fonte externa.
 
-\subsection*{Resumos de reuniões}
-
-\begin{enumerate}[leftmargin=*]
-\item Gravas uma reunião.
-\item ASR gera transcrição (com erros, “hums”, etc.).
-\item LLM:
-\begin{itemize}[leftmargin=*]
-\item limpa a transcrição (se quiseres),
-\item extrai decisões, ações, riscos.
-\end{itemize}
-\end{enumerate}
-
-Prompt típico:
-
-\begin{lstlisting}
-A partir da transcrição abaixo de uma reunião,
-organiza em:
-
-Decisões tomadas
-
-Ações (com responsável se indicado)
-
-Prazos mencionados
-
-Questões em aberto
-
-Riscos
-
-Português de Portugal, formato em bullet points.
-Ignora "hums", small talk e interrupções irrelevantes.
-\end{lstlisting}
-
-\subsection*{Comandos por voz}
-
-Fluxo genérico:
-
-\begin{enumerate}[leftmargin=*]
-\item Utilizador fala.
-\item ASR converte para texto.
-\item LLM interpreta comando e decide ação:
-\begin{itemize}[leftmargin=*]
-\item responder com texto,
-\item chamar ferramenta,
-\item pedir clarificação.
-\end{itemize}
-\end{enumerate}
-
-Convém ter prompts de “interpretação robusta” que:
-
-\begin{itemize}[leftmargin=*]
-\item tolerem erros de transcrição,
-\item clarifiquem ambiguidade (“queres A ou B?”),
-\item não façam ações perigosas com base em frases meio cortadas.
-\end{itemize}
-
-\begin{warningboxenv}{Privacidade em áudio é ainda mais sensível}
-Gravar conversas, reuniões e comandos de voz implica:
-
-\begin{itemize}[leftmargin=*]
-\item verificação da licitude da gravação e informação aos participantes, considerando também as regras nacionais aplicáveis,
-\item decisões sobre retenção (quanto tempo guardas?),
-\item risco de capturar informações que ninguém queria que fossem processadas por IA.
-\end{itemize}
-
-Não é só uma questão técnica; é legal e ética.
-\end{warningboxenv}
-
-\section{Ferramentas multimodais e agentes ``sensoriais''}
-
-Quando combinas:
-
-\begin{itemize}[leftmargin=*]
-\item visão,
-\item texto,
-\item áudio,
-\item ferramentas (APIs),
-\end{itemize}
-
-começas a ter agentes que:
-
-\begin{itemize}[leftmargin=*]
-\item “olham” para o estado de um sistema (screenshots),
-\item “ouvem” comandos,
-\item consultam dados,
-\item respondem por texto/voz.
-\end{itemize}
-
-O papel do prompt aqui é:
-
-\begin{itemize}[leftmargin=*]
-\item definir que tipo de informação o modelo deve tirar de cada modalidade;
-\item especificar a ordem de operações (ver imagem \(\to\) consultar API \(\to\) explicar resultado);
-\item impor limites (“não executes ações destrutivas sem autorização explícita”).
-\end{itemize}
-
-Exemplo conceptual:
-
-\begin{lstlisting}
-És um assistente que ajuda a diagnosticar problemas
-num painel de controlo industrial.
-
-Inputs:
-
-Texto do operador (perguntas, descrições).
-
-Screenshot do painel.
-
-Tarefas:
-
-Descrever o estado atual com base nos elementos
-visíveis (indicadores, alarmes, gráficos).
-
-Cruzar isso com as regras abaixo (manual de operação).
-
-Explicar ao operador, em linguagem simples,
-o que parece estar a acontecer e propondo
-2-3 ações seguras de diagnóstico.
-
-Nunca sugiras ações que envolvam desligar sistemas
-críticos sem confirmação adicional explícita.
-\end{lstlisting}
-
-\section{Limites e riscos específicos do multimodal}
-
-Com multimodal, ganhas poder, mas também:
-
-\begin{itemize}[leftmargin=*]
-\item \textbf{Ambiguidade visual}: imagens podem ser pouco claras, cortadas, desfocadas.
-\item \textbf{Leitura enganadora}: o modelo pode interpretar um detalhe visual de forma errada e construir uma narrativa plausível mas falsa.
-\item \textbf{Reconhecimento de pessoas}: risco de identificação, vigilância, perfis sensíveis.
-\item \textbf{Dependência da qualidade do ASR}: erros de transcrição podem distorcer significados importantes.
-\end{itemize}
-
-Boas práticas:
-
-\begin{itemize}[leftmargin=*]
-\item sempre que o output depender \emph{fortemente} de um detalhe visual, pede ao modelo para indicar o que viu (“dizes que o botão está cinzento; que label tem?”);
-\item evita decisões automatizadas em cima de reconhecimento facial ou de emoções;
-\item para reuniões, considera partilhar resumos com os participantes para revisão humana (não assumir que “se a IA resumiu, está certo”);
-\item documenta como as imagens/áudios são recolhidos, processados e descartados.
-\end{itemize}
-
-\begin{keyideabox}{Multimodal é uma ferramenta de contexto, não um oráculo}
-Usa imagens, áudio e afins para dar \emph{mais contexto} ao modelo, não para substituir completamente o teu julgamento.
-Se uma decisão é crítica, valida sempre com humanos e dados diretos.
-\end{keyideabox}
-
-\section{Separar observação, interpretação e ação}
-Num teste de interface, uma captura permite observar que um botão está cortado. Não permite concluir, sozinha, que uma atualização à base de dados falhou. Regista «observado na imagem», «hipótese» e «verificação necessária». Faz o mesmo com áudio: uma palavra transcrita com erro pode inverter uma instrução.
-
-Para gráficos que comuniquem dados, usa ferramentas que desenhem os valores originais em SVG, PDF ou outro formato verificável. Uma imagem gerada de um dashboard é uma maquete, não evidência estatística. Para documentos, preserva a página ou região de origem para confirmar números e negações.
+Para comunicar dados num gráfico, constrói as marcas e as escalas a partir dos valores originais. Para interpretar um documento, guarda a página ou a região. No cartaz do capítulo~\ref{ch:imagem-design}, a segunda meia está no cesto. O primeiro plano da curta deixa o cesto fora do quadro. O que podemos verificar muda quando mudamos o enquadramento.

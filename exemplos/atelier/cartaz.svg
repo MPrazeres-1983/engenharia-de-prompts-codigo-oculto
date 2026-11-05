@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="210mm" height="297mm" viewBox="0 0 595.28 841.89" role="img" aria-labelledby="titulo descricao">
+  <title id="titulo">A Meia Testemunha</title>
+  <desc id="descricao">Cartaz de ficção. Duas meias vermelhas numa lavandaria, uma no balcão e outra na borda do cesto.</desc>
+  <rect width="595.28" height="841.89" fill="#0b1726"/>
+  <rect x="48" y="52" width="29" height="4" fill="#ef9066"/>
+  <text x="89" y="59" font-family="DejaVu Sans" font-size="9.6" font-weight="700" letter-spacing="1.1" fill="#ef9066">A LAVANDARIA DAS MEIAS DESAPARECIDAS</text>
+  <g font-family="DejaVu Sans" font-weight="700" font-size="57" letter-spacing="-1.5" fill="#fff4df">
+    <text x="45" y="132">A MEIA</text>
+    <text x="45" y="192">TESTEMUNHA</text>
+  </g>
+  <image x="48" y="226" width="499.28" height="281" preserveAspectRatio="xMidYMid meet" xlink:href="ilustracao.png"/>
+  <rect x="48" y="226" width="499.28" height="281" fill="none" stroke="#9c7457" stroke-width="0.8"/>
+  <line x1="48" y1="548" x2="547.28" y2="548" stroke="#546476" stroke-width="0.6"/>
+  <text x="48" y="577" font-family="DejaVu Sans" font-size="10" font-weight="700" letter-spacing="1.25" fill="#ef9066">UM MISTÉRIO EM TRÊS PLANOS</text>
+  <g font-family="DejaVu Serif" font-size="24" fill="#fff4df">
+    <text x="48" y="623">A máquina parecia culpada.</text>
+    <text x="48" y="659">A resposta estava à vista.</text>
+  </g>
+  <line x1="48" y1="736" x2="547.28" y2="736" stroke="#546476" stroke-width="0.6"/>
+  <text x="48" y="764" font-family="DejaVu Sans" font-size="10" letter-spacing="1.1" fill="#b5c6d8">FICÇÃO  ·  CURTA MUDA  ·  15 SEGUNDOS</text>
+  <text x="48" y="799" font-family="DejaVu Serif" font-size="18" fill="#fff4df">Mário Prazeres</text>
+</svg>

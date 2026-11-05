@@ -1,268 +1,85 @@
 \chapter{Análise de Dados e Automação com LLMs}
 \label{ch:analise-dados}
 
-\section{O que um LLM faz bem (e mal) com dados}
+\ficcao O relatório de vendas da Lavandaria mostra 90 euros. No caderno estão dois pedidos de 30 euros. A consulta correu sem erros. Antes de pedir ao modelo uma explicação para o aumento das vendas, vale a pena perceber por que motivo um pedido entrou duas vezes na soma.
 
-LLMs podem ser ótimos para:
+\section{Saber o que representa uma linha}
 
-\begin{itemize}[leftmargin=*]
-\item explicar gráficos e tabelas em linguagem natural,
-\item sugerir hipóteses e próximas análises,
-\item escrever queries SQL ou código de análise,
-\item resumir resultados de relatórios longos.
-\end{itemize}
+Há uma linha por pedido na primeira tabela e uma por artigo na segunda. O primeiro pedido tem dois artigos. Se juntares as tabelas, o total do pedido aparece uma vez em cada linha de artigo. O cálculo pode estar certo para a tabela produzida e errado para a pergunta original.
 
-São fracos em:
+Podes fazer a conta sem computador. Depois da junção, vês 30, 30 e 30. A soma dá 90. Eliminar valores repetidos dá 30, porque os dois pedidos legítimos têm o mesmo total. A pergunta exige contar cada pedido uma vez, usando o identificador do pedido para distinguir os dois.
 
-\begin{itemize}[leftmargin=*]
-\item fazer cálculos exatos e robustos em grandes volumes de dados,
-\item garantir que estatísticas estão corretas sem código externo,
-\item manter memória precisa de datasets gigantes ao longo de muitas interações.
-\end{itemize}
+\section{Executar a consulta num conjunto pequeno}
 
-Portanto, o fluxo saudável é:
-
-\begin{itemize}[leftmargin=*]
-\item deixar o LLM ajudar a \emph{pensar} sobre dados,
-\item deixar ferramentas clássicas \emph{manipular} dados em escala.
-\end{itemize}
-
-\section{Escrever queries SQL com IA, mas executar fora}
-
-Um padrão simples e poderoso:
-
-\begin{enumerate}[leftmargin=*]
-\item Descreves o que queres em linguagem natural.
-\item O LLM escreve a query SQL.
-\item Tu revês a query.
-\item Executas a query na tua base de dados real.
-\end{enumerate}
-
-Padrão de prompt:
+SQL é uma linguagem para pedir operações a uma base de dados. Podes repetir o exemplo no SQLite, um sistema que guarda as tabelas localmente. Cria-as e começa pela consulta que as junta. Dentro de \texttt{SUM}, o operador \texttt{DISTINCT} elimina valores iguais antes da soma~\citep{sqliteagregados2026}.
 
 \begin{lstlisting}
-Vou descrever a estrutura de uma base de dados
-e o tipo de informação que quero.
+CREATE TABLE pedidos (id INTEGER PRIMARY KEY, total INTEGER);
+CREATE TABLE artigos (pedido_id INTEGER, nome TEXT);
+INSERT INTO pedidos VALUES (1, 30), (2, 30);
+INSERT INTO artigos VALUES (1, 'meia'), (1, 'saco'),
+                           (2, 'toalha');
 
-Esquema simplificado:
-
-tabela clientes(id, nome, segmento, cidade)
-
-tabela pedidos(id, cliente_id, data, valor_total)
-
-Quero uma query SQL (dialeto PostgreSQL) que:
-
-devolva, para cada cidade,
-o total de vendas do último mês
-e o número de clientes distintos.
-
-Define primeiro o intervalo temporal e as relacoes entre tabelas.
-Depois mostra a query e os pressupostos, sem a executar.
+SELECT COUNT(*) AS linhas, SUM(p.total) AS soma,
+       SUM(DISTINCT p.total) AS soma_distinta
+FROM pedidos AS p
+JOIN artigos AS a ON a.pedido_id = p.id;
 \end{lstlisting}
 
-Depois:
+\noindent\begin{minipage}{\linewidth}
+A segunda consulta usa \texttt{EXISTS} para verificar se o pedido tem pelo menos um artigo. A soma continua a usar uma linha por pedido.
+\begin{lstlisting}
+SELECT COUNT(*) AS pedidos, SUM(p.total) AS soma
+FROM pedidos AS p
+WHERE EXISTS (
+    SELECT 1 FROM artigos AS a WHERE a.pedido_id = p.id
+);
+\end{lstlisting}
+\end{minipage}
 
-\begin{itemize}[leftmargin=*]
-\item verificas se as joins fazem sentido,
-\item verificas o período (último mês civil ou últimos 30 dias), a moeda, os nulos e se o join duplica valores. Executa com credenciais de consulta e limites de tempo/volume; um SELECT pode chamar funções com efeitos, consoante a base de dados.
-\end{itemize}
+Na execução local, a primeira consulta devolveu $(3,90,30)$ e a segunda $(2,60)$. Para incluir pedidos sem artigos, consulta só a tabela de pedidos. Se também precisares de estatísticas de artigos, agrega primeiro por pedido e verifica a cardinalidade antes de juntar.
 
-\begin{promptlabbox}{Usar LLM como ``gerador de esqueleto'' SQL}
-\textbf{Objetivo e contexto:} Produzir SQL num esquema e massa de dados de teste cujo resultado conheces.
+\begin{promptlabbox}{Rever uma consulta com um resultado conhecido}
+\textbf{Objetivo e contexto:} Verificar linhas e totais antes de aplicar uma consulta a dados maiores. Usa o esquema fictício acima ou uma base de teste autorizada.
 
-Pega numa pergunta analítica real que já tenhas respondido à mão em SQL. Pede ao LLM para gerar a query a partir da descrição.
+Escreve a resposta à mão. Pede SQL para o dialeto que vais usar e indica o que representa uma linha de cada tabela. Compara com a tua consulta. Acrescenta um pedido sem artigos e decide se deve entrar no total. Se a pergunta usar datas, testa os limites inicial e final do intervalo.
 
-Compara:
+\textbf{Resultado esperado e validação:} A consulta devolve o número de pedidos e o total definidos pela regra. Explica o efeito de uma duplicação, de um nulo e de uma exclusão. Confirma permissões, volume e tempo de execução antes de passar a outro ambiente.
 
-\begin{itemize}[leftmargin=*]
-\item a tua query e a da IA produzem o mesmo resultado?
-\item a versão da IA é mais legível? menos?
-\item que erros ou supostos “atalhos” aparecem?
-\end{itemize}
-
-O objetivo não é quem ganha, é ver como a IA pode servir de atalho para a parte chata das joins e agregações.
-
-\textbf{Resultado esperado e validação:} Confere linhas, valores, cardinalidade do join, nulos e fronteiras de data. Executa apenas num ambiente autorizado com permissões de consulta e limites.
-
-\textbf{Falhas possíveis:} Usar tabelas de produção para experimentar, comparar só contagens ou duplicar totais por join.
+\textbf{Falhas possíveis:} Comparar apenas o número de linhas, deduplicar valores quando a unidade é o pedido ou executar uma consulta sugerida sem a rever.
 \end{promptlabbox}
 
-\section{Análise exploratória guiada por conversa}
+\section{Explorar antes de escrever a interpretação}
 
-Ferramentas tipo notebooks conversacionais (ou integração entre LLM e Python) permitem um fluxo muito natural:
+Começa por contagens, ausências, intervalos, unidades e grupos. Se duas colunas se moverem em conjunto, considera explicações alternativas e escolhe a análise que as separaria. Um modelo pode ajudar a propor perguntas e consultas. Guarda as tabelas e os gráficos que efetivamente calculaste para conseguir regressar ao resultado.
 
-\begin{enumerate}[leftmargin=*]
-\item LLM sugere exploração inicial (“vê distribuição desta variável, corre uma correlação, faz um gráfico”).
-\item Código é gerado e executado.
-\item Resultados (tabelas, gráficos) são devolvidos.
-\item Conversa continua com base nos resultados.
-\end{enumerate}
+Para períodos consecutivos, um intervalo com início incluído e fim excluído permite pôr um registo de fronteira num só período. Define o fuso horário se houver instantes de tempo. Regista como trataste cancelamentos, dados ausentes e moedas. Um valor desconhecido tem uma consequência diferente de um valor zero, sobretudo quando calculas médias.
 
-Mesmo sem ambiente integrado, podes usar o LLM para:
+\section{Dar ao relatório métricas com contexto}
 
-\begin{itemize}[leftmargin=*]
-\item planear a análise:
-\begin{lstlisting}
-Dado este dataset com colunas A, B, C, D,
-que análises iniciais farias para perceber
-o comportamento de A em função de B e C?
-\end{lstlisting}
-\item gerar código de EDA (exploratory data analysis),
-\item interpretar resultados que já calculaste.
-\end{itemize}
-
-\begin{warningboxenv}{Não deixes o modelo inventar gráficos inexistentes}
-Se pedires interpretação de um “gráfico” que não forneceste, o modelo vai inventar qualquer coisa plausível. Só faz sentido interpretar gráficos ou tabelas que realmente lhe mostraste (em texto ou imagem).
-\end{warningboxenv}
-
-\section{Relatórios automáticos a partir de métricas}
-
-Um uso prático em negócios: gerar relatórios narrativos a partir de métricas pré-calculadas.
-
-Fluxo:
-
-\begin{enumerate}[leftmargin=*]
-\item O teu sistema calcula métricas (em SQL, Python, etc.).
-\item Constróis um objeto estruturado com esses números.
-\item Passas esse objeto para o LLM com instruções de como escrever o relatório.
-\end{enumerate}
-
-Exemplo de entrada:
+Um relatório pode receber um objeto JSON com período, unidade, numerador e denominador. Este exemplo sintético distingue o universo da amostra que respondeu.
 
 \begin{lstlisting}
 {
-"periodo": "2025-10",
-"vendas_totais": 123456.78,
-"vendas_vs_mes_anterior": -0.12,
-"novos_clientes": 34,
-"churn_rate": 0.07,
-"principal_causa_churn": "preço"
+  "periodo": "2026-10",
+  "saidas_registadas": 20,
+  "respostas_ao_inquerito": 8,
+  "respostas_que_mencionam_preco": 5
 }
 \end{lstlisting}
 
-Prompt:
+«Cinco das oito respostas mencionam preço» descreve os dados. Para dizer o que aconteceu nas vinte saídas, faltam doze respostas. Para atribuir a causa de uma saída, seria preciso um desenho que sustentasse essa conclusão. Pede que cada número do relatório aponte ao campo ou cálculo correspondente.
 
-\begin{lstlisting}
-A partir dos dados abaixo, escreve um resumo
-mensal para a direção, em 3 a 5 parágrafos,
-em português de Portugal, com tom profissional
-e direto. Destaca:
+\begin{promptlabbox}{Ligar dados e narrativa}
+\textbf{Objetivo e contexto:} Produzir um relatório curto a partir de métricas calculadas, com unidades e denominadores visíveis.
 
-tendências importantes,
+Usa o JSON acima. Redige três frases que distingam contagem, proporção e dúvida. Se recorreres a um modelo, confronta o rascunho com uma versão feita à mão. Testa também o caso de zero respostas ao inquérito.
 
-riscos,
+\textbf{Resultado esperado e validação:} A proporção entre respondentes é $5/8=62{,}5\%$. Com zero respostas, essa proporção fica indefinida. Cada frase indica o universo a que se aplica.
 
-oportunidades,
-
-ações recomendadas.
-
-Não inventes números que não estejam nos dados.
-
-[cola aqui o JSON]
-\end{lstlisting}
-
-\begin{promptlabbox}{Pipeline ``dados \texorpdfstring{$\to$}{->} narrativa''}
-\textbf{Objetivo e contexto:} Gerar narrativa a partir de métricas calculadas e guardadas em JSON. Identifica período e unidade de cada métrica.
-
-Implementa um pequeno script que:
-
-\begin{enumerate}[leftmargin=*]
-\item Calcula 3–4 métricas simples sobre um dataset (por exemplo, vendas, visitas a site, etc.).
-\item Serializa essas métricas em JSON.
-\item Envia o JSON para um LLM com um prompt de relatório como o acima.
-\end{enumerate}
-
-Compara o relatório gerado em diferentes meses e avalia:
-
-\begin{itemize}[leftmargin=*]
-\item consistência do tom,
-\item se as recomendações fazem sentido,
-\item se há tentativas de inventar contexto que não deste.
-\end{itemize}
-
-\textbf{Resultado esperado e validação:} Reconcilia todos os números e sinais de variação com a entrada. Causas não fornecidas devem surgir como hipóteses, nunca como resultados medidos.
-
-\textbf{Falhas possíveis:} Inventar causas, confundir percentagem e pontos percentuais ou apresentar chamadas a API não executadas como resultados.
+\textbf{Falhas possíveis:} Dividir pelo universo errado, trocar pontos percentuais por variação relativa ou escrever uma causa que os dados não mediram.
 \end{promptlabbox}
 
-\section{Automação de tarefas de dados ``low-code'' com LLM}
+\section{Automatizar a parte que tem uma regra}
 
-Há muita automação “meio manual” que dá para orquestrar com LLMs:
-
-\begin{itemize}[leftmargin=*]
-\item renomear colunas e normalizar schemas em ficheiros CSV vindos de fontes diferentes,
-\item mapear categorias semelhantes entre sistemas distintos,
-\item gerar descrições legíveis de colunas a partir de nomes técnicos,
-\item escrever documentação básica para dashboards.
-\end{itemize}
-
-Exemplos:
-
-\subsection*{Normalizar cabeçalhos de CSV: preferir código}
-
-\begin{lstlisting}
-Escreve uma funcao deterministica para normalizar
-cabecalhos de CSV; inclui tratamento de colisoes.
-Nao uses um LLM em cada linha para executar estas regras.
-Tens uma lista de nomes de colunas de um ficheiro CSV.
-Quero que devolvas uma lista normalizada, adequada
-para usar como nomes de colunas numa base de dados:
-
-tudo em minúsculas,
-
-sem acentos,
-
-espaços substituídos por underscore,
-
-sem caracteres especiais.
-
-[lista original]
-\end{lstlisting}
-
-\subsection*{Mapear categorias}
-
-\begin{lstlisting}
-Temos duas listas de categorias de produto:
-
-Lista A: [...]
-Lista B: [...]
-
-Quero um mapa que diga, para cada categoria de A,
-qual a categoria mais próxima em B. Se não houver
-equivalente razoável, marca como "sem_mapeamento".
-
-Devolve o resultado em JSON com pares {A: B}.
-\end{lstlisting}
-
-\begin{checklistbox}{Automação de dados com IA sem caos}
-Antes de pôr um LLM no meio do teu pipeline de dados:
-
-\begin{itemize}[leftmargin=*]
-\item Define que tarefas são deterministas (e devem ser feitas com código clássico).
-\item Isola tarefas onde interpretação de texto acrescenta valor (nomes, descrições, categorias).
-\item Mantém sempre um passo de validação (mesmo que amostral) sobre o que o LLM produziu.
-\item Documenta claramente em que parte do pipeline há “inteligência estocástica”.
-\end{itemize}
-\end{checklistbox}
-
-\section{Limites e riscos na análise de dados com LLMs}
-
-Por fim, alguns lembretes para não te apaixonar em excesso:
-
-\begin{itemize}[leftmargin=*]
-\item LLMs podem sugerir análises estatísticas que soam sofisticadas mas são inapropriadas (p.e., aplicar modelos paramétricos onde não faz sentido).
-\item Podem confundir correlação com causalidade com a mesma facilidade que muitos humanos.
-\item Podem produzir interpretações demasiado confiantes de resultados pouco robustos.
-\end{itemize}
-
-Boas práticas:
-
-\begin{itemize}[leftmargin=*]
-\item Usa a IA como \emph{consultor júnior} em estatística, não como \emph{autoridade final}.
-\item Sempre que uma decisão importante depender de um resultado numérico, confirma com ferramentas e/ou especialistas.
-\item Mantém registos do que foi sugerido pela IA e do que foi validado por humanos; isto ajuda em auditorias futuras.
-\end{itemize}
-
-\begin{keyideabox}{IA para dados: mais copiloto, menos piloto automático}
-Se tratas o LLM como copiloto curioso que ajuda a ver ângulos novos, ganhas muito. Se o tratas como piloto automático de estatística, vais acabar em turbulência séria.
-\end{keyideabox}
+Para normalizar cabeçalhos de CSV, escreve regras de caixa, acentos e separadores e testa colisões. «Preço total» e «Preco total» podem produzir o mesmo identificador. Decide como preservar a relação com os nomes de origem. Para aproximar categorias entre sistemas, pede uma proposta de correspondência com a opção «sem correspondência». Guarda a aprovação e versiona o mapa antes de o aplicar a outros registos. O capítulo~\ref{ch:software} mostra como transformar essas regras em casos verificáveis.

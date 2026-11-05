@@ -1,7 +1,7 @@
 \chapter{A Lavandaria Funcional: Integrar sem Fingir que Tudo Está Resolvido}
 \label{ch:lavandaria}
 
-A empresa começou com uma hipótese sobre meias esquerdas. Chegou a um sistema que consulta uma política, verifica a autorização de uma reclamação e prepara uma resposta com evidência. Ainda não encontrou a meia. Encontrou uma fronteira mais útil: aquilo que consegue afirmar sem inventar.
+\ficcao A Lavandaria recebe uma pergunta sobre uma reclamação. Para preparar a resposta, o sistema tem de decidir se precisa de uma política pública ou de um registo privado. Este capítulo junta as peças da especificação, da pesquisa e da autorização num exemplo que podes executar e observar.
 
 \ficcao Todos os documentos, clientes e pedidos deste capítulo são inventados. O exemplo executa-se localmente, sem conta, chave de API ou envio de dados. Usa pesquisa lexical e um gerador por templates. \textbf{Não é uma execução de um LLM, um servidor MCP ou um benchmark de raciocínio.} Podemos assim testar contratos e barreiras antes de ligar uma componente estocástica.
 
@@ -21,6 +21,26 @@ python3 -m unittest discover -s tests -v
 \end{lstlisting}
 
 O argumento \texttt{--cliente} escolhe um papel fictício; \textbf{não autentica ninguém}. Num serviço real, a aplicação teria de autenticar a identidade antes de chamar este núcleo. O modelo não pode fornecer ou alterar esse valor nos argumentos da ferramenta.
+
+\section{Ler as respostas lado a lado}
+
+Executámos as consultas com os papéis fictícios. A coluna «resposta» resume o que chegou ao utilizador.
+
+\begin{center}
+\small
+\begin{tabularx}{\textwidth}{@{}p{.26\textwidth}XX@{}}
+\toprule
+Pedido & Resposta observada & Critério exercitado \\
+\midrule
+A pede LAV-001 & Estado «em análise», com excerto do registo. & CA-02, consulta autorizada. \\
+B pede LAV-002 & Estado «aguarda contacto», com excerto do registo. & CA-02, o segundo titular também consegue consultar. \\
+A pede LAV-002 & Consulta não disponível, encaminhamento. & CA-03, sem estado ou excertos privados. \\
+A pede LAV-999 & A mesma resposta externa. & CA-03, a resposta não distingue ausência de acesso e ausência de registo. \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+Nas duas recusas, o objeto devolvido tem identificador nulo, lista de evidências vazia e indicador de encaminhamento ativo. O indicador descreve a decisão do núcleo. A entrega a uma equipa depende da fila do serviço que integrar este núcleo.
 
 \section{Dados pequenos, origens explícitas}
 POL-01 explica como iniciar uma investigação de peças em falta. POL-02 não estabelece prazo fixo nem reembolso automático. Há documentos privados para testar filtragem. LAV-001 pertence a cliente-A; LAV-002 a cliente-B. Os estados vêm de uma ferramenta autorizada, não do tom da mensagem.
@@ -72,6 +92,4 @@ São testes de software. A resistência de um LLM real a prompt injection exige 
 \section{O que falta para operar com pessoas reais}
 Faltam autenticação, armazenamento com permissões, tratamento de dados pessoais, monitorização, limites de custo e latência, avaliação de mensagens representativas e procedimento de incidente. «Pedir a um humano» também exige fila, responsável e tempo de resposta; sem isso, é só uma frase para deixar o pedido parado.
 
-Para acrescentar um modelo, implementa o adaptador segundo a API escolhida, com timeout e tratamento de recusa. Preserva os contratos e acrescenta avaliação semântica. Para MCP, implementa transporte e requisitos da versão sem deslocar autorização para o prompt.
-
-O resultado é pequeno, mas funcional no âmbito declarado. Mostra por que motivo precisamos de engenharia mesmo quando o modelo melhora. As meias podem permanecer um mistério; o acesso aos dados não deve ser um.
+Para acrescentar um modelo, implementa o adaptador para a API escolhida, define um tempo limite e trata a recusa. Conserva os contratos e verifica também se o texto respeita os registos. O ensaio do capítulo~\ref{ch:interop} permite seguir uma consulta local através dos protocolos. Uma integração com outro servidor precisa de repetir as verificações com esse servidor.

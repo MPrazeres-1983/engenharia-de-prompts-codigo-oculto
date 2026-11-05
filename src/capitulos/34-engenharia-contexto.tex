@@ -1,0 +1,55 @@
+\chapter{Engenharia de Contexto: o que Entra, o que Fica e o que se Perde}
+\label{ch:context-engineering}
+
+O pedido tem duas linhas. O contexto tem mensagens antigas, ficheiros, resultados de pesquisa, descrições de ferramentas e um resumo produzido ontem. Uma falha pode nascer em qualquer dessas peças. Chamar «prompt» ao conjunto não nos impede de o usar, mas pode esconder o trabalho de selecionar, organizar e manter informação.
+
+\section{O contexto como uma construção da aplicação}
+Usamos \emph{engenharia de contexto} para o desenho do material disponibilizado em cada chamada: instruções, pedido, demonstrações, documentos, estado e resultados de ferramentas. É uma prática de sistemas, sem formato único nem garantia universal de desempenho. Os exemplos do capítulo~\ref{ch:contexto} tratam uma parte deste trabalho; RAG, no capítulo~\ref{ch:rag}, trata a seleção de evidência externa.
+
+Uma boa seleção responde a quatro perguntas: para que decisão precisamos deste dado; qual a origem; quem o pode usar; e até quando é válido? Um prazo de dez dias pode ter sido correto ontem. Se a versão vigente diz cinco, o sistema precisa de identificar a diferença antes de responder. No ensaio do capítulo~\ref{ch:llmops}, uma cache conservou a primeira versão e a sonda encontrou-a.
+
+Convém separar classes de conteúdo por estrutura e metadados. Isso facilita validação e leitura, embora delimitadores não criem uma barreira de segurança infalível. As permissões têm de ser aplicadas antes de recuperar ou executar; não dependem de o modelo reconhecer corretamente a etiqueta.
+
+\section{Quatro sentidos diferentes de memória}
+Os pesos contêm regularidades aprendidas. A janela contém os elementos usados nesta inferência. A cache de atenção reutiliza chaves e valores durante a geração, como mostra o capítulo~\ref{ch:local}. A memória persistente da aplicação guarda dados para chamadas futuras. Uma cache de documentos, como a do ensaio, pertence à aplicação. Para a corrigir, verifica a chave, a versão e a origem do documento.
+
+Uma memória útil pode ser uma decisão aprovada com data e origem: «a política ativa é POL-02, versão 3». Uma memória perigosa é uma síntese sem origem: «este cliente costuma ter prioridade», extraída de uma conversa ambígua e reutilizada indefinidamente. A persistência aumenta o alcance de um erro se não houver correção, expiração e controlo de acesso.
+
+Por isso, uma entrada de memória deve ter autor ou origem, âmbito, momento de criação, validade e mecanismo de revisão. Uma inferência produzida pelo assistente não deve ser promovida silenciosamente a facto. Dados revogados não podem continuar disponíveis numa cópia informal da conversa.
+
+\section{Orçamento: caber não significa ser útil}
+Reserva espaço para instruções, entrada, evidência, resultados intermédios e geração. O limite concreto depende do serviço. Se envias tudo até ao último token, podes deixar de ter espaço para a ferramenta que faltava ou para a resposta final.
+
+Há três decisões distintas: excluir material irrelevante, recuperar material relevante e comprimir material que queremos conservar. Um resumo reduz tamanho, mas pode eliminar uma exceção. Uma pesquisa pode selecionar a regra e deixar de fora a condição. Uma janela grande pode conter a informação sem que o sistema a use corretamente. O efeito de posição observado por Liu e colaboradores reforça a necessidade de testar, sem estabelecer uma lei universal~\citep{liu2024}.
+
+Um exemplo: o documento diz «prazo habitual de dois dias, exceto peças delicadas, que exigem avaliação». Um resumo que guarda apenas «prazo: dois dias» é curto e errado para a exceção. Comprimir é transformar dados; exige critérios como qualquer outra transformação.
+
+\section{Uma passagem de trabalho que não apaga as dúvidas}
+Quando uma conversa é resumida para continuar noutra chamada, conserva objetivo, decisões aprovadas, factos com origem, dúvidas, ações executadas, resultados e próximo passo. Guarda identificadores que permitam regressar ao original. Distingue o passo autorizado, o que foi executado e o que ficou à espera de evidência.
+
+\begin{lstlisting}
+Objetivo: preparar resposta, sem enviar.
+Fonte: POL-02 v3, secao "prazos".
+Facto confirmado: nao existe prazo fixo para reembolso.
+Decisao: encaminhar para equipa responsavel.
+Pendente: ainda nao ha resposta dessa equipa.
+Executado: consulta documental, sem alteracao de registos.
+Proximo passo: rever rascunho com estes limites.
+\end{lstlisting}
+
+Ao retomar, abre a versão indicada e verifica se ainda está em vigor. Neste exemplo, podes rever um rascunho. Para informar o cliente de uma decisão, ainda precisas da resposta da equipa. Se houver uma política posterior, regista a nova fonte e volta a verificar a exceção.
+
+\section{Escrita na memória é uma operação com efeitos}
+Consultar uma nota e alterar uma preferência persistente não são equivalentes. Uma atualização precisa de uma fonte autorizada e de uma regra para resolver conflitos. Se dois componentes escrevem valores incompatíveis, a última mensagem não se torna verdadeira por chegar mais tarde.
+
+Em equipas de agentes, limita quem pode escrever cada campo, mantém versões e valida a fusão. O capítulo~\ref{ch:multiagente} mostra por que um estado partilhado sem proprietário se transforma numa reunião onde todos editam a ata ao mesmo tempo.
+
+\begin{promptlabbox}{O resumo que perdeu a exceção}
+\textbf{Objetivo e contexto:} avaliar compressão sem código. Escreve uma política fictícia com uma regra, uma exceção, uma data e uma dúvida não resolvida.
+
+\textbf{Procedimento:} pede um resumo de 100 palavras e outro de 40. Usa cada resumo, em sessões separadas, para responder a quatro perguntas definidas antes, incluindo a exceção e a dúvida. Conserva o texto original como referência.
+
+\textbf{Resultado esperado e validação:} classifica preservação de regra, exceção, data e estado pendente. Um resumo elegante que transforma a dúvida em decisão falha. A experiência é proposta para execução pelo leitor, sem resultado atribuído a um modelo específico.
+
+\textbf{Falhas possíveis:} avaliar apenas tamanho, deixar a resposta original no contexto ou concluir que mais memória é sempre melhor.
+\end{promptlabbox}

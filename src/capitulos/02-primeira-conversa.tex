@@ -1,61 +1,55 @@
 \chapter{A Primeira Conversa: do Pedido Vago ao Resultado Útil}
 \label{ch:primeira-conversa}
 
-O gerente abre um chat e escreve: «Resolve o problema das meias desaparecidas.» Pode receber uma lista de hipóteses, uma campanha de marketing ou uma teoria sobre duendes. Nenhuma dessas respostas demonstra onde está uma meia. O problema começa no pedido: não define uma tarefa que a ferramenta possa executar e verificar.
+\ficcao «Já posso levantar a reserva R-014?» A Ana quer decidir se passa pela biblioteca antes de ir para casa. «Sim» e «ainda não temos confirmação» levam a percursos diferentes. A tarefa do chat é ajudar a preparar a resposta ao pedido.
 
-Um prompt melhor não precisa de linguagem solene. Precisa de dar ao modelo informação suficiente para produzir o resultado de que precisas. Comecemos por um trabalho pequeno: preparar uma resposta a uma reclamação.
+\section{Ler a ficha antes de escrever}
 
-\section{Dar ao pedido uma finalidade}
-\ficcao A mensagem do cliente é: «Entreguei seis pares na segunda-feira e recebi cinco. Podem confirmar o que aconteceu?» Não temos acesso ao registo de recolha. Sabemos apenas que a política fictícia pede o número do talão antes de investigar.
+Temos o número \texttt{R-014} e o estado «pedido recebido». Neste exercício, a biblioteca confirma o levantamento apenas quando o estado é «pronto para levantamento». Para pedidos recebidos, pede ao leitor que aguarde o aviso. A ficha não indica data nem hora.
 
-Um primeiro pedido utilizável seria:
+Um pedido como «responde à Ana» deixa ao modelo a tarefa de escolher o que salientar. Podemos dar-lhe a mesma ficha e explicar como reconhecer uma resposta que serve:
 
 \begin{lstlisting}
-Prepara um rascunho de resposta em portugues de Portugal.
-O cliente diz que entregou seis pares e recebeu cinco.
-Nao temos o registo de recolha nem sabemos a causa.
-A politica pede o numero do talao para investigar.
+Escreve um rascunho em português de Portugal, até três frases.
 
-A resposta deve reconhecer o pedido, pedir esse numero
-e explicar o proximo passo. Usa ate quatro frases.
-Nao prometas reembolso, prazo nem resultado da investigacao.
+Mensagem: «Já posso levantar a reserva R-014?»
+Ficha R-014: pedido recebido. Sem data ou hora indicada.
+Regra: confirmar o levantamento só no estado «pronto
+para levantamento». Se está recebido, pedir que aguarde o aviso.
+
+Indica o estado que consta na ficha e o que fazer a seguir.
+A disponibilidade e a hora ficam por confirmar.
 \end{lstlisting}
 
-O texto dá uma tarefa, contexto, limites e formato. Não manda fingir que temos acesso à máquina de lavar. A resposta que procuramos pede o talão e evita inventar uma conclusão. O vocabulário exato pode variar.
+A ficha diz o que sabemos. A regra diz como agir. O pedido define o trabalho e o tamanho da resposta. Se fizermos a mesma tarefa para outra reserva, trocamos a mensagem e a ficha, mantendo o critério.
 
-\begin{keyideabox}{Especificar é reduzir adivinhas}
-Pergunta: o que quero obter, com que informação, sob que limites e como vou verificar? O papel do modelo é opcional; esses quatro elementos são mais importantes do que começar por «és o maior especialista do mundo».
-\end{keyideabox}
+\section{Conferir a resposta}
 
-\section{Uma resposta ilustrativa e uma verificação real}
-Uma possível saída, escrita aqui como exemplo, seria: «Obrigado pelo aviso. Para verificarmos a diferença entre a entrega e a recolha, pode indicar o número do talão? Com esse número, a equipa poderá consultar o registo e dar seguimento à reclamação.» Este texto não é uma execução registada de um modelo.
+Uma resposta ilustrativa, escrita para o exercício, seria «O seu pedido R-014 foi recebido. Aguarde o aviso da biblioteca antes de se deslocar para levantar o livro.» Podes conferir a resposta de um chat, ou a tua, com quatro perguntas:
 
-Verificamos quatro coisas: reconhece o pedido; pede o talão; não afirma saber a causa; não promete compensação ou prazo. «Lamentamos o duende ter fugido com a sua meia» falha o terceiro critério, mesmo que tenha melhor sentido de humor.
+\begin{enumerate}[leftmargin=*,nosep]
+\item Indica o estado «pedido recebido»?
+\item Evita apresentar a reserva como pronta?
+\item Indica que a Ana deve aguardar o aviso?
+\item Mantém data e hora por confirmar?
+\end{enumerate}
 
-Também podemos distinguir factos atribuídos de factos confirmados. «O cliente refere que faltou um par» descreve a mensagem. «A lavandaria perdeu um par» afirma uma conclusão ainda não investigada. Uma palavra muda a responsabilidade da frase.
+«Já pode levantar o livro» falha a segunda pergunta. «A reserva fica pronta amanhã» falha a quarta. Uma resposta breve pode passar nas quatro mesmo que tenha palavras diferentes das do exemplo.
 
-\section{Melhorar uma coisa de cada vez}
-Se a resposta for demasiado longa, especifica o limite e confirma-o. Se inventar uma causa, torna explícita a informação em falta e testa outra mensagem. Se o formato variar, mostra um exemplo. Evita acrescentar quinze regras sem saber que falha cada uma tenta resolver.
+\section{Mudar uma coisa de cada vez}
 
-Para comparar duas versões, guarda a mesma entrada e usa sessões independentes, quando a interface o permite. Caso contrário, uma resposta anterior pode influenciar a seguinte. Não confundas mudança de modelo com efeito do prompt. Regista a ferramenta, data, versão identificável e configuração disponível.
+Se a resposta confundir os estados, põe a regra ao lado da ficha e volta a testar. Se for demasiado longa, ajusta o limite e conta as frases. Guarda a mensagem, a ficha, o pedido e o trecho que mostra cada falha. Esse registo ajuda a perceber o efeito de uma alteração.
 
-Num chat não controlas necessariamente todos os detalhes: pode haver instruções da plataforma, pesquisa automática, memória ou seleção de ferramentas. Anota o que consegues observar. «Não sei qual era a configuração interna» é uma descrição honesta da experiência.
+Para comparar duas versões num chat, mantém a mensagem, a ficha e a regra. Usa conversas separadas, se possível, porque a primeira resposta pode entrar no contexto da segunda. Regista a ferramenta e a versão que consegues identificar. Pesquisa automática ou mensagens de configuração também podem influenciar a experiência.
 
-\begin{promptlabbox}{A primeira reclamação da Lavandaria}
-\textbf{Objetivo e contexto:} comparar um pedido vago com uma tarefa delimitada. Usa a mensagem dos seis pares e a política fictícia deste capítulo. Não forneças dados de clientes reais.
+\begin{promptlabbox}{Uma reserva ainda por confirmar}
+\textbf{Objetivo e contexto:} comparar um pedido curto com um pedido com critérios. Usa a mensagem, a ficha e a regra fictícias de R-014.
 
-\textbf{Instruções:} numa sessão pede «responde ao cliente». Noutra, usa o prompt completo. Guarda ambas as saídas. Repete com «não tenho o talão» e com «quero uma indemnização já». Não alteres a política entre versões.
+\textbf{Instruções:} em duas conversas, fornece a mesma mensagem, ficha e regra. Num caso, pede só uma resposta. No outro, acrescenta o limite e os critérios do exemplo. Guarda ambas as respostas. Podes fazer a comparação em papel com a resposta ilustrativa e com «Já pode levantar o livro amanhã às dez».
 
-\textbf{Resultado esperado:} o segundo pedido torna observáveis os critérios da resposta, sem garantir acerto. Para a falta de talão, deve identificar o bloqueio ou pedir um procedimento autorizado; não inventar uma exceção.
+\textbf{Resultado esperado e validação:} avalia as quatro perguntas com um trecho da resposta para cada decisão. Depois retira o estado da ficha e verifica se a resposta admite que falta confirmação, em vez de inventar um estado ou uma hora.
 
-\textbf{Validação:} usa os quatro critérios acima, marcando cumpre/não cumpre e copiando o trecho que justifica a avaliação. Se quiseres quantificar variação, repete cada condição e guarda todas as respostas, incluindo falhas.
-
-\textbf{Falhas possíveis:} avaliar só a simpatia, escolher apenas a melhor tentativa, comparar entradas diferentes ou tratar um resultado ilustrativo como resposta medida.
+\textbf{Falhas possíveis:} comparar pedidos com fichas diferentes, escolher só a melhor tentativa ou tomar uma resposta escrita para o exercício como medição do chat.
 \end{promptlabbox}
 
-\section{Do rascunho à ação}
-Enquanto estás a experimentar, podes rever uma frase antes de a usar. Numa aplicação automática, o texto pode ser enviado a milhares de pessoas. A diferença de escala altera o que precisamos de testar.
-
-Por isso vamos manter quatro fronteiras ao longo do livro: informação e instrução; proposta e execução; resposta e evidência; experiência fictícia e resultado medido. Quando chegarmos a agentes, serão as mesmas fronteiras com ferramentas ligadas.
-
-O capítulo seguinte transforma este pequeno exercício num método repetível. Em vez de procurar uma frase secreta que faz o modelo obedecer, vamos construir um ciclo de especificação, teste e revisão.
+A Ana pode decidir aguardar o aviso. O capítulo seguinte transforma o registo desta experiência num método para alterar pedidos e perceber o que melhorou.

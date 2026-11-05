@@ -1,14 +1,20 @@
 \chapter{Desligar a Magia, Ligar a Engenharia}
 \label{ch:fundamentos}
 
-\section{O que é realmente um LLM}
-Já temos prompts e exemplos. Falta abrir a máquina. Um \emph{large language model} (LLM) é um modelo de linguagem de grande escala. Neste capítulo focamo-nos nos modelos \emph{autoregressivos}: produzem uma sequência condicionando cada novo token nos anteriores. Existem outros objetivos de treino e outras arquiteturas; esta descrição não é uma definição de toda a IA generativa.
+Escreve «A meia ficou no» e experimenta acabar a frase. Podes escolher «cesto», «tambor» ou «bolso». Agora troca o início por «O talão ficou no». A frase mudou a plausibilidade de cada opção. Num modelo autorregressivo, as probabilidades das próximas unidades também dependem do texto anterior. A regra de geração usa essas probabilidades para escolher o que vem a seguir.
 
-A fatorização da probabilidade de uma sequência é
+\section{Prever uma continuação}
+Um \emph{large language model} (LLM) é um modelo de linguagem de grande escala. Neste capítulo focamo-nos nos modelos \emph{autorregressivos}: produzem uma sequência condicionando cada novo token nos anteriores. Existem outros objetivos de treino e outras arquiteturas; esta descrição não é uma definição de toda a IA generativa.
+
+Um token é uma unidade de representação do texto. Pode ser uma palavra, um fragmento ou outro elemento do vocabulário. O capítulo~\ref{ch:tokens} mostra como é construído. Para seguir a ideia, imagina que cada palavra do exemplo ocupa um token.
+
+Imagina dez finais de frase possíveis, todos igualmente prováveis neste exemplo. Cinco começam por «a». Desses cinco, três continuam com «meia». Para contar «a meia», usamos três dos dez finais, ou $3/10$. Podemos chegar à mesma conta em duas etapas. Metade dos finais começa por «a» e, dentro dessa metade, $3/5$ continuam com «meia». Multiplicar $1/2$ por $3/5$ dá $3/10$.
+
+\textbf{Aprofundamento opcional.} Esta conta em etapas dá a regra para mais unidades:
 \[
 P(t_1,\ldots,t_n)=\prod_{k=1}^{n}P(t_k\mid t_1,\ldots,t_{k-1}).
 \]
-Aqui, $t_k$ é o identificador de um token. A fórmula diz: a probabilidade do texto completo é o produto das probabilidades condicionais dos seus passos. Não diz que o sistema escolhe sempre o token mais provável. Essa escolha depende do método de descodificação, que estudaremos no capítulo~\ref{ch:tokens}.
+$P$ indica probabilidade, $t_k$ é o token na posição $k$ e a barra vertical lê-se «dado que». À direita da barra estão os tokens que já apareceram. O símbolo $\prod$ manda multiplicar, desde a primeira posição até à última. Isto descreve a probabilidade do texto completo. A regra que escolhe cada token chama-se \emph{descodificação} e é explicada no capítulo~\ref{ch:tokens}.
 
 Durante o treino, os parâmetros aprendem regularidades de linguagem e representações úteis para muitas tarefas. O facto de o objetivo envolver previsão não implica que o modelo só consiga copiar expressões superficiais. Há conhecimento factual e capacidades de generalização nos parâmetros, como mostram as tarefas avaliadas por Brown e colaboradores~\citep{brown2020}. O problema é outro: uma resposta fluente não vem acompanhada de uma prova de verdade.
 
@@ -21,17 +27,17 @@ Um modelo pode produzir uma resposta correta a partir do conhecimento aprendido.
 
 \section{Do n-gram ao Transformer}
 
-Antes de Transformers, modelos de linguagem já existiam, mas eram muito mais limitados.
+Podemos comparar as arquiteturas pelo modo como usam o que veio antes.
 
-\subsection*{Modelos n-gram (a pré-história útil)}
+\subsection*{Modelos n-gram e contexto de tamanho fixo}
 
-Um modelo n-gram olha para as últimas n-1 palavras e tenta prever a próxima. Por exemplo, num modelo trigram (n=3), para prever a próxima palavra em:
+Num modelo n-gram, estimamos a probabilidade da próxima unidade a partir das $n-1$ anteriores. Neste exemplo, as unidades são palavras. Para um trigrama, $n=3$. Considera a frase
 \begin{center}
 \texttt{o rato comeu o ?}
 \end{center}
-ele só olha para as duas anteriores: \texttt{comeu o}. Não vê o resto da frase, não percebe o tema global. Isto funciona de forma razoável para coisas simples, mas falha em dependências longas (pronomes, anáforas, estrutura de parágrafos).
+Para completar a frase, o modelo usa \texttt{comeu o}. Se trocar «o rato» por «o leitor», a parte que entra no cálculo continua igual. Uma referência que dependa do primeiro nome fica fora dessas duas palavras.
 
-\subsection*{RNNs e LSTMs (a era “quase dá”)}
+\subsection*{Redes recorrentes e estado acumulado}
 
 Depois vieram as \emph{Recurrent Neural Networks} e variantes como LSTM/GRU. A ideia: em vez de só olhar para as últimas n-1 palavras, mantemos um estado interno que vai sendo atualizado token a token. Em teoria, a rede pode “lembrar-se” de coisas ditas há muito tempo.
 
@@ -43,7 +49,7 @@ Na prática, tens:
 \item Contextos longos continuam difíceis de usar de forma eficiente.
 \end{itemize}
 
-Foi aqui que alguém decidiu que talvez fosse boa ideia deixar a sequência de lado e perguntar: e se cada palavra pudesse olhar diretamente para qualquer outra?
+A recorrência faz passar informação de um passo ao seguinte. A atenção introduz um caminho mais direto entre posições. Que posições podem comunicar depende da máscara e da arquitetura.
 
 \subsection*{Transformers (o “Attention Is All You Need”)}
 
@@ -57,7 +63,7 @@ Resultado:
 \item Uma arquitetura que escala com mais dados e mais parâmetros.
 \end{itemize}
 
-Não vamos reconstruir o paper linha a linha, mas precisas de reter isto: o Transformer é a máquina que está por baixo dos LLMs modernos. As tuas decisões de prompt estão a mexer na forma como essa máquina distribui atenção pelo contexto.
+Não vamos reconstruir o paper linha a linha, mas precisas de reter isto: o Transformer é uma arquitetura central em muitos LLMs. As decisões de prompt alteram a entrada do cálculo; não revelam nem controlam diretamente os pesos de atenção.
 
 \section{O jogo das probabilidades na prática}
 
@@ -128,12 +134,12 @@ Compara as respostas. O que mudou? Que tipo de palavras aparecem agora?
 \textbf{Falhas possíveis:} Escolher só as respostas engraçadas, continuar na mesma conversa ou atribuir probabilidades inventadas ao modelo.
 \end{promptlabbox}
 
-A moral da história: o que pedes, como pedes e em que ordem pedes muda a distribuição de probabilidades que o modelo vai usar. A “engenharia” está em controlar o contexto em vez de aceitar o default.
+Um pormenor ajuda a ler a fórmula. Imagina dois primeiros tokens, A com probabilidade 0,60 e B com 0,40. O melhor segundo token após A tem probabilidade 0,50. Após B, o melhor segundo token tem 0,90. As melhores sequências de dois passos em cada ramo têm, respetivamente, $0{,}60\times0{,}50=0{,}30$ e $0{,}40\times0{,}90=0{,}36$. A escolha gulosa começa em A. Neste exemplo sintético, a sequência mais provável começa em B.
 
 \section{Alucinações: quando a fluência ultrapassa a evidência}
 Uma resposta pode conter um título de artigo perfeito, autores plausíveis e um DOI inexistente. Chamamos frequentemente \emph{alucinação} a conteúdo fabricado ou sem suporte. Em tarefas documentais, convém distinguir erro factual de falta de sustentação: uma afirmação pode até ser verdadeira e, mesmo assim, não constar dos documentos autorizados.
 
-O pré-treino autoregressivo não verifica cada frase num repositório de factos. Mas seria incorreto dizer que o modelo nunca foi treinado para admitir incerteza: o pós-treino pode premiar utilidade, veracidade ou abstinência e penalizar determinadas respostas~\citep{ouyang2022}. Nada disso garante correção em todos os casos.
+O pré-treino autorregressivo não verifica cada frase num repositório de factos. Mas seria incorreto dizer que o modelo nunca foi treinado para admitir incerteza: o pós-treino pode premiar utilidade, veracidade ou abstinência e penalizar determinadas respostas~\citep{ouyang2022}. Nada disso garante correção em todos os casos.
 
 Em ficção, inventar uma lavandaria intergaláctica pode ser o objetivo. Numa reclamação de cliente, inventar a política de indemnização é uma falha. Não são apenas dois níveis de uma mesma «criatividade»: mudam os critérios de aceitação.
 
@@ -145,7 +151,7 @@ RAG, pesquisa e ferramentas podem melhorar o acesso a evidência, mas também po
 
 
 \section{Da intuição à engenharia}
-Os capítulos~\ref{ch:ia} e~\ref{ch:primeira-conversa} introduziram IA, modelos e uma primeira experiência sem exigir programação. A partir daqui, a notação surge acompanhada da sua leitura em palavras. Podes experimentar os prompts num chat; só os laboratórios de implementação exigem Python.
+Já passámos pela ideia de um modelo e pela aprendizagem a partir de dados. A seguir, o capítulo~\ref{ch:transformer} abre o mecanismo de atenção. Se quiseres fazer primeiro um pedido num chat, podes saltar para o capítulo~\ref{ch:primeira-conversa} e voltar à fórmula depois.
 
 Se já programas, não confundas facilidade de integração com fiabilidade. Se estás a começar, não precisas de decorar matrizes para escrever um pedido claro. O objetivo comum é conseguir perguntar: «Que parte deste problema pede um modelo, que parte pede código e como vou saber se funcionou?»
 

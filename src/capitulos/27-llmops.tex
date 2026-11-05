@@ -1,38 +1,11 @@
 \chapter{LLMOps para Prompts e Sistemas de Produção}
 \label{ch:llmops}
 
-\section{De “brincar no chat” a operar em produção}
+\ficcao A Lavandaria encurtou o prazo de devolução de dez para cinco dias úteis. A política foi publicada. O sistema continuou a responder «dez». Tinha cumprido todos os testes de formato, incluindo aquele que verificava se o prazo era um número. Era, de facto, um número.
 
-Há uma diferença grande entre:
+Se a resposta saiu num chat de experiências, podemos corrigir o pedido e repetir. Num serviço em produção, precisamos de saber quem recebeu a resposta, que fonte a sustentou e como parar a divulgação do prazo antigo. Chamamos \textbf{LLMOps} ao trabalho de testar, lançar, observar e recuperar sistemas que integram modelos de linguagem. Inclui o prompt, a aplicação, os dados e as pessoas com autoridade para intervir.
 
-\begin{itemize}[leftmargin=*]
-\item tu, ao fim do dia, a experimentar prompts num chat;
-\item uma aplicação de produção que atende milhares de utilizadores com um SLA.
-\end{itemize}
-
-No primeiro caso, quando algo corre mal:
-
-\begin{itemize}[leftmargin=*]
-\item dás um suspiro,
-\item corriges o prompt,
-\item segues a tua vida.
-\end{itemize}
-
-No segundo, quando algo corre mal:
-
-\begin{itemize}[leftmargin=*]
-\item há clientes zangados,
-\item métricas de negócio a descer,
-\item equipas de suporte sobrecarregadas,
-\item possivelmente riscos legais.
-\end{itemize}
-
-Aí entra \textbf{LLMOps} para prompts: aplicar disciplinas de DevOps/MLOps à vida inteira dos prompts e das integrações com LLMs.
-
-\begin{keyideabox}{Prompts de produção são “infraestrutura lógica”}
-Não são posts-it colados numa UI de fornecedor.
-São parte da infraestrutura: precisam de controlo de versões, testes, monitorização, owners, processos de mudança.
-\end{keyideabox}
+Começa por guardar as versões que permitem reconstruir uma resposta. Um prompt num ficheiro versionado ajuda. Neste incidente, precisaremos também de saber qual era a política em vigor e qual foi usada pela aplicação.
 
 \section{Ciclo de vida de um prompt em produção}
 
@@ -54,7 +27,7 @@ Experimentas no chat:
 \item recolhes casos fáceis e difíceis.
 \end{itemize}
 \item \textbf{Criação de golden set}
-A partir dos exemplos, montas um conjunto de teste (Secção anterior).
+A partir dos exemplos, montas um conjunto de teste como no capítulo~\ref{ch:avaliacao}.
 \item \textbf{Testes offline}
 Corres:
 \begin{itemize}[leftmargin=*]
@@ -79,7 +52,7 @@ Lançamento em:
 \item \textbf{Monitorização contínua}
 Recolhes:
 \begin{itemize}[leftmargin=*]
-\item logs de prompts e outputs (com anonimização),
+\item pedidos e respostas estritamente necessários, com campos sensíveis excluídos ou protegidos,
 \item métricas de negócio,
 \item feedback dos utilizadores.
 \end{itemize}
@@ -158,62 +131,12 @@ Garante que:
 \end{itemize}
 \end{checklistbox}
 
-\section{Observabilidade: logs, métricas e rastreamento}
+\section{Registar o suficiente para reconstruir a resposta}
+Para diagnosticar os dez dias, começamos pelo identificador do pedido, a versão do serviço e a da política usada. Juntamos a decisão de validação e o identificador da ferramenta, quando existe. Com esses campos, podemos seguir o percurso sem copiar toda a conversa para os logs.
 
-Sem observabilidade, ficas cego. Coisas a registar (com cuidado com privacidade):
+A latência e os erros da API mostram como correu a execução. Para conhecer a qualidade, revê uma amostra com critérios e fontes. Uma queda nas escaladas pode significar que o serviço resolveu mais casos. Pode também significar que deixou de encaminhar casos difíceis. Confirma o significado com os resultados da revisão.
 
-\begin{itemize}[leftmargin=*]
-\item \textbf{Inputs} anonimizados:
-\begin{itemize}[leftmargin=*]
-\item tipo de pedido,
-\item tamanho em tokens,
-\item canal (web, mobile, API, etc.).
-\end{itemize}
-\item \textbf{Prompts usados}:
-\begin{itemize}[leftmargin=*]
-\item versão do system prompt,
-\item contexto adicional (documentos, ferramentas chamadas).
-\end{itemize}
-\item \textbf{Outputs} (de forma segura e, se possível, truncada ou mascarada).
-\item \textbf{Métricas técnicas}:
-\begin{itemize}[leftmargin=*]
-\item latência,
-\item tokens de input e output,
-\item erros da API.
-\end{itemize}
-\item \textbf{Métricas de negócio}:
-\begin{itemize}[leftmargin=*]
-\item taxa de resolução automática,
-\item thumbs up/down,
-\item escaladas para humanos,
-\item conversões (quando aplicável).
-\end{itemize}
-\end{itemize}
-
-Isto permite:
-
-\begin{itemize}[leftmargin=*]
-\item identificar rapidamente:
-\begin{itemize}[leftmargin=*]
-\item quedas de qualidade,
-\item aumentos de alucinações,
-\item quebras de formato.
-\end{itemize}
-\item analisar distribuição de tráfego por tipo de pedido;
-\item perceber onde convém investir em melhorias de prompt ou fluxo.
-\end{itemize}
-
-\begin{warningboxenv}{Logs de IA podem conter dados sensíveis}
-Não registes texto bruto de utilizadores sem:
-\begin{itemize}[leftmargin=*]
-\item políticas claras de retenção,
-\item anonimização e/ou pseudonimização,
-\item fundamento de licitude e informação aos titulares adequados ao tratamento,
-\item controlos de acesso rígidos.
-\end{itemize}
-
-Observabilidade não é desculpa para ignorar privacidade.
-\end{warningboxenv}
+Define acesso e retenção para os registos. Truncar ou mascarar um texto pode reduzir o detalhe exposto. A avaliação de se os dados permitem identificar uma pessoa continua a depender do conteúdo e da possibilidade de os associar.
 
 \section{Guardrails, políticas e fallbacks}
 
@@ -286,78 +209,48 @@ Mudar de \emph{modelo} (por exemplo, de uma versão para outra) pode ter impacto
 Planeia, testa, monitora e regista.
 \end{keyideabox}
 
-\section{Custos, latência e escolhas arquiteturais}
+\section{Quem pode travar uma alteração}
+Para cada fluxo, regista quem aprova uma versão e quem intervém num incidente. Na Lavandaria, a equipa técnica pode suspender o envio de respostas automáticas. A área que decide a política confirma o prazo em vigor. A equipa de apoio recebe os casos encaminhados e pode corrigir uma comunicação anterior.
 
-LLMs não são grátis nem instantâneos. Em sistemas reais, tens de equilibrar:
+Um lançamento gradual precisa de critérios de avanço e de paragem. Se o canário recuperar uma versão antiga do documento, suspende o fluxo afetado e confirma que a contenção funciona. Antes de reabrir, pede à mesma sonda que verifique a fonte em vigor. Um timeout numa ação externa exige confirmar o estado da operação antes de a repetir.
 
-\begin{itemize}[leftmargin=*]
-\item \textbf{Qualidade} (modelos maiores, prompts mais ricos),
-\item \textbf{Custos} (tokens, chamadas, infra de suporte),
-\item \textbf{Latência} (utilizadores não gostam de esperar).
-\end{itemize}
-
-Padrões para gerir isto:
-
-\begin{itemize}[leftmargin=*]
-\item Usar modelos menores para tarefas simples (classificação, validação).
-\item Reservar modelos mais poderosos para:
-\begin{itemize}[leftmargin=*]
-\item casos complexos,
-\item revisão final,
-\item tarefas com impacto maior.
-\end{itemize}
-\item Cache de resultados:
-\begin{itemize}[leftmargin=*]
-\item pedidos repetidos (FAQs populares),
-\item outputs que não mudam frequentemente.
-\end{itemize}
-\item Otimizar prompts:
-\begin{itemize}[leftmargin=*]
-\item remover redundância,
-\item cortar exemplos desnecessários,
-\item não enfiar meia enciclopédia no contexto “só porque sim”.
-\end{itemize}
-\end{itemize}
-
-\section{Equipa, governance e responsabilidade}
-
-LLMOps não é só tech. Envolve pessoas e processos:
-
-\begin{itemize}[leftmargin=*]
-\item \textbf{Quem escreve e revê prompts?}
-\begin{itemize}[leftmargin=*]
-\item engenheiros,
-\item especialistas de domínio,
-\item equipas de UX/conteúdo.
-\end{itemize}
-\item \textbf{Quem decide que mudanças avançam?}
-\begin{itemize}[leftmargin=*]
-\item existe um processo de aprovação?
-\item há critérios de “go/no-go”?
-\end{itemize}
-\item \textbf{Quem responde quando algo corre mal?}
-\begin{itemize}[leftmargin=*]
-\item contact points,
-\item equipas de incidente,
-\item comunicação interna/externa.
-\end{itemize}
-\end{itemize}
-
-Idealmente, defines:
-
-\begin{itemize}[leftmargin=*]
-\item um \emph{owner} por fluxo de prompts,
-\item uma cadência de review (por exemplo, mensal),
-\item linhas vermelhas (o que o sistema nunca deve fazer, e o que acontece se fizer).
-\end{itemize}
-
-\begin{keyideabox}{LLMOps é a ponte entre “brincar com IA” e “assumir responsabilidade por IA”}
-É aqui que deixas de ser só um entusiasta com prompts giros e passas a ser alguém que põe sistemas com LLMs no mundo sem incendiar metade da empresa.
-\end{keyideabox}
-
-\section{O custo da tarefa resolvida, não apenas do token}
-Calcula custo de chamadas, ferramentas, infraestrutura e revisão humana por tarefa concluída dentro do critério. Um modelo barato que obriga a três tentativas e duas correções pode ser a opção mais cara. Para latência, acompanha percentis, como p50 e p95, e a taxa de timeouts; a média esconde esperas raras mas importantes.
+\section{O custo por tarefa concluída}
+Calcula o custo de chamadas, ferramentas, infraestrutura e revisão humana por tarefa concluída dentro do critério. Um modelo barato que obriga a três tentativas e duas correções pode ser a opção mais cara. Compara candidatos nos mesmos casos e inclui as falhas. Na latência, acompanha a mediana, o p95 e a taxa de timeouts. O p95 ajuda a observar a cauda dos tempos mesmo quando a maioria das respostas é rápida.
 
 Uma cache de respostas ou documentos deve incluir o âmbito de autorização, versão da fonte e prazo de validade. Se um cliente deixa de ter acesso a um documento, uma resposta antiga em cache não pode contornar essa revogação. Nunca uses uma cache partilhada como memória informal entre clientes.
 
 Pseudonimizar reduz associação direta, mas os dados continuam pessoais quando podem ser reatribuídos. Regista por defeito identificadores técnicos e métricas; conserva texto bruto apenas quando necessário, com acesso, fundamento e retenção definidos. Para reproduzir incidentes, guarda uma amostra controlada, não um arquivo ilimitado de conversas~\citep{rgpd2016}.
+
+\section{O incidente dos cinco dias}
+\textbf{Ensaio executado.} A cache guarda a política fictícia \texttt{v1}, de dez dias úteis, com a chave \texttt{devolucoes}. Entra em vigor a \texttt{v2}, de cinco dias. Como a chave continua igual, a cache devolve a entrada antiga. A proposta tem todos os campos e o prazo é um inteiro positivo.
+
+O \emph{canário} é um pedido de teste que compara documento, versão, SHA-256 e prazo com a política vigente, obtida fora da cache. Com a \texttt{v2} ativa, a sonda encontra a \texttt{v1} e o simulador encaminha o pedido sem devolver o prazo antigo.
+
+\begin{table}[htbp]
+\small
+\begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}p{.19\textwidth}>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}X@{}}
+\toprule
+Etapa & Versão vigente & Proposta & Decisão \\
+\midrule
+Base & v1, 10 dias úteis & v1, 10 dias úteis & Validada \\
+Falha injetada & v2, 5 dias úteis & v1, 10 dias úteis & Encaminhada, sem prazo \\
+Recuperação & v2, 5 dias úteis & v2, 5 dias úteis & Validada \\
+\bottomrule
+\end{tabularx}
+\caption{Três etapas do ensaio sintético de cache. A proposta antiga está visível apenas no registo da sonda.}
+\label{tab:incidente-cache}
+\end{table}
+
+A recuperação usa a chave composta pelo documento e pela versão. A entrada \texttt{v1} fica na cache, mas a consulta da \texttt{v2} recupera os cinco dias. Os hashes e os estados estão no registo do ensaio. Num serviço, reverter o código e mudar a política vigente são decisões separadas.
+
+\begin{promptlabbox}{Reproduzir, conter e recuperar um incidente de cache}
+\textbf{Objetivo e contexto:} reproduzir os três estados da tabela~\ref{tab:incidente-cache}. Requisitos: Python 3.10+ e biblioteca padrão. Os dados são sintéticos e a execução tem zero chamadas a modelos.
+
+\textbf{Procedimento:} na raiz do projeto, executa o comando abaixo.
+\par\noindent\texttt{python3 -m exemplos.laboratorio.operacao}\par
+Compara a saída com \texttt{experiencias/operacao/resultado.json} e segue no código as chaves da cache.
+
+\textbf{Resultado esperado e validação:} a proposta antiga passa a verificação estrutural e é encaminhada sem prazo. Depois da correção, o teste confirma versão \texttt{v2}, hash correspondente e cinco dias úteis. Experimenta propor dez dias com os identificadores da versão certa. A verificação do prazo deve travar também essa proposta.
+
+\textbf{Falhas possíveis:} validar só o JSON, ler a versão de referência a partir da mesma cache ou restaurar o prazo antigo quando se reverte uma mudança de software.
+\end{promptlabbox}

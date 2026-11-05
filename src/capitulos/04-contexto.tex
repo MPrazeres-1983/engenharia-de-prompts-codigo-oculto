@@ -1,254 +1,52 @@
-\chapter{Contexto, Exemplos e Aprendizagem In-Context}
+\chapter{Contexto e Exemplos: Mostrar a Regra em Ação}
 \label{ch:contexto}
 
-\section{Zero-shot, one-shot e few-shot}
+\ficcao Chega à biblioteca uma mensagem: «Queria saber se o livro da reserva está pronto e prolongar o empréstimo de outro livro.» A lista de categorias tem «reserva», «renovação» e «outro». Se só podemos guardar uma, a lista deixa por resolver o caso de uma pessoa que pede duas coisas.
 
-Quando dás um prompt ao modelo, podes ou não incluir exemplos. Três modos clássicos:
+\section{Mostrar zero, um ou vários exemplos}
 
-\begin{itemize}[leftmargin=*]
-\item \textbf{Zero-shot}: não dás exemplo nenhum, apenas instruções.
-\item \textbf{One-shot}: dás um exemplo.
-\item \textbf{Few-shot}: dás alguns exemplos (2–10, tipicamente).
-\end{itemize}
+Para este exercício, escolhemos uma regra simples. Se houver um pedido de renovação, assinala «renovação». Se houver só um pedido sobre uma reserva, assinala «reserva». Nos restantes casos, assinala «outro». A prioridade é uma escolha do exercício. Noutro sistema, poderíamos guardar as duas categorias.
 
-\subsection*{Zero-shot}
+Podes dar apenas a regra (\emph{zero-shot}), acrescentar uma mensagem já classificada (\emph{one-shot}) ou mostrar várias (\emph{few-shot}). Uma boa demonstração mostra uma decisão que, de outra forma, seria fácil interpretar de duas maneiras:
 
-Vantagens:
+\begin{lstlisting}
+Mensagem: «A reserva está pronta? Preciso também de
+mais uma semana para devolver o livro que levei.»
+Categoria: renovação
+Justificação: a mensagem também pede para prolongar
+um empréstimo, que tem prioridade nesta regra.
+\end{lstlisting}
 
-\begin{itemize}[leftmargin=*]
-\item Mais simples de escrever.
-\item Ocupa menos tokens.
-\item Fácil de reutilizar em muitos contextos diferentes.
-\end{itemize}
+Os exemplos integram o contexto dessa utilização. A resposta pode mudar com a nova informação, mantendo os mesmos parâmetros do modelo. Esta é a ideia de \emph{aprendizagem em contexto} observada nos modelos e tarefas estudados por Brown e colaboradores~\citep{brown2020}. Com as mesmas regras, testa mensagens novas para ver se as demonstrações ajudam no teu caso.
 
-Desvantagens:
+\begin{promptlabbox}{Comparar zero, uma e várias demonstrações}
+\textbf{Objetivo e contexto:} comparar três maneiras de apresentar a mesma regra de classificação. Usa mensagens fictícias e escolhe cinco para o teste, incluindo uma com dois pedidos.
 
-\begin{itemize}[leftmargin=*]
-\item O modelo pode interpretar o pedido de forma inesperada.
-\item Sem exemplos, pode ser mais difícil comunicar critérios específicos; o efeito no acerto precisa de comparação.
-\end{itemize}
+\textbf{Procedimento:} classifica as cinco mensagens à mão e guarda essas respostas. Em conversas separadas, fornece a regra e as cinco mensagens. Na primeira, usa só a regra. Na segunda, inclui a demonstração acima. Na terceira, junta duas demonstrações novas, com «reserva» e «outro». Usa o mesmo modelo e a mesma configuração disponível.
 
-\subsection*{One-shot}
+\textbf{Resultado esperado e validação:} compara as categorias com as respostas de referência. Regista os erros, incluindo os casos em que as demonstrações introduzem um erro. Cinco mensagens permitem observar comportamentos concretos.
 
-Um exemplo já ajuda o modelo a perceber formato e estilo. Podes usar:
-
-\begin{itemize}[leftmargin=*]
-\item Um exemplo típico e “limpo”.
-\item Um exemplo que ilustre um caso limite importante.
-\end{itemize}
-
-\subsection*{Few-shot}
-
-Aqui começas a aproveitar a tal \emph{aprendizagem in-context}: o modelo infere padrões a partir dos exemplos no próprio prompt, sem alterar os pesos do modelo.
-
-Vantagens:
-
-\begin{itemize}[leftmargin=*]
-\item Muito poder para tarefas estruturadas (classificação, extração, reformulação).
-\item Permite ensinar “dialetos” muito específicos sem fine-tuning formal.
-\end{itemize}
-
-Desvantagens:
-
-\begin{itemize}[leftmargin=*]
-\item Consome tokens rapidamente.
-\item Se os exemplos forem inconsistentes, o modelo aprende a inconsistência.
-\end{itemize}
-
-\begin{promptlabbox}{Comparar zero-shot, one-shot e few-shot}
-\textbf{Objetivo e contexto:} Comparar demonstrações na classificação dos mesmos cinco emails fictícios. Os exemplos fornecidos devem ser outros emails.
-
-Escolhe uma tarefa simples, por exemplo: classificar e-mails em \emph{suporte técnico}, \emph{comercial} ou \emph{outro}.
-
-\medskip
-
-\textbf{Passo 1 — Zero-shot}
-
-Pede ao modelo para classificar 5 e-mails apenas com a lista de categorias e instruções básicas.
-
-\textbf{Passo 2 — One-shot}
-
-Acrescenta um exemplo de e-mail + categoria correta, antes da lista de e-mails a classificar.
-
-\textbf{Passo 3 — Few-shot}
-
-Acrescenta 3–4 exemplos variados (um de cada categoria, mais algum caso ambíguo).
-
-Compara a consistência das classificações nos três cenários.
-
-\textbf{Resultado esperado e validação:} Escreve etiquetas de referência antes de executar. Mede acertos por condição e guarda os erros; cinco casos exploram comportamento, sem estimar desempenho geral.
-
-\textbf{Falhas possíveis:} Usar emails do teste como exemplos, mudar etiquetas entre condições ou escolher apenas casos fáceis.
+\textbf{Falhas possíveis:} usar uma mensagem do teste como demonstração, mudar a regra entre condições ou contar justificações eloquentes como categorias corretas.
 \end{promptlabbox}
 
-\section{Ensinar formato vs. ensinar lógica}
+\section{O exemplo pode mostrar forma e significado}
 
-Quando incluis exemplos no prompt, podes estar a ensinar:
+Se precisares de uma tabela, escreve o nome das colunas e uma linha completa. Para encaminhar pedidos da biblioteca, «categoria», «excerto» e «informação em falta» permitem guardar a decisão, o trecho que a sustenta e o que ainda falta confirmar. A coluna «excerto» tem de citar palavras que estão na mensagem. A coluna «informação em falta» pode indicar que o número da reserva não foi fornecido. O formato e o significado de cada coluna ficam assim ligados.
 
-\begin{itemize}[leftmargin=*]
-\item \textbf{Formato}: como deve ser a estrutura do output (listas, JSON, secções).
-\item \textbf{Lógica}: como o modelo deve raciocinar ou tomar decisões.
-\end{itemize}
+Conserva as exceções na regra, mesmo quando todos os exemplos apresentados são simples. Se o modelo propuser mais demonstrações, revê-as com a regra à frente. Um rascunho que dá prioridade a reservas vai ensinar o contrário do que foi pedido. As mensagens usadas para demonstrar ficam separadas das reservadas para avaliar.
 
-\subsection*{Ensinar formato}
+\section{Organizar informação que chega de várias fontes}
 
-Aqui o objetivo é:
+A \emph{janela de contexto} é o espaço de informação que o modelo pode considerar de uma vez. Um índice curto e títulos claros ajudam o leitor a encontrar a passagem que interessa. Podemos medir se ajudam também o modelo. Quando passares a selecionar excertos automaticamente, o capítulo~\ref{ch:context-engineering} mostra como guardar a origem, a versão e a informação que foi retirada.
 
-\begin{itemize}[leftmargin=*]
-\item padronizar a saída,
-\item facilitar parsing posterior,
-\item evitar surpresas de layout.
-\end{itemize}
+\begin{promptlabbox}{Comparar um texto corrido com o mesmo texto organizado}
+\textbf{Objetivo e contexto:} perceber se títulos e um índice ajudam a encontrar uma passagem num documento que possas usar.
 
-Exemplo:
+\textbf{Procedimento:} escolhe uma pergunta factual e sublinha previamente o trecho que a responde. Numa conversa, dá o texto corrido. Noutra, junta títulos e um índice ao mesmo texto. Conserva todas as frases e faz a mesma pergunta, sem dizer em que secção está a resposta.
 
-\begin{lstlisting}
-Exemplo de output:
+\textbf{Resultado esperado e validação:} compara a resposta e a localização da evidência. Este ensaio avalia os títulos e o índice em conjunto. Para medir cada contribuição, cria uma condição adicional.
 
-TÍTULO: [uma frase curta]
-RESUMO: [3 a 5 frases]
-RISCO PRINCIPAL: [texto curto]
-OPORTUNIDADE PRINCIPAL: [texto curto]
-
-Agora aplica este formato ao seguinte texto:
-[...]
-\end{lstlisting}
-
-\subsection*{Ensinar lógica}
-
-Aqui a ênfase está no caminho, não só no destino. Em vez de só mostrar inputs e outputs, mostras também a explicação:
-
-\begin{lstlisting}
-Exemplo:
-
-Pergunta: "Se tenho 3 maçãs e como 1, quantas sobram?"
-Raciocínio: "Começo com 3, retiro 1, fico com 2."
-Resposta: "Sobram 2 maçãs."
-\end{lstlisting}
-
-O modelo infere que:
-
-\begin{itemize}[leftmargin=*]
-\item deve explicar o raciocínio passo a passo,
-\item deve terminar com uma resposta clara.
-\end{itemize}
-
-Idealmente, combinas os dois: formato e lógica.
-
-\begin{keyideabox}{Exemplos são mini-datasets de treino em contexto}
-Os exemplos fazem parte da entrada; não alteram os pesos durante a inferência habitual~\citep{brown2020}. Podem demonstrar regras, formatos e casos limite. Chamar-lhes «fine-tuning temporário» confunde duas operações diferentes.
-\end{keyideabox}
-
-\section{Exemplos bons, exemplos tóxicos}
-
-Nem todos os exemplos são iguais. Alguns ajudam, outros só acrescentam ruído.
-
-\subsection*{Características de bons exemplos}
-
-\begin{itemize}[leftmargin=*]
-\item \textbf{Representativos}: parecem-se com casos que realmente vais encontrar.
-\item \textbf{Claros}: sem ambiguidade sobre a resposta correta.
-\item \textbf{Diversos}: cobrem diferentes nuances (não só o “caso fácil”).
-\item \textbf{Consistentes}: seguem sempre o mesmo formato e critérios.
-\end{itemize}
-
-\subsection*{Exemplos tóxicos}
-
-\begin{itemize}[leftmargin=*]
-\item \textbf{Ambíguos} sem explicitamente dizer que são ambíguos.
-\item \textbf{Formatados de forma inconsistente}.
-\item \textbf{Com erros} que o modelo pode imitar (gramaticais, factuais, lógicos).
-\end{itemize}
-
-\begin{warningboxenv}{Não uses exemplos “rápidos” só para despachar}
-Copiar um pedaço qualquer de texto só para “ter um exemplo” é receita para comportamento errático. Em sistemas sérios, investe tempo a escolher exemplos com a mesma seriedade com que escolherias dados de treino.
-\end{warningboxenv}
-
-\section{Estratégias para janelas de contexto grandes}
-
-Modelos modernos permitem contextos enormes. Parece fantástico, até tentares meter lá dentro:
-
-\begin{itemize}[leftmargin=*]
-\item toda a documentação da tua empresa,
-\item o histórico completo de e-mails com o cliente,
-\item mais o prompt,
-\item mais exemplos,
-\item mais logs,
-\item mais anexos porque “já que há espaço, porque não?”
-\end{itemize}
-
-Resultado: um caos. Janela grande não é desculpa para não organizar.
-
-Estratégias práticas:
-
-\begin{itemize}[leftmargin=*]
-\item \textbf{Chunking}: dividir documentos longos em secções com títulos claros.
-\item \textbf{Resumos progressivos}: gerar resumos de blocos e trabalhar em cima dos resumos.
-\item \textbf{Marcadores e índices}: indicar explicitamente em que secção estão as respostas prováveis.
-\item \textbf{Contexto focalizado}: selecionar apenas as partes relevantes via RAG ou filtros heurísticos.
-\end{itemize}
-
-\begin{promptlabbox}{Comparar parede de texto vs. contexto estruturado}
-\textbf{Objetivo e contexto:} Medir estrutura do contexto com o mesmo documento autorizado e a mesma pergunta.
-
-Pega num documento de 10 páginas (relatório, artigo, documentação). Testa duas abordagens:
-
-\medskip
-
-\textbf{A) Parede de texto}
-
-Copia tudo para o prompt e pergunta algo específico (por exemplo, “qual é o principal risco identificado?”).
-
-\medskip
-
-\textbf{B) Contexto estruturado}
-
-Divide o documento em secções com títulos, faz um mini-índice e indica explicitamente:
-
-\begin{lstlisting}
-Secção 1: Introdução
-Secção 2: Metodologia
-Secção 3: Resultados
-Secção 4: Riscos e limitações
-\end{lstlisting}
-
-Depois, faz a mesma pergunta sem indicar a secção da resposta. Mantém o conteúdo idêntico e altera apenas a organização; indicar a localização acrescentaria uma segunda variável.
-
-Compara a presença dos pontos corretos e a referência ao excerto que os sustenta. Não uses a confiança verbal como medida de acerto.
-
-\textbf{Resultado esperado e validação:} Cria uma lista prévia de pontos e localizadores. Compara cobertura e evidência; não reveles a secção correta numa só condição.
-
-\textbf{Falhas possíveis:} Mudar o conteúdo ao acrescentar títulos, resumir só uma versão ou usar a confiança verbal como medida de precisão.
+\textbf{Falhas possíveis:} mudar o conteúdo, dar a secção certa numa só condição ou tomar o tom confiante como medida de acerto.
 \end{promptlabbox}
 
-\section{Criar datasets em contexto com o próprio modelo}
-
-Uma técnica poderosa (e fácil de abusar) é usar o próprio LLM para gerar exemplos adicionais. Por exemplo:
-
-\begin{itemize}[leftmargin=*]
-\item dás 3 exemplos curados por ti,
-\item pedes ao modelo para gerar mais 20 no mesmo formato,
-\item usas esses 20 como \emph{few-shot} em prompts futuros.
-\end{itemize}
-
-Isto pode acelerar muito o processo, mas vem com riscos:
-
-\begin{itemize}[leftmargin=*]
-\item O modelo pode introduzir enviesamentos ou erros subtilmente.
-\item Se não validares os exemplos gerados, estás a treinar-te em cima de dados sintéticos não verificados.
-\end{itemize}
-
-Uso responsável:
-
-\begin{itemize}[leftmargin=*]
-\item Usa o modelo para gerar \emph{rascunhos} de exemplos.
-\item Revê e edita manualmente antes de os canonizares.
-\item Mantém uma separação mental entre exemplos “curados por humanos” e “sugeridos pela IA”.
-\end{itemize}
-
-\begin{keyideabox}{A IA pode ajudar a construir o dataset, mas não deve ser o árbitro final}
-Pedir à IA para inventar exemplos é legítimo. Pedir para verificar se os próprios exemplos estão corretos é pedir à raposa para auditar a cerca das galinhas.
-\end{keyideabox}
-
-\section{Exemplos da Lavandaria que não contam o fim da história}
-Mostra uma reclamação de desaparecimento, uma pergunta sobre prazo e uma mensagem ambígua. Reserva outras mensagens para testar. Se os mesmos exemplos servirem para ensinar e medir, o resultado sobrestima o que o sistema consegue fazer com reclamações novas. Numa tarefa de classificação, inclui a opção «outro» e define o que fazer quando há duas intenções.
+Até aqui, demos ao modelo a regra e os exemplos. A seguir, vamos escolher a perspetiva a partir da qual queremos que leia o pedido e distinguir essa escolha dos papéis definidos pela aplicação.

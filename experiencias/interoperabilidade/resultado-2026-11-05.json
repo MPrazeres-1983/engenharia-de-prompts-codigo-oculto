@@ -1,0 +1,51 @@
+{
+  "mcp": "2026-07-28",
+  "a2a": "1.0",
+  "verificacoes": [
+    {
+      "caso": "Descobrir ferramenta MCP",
+      "observado": "consultar_estado"
+    },
+    {
+      "caso": "Rejeitar versão MCP incompatível",
+      "observado": -32022
+    },
+    {
+      "caso": "Rejeitar identidade nos argumentos MCP",
+      "observado": {
+        "code": -32602,
+        "message": "Ferramenta ou argumentos inválidos"
+      }
+    },
+    {
+      "caso": "Descobrir serviço A2A",
+      "observado": "HTTP+JSON"
+    },
+    {
+      "caso": "Pedir o número em falta",
+      "observado": "TASK_STATE_INPUT_REQUIRED"
+    },
+    {
+      "caso": "Isolar consulta e retoma de tarefas",
+      "observado": 404
+    },
+    {
+      "caso": "Preservar tarefa e exigir credencial",
+      "observado": "200 para A e 401 sem credencial"
+    },
+    {
+      "caso": "Concluir a mesma tarefa com artefacto",
+      "observado": "LAV-001: em análise."
+    },
+    {
+      "caso": "Equiparar reclamação privada e ausente",
+      "observado": "Não foi possível consultar essa reclamação. A equipa deve analisar o pedido."
+    },
+    {
+      "caso": "Consultar como o titular",
+      "observado": "LAV-002: aguarda contacto."
+    }
+  ],
+  "total": 10,
+  "chamadas_llm": 0
+}

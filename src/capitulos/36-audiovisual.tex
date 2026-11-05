@@ -1,0 +1,64 @@
+\chapter{Imagem em Movimento, Voz e Música: um Pequeno Estúdio}
+\label{ch:audiovisual}
+
+\ficcao A meia estava no balcão. O gerente espreitou pelo vidro do tambor, convencido de que a máquina guardava a outra. Já tinha preparado o discurso sobre reincidência quando viu, no cesto ao lado, uma faixa de lã a pender para fora. O suspeito passou a servir de cenário.
+
+No cartaz do capítulo~\ref{ch:imagem-design}, as duas meias cabem no mesmo quadro. Se cortarmos a imagem em três planos, podemos fazer o espectador seguir a suspeita do gerente e reparar no cesto só no fim. A descoberta dá-nos uma história inteira com um balcão, uma máquina e quinze segundos.
+
+\section{O guião mais pequeno que ainda conta alguma coisa}
+Começa com uma mudança que o espectador consiga seguir. Primeiro falta uma peça. Depois há uma hipótese. No último plano surge uma pista que obriga a reconsiderá-la. O tambor recebe cinco segundos de atenção e fica dispensado de prestar declarações.
+
+Regista duração, enquadramento, ação, som e ligação para cada plano. Em \emph{A Meia Testemunha}, usámos cortes diretos e intertítulos. Três planos de cinco segundos dão quinze na linha temporal. Uma sobreposição alteraria a conta, por isso confirmámos a duração no ficheiro final.
+
+\begin{table}[htbp]
+\small
+\begin{tabularx}{\textwidth}{@{}l>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}X@{}}
+\toprule
+Tempo & Enquadramento & Intertítulo \\
+\midrule
+0–5 s & Uma meia no balcão, cesto fora do quadro & Faltava uma meia. \\
+5–10 s & Vidro e tambor da máquina & A máquina parecia culpada. \\
+10–15 s & A segunda meia na borda exterior do cesto & Estava no cesto. Do lado de fora. \\
+\bottomrule
+\end{tabularx}
+\caption{Planos montados em \emph{A Meia Testemunha}. Os intervalos começam aos 0, 5 e 10 segundos.}
+\label{tab:meia-planos}
+\end{table}
+
+\textbf{Resultado observado.} A exportação MP4 contém uma faixa de vídeo H.264, a $1280 \times 720$ píxeis e 24 fotogramas por segundo. A contagem deu 360 fotogramas e a duração registada foi de 15 segundos. A curta é muda. O guião visual usa fotogramas da exportação aos 2,5, 7,5 e 12,5 segundos. Confere os ficheiros em \nolinkurl{exemplos/atelier/saidas}. A inspeção editorial verificou as pistas e os intertítulos. A compreensão por espectadores fica para o exercício.
+
+\section{Gerar planos curtos, montar a relação}
+Uma geração longa pode perder identidade ou transformar objetos. Dividir em planos permite controlar material e substituir apenas um trecho. Uma imagem de referência pode servir de ponto de partida, se a ferramenta suportar esse controlo. Regista os parâmetros efetivamente disponíveis, sem presumir funcionalidades a partir do nome de um produto.
+
+Avalia continuidade: posição de objetos, direção do olhar, lado por onde a personagem sai, quantidade de peças e iluminação. Uma mudança pode ser deliberada, como um corte de passagem de tempo. Se não é deliberada, pode parecer um erro de montagem. A beleza de cada plano isolado não resolve a relação entre eles.
+
+Para informação exata, como legendas e cronómetros, prefere camadas editáveis. Se o objetivo é demonstrar uma interface, grava a interação real ou constrói uma animação verificável. Um vídeo gerado de alguém a carregar num botão não demonstra que a aplicação executou a operação.
+
+\section{Voz: texto, pronúncia e consentimento}
+Para narração, prepara um texto que caiba no tempo e lê-o em voz alta. Uma frase com muitos números, siglas ou nomes pode exigir mais pausas. Testa a pronúncia antes da versão final. Uma voz natural pode continuar a ler mal um nome ou a tornar ambígua uma negação.
+
+TTS transforma texto em fala; ASR transforma fala em texto. Algumas arquiteturas trabalham diretamente com áudio. Estas capacidades não autorizam imitar uma pessoa real. Para uma voz própria ou licenciada, regista consentimento, finalidade e condições de utilização. Não uses uma imitação para criar a impressão enganosa de que alguém aprovou ou disse o que nunca disse.
+
+Para acessibilidade, oferece legendas e uma transcrição revista. Revê a sincronização e identifica quem fala quando necessário. Um ficheiro de legendas com texto correto e tempos errados continua a falhar para o espectador.
+
+\section{Música e desenho sonoro}
+Um pedido musical pode indicar função, duração aproximada, energia, instrumentação e espaço para a voz. «Uma base discreta para uma explicação» é uma finalidade diferente de «um refrão memorável». Compara versões pelo papel que cumprem no projeto, sem confundir semelhança a uma referência com autorização para a reproduzir.
+
+Música, composição, interpretação e gravação podem envolver direitos diferentes. Termos de uma plataforma, origem de amostras e materiais de referência precisam de verificação. Guarda também a licença de sons que adicionas na montagem. Um recurso anunciado como gratuito pode impor atribuição ou restrições de utilização.
+
+Na mistura, ouve com auscultadores e colunas simples. A voz tem de continuar percetível. Cortes bruscos, distorção e mudanças abruptas de volume merecem correção. O valor exato de normalização depende do destino; não existe um único nível obrigatório para todos os meios.
+
+\section{Animar com controlo explícito}
+Nem toda a animação pede geração de vídeo. Se uma bola precisa de cruzar uma linha exatamente ao segundo quatro, uma animação por keyframes ou código oferece controlo direto. Se queremos uma textura visual imprevisível, um gerador pode ser útil. Combinar recursos gerados com movimento determinístico pode dar o melhor controlo para um projeto pequeno.
+
+Esta separação evita gastar tentativas a pedir precisão temporal a um mecanismo que não a garante. Também ajuda na revisão: consegues mudar uma legenda ou atrasar um som sem regenerar o cenário.
+
+\begin{promptlabbox}{Uma curta de quinze segundos, sem equipa de cinema}
+\textbf{Objetivo e contexto:} remontar a descoberta da segunda meia. Usa a ilustração do projeto ou três fotografias próprias e um editor de vídeo. Podes começar pela curta muda.
+
+\textbf{Procedimento:} monta os planos da tabela~\ref{tab:meia-planos}. Faz uma segunda versão que mostre o cesto logo no início. Conserva as palavras e os quinze segundos. Se acrescentares voz, usa uma gravação autorizada e sincroniza as legendas.
+
+\textbf{Resultado esperado e validação:} a revelação acontece em momentos diferentes. Confere os cortes, a legibilidade e a duração nos dois ficheiros. Mostra uma versão a alguém e pergunta em que plano percebeu onde estava a meia. Regista a resposta dessa pessoa e a versão que viu.
+
+\textbf{Falhas possíveis:} o primeiro enquadramento mostra o cesto por acidente, o intertítulo tapa a faixa clara ou o corte chega antes de se conseguir ler. Com áudio, verifica também pronúncia, cortes e condições de utilização.
+\end{promptlabbox}

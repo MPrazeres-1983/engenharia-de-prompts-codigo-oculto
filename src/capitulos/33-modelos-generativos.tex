@@ -1,0 +1,85 @@
+\chapter{Gerar não é uma Arquitetura: Linguagem, Difusão e Outras Famílias}
+\label{ch:generativos}
+
+Uma aplicação escreve, desenha e fala na mesma janela. A interface convida a imaginar uma única máquina a fazer tudo. Pode haver um modelo comum, vários modelos especializados, ferramentas ou uma combinação. Para utilizar ou avaliar o sistema, interessa saber que operações estão realmente presentes.
+
+Vamos entrar por uma experiência mental: pedes uma bicicleta vermelha numa rua molhada. A imagem surge, mas uma roda parece pertencer à bicicleta de trás. Uma nova tentativa resolve a roda e troca a cor. Perceber esta dificuldade não exige assumir que existe uma pequena oficina dentro do computador. Exige distinguir como a saída é construída, como o pedido a condiciona e como verificamos relações entre elementos.
+
+\section{Autorregressão: construir uma sequência}
+Nos modelos autorregressivos, cada elemento é gerado condicionado nos anteriores. O capítulo~\ref{ch:fundamentos} apresenta a fatorização da probabilidade. O elemento não tem de ser uma palavra: pode representar parte de texto, áudio ou outra codificação. A geração sequencial introduz uma dependência temporal, mesmo quando o treino permite bastante paralelismo.
+
+Uma sequência provável não é necessariamente uma sequência verdadeira. Uma frase sobre uma política inexistente pode ser coerente com padrões de linguagem. Acrescentar recuperação e verificadores muda o sistema, sem transformar o objetivo de previsão numa definição de verdade.
+
+Também não basta saber que há um Transformer. Há diferenças entre codificadores, descodificadores, atenção causal, atenção cruzada e representações de cada modalidade. O nome de uma família não revela todos os detalhes de uma implementação comercial.
+
+Uma sequência longa acumula compromissos. O início condiciona os elementos seguintes; corrigir um detalhe pode exigir rever o que depende dele. Uma aplicação pode acrescentar planeamento ou edição à geração básica, mas esses mecanismos têm de ser descritos separadamente. A interface «reescreve esta frase» não nos diz se houve nova geração de todo o parágrafo, alteração local ou vários passos internos.
+
+\section{Difusão: aprender a retirar ruído}
+Em modelos de difusão, uma construção de treino acrescenta ruído a dados e aprende uma transformação associada à reversão desse processo. DDPM é um trabalho original importante desta família~\citep{ho2020}. Na geração, parte-se de uma variável ruidosa e aplica-se um procedimento aprendido para produzir uma amostra. A descrição exata depende do objetivo e do método de amostragem.
+
+Uma intuição útil é restaurar progressivamente uma imagem degradada. O limite da analogia é essencial: na geração de uma imagem nova, não existe necessariamente uma fotografia original escondida por baixo do ruído. A rede aprendeu regularidades de dados; não está a revelar uma fotografia que alguém guardou naquela seed.
+
+Sistemas de difusão latente operam num espaço comprimido por um codificador e descodificador, em vez de executar todo o processo no espaço de píxeis~\citep{rombach2022}. A compressão pode reduzir o custo, mas também participa nos limites de detalhe. O texto condicionante orienta a amostra por mecanismos da arquitetura. «Luz suave» não é uma chamada a uma lâmpada dentro da máquina.
+
+\textbf{Aprofundamento opcional.} Num modelo probabilístico de difusão para remoção de ruído (DDPM), $x_0$ é o sinal inicial e $x_t$ a versão ruidosa no passo $t$. A letra $\epsilon$ (épsilon) representa o ruído, sorteado de uma distribuição normal padrão. A sua média é zero e a sua variância, uma medida da dispersão, é um. O processo fixa $\bar\alpha_t$, um número entre zero e um que controla a escala das duas parcelas. A raiz quadrada de um número é o valor não negativo que, multiplicado por si mesmo, dá esse número:
+\[
+x_t=\sqrt{\bar\alpha_t}x_0+\sqrt{1-\bar\alpha_t}\,\epsilon.
+\]
+A primeira parcela é o sinal original com escala alterada. A segunda é o ruído com a sua própria escala. Uma imagem teria muitos valores. Aqui vamos acompanhar só um.
+
+Escolhemos sinteticamente $x_0=2$, $\bar\alpha_t=0.64$ e uma realização $\epsilon=-1$. Obtemos $0.8\times2+0.6\times(-1)=1$. Não reconstruímos uma imagem nem treinámos um modelo: abrimos uma operação do processo direto. A tarefa de aprender a inverter o processo estatisticamente e o procedimento de geração são etapas adicionais. «Retirar ruído» é uma intuição de entrada; não dispensa essas escolhas.
+
+A diferença entre treino e geração aparece de novo. No treino, dispomos de dados que permitem criar exemplos ruidosos e um objetivo de aprendizagem. Ao gerar uma amostra nova, não recebemos a fotografia final que queremos revelar. O condicionamento restringe o tipo de amostra procurada; não transforma uma instrução ambígua numa geometria completamente especificada.
+
+\section{Duas outras maneiras de formular a geração}
+Num \emph{autoencoder variacional}, uma parte do modelo converte a entrada numa representação interna, chamada \emph{latente}, e outra usa essa representação para reconstruir a entrada. A primeira parte aprende uma distribuição de possibilidades para essa representação. O treino concilia reconstruir os dados com manter uma distribuição interna utilizável para gerar amostras~\citep{kingma2014}. Numa rede generativa adversarial, o gerador cria amostras e o discriminador tenta distingui-las das que vêm dos dados. A dificuldade que cada um põe ao outro faz parte do treino~\citep{gan2014}.
+
+As distinções ajudam a escolher perguntas. Num gerador adversarial, a dinâmica do treino entre componentes importa. Numa reconstrução latente, interessa a informação que a compressão preserva. Numa geração iterativa, interessam o número de passos e o método de amostragem. Não se deduz qualidade final apenas contando parâmetros.
+
+Estas famílias também podem combinar-se. A existência de uma representação latente não prova, por si só, que a geração usa difusão; a presença de atenção não implica geração autorregressiva. «Usa redes neuronais» seria uma descrição tão insuficiente como explicar uma estação ferroviária dizendo que usa metal. Para escolher uma experiência, precisamos das operações que afetam a tarefa.
+
+\section{Representações multimodais e alinhamento entre modalidades}
+Para relacionar texto e imagem, um método pode aprender representações que aproximam pares correspondentes e afastam pares não correspondentes, como no trabalho CLIP~\citep{radford2021clip}. Essa associação não equivale a uma compreensão infalível de tudo o que uma imagem contém. Texto pequeno, negações e relações espaciais continuam a exigir avaliação específica.
+
+Uma aplicação multimodal pode extrair texto por OCR, usar um codificador visual, converter fala em texto ou processar áudio de outra forma. A qualidade final depende do conjunto. Se uma negação desaparece na transcrição, o modelo seguinte pode raciocinar de forma coerente sobre a frase errada.
+
+Convém ainda distinguir compreender uma entrada e produzir uma saída. Aceitar imagens e responder com texto não implica gerar imagens. Gerar áudio não implica reconhecer quem fala, nem autoriza fazê-lo. O catálogo de modalidades é uma descrição de interfaces, não um passaporte de competências.
+
+\section{A roda trocada mostra o que a média esconde}
+No exemplo fictício da bicicleta, uma imagem globalmente convincente pode falhar uma relação: que roda pertence a que objeto. Um critério de avaliação precisa de separar qualidade visual, cumprimento do pedido, relações espaciais e legibilidade. Uma média de agrado não identifica qual destas dimensões falhou.
+
+Podemos transformar o pedido numa pequena ficha: uma bicicleta, quadro vermelho, duas rodas ligadas ao mesmo quadro, rua molhada, sem texto. A ficha não garante sucesso; permite encontrá-lo ou rejeitá-lo. Depois, alterar uma condição de cada vez ajuda a descobrir quais as restrições que o sistema consegue manter. O capítulo~\ref{ch:imagem-design} aplica este método a um projeto com objetivo e destinatário.
+
+Há uma fronteira entre regularidade visual e verdade do mundo. Uma paisagem inventada pode ser um excelente resultado criativo. A mesma paisagem apresentada como prova de um acontecimento exige outra avaliação. O mecanismo de geração não muda de natureza porque trocámos a legenda; mudam o uso, a alegação e a responsabilidade de verificar.
+
+\section{Seeds, controlo e repetibilidade}
+Uma seed inicializa um gerador pseudoaleatório. Pode ajudar a repetir uma execução quando modelo, código, parâmetros e ambiente também se mantêm. Não é um identificador universal de imagem. Trocar a versão ou o método pode produzir outra saída com o mesmo número.
+
+Num projeto criativo, guarda o original, as referências autorizadas, o pedido, a versão identificável, a configuração e as edições. Se a plataforma não expõe esses detalhes, regista o que observaste. Uma captura do botão «gerar» não demonstra toda a proveniência, mas um registo incompleto identificado é melhor do que inventar reprodutibilidade.
+
+\begin{table}[htbp]
+\small
+\begin{tabularx}{\textwidth}{@{}lXX@{}}
+\toprule
+Família / mecanismo & Pergunta útil & Inferência a evitar \\
+\midrule
+Autorregressão & Que unidades e limites de geração? & Texto provável significa facto confirmado. \\
+Difusão & Que condicionamento, passos e espaço? & A seed contém uma imagem original. \\
+Representação conjunta & Que relações foram avaliadas? & Proximidade vetorial prova compreensão geral. \\
+Pipeline multimodal & Que componente pode perder informação? & Uma única janela implica um único modelo. \\
+\bottomrule
+\end{tabularx}
+\caption{Perguntas de mecanismo que ajudam a ler documentação e resultados.}
+\end{table}
+
+\begin{promptlabbox}{Desenhar a máquina que a interface esconde}
+\textbf{Objetivo e contexto:} mapear uma tarefa multimodal sem presumir detalhes privados. Escolhe «fotografia de apontamentos para áudio de revisão».
+
+\textbf{Procedimento:} desenha os passos possíveis: extração, confirmação do texto, síntese e voz. Marca os que a documentação confirma e os que são apenas hipóteses. Introduz deliberadamente um sinal de menos difícil de ler e verifica a transcrição antes de gerar a explicação.
+
+\textbf{Resultado esperado e validação:} o texto confirmado mantém sinais e unidades. O mapa separa arquitetura documentada de proposta conceptual.
+
+\textbf{Falhas possíveis:} inventar um mecanismo interno, usar a voz fluente para validar a transcrição ou confundir geração raster com desenho vetorial editável.
+\end{promptlabbox}
+
+A interface voltou a parecer simples: uma fotografia entra, uma voz sai. Agora sabemos por que a simplicidade pode esconder etapas diferentes. O próximo capítulo acompanha esse percurso entre modalidades e procura o lugar em que um sinal, uma palavra ou uma relação se pode perder.

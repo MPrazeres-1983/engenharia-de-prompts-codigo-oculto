@@ -1,0 +1,135 @@
+{
+  "data": "2026-11-04",
+  "python": "3.12.14",
+  "codigo": "exemplos/laboratorio/adaptacao.py",
+  "codigo_sha256": "90bed4b7f6a808168bb5396f462354c6032db4f2e947e6c8a9e3f67a51d651e1",
+  "resultado": {
+    "tipo": "treino executado de adaptador rank-1 linear 2x2; dados sintéticos",
+    "limite": "não é ajuste de LLM; não mede memória, linguagem ou hardware",
+    "configuracao": {
+      "passos": 1200,
+      "taxa": 0.05,
+      "alpha_div_r": 1,
+      "a_inicial": [
+        0.1,
+        -0.1
+      ],
+      "b_inicial": [
+        0.0,
+        0.0
+      ]
+    },
+    "treino": [
+      [
+        [
+          -1,
+          0
+        ],
+        [
+          -2,
+          1
+        ]
+      ],
+      [
+        [
+          1,
+          0
+        ],
+        [
+          2,
+          -1
+        ]
+      ],
+      [
+        [
+          0,
+          -1
+        ],
+        [
+          -2,
+          1
+        ]
+      ],
+      [
+        [
+          0,
+          1
+        ],
+        [
+          2,
+          -1
+        ]
+      ]
+    ],
+    "teste_reservado": [
+      [
+        [
+          1,
+          1
+        ],
+        [
+          4,
+          -2
+        ]
+      ],
+      [
+        [
+          -1,
+          2
+        ],
+        [
+          2,
+          -1
+        ]
+      ],
+      [
+        [
+          2,
+          -1
+        ],
+        [
+          2,
+          -1
+        ]
+      ]
+    ],
+    "ajuste": {
+      "base": [
+        [
+          1.0,
+          0.0
+        ],
+        [
+          0.0,
+          1.0
+        ]
+      ],
+      "a": [
+        -0.7965408781972503,
+        -1.593081756394503
+      ],
+      "b": [
+        -1.2554283494692982,
+        1.2554283494692982
+      ],
+      "perda_inicial": 2.5,
+      "perda_final": 1.2356766523188505e-30
+    },
+    "mse_teste": 7.691393825904865e-30,
+    "delta_aprendido": [
+      [
+        0.9999999999999992,
+        2.0000000000000013
+      ],
+      [
+        -0.9999999999999992,
+        -2.0000000000000013
+      ]
+    ],
+    "alvo_delta_posto_dois": {
+      "perda_inicial": 0.5,
+      "perda_final": 0.25,
+      "limite_inferior_neste_conjunto": 0.25
+    }
+  }
+}

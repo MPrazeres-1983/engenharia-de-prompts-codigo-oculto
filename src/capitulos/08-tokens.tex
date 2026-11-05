@@ -1,65 +1,29 @@
-\chapter{Tokens, Temperatura e Controlo de Loucura}
+\chapter{Tokens e Escolhas na Geração de Texto}
 \label{ch:tokens}
 
-\section{Tokenização e as suas consequências desagradáveis}
+Uma peça de roupa pode chegar com a etiqueta «lã», um código e um desenho minúsculo de uma bacia. Para nós, cada um tem um significado. Para contar o que cabe na entrada de um modelo de texto, precisamos de conhecer a forma como o tokenizador representa esses sinais.
 
-Um LLM não vê “palavras” nem “frases” como tu. Vê \emph{tokens}. Dependendo do modelo, um token pode ser:
+\section{Como o texto se torna uma sequência de IDs}
+O tokenizador converte o texto numa sequência de identificadores do seu vocabulário. Um token pode representar uma palavra inteira, parte dela, pontuação ou uma sequência que inclui espaços. Usa o tokenizador que corresponde à versão e configuração do modelo, pois a segmentação pode variar.
 
-\begin{itemize}[leftmargin=*]
-\item uma palavra inteira (\texttt{gato}),
-\item um pedaço de palavra (\texttt{pro}, \texttt{gram}, \texttt{ação}),
-\item um símbolo (\texttt{?}, \texttt{,}, \texttt{)}),
-\item ou até espaços em branco.
-\end{itemize}
+\subsection*{Espaço e custos}
+Quando o serviço dá um limite em tokens, conta com o texto e com a estrutura que a aplicação acrescenta, conforme a interface. Cinco páginas de código e cinco páginas de prosa podem ter contagens diferentes. A contagem serve para decidir o que cabe e, quando a cobrança usa tokens, para estimar parte do custo.
 
-O processo de partir texto em tokens chama-se \emph{tokenização}. Cada modelo tem o seu tokenizador com regras próprias. Isto leva a efeitos curiosos:
-
-\begin{itemize}[leftmargin=*]
-\item Palavras raras ou com acentos estranhos podem partir-se em muitos tokens.
-\item Algumas sequências comuns (como \texttt{https://}) podem ser um único token.
-\item Um emoji pode ocupar vários tokens; mede com o tokenizador correspondente, sem assumir equivalência entre um símbolo visível e um token.
-\end{itemize}
-
-Porque é que isto te deve interessar como engenheiro de prompts?
-
-\subsection*{1. Custos e limites contam em tokens, não em palavras}
-
-Quando a documentação diz “máximo 8k tokens” ou “custo de X por 1M tokens”, não é “palavras”. Um texto de 500 palavras pode ser 700, 800 ou mais tokens, dependendo da língua e do estilo.
-
-\subsection*{2. Contar letras ou sílabas é pedir problemas}
-
-Se pedires:
-
-\begin{quote}
-\small
-“Escreve um poema em que cada verso tem exatamente 7 sílabas.”
-\end{quote}
-
-o modelo tem de fazer ginástica para conectar o teu pedido (sílabas) com a sua realidade interna (tokens). Às vezes acerta surpreendentemente bem; noutras falha miseravelmente. A tokenização, por si só, não prova incapacidade de contagem. Contudo, não existe garantia de cumprimento da métrica poética; valida o resultado com um critério linguístico apropriado.
-
-\subsection*{3. Formatação estranha pode rebentar a tokenização}
-
-Sequências como:
+\subsection*{Dois textos que parecem iguais}
+Em Python, podemos representar «é» por um ponto de código ou por um \texttt{e} seguido de um acento combinante. O seguinte cálculo mostra o número de pontos de código e de bytes em UTF-8 de cada representação.
 
 \begin{lstlisting}
-########## TÍTULO ##########
+>>> [ (len(s), len(s.encode("utf-8")))
+...   for s in ("\u00e9", "e\u0301") ]
+[(1, 2), (2, 3)]
 \end{lstlisting}
 
-ou
-\begin{lstlisting}
----- passo 1 ----
-\end{lstlisting}
-
-são perfeitamente válidas para humanos, mas podem gerar tokens pouco usuais. Não é grave, mas se enchermos o prompt de ruído decorativo, gastamos tokens sem acrescentar significado.
-
-\begin{warningboxenv}{Cuidado com “prompts artísticos”}
-Prompts cheios de emojis, molduras ASCII e ornamentos tipo “====” podem ser bonitos para screenshots no Twitter, mas podem aumentar o custo sem melhorar o resultado; isso deve ser testado, não presumido. Num sistema de produção, menos espetáculo e mais clareza.
-\end{warningboxenv}
+A contagem de tokens depende ainda do tokenizador e da normalização que este aplicar. Para contar palavras, letras ou sílabas numa saída, define a regra da tarefa e verifica segundo essa regra. Um limite de tokens controla outro tamanho.
 
 \begin{promptlabbox}{Ver a tokenização com os teus próprios olhos}
 \textbf{Objetivo e contexto:} Medir segmentação com um tokenizador identificado. Guarda os três textos completos e a versão usada.
 
-Quase todas as grandes APIs fornecem uma forma de ver como um texto é tokenizado (via ferramentas web ou SDKs).
+Usa um tokenizador fornecido ou documentado para o modelo escolhido. Se a interface só mostrar a contagem de utilização, regista essa contagem e a diferença entre o pedido escrito e a chamada completa.
 
 \medskip
 
@@ -78,16 +42,20 @@ Depois disso, nunca mais vais olhar para “contar palavras” da mesma forma.
 \textbf{Falhas possíveis:} Usar tokenizador de outro modelo, confundir caracteres com tokens ou introduzir normalização sem a registar.
 \end{promptlabbox}
 
-\section{Parâmetros de \emph{sampling}: temperatura, top-k e top-p}
-O modelo produz \emph{logits}, scores reais $z_i$ para tokens candidatos. Para $T>0$, uma forma comum de obter probabilidades é
+\section{Como se escolhe o próximo token}
+Quando chega a vez de escolher o token seguinte, o modelo atribui uma pontuação a cada candidato. Chamamos \emph{logits} às pontuações antes da conversão em probabilidades. \emph{Amostragem}, ou \emph{sampling}, é fazer uma escolha ao acaso com essas probabilidades. Se dois candidatos tiverem pesos de $3/4$ e $1/4$, imagina quatro papéis num saco. Três têm o primeiro candidato e um tem o segundo. Tirar um papel faz com que o primeiro seja mais provável, mas ambos podem sair.
+
+A \emph{temperatura} altera a diferença entre as probabilidades. Baixá-la dá mais peso aos candidatos mais pontuados. Isso ajuda a repetir escolhas, incluindo escolhas erradas. Se quisermos saber porquê, podemos abrir a conta.
+
+\textbf{Aprofundamento opcional.} Para temperatura positiva $T$, divide cada pontuação $z_i$ por $T$ e aplica a softmax do capítulo~\ref{ch:transformer}. A função $\exp(x)$ quer dizer $e^x$. Em baixo somamos os valores obtidos para todos os candidatos $j$, para que as probabilidades somem um:
 \[
 p_i(T)=\frac{\exp(z_i/T)}{\sum_j\exp(z_j/T)}.
 \]
-Reduzir $T$ concentra massa nos scores maiores; aumentar $T$ torna a distribuição mais uniforme. Isto altera a amostragem, não a veracidade do que está a ser dito. Um erro muito provável pode continuar muito provável a baixa temperatura.
+Com dois logits, $\ln 2$ e $0$, a $T=1$ os valores antes da divisão final são 2 e 1. O primeiro candidato tem probabilidade $2/(2+1)=2/3$. A $T=0{,}5$, dividir a primeira pontuação por meio duplica o expoente. Os valores passam a 4 e 1, e a probabilidade a $4/5$. A $T=2$, desce para cerca de $0{,}586$.
 
-\emph{Top-k} restringe a escolha aos $k$ candidatos de maior probabilidade. \emph{Top-p}, ou nucleus sampling, retém o menor prefixo da lista ordenada cuja probabilidade acumulada atinge pelo menos $p$; depois renormaliza~\citep{holtzman2020}. Empates e combinação de filtros dependem da implementação.
+\emph{Top-k} restringe a escolha aos $k$ candidatos de maior probabilidade. Com $k=2$, ficam os dois primeiros. \emph{Top-p}, ou \emph{nucleus sampling}, começa pelo candidato mais provável e vai acrescentando os seguintes até a soma chegar pelo menos a $p$. Recalcula então os pesos entre os candidatos que ficaram~\citep{holtzman2020}. Empates e combinação de filtros dependem da implementação.
 
-Com probabilidades ilustrativas $[0.60,0.25,0.10,0.05]$, top-p de $0.80$ retém os dois primeiros candidatos, cuja massa é $0.85$. Top-k igual a 1 corresponde a escolha gulosa no passo considerado. O limite $T\to0^+$ também concentra a escolha nos máximos; muitos serviços tratam o valor zero como opção especial. Não substituas essa convenção pela divisão por zero na fórmula.
+Com probabilidades ilustrativas $[0.60,0.25,0.10,0.05]$, top-p de $0.80$ retém os dois primeiros candidatos, cuja massa é $0.85$. Depois de renormalizar, as probabilidades são $12/17$ e $5/17$. Top-k igual a 1 corresponde a escolha gulosa no passo considerado. O limite $T\to0^+$ também concentra a escolha nos máximos; muitos serviços tratam o valor zero como opção especial. Não substituas essa convenção pela divisão por zero na fórmula.
 
 \begin{warningboxenv}{Repetível não significa garantidamente idêntico}
 Mesmo sem amostragem, uma aplicação pode mudar de versão, contexto, ferramenta ou implementação numérica. Temperatura zero não é contrato de reprodução de um serviço inteiro. Guarda a versão do modelo, configuração, entradas e resultados das ferramentas.
@@ -98,7 +66,7 @@ Nem todos os modelos expõem estes controlos, e alguns modelos de raciocínio im
 
 \section{Orientar o estilo quando não controlas a API}
 
-Nem sempre tens acesso direto aos parâmetros de \emph{sampling}. Num chat “normal”, não podes mexer no \texttt{temperature} ou no \texttt{top-p}. Ainda assim, consegues influenciar o comportamento com instruções.
+Nem sempre tens acesso direto aos parâmetros de \emph{sampling}. Se o chat não expõe temperatura ou top-p, podes descrever o tom e o formato que queres. Ainda assim, consegues influenciar o comportamento com instruções.
 
 Alguns padrões úteis:
 
@@ -170,7 +138,7 @@ Depois, experimenta:
 \textbf{Falhas possíveis:} Confundir criatividade verbal com qualidade ou deixar modos diferentes acumularem contexto.
 \end{promptlabbox}
 
-\section{Comprimento de resposta, penalizações e repetição}
+\section{Comprimento, penalizações e repetição}
 
 Outro conjunto de parâmetros importante controla o quão longa e repetitiva é a resposta do modelo.
 
@@ -178,8 +146,9 @@ Nas APIs, encontras coisas como:
 
 \begin{itemize}[leftmargin=*]
 \item \texttt{max\_tokens} ou equivalente: limite de geração; o nome e a inclusão de tokens de raciocínio variam por API.
-\item \texttt{frequency\_penalty}: penaliza repetir o mesmo token muitas vezes.
-\item \texttt{presence\_penalty}: penaliza repetir tokens que já apareceram no contexto.
+\item Penalização por frequência, quando disponível: pode depender de quantas vezes um token foi visto.
+\item Penalização por presença, quando disponível: pode depender de o token já ter aparecido.
+\item Confirma na documentação a fórmula e os tokens a que cada parâmetro se aplica.
 \end{itemize}
 
 Se não tens acesso direto a estes controlos, podes aproximar-te com linguagem natural:
@@ -203,21 +172,8 @@ Claro que isto não é perfeito. O modelo pode ignorar-te ocasionalmente. Mas é
 Pedir “exatamente 137 palavras” é pedir ao modelo que alinhe um pedido em “palavras” com uma realidade interna em “tokens”. Mesmo que acerte, não contes com isso como contrato. Em contextos de produção, usa limites de tokens na API e valida o tamanho do output com código.
 \end{warningboxenv}
 
-\section{Quando não usar LLMs}
+\section{Escolher a ferramenta pelo trabalho}
 
-Antes de avançarmos, convém dizer o óbvio que muitas equipas ignoram: há situações em que usar um LLM é simplesmente má ideia.
+Se a data do talão vem no formato ano, mês e dia, uma regra pode pô-la na ordem dia, mês e ano. A mesma entrada dá sempre o mesmo resultado. Chamamos \emph{determinista} a esse comportamento. Se o talão vier escrito à mão e a data estiver ilegível, o problema já exige interpretação e uma forma de assinalar a dúvida.
 
-Casos típicos onde \emph{não} é a melhor ferramenta:
-
-\begin{itemize}[leftmargin=*]
-\item \textbf{Cálculos exatos e de alto risco}: impostos, dosagem de medicamentos, controlo de infraestruturas críticas.
-\item \textbf{Verificações formais}: provas matemáticas, validação de protocolos criptográficos.
-\item \textbf{Regras fixas e simples}: transformações deterministas (por exemplo, converter \texttt{YYYY-MM-DD} em \texttt{DD/MM/YYYY}).
-\item \textbf{Dados ultra-sensíveis} quando não tens garantias fortes de privacidade.
-\end{itemize}
-
-Nestes casos, usa código normal, algoritmos tradicionais, bases de dados. O LLM pode ajudar a \emph{escrever} esse código, a explicar o problema ou a gerar testes — mas não deve ser o motor principal de decisão.
-
-\begin{keyideabox}{LLM é martelo, mas nem tudo é prego}
-Sempre que pensares “podíamos pôr um LLM aqui”, pergunta primeiro se não há uma função determinista simples que faça melhor, mais rápido e mais barato. Só depois envolve tokens.
-\end{keyideabox}
+Para cálculos exatos ou verificações formais, usa a regra e o verificador adequados à tarefa. Em decisões com consequências sérias, confirma também dados, permissões e procedimento. Um modelo pode ajudar a explicar a regra ou a propor casos de teste. Para executar a decisão, mede o que o sistema consegue verificar, incluindo como trata os dados sensíveis.
