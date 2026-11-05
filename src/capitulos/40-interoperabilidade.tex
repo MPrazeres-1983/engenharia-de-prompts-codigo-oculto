@@ -4,12 +4,12 @@
 Uma equipa sabe consultar documentos, outra sabe calcular rotas. Queremos que cooperem sem reescrever cada integração. Um protocolo comum pode ajudar a descrever operações e trocar mensagens. Não faz os sistemas compreenderem automaticamente a mesma definição de «concluído», nem lhes concede acesso aos mesmos dados.
 
 \section{Três ligações com finalidades diferentes}
-Function calling descreve como um modelo propõe operações estruturadas à aplicação. MCP padroniza a ligação a ferramentas e contexto, como desenvolvido no capítulo~\ref{ch:mcp}. A2A trata de comunicação entre serviços de agentes, incluindo descoberta, mensagens, tarefas e resultados~\citep{a2a2026}. Uma skill pode organizar o procedimento que usa estas ligações.
+Um modelo pode sugerir à aplicação que procure o estado de uma reclamação. É a proposta de chamada, ou \emph{function calling}. Para contactar o arquivo que fornece a operação, a aplicação pode usar MCP, como no capítulo~\ref{ch:mcp}. Quando um serviço de agentes entrega um pedido a outro e acompanha uma tarefa, pode usar \emph{Agent2Agent} (A2A). A2A descreve como descobrir serviços e trocar mensagens, tarefas e resultados~\citep{a2a2026}. Uma \emph{skill} pode organizar o procedimento que usa essas ligações.
 
 Não precisas de usar todos para chamar uma função interna. A interoperabilidade é útil quando existem fronteiras reais: aplicações diferentes, fornecedores, equipas ou ciclos de execução. Adotar três protocolos para somar dois números seria uma homenagem muito dispendiosa à arquitetura.
 
 \section{A2A: descobrir não significa confiar}
-Esta edição usa explicitamente a especificação A2A 1.0.0. A Agent Card descreve o serviço, interfaces, capacidades e requisitos de segurança. A localização conhecida indicada nessa versão é \texttt{/.well-known/agent-card.json}. Exemplos antigos podem usar outros caminhos; confirma a versão antes de os copiar.
+Esta edição usa a especificação A2A 1.0.0. A \emph{Agent Card} funciona como um cartão do serviço. Identifica a morada para enviar pedidos, as operações anunciadas e os requisitos de segurança. A localização conhecida indicada nessa versão é \texttt{/.well-known/agent-card.json}. Exemplos antigos podem usar outros caminhos. No ensaio, o pedido indica a versão de comunicação \texttt{1.0}~\citep{a2a2026}.
 
 O campo \texttt{skills} da Agent Card contém descrições do tipo \texttt{AgentSkill}. Cada uma anuncia uma capacidade. O pacote Agent Skills do capítulo~\ref{ch:skills} organiza instruções e recursos a partir de \texttt{SKILL.md}. Uma capacidade anunciada no cartão precisa de ser autorizada no servidor quando alguém a utiliza.
 
@@ -22,7 +22,7 @@ Imagina dois serviços que preparam um resumo de documentos autorizados. O clien
 
 Se a ligação cair, separa a falha de transporte do estado da tarefa. Quando a tarefa já foi identificada, consulta-a antes de enviar uma nova. Para repetir uma operação com efeitos, aplica as regras do executor do capítulo~\ref{ch:agentes}. Um identificador de conversa ajuda a seguir o contexto. A autorização continua a ser verificada pelo serviço que conhece o recurso.
 
-O exemplo do repositório não implementa um servidor A2A ou MCP. Implementa contratos e um controlador de domínio. Uma implementação de protocolo exigiria SDK ou transporte compatível, testes de mensagens e estados, autenticação e ensaios entre cliente e servidor. Não confundimos um diagrama com essa execução.
+Uma resposta HTTP com o código 200 significa que o servidor tratou o pedido dessa troca. Dentro da resposta, a tarefa pode ainda estar à espera de informação. Por exemplo, o serviço pode responder corretamente «falta o número da reclamação», com a tarefa em aberto.
 
 \section{Compatibilidade tem mais do que uma dimensão}
 Dois sistemas podem aceitar o mesmo JSON e interpretar mal o conteúdo. Um chama «prazo» à estimativa, outro a uma garantia. Um usa hora local, outro UTC. Um identificador só é único dentro de uma organização; o outro assume que é global. São incompatibilidades semânticas, não erros de parsing.
@@ -30,6 +30,33 @@ Dois sistemas podem aceitar o mesmo JSON e interpretar mal o conteúdo. Um chama
 Versiona contratos e explicita unidade, âmbito, estados de erro e efeitos. Testa os pares de versões que vais suportar. Uma nova propriedade opcional pode ser ignorada por um cliente antigo, dependendo da sua política de validação. Se mudares um prazo de dias úteis para dias de calendário, o tipo continua a ser inteiro. Um teste com sexta-feira e um fim de semana pode revelar que o contrato mudou de significado.
 
 Também precisas de um limite de confiança para cada salto. Credenciais destinadas ao serviço A não devem ser passadas cegamente ao serviço B. O servidor confirma destinatário, identidade e âmbito, e a autorização de dados acompanha a tarefa. O facto de o pedido vir de um «agente colega» não o transforma num administrador.
+
+\section{Acompanhar uma consulta da receção ao arquivo}
+\label{sec:ensaio-interop}
+
+\ficcao Imagina que receção e arquivo são dois programas. A receção guarda a tarefa. Quando tem o número, envia a consulta ao arquivo. Antes de correr o exemplo, segue as trocas no papel e decide em que momento faz sentido dizer «concluído».
+
+\begin{center}
+\small
+\begin{tabularx}{\textwidth}{@{}p{.32\textwidth}X@{}}
+\toprule
+Passo & O que é possível verificar \\
+\midrule
+A pede o estado sem número. & A receção cria uma tarefa e pede o número. Ainda não há resultado. \\
+B tenta ler ou retomar essa tarefa. & A receção devolve a mesma recusa que daria para uma tarefa inexistente. \\
+A indica LAV-001 na mesma tarefa. & O arquivo recebe uma chamada MCP com o número. A identidade usada na consulta vem da receção. \\
+A receção obtém «em análise». & A tarefa passa a concluída e guarda a resposta como artefacto. \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+O ensaio abre uma ligação HTTP na própria máquina e troca mensagens A2A com a receção. O arquivo corre noutro processo Python, iniciado pela receção, e recebe mensagens MCP pela entrada e saída desse processo. Para repetir as dez verificações, abre o terminal na pasta principal do projeto:
+
+\begin{lstlisting}
+python3 -m experiencias.interoperabilidade.executar
+\end{lstlisting}
+
+Na execução registada, a chamada na tarefa original devolveu «LAV-001: em análise». Com a credencial fictícia de A, LAV-002 e LAV-999 produziram a mesma falha sem artefacto. Com a de B, a consulta a LAV-002 devolveu «aguarda contacto». Foram usados dados fictícios, zero chamadas a um LLM e apenas as operações descritas. A experiência cobre uma ligação controlada entre estas duas implementações. A compatibilidade com outros clientes e a autenticação de produção exigem ensaios próprios.
 
 \section{Uma matriz antes de construir a ligação}
 \begin{table}[htbp]
